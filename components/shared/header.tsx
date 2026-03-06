@@ -4,19 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-
-// Navigasyon tipi tanımlama
-interface NavLink {
-  name: string;
-  href: string;
-}
-
-const navLinks: NavLink[] = [
-  { name: "Projects", href: "/projects" },
-  { name: "Games", href: "/games" },
-  { name: "About Us", href: "/about" },
-  { name: "Contact", href: "/contact" },
-];
+import { headerNavLinks as navLinks } from "@/constants/navlinks";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);

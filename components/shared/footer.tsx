@@ -10,6 +10,7 @@ import {
 } from "framer-motion";
 import { BsInstagram, BsX, BsYoutube } from "react-icons/bs";
 import { InstagramIcon } from "lucide-react";
+import { footerNavLinks } from "@/constants/navlinks";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -19,19 +20,6 @@ interface StudioLogo {
 }
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
-
-const NAV_LINKS = [
-    "Legal",
-    "Terms of Use",
-    "Privacy Policy",
-    "Careers",
-    "Cookie Policy",
-    "Support",
-    "Code of Conduct",
-];
-
-
-
 
 
 const SOCIAL_ICONS = [
@@ -155,10 +143,10 @@ function NavSection() {
             ref={ref}
             className="border-b border-white/10 px-16 py-6 flex flex-wrap items-center justify-center"
         >
-            {NAV_LINKS.map((link, i) => (
-                <span key={link} className="flex items-center">
+            {footerNavLinks.map((link, i) => (
+                <span key={link.name} className="flex items-center">
                     <motion.a
-                        href="#"
+                        href={link.href}
                         initial="hidden"
                         animate={inView ? "visible" : "hidden"}
                         variants={fadeUp}
@@ -167,9 +155,9 @@ function NavSection() {
                         whileHover={{ color: "#888" }}
                         transition={{ duration: 0.15 }}
                     >
-                        {link}
+                        {link.name}
                     </motion.a>
-                    {i < NAV_LINKS.length - 1 && (
+                    {i < footerNavLinks.length - 1 && (
                         <span className="text-white/20 text-sm select-none">|</span>
                     )}
                 </span>
@@ -182,7 +170,7 @@ function NavSection() {
                     initial="hidden"
                     animate={inView ? "visible" : "hidden"}
                     variants={fadeUp}
-                    custom={NAV_LINKS.length * 0.5}
+                    custom={footerNavLinks.length * 0.5}
                     className="font-['Barlow_Condensed',sans-serif] text-xs font-bold tracking-[0.1em] uppercase text-white no-underline px-5 flex items-center gap-1.5"
                     whileHover={{ color: "#888" }}
                 >
