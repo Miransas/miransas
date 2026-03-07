@@ -23,7 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     {
-      url: `${baseUrl}/games/lost-signal`,
+      url: `${baseUrl}/games/lostsignal`,
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 1, // Oyun sayfası çok önemli, öncelik yüksek
