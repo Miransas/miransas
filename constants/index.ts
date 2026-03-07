@@ -1,5 +1,7 @@
 // ─── Nav Link Types ───────────────────────────────────────────────────────────
 
+import { FaGithub, FaInstagram, FaRadio, FaX, FaYoutube } from "react-icons/fa6";
+
 export interface NavLink {
   name: string;
   href: string;
@@ -36,4 +38,13 @@ export const sidebarNavLinks: NavLink[] = [
   { name: "Contact", href: "/contact" },
   { name: "Careers", href: "/careers" },
   { name: "Support", href: "/support" },
+];
+
+
+export const SOCIAL_LINKS = [
+  { name: "Instagram", href: "https://instagram.com/miransas", icon: FaInstagram, color: "#E4405F" },
+  { name: "X", href: "https://x.com/miransas", icon: FaX, color: "#FFFFFF" },
+  { name: "YouTube", href: "https://youtube.com/@miransas", icon: FaYoutube, color: "#FF0000" },
+  { name: "Kick", href: "https://kick.com/miransas", icon: FaRadio, color: "#53FC18" }, // Kick için Radio ikonu ve neon yeşil
+  { name: "GitHub", href: "https://github.com/miransas", icon: FaGithub, color: "#4078c0" },
 ];

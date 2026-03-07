@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -88,7 +89,7 @@ export default function Hero() {
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 0.8 } } }} 
             className="text-[16px] text-gray-400 mb-12 leading-relaxed max-w-lg font-light"
           >
-            Üretim sistemleri için inşa edilmiş; 6 katmanlı düğüm (node) kontrolü, simetrik hata toleransı ve Merkezî Depolama özellikli yaşayan veri akışı motoru. Tüm yollar Miransas'a çıkar.
+            Üretim sistemleri için inşa edilmiş; 6 katmanlı düğüm (node) kontrolü, simetrik hata toleransı ve Merkezî Depolama özellikli yaşayan veri akışı motoru. Tüm yollar Miransas&rsquo;a çıkar.
           </motion.p>
           
           <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }} className="flex flex-wrap gap-4">
@@ -290,7 +291,6 @@ export default function Hero() {
                 stroke={coreColor} 
                 strokeWidth="2.5" 
                 strokeLinecap="round" strokeLinejoin="round" 
-                variants={nodes[activeNode]} // Aktif modülün rengiyle parlar!
                 initial={{ pathLength: 0, opacity: 0 }}
                 animate={{ pathLength: [0, 1, 1], opacity: [0, 1, 0] }} 
                 transition={{ duration: 2, ease: "easeOut", delay: 1.8 }} // Şelale bittikten sonra akar

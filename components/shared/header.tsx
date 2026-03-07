@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { headerNavLinks as navLinks } from "@/constants/navlinks";
+import { headerNavLinks as navLinks } from "@/constants";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -20,30 +20,30 @@ const Navbar: React.FC = () => {
   }, []);
 
   const menuVariants = {
-    closed: { 
+    closed: {
       x: "100%" as const,
-      transition: { type: "spring" as const, stiffness: 400, damping: 40 } 
+      transition: { type: "spring" as const, stiffness: 400, damping: 40 }
     },
-    opened: { 
+    opened: {
       x: 0,
-      transition: { type: "spring" as const, stiffness: 400, damping: 40 } 
+      transition: { type: "spring" as const, stiffness: 400, damping: 40 }
     },
   };
 
   return (
     <>
-      <nav 
-        className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${
-          scrolled 
-            ? "border-b border-white/10 bg-black/70 backdrop-blur-xl py-4" 
+      <nav
+        className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${scrolled
+            ? "border-b border-white/10 bg-black/70 backdrop-blur-xl py-4"
             : "bg-transparent py-6"
-        }`}
+          }`}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          
+
           {/* Logo */}
-          <Link href="/" className="text-2xl font-black tracking-tighter text-white">
-            MIRANSAS<span className="text-blue-500">.</span>
+          <Link href="/" className="text-2xl font-black tracking-tighter text-white flex items-center gap-1">
+            <img src="/logo/logo.png" alt="" className="w-16" />
+            MIRANSAS<span className="text-blue-500"></span>
           </Link>
 
           {/* Desktop Menü */}
@@ -57,7 +57,7 @@ const Navbar: React.FC = () => {
                 {link.name}
               </Link>
             ))}
-            <Link 
+            <Link
               href="/start"
               className="px-6 py-2.5 bg-white text-black text-sm font-bold rounded-full hover:bg-blue-600 hover:text-white transition-all transform active:scale-95"
             >
@@ -67,7 +67,7 @@ const Navbar: React.FC = () => {
 
           {/* Burger Butonu (Next-level Animasyonlu) */}
           <div className="md:hidden z-[110]">
-            <button 
+            <button
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 text-white outline-none"
               aria-label="Toggle Menu"
