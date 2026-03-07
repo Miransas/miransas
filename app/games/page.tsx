@@ -15,7 +15,7 @@ export default function GamesPage() {
       status: "Available Now",
       active: true,
       description: "Step into the 1:00 AM shift. A psychological horror experience following Sad's encounter with the stranger named Das. Do you have the diesel?",
-      image: "/images/lost-signal-1.jpg", // public klasörüne oyunun kapağını eklemelisin usta
+      image: "/images/lostsignal-1.png", // public klasörüne oyunun kapağını eklemelisin usta
       link: "/games/lostsignal",
     },
     {

@@ -4,6 +4,10 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Clock, BrainCircuit, Ghost, TriangleAlert, Radio } from "lucide-react";
 import Image from "next/image";
+import { TbSteam } from "react-icons/tb";
+import { FaSteam } from "react-icons/fa";
+import { SiEpicgames } from "react-icons/si";
+import Link from "next/link";
 
 // --- Custom Steam & Epic Icons ---
 const SteamIcon = () => (
@@ -28,7 +32,7 @@ export default function LostSignalPage() {
       <section className="relative w-full h-[85vh] min-h-[700px] flex items-end pb-24 border-b border-white/5 overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image 
-            src="/images/lost-signal-hero.jpg" 
+            src="/images/lostsignal-banner.png" 
             alt="Lost Signal Night Shift" 
             fill
             className="object-cover opacity-50 scale-105"
@@ -60,14 +64,14 @@ export default function LostSignalPage() {
             </p>
 
             <div className="flex flex-col sm:flex-row items-center gap-4 max-w-md">
-              <a href="#" className="w-full flex items-center justify-center gap-3 bg-white text-black px-6 py-4 rounded-md font-bold uppercase tracking-widest text-xs hover:bg-gray-200 transition-colors group">
-                <SteamIcon />
+              <Link href="7" className="w-full flex items-center justify-center gap-3  border border-white/10 px-6 py-4 rounded-md font-bold uppercase tracking-widest text-xs transition-colors group">
+              <FaSteam  size={30}/>
                 Wishlist on Steam
-              </a>
-              <a href="#" className="w-full flex items-center justify-center gap-3 bg-[#111] border border-white/10 text-white px-6 py-4 rounded-md font-bold uppercase tracking-widest text-xs hover:bg-[#1A1A1A] hover:border-white/20 transition-colors group">
-                <EpicIcon />
+              </Link>
+              <Link href="/" className="w-full flex items-center justify-center gap-3  border border-white/10 text-white px-6 py-4 rounded-md font-bold uppercase tracking-widest text-xs hover:bg-[#1A1A1A] hover:border-white/20 transition-colors group">
+                <SiEpicgames  size={30}/>
                 Epic Games Store
-              </a>
+              </Link>
             </div>
 
           </motion.div>
@@ -118,7 +122,7 @@ export default function LostSignalPage() {
           >
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent z-10" />
             <Image 
-              src="/images/character-sad.jpg" 
+              src="/images/lost.png" 
               alt="Night Watchman Sad" 
               fill 
               className="object-cover opacity-40 grayscale group-hover:grayscale-0 transition-all duration-1000"

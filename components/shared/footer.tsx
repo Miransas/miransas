@@ -82,7 +82,7 @@ export default function Footer({ card, index, hovered, setHovered, beamActive }:
                 </div>
 
                 {/* --- FOUNDER SECTION --- */}
-                <div className="w-full mt-10 pt-8 border-t border-white/5 flex justify-center">
+                <div className="w-full mt-10 pt-8 border-t flex justify-center">
                     <Link 
                         href="https://instagram.com/asardorazimov" 
                         className="flex flex-col sm:flex-row items-center gap-4 group transition-all"
@@ -93,9 +93,9 @@ export default function Footer({ card, index, hovered, setHovered, beamActive }:
                                 alt="Sardor Azimov" 
                                 width={40} 
                                 height={40} 
-                                className="rounded-full border border-white/10 grayscale group-hover:grayscale-0 transition-all"
+                                className="rounded-full   grayscale group-hover:grayscale-0 transition-all"
                             />
-                            <div className="absolute inset-0 rounded-full bg-[#FF4F00]/10 opacity-0 group-hover:opacity-100 transition-all" />
+                           
                         </div>
                         <span className="text-[11px] font-bold tracking-widest text-stone-500 group-hover:text-white transition-colors">
                             Founded by Sardor Azimov // HQ: 
