@@ -71,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#050505] text-white selection:bg-[#075a07] selection:text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#000000] text-white selection:bg-[#075a07] selection:text-white`}
       >
         {/* Senin doğan karanlık olduğu için ThemeProvider hep dark kalacak */}
         <ThemeProvider
@@ -82,16 +82,16 @@ export default function RootLayout({
         >
           <div className="relative flex min-h-screen flex-col">
             <Navbar />
-            
+
             <main className="flex-grow">
               {/* Sayfalar arası siber-lazer geçiş efekti */}
               <>
-               <SmoothScrolling>
-          {children}
-        </SmoothScrolling>
+                <SmoothScrolling>
+                  {children}
+                </SmoothScrolling>
               </>
             </main>
-            
+
             <Footer />
           </div>
         </ThemeProvider>
