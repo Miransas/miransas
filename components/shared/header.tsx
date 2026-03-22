@@ -57,12 +57,7 @@ const Navbar: React.FC = () => {
                 {link.name}
               </Link>
             ))}
-            <Link
-              href="/start"
-              className="px-6 py-2.5 bg-white text-black text-sm font-bold rounded-full hover:bg-blue-600 hover:text-white transition-all transform active:scale-95"
-            >
-              Başlayalım
-            </Link>
+           
           </div>
 
           {/* Burger Butonu (Next-level Animasyonlu) */}

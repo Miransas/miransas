@@ -14,6 +14,9 @@ export const headerNavLinks: NavLink[] = [
   { name: "Games", href: "/games" },
   { name: "About Us", href: "/about" },
   { name: "Contact", href: "/contact" },
+  { name: "Careers", href: "/careers" },
+  { name: "Support", href: "/support" },
+  { name: "Blog", href: "/blog" },
 ];
 
 // ─── Footer Nav Links ─────────────────────────────────────────────────────────

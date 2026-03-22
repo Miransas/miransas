@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "../components/provider/theme-provider";
 import Navbar from "../components/shared/header";
 import Footer from "../components/shared/footer";
+import SmoothScrolling from "../components/shared/smooth-scrolling";
 
 
 // Font Tanımlamaları
@@ -70,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="scroll-smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#050505] text-white selection:bg-[#FF4F00] selection:text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#050505] text-white selection:bg-[#075a07] selection:text-white`}
       >
         {/* Senin doğan karanlık olduğu için ThemeProvider hep dark kalacak */}
         <ThemeProvider
@@ -85,7 +86,9 @@ export default function RootLayout({
             <main className="flex-grow">
               {/* Sayfalar arası siber-lazer geçiş efekti */}
               <>
-                {children}
+               <SmoothScrolling>
+          {children}
+        </SmoothScrolling>
               </>
             </main>
             
