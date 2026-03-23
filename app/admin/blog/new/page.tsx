@@ -6,7 +6,7 @@ export default async function NewBlogPage() {
   const session = await auth();
   if (!session) redirect("/login");
   return (
-    <div className="py-8 px-6 max-w-5xl mx-auto mt-24">
+    <div className="">
       <BlogEditor />
     </div>
   );

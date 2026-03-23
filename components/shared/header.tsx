@@ -25,7 +25,7 @@ const Navbar: React.FC = () => {
         className={cn(
           "fixed top-0 left-0 w-full z-[100] transition-all duration-500",
           scrolled
-            ? "bg-black/60 backdrop-blur-xl py-3 border-b border-white/[0.05] shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+            ? "bg-black/60 backdrop-blur-xl py-3 border-b border-black shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
             : "bg-transparent py-6"
         )}
       >
@@ -39,7 +39,7 @@ const Navbar: React.FC = () => {
             </div>
             <div className="flex flex-col">
                 <span className="text-lg font-black tracking-tighter text-white leading-none uppercase italic">Miransas.</span>
-                <span className="text-[8px] font-bold tracking-[0.3em] text-zinc-500 uppercase leading-none mt-1 group-hover:text-blue-400 transition-colors">Digital Studio</span>
+                <span className="text-[8px] font-bold tracking-[0.3em] text-zinc-500 uppercase leading-none mt-1 group-hover:text-blue-400 transition-colors"></span>
             </div>
           </Link>
 

@@ -6,11 +6,23 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Changelog | Miransas",
-  description: "Worktio ve Miransas ekosistemindeki en son güncellemeler.",
+  description: "Latest updates and releases from the Worktio and Miransas ecosystem.",
+};
+
+// ─── DECODER FONKSİYONU (Dışarıya alındı) ───
+const decodeHTML = (html: string) => {
+  if (!html) return "";
+  return html
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x27;/g, "'")
+    .replace(/&#x2F;/g, "/");
 };
 
 export default async function ChangelogPage() {
-  // Sadece yayında olan ve tipi 'changelog' olanları çekiyoruz
   const updates = await db.select().from(posts)
     .where(
       and(
@@ -30,21 +42,21 @@ export default async function ChangelogPage() {
           
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/5 border border-blue-500/10 text-[10px] font-black uppercase tracking-[0.2em] text-blue-400 mb-6">
             <Zap size={12} fill="currentColor" />
-            <span>Sistem Güncellemeleri</span>
+            <span>System Updates</span>
           </div>
           
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-4 italic uppercase">
             Changelog.
           </h1>
           <p className="text-zinc-500 max-w-lg mx-auto leading-relaxed">
-            Miransas ve Worktio&#39;nun gelişim serüveni. Her commit, yeni bir özellik; her güncelleme, daha iyi bir deneyim.
+            The evolution of Miransas and Worktio. Every commit is a new architecture; every update is a superior experience.
           </p>
         </div>
 
         {updates.length === 0 ? (
           <div className="text-center py-20 border border-dashed border-zinc-800 rounded-[2.5rem] bg-zinc-900/20">
             <Box size={40} className="mx-auto text-zinc-700 mb-4" />
-            <p className="text-zinc-500 font-medium">Henüz bir güncelleme notu paylaşılmadı.</p>
+            <p className="text-zinc-500 font-medium">No release notes have been published yet.</p>
           </div>
         ) : (
           <div className="relative">
@@ -60,10 +72,10 @@ export default async function ChangelogPage() {
                     <GitCommit size={18} className="text-blue-500 group-hover:scale-110 transition-transform" />
                   </div>
 
-                  {/* TARİH ETİKETİ */}
+                  {/* TARİH ETİKETİ (İngilizce Format) */}
                   <div className="flex items-center gap-2 text-[10px] font-black text-zinc-600 uppercase tracking-widest mb-3">
                     <Calendar size={12} />
-                    {new Date(update.createdAt!).toLocaleDateString("tr-TR", { 
+                    {new Date(update.createdAt!).toLocaleDateString("en-US", { 
                         day: 'numeric', 
                         month: 'long', 
                         year: 'numeric' 
@@ -86,14 +98,15 @@ export default async function ChangelogPage() {
                       {update.excerpt}
                     </p>
 
-                    {/* ZENGİN İÇERİK (HTML) */}
+                    {/* ─── HATA BURADA ÇÖZÜLDÜ: decodeHTML(update.content || "") eklendi ─── */}
                     <div 
                       className="prose prose-invert prose-sm max-w-none 
                         prose-p:text-zinc-500 prose-p:leading-relaxed
+                        prose-headings:text-white prose-headings:font-bold prose-headings:mt-6 prose-headings:mb-2
                         prose-strong:text-zinc-300 prose-strong:font-bold
                         prose-ul:list-disc prose-ul:pl-4
                         prose-li:text-zinc-500 prose-li:mb-2"
-                      dangerouslySetInnerHTML={{ __html: update.content }} 
+                      dangerouslySetInnerHTML={{ __html: decodeHTML(update.content || "") }} 
                     />
 
                     {/* ETİKETLER */}
@@ -108,16 +121,6 @@ export default async function ChangelogPage() {
             </div>
           </div>
         )}
-
-        {/* FOOTER CALL TO ACTION */}
-        <div className="mt-24 p-12 rounded-[3rem] bg-gradient-to-br from-zinc-900 to-black border border-white/5 text-center relative overflow-hidden">
-             <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 blur-[60px]" />
-             <h3 className="text-xl font-bold mb-2 text-white">Bizi Takip Edin</h3>
-             <p className="text-zinc-500 text-sm mb-6 italic">En yeni özelliklerden anında haberdar olmak için X (Twitter) üzerinden takipte kalın.</p>
-             <Link href="https://x.com/asardorazimov" target="_blank" className="inline-flex px-8 py-3 bg-white text-black rounded-full font-black text-xs uppercase tracking-widest hover:scale-105 transition-transform active:scale-95">
-                X.COM&#39;A GİT
-             </Link>
-        </div>
 
       </div>
     </main>

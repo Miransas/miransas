@@ -4,9 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { 
   Save, Loader2, ImagePlus, X, 
-  Newspaper, History, FileCode, Briefcase, Check 
+  Newspaper, History, FileCode, Briefcase, Check, ArrowLeft 
 } from "lucide-react";
 import RichTextEditor from "./rich-text-editor";
+import Link from "next/link";
+import { toast } from "sonner";
 
 export default function BlogEditor({ initialData }: { initialData?: any }) {
     const router = useRouter();
@@ -14,7 +16,7 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
     
     const [form, setForm] = useState({
         slug: initialData?.slug ?? "",
-        type: initialData?.type ?? "blog", // 'blog' | 'changelog' | 'docs' | 'project'
+        type: initialData?.type ?? "blog",
         tag: initialData?.tag ?? "Rehber",
         readTime: initialData?.readTime ?? 5,
         published: initialData?.published ?? false,
@@ -24,10 +26,16 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
         content: initialData?.content ?? "",
         coverImage: initialData?.coverImage ?? "",
     });
+const handleSave = async () => {
+    if (!form.slug || !form.title) {
+        toast.error("Başlık ve Slug alanları boş bırakılamaz!");
+        return;
+    }
 
-    const handleSave = async () => {
-        if (!form.slug || !form.title) return;
-        setSaving(true);
+    setSaving(true);
+
+    // Toast mekanizmasını başlatıyoruz
+    const savePromise = new Promise(async (resolve, reject) => {
         try {
             const url = initialData ? `/api/posts/${initialData.slug}` : "/api/posts";
             const method = initialData ? "PATCH" : "POST";
@@ -38,18 +46,32 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
                 body: JSON.stringify(form),
             });
 
+            const data = await res.json();
+
             if (res.ok) {
-                // KAYIT BAŞARILI: Seni yazdığın kategorinin listesine gönderir
-                // Örneğin: Doküman yazdıysan /admin?type=docs sayfasına gider.
-                router.push(`/admin?type=${form.type}`);
-                router.refresh();
+                resolve(data);
+                // Kısa bir gecikme ile yönlendir ki kullanıcı başarı mesajını görsün
+                setTimeout(() => {
+                    router.push(`/admin?type=${form.type}`);
+                    router.refresh();
+                }, 1500);
+            } else {
+                // API'den gelen spesifik hata mesajını (örneğin: slug çakışması) fırlatıyoruz
+                reject(data.error || "Bir sorun oluştu.");
             }
         } catch (error) {
-            console.error("Kayıt hatası:", error);
+            reject("Sunucuya bağlanılamadı.");
         } finally {
             setSaving(false);
         }
-    };
+    });
+
+    toast.promise(savePromise, {
+        loading: 'Veriler Miransas Core\'a iletiliyor...',
+        success: (data: any) => `${form.title} başarıyla kaydedildi!`,
+        error: (err) => `Hata: ${err}`,
+    });
+};
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -61,153 +83,163 @@ export default function BlogEditor({ initialData }: { initialData?: any }) {
     };
 
     const CATEGORIES = [
-        { id: "blog", label: "Blog Yazısı", icon: <Newspaper size={18} />, color: "purple" },
-        { id: "changelog", label: "Changelog", icon: <History size={18} />, color: "blue" },
-        { id: "docs", label: "Doküman", icon: <FileCode size={18} />, color: "emerald" },
-        { id: "project", label: "Proje", icon: <Briefcase size={18} />, color: "orange" },
+        { id: "blog", label: "Blog", icon: <Newspaper size={14} /> },
+        { id: "changelog", label: "Changelog", icon: <History size={14} /> },
+        { id: "docs", label: "Docs", icon: <FileCode size={14} /> },
+        { id: "project", label: "Project", icon: <Briefcase size={14} /> },
     ];
 
     return (
-        <div className="max-w-4xl mx-auto py-10">
-            {/* ÜST PANEL */}
-            <div className="flex items-center justify-between mb-10">
-                <div>
-                    <h1 className="text-3xl font-black text-white tracking-tighter italic">Yeni İçerik Oluştur</h1>
-                    <p className="text-zinc-500 text-sm mt-1">Miransas & Worktio için yeni değerler üret.</p>
-                </div>
-                
-                <div className="flex items-center gap-6">
-                    <label className="flex items-center gap-3 cursor-pointer group">
-                        <span className="text-[10px] font-black text-zinc-500 group-hover:text-zinc-300 uppercase tracking-widest transition-colors">Yayınla</span>
-                        <div
-                            onClick={() => setForm(f => ({ ...f, published: !f.published }))}
-                            className={`w-12 h-6 rounded-full transition-all relative flex items-center ${form.published ? "bg-purple-600 shadow-[0_0_20px_rgba(147,51,234,0.3)]" : "bg-zinc-800"}`}
-                        >
-                            <div className={`absolute w-4.5 h-4.5 rounded-full bg-white transition-transform ${form.published ? "translate-x-6.5" : "translate-x-1"}`} />
+        <div className="min-h-screen bg-[#030303]">
+            {/* ─── STICKY HEADER (Seni asla bırakmaz) ─── */}
+            <div className="sticky top-0 z-[50] w-full bg-black/80 backdrop-blur-xl border-b border-white/5 py-4 mb-10">
+                <div className="max-w-full  mx-auto px-6 flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                        <Link href="/admin" className="p-2 hover:bg-white/5 rounded-xl transition-colors text-zinc-500">
+                            <ArrowLeft size={20} />
+                        </Link>
+                        <div>
+                            <h1 className="text-sm font-black uppercase tracking-widest text-white italic">
+                                {initialData ? "İçeriği Düzenle" : "Yeni İçerik"}
+                            </h1>
+                            <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-tighter">Miransas Editor v2.0</p>
                         </div>
-                    </label>
-
-                    <button
-                        onClick={handleSave}
-                        disabled={saving || !form.slug || !form.title}
-                        className="flex items-center gap-2 px-8 py-3 bg-white text-black hover:bg-zinc-200 disabled:bg-zinc-800 disabled:text-zinc-500 rounded-2xl font-black text-xs uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-white/5"
-                    >
-                        {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
-                        Save
-                    </button>
-                </div>
-            </div>
-
-            {/* 4'LÜ KATEGORİ SEÇİCİ */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-10">
-                {CATEGORIES.map((cat) => (
-                    <button 
-                        key={cat.id}
-                        onClick={() => setForm(f => ({ ...f, type: cat.id as any }))}
-                        className={`relative flex items-center justify-center gap-3 p-4 rounded-2xl border transition-all overflow-hidden ${
-                            form.type === cat.id 
-                            ? "bg-white/5 border-white/20 text-white" 
-                            : "bg-zinc-900/40 border-white/5 text-zinc-500 hover:border-white/10"
-                        }`}
-                    >
-                        {cat.icon}
-                        <span className="text-[11px] font-black uppercase tracking-tight">{cat.label}</span>
-                        {form.type === cat.id && (
-                            <div className="absolute top-1 right-1">
-                                <Check size={12} className="text-purple-500" />
-                            </div>
-                        )}
-                    </button>
-                ))}
-            </div>
-
-            {/* META BİLGİLERİ */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                <div className="bg-zinc-900/40 border border-white/5 p-4 rounded-2xl">
-                    <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest mb-2 block">Slug</label>
-                    <input
-                        value={form.slug}
-                        onChange={e => setForm(f => ({ ...f, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') }))}
-                        placeholder="n8n-vs-worktio"
-                        className="w-full bg-transparent text-sm text-zinc-300 outline-none font-mono placeholder:text-zinc-800"
-                    />
-                </div>
-                <div className="bg-zinc-900/40 border border-white/5 p-4 rounded-2xl">
-                    <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest mb-2 block">Tag</label>
-                    <select
-                        value={form.tag}
-                        onChange={e => setForm(f => ({ ...f, tag: e.target.value }))}
-                        className="w-full bg-transparent text-sm text-zinc-300 outline-none"
-                    >
-                        {["Rehber", "Duyuru", "Güncelleme", "İnceleme", "Portfolio"].map(t => (
-                            <option key={t} value={t} className="bg-zinc-900">{t}</option>
-                        ))}
-                    </select>
-                </div>
-                <div className="bg-zinc-900/40 border border-white/5 p-4 rounded-2xl">
-                    <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest mb-2 block">Okuma Süresi</label>
-                    <input
-                        type="number"
-                        value={form.readTime}
-                        onChange={e => setForm(f => ({ ...f, readTime: parseInt(e.target.value) || 1 }))}
-                        className="w-full bg-transparent text-sm text-zinc-300 outline-none"
-                    />
-                </div>
-            </div>
-
-            {/* YAZAR & KAPAK */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
-                <div className="bg-zinc-900/40 border border-white/5 p-4 rounded-2xl flex flex-col justify-center">
-                    <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest mb-2 block">Yazar</label>
-                    <input
-                        value={form.authorName}
-                        onChange={e => setForm(f => ({ ...f, authorName: e.target.value }))}
-                        className="w-full bg-transparent text-sm text-zinc-300 outline-none font-bold"
-                    />
-                </div>
-                
-                <div className={`relative h-24 border-2 border-dashed rounded-2xl transition-all overflow-hidden flex items-center justify-center ${form.coverImage ? "border-purple-500/20 bg-purple-500/5" : "border-white/5 bg-zinc-900/40 hover:border-white/10"}`}>
-                    {form.coverImage ? (
-                        <div className="relative w-full h-full group">
-                            <img src={form.coverImage} alt="" className="w-full h-full object-cover" />
-                            <button
-                                onClick={() => setForm(f => ({ ...f, coverImage: "" }))}
-                                className="absolute inset-0 m-auto w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    </div>
+                    
+                    <div className="flex items-center gap-6">
+                        <label className="flex items-center gap-3 cursor-pointer group">
+                            <span className="text-[10px] font-black text-zinc-500 group-hover:text-zinc-300 uppercase tracking-widest transition-colors">Yayınla</span>
+                            <div
+                                onClick={() => setForm(f => ({ ...f, published: !f.published }))}
+                                className={`w-10 h-5 rounded-full transition-all relative flex items-center ${form.published ? "bg-purple-600" : "bg-zinc-800"}`}
                             >
-                                <X size={16} />
-                            </button>
-                        </div>
-                    ) : (
-                        <label className="flex flex-col items-center justify-center cursor-pointer w-full h-full">
-                            <ImagePlus size={20} className="text-zinc-700 mb-1" />
-                            <span className="text-[9px] font-black text-zinc-700 uppercase tracking-tighter">Kapak Görseli</span>
-                            <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                                <div className={`absolute w-3.5 h-3.5 rounded-full bg-white transition-transform ${form.published ? "translate-x-5.5" : "translate-x-1"}`} />
+                            </div>
                         </label>
-                    )}
+
+                        <button
+                            onClick={handleSave}
+                            disabled={saving || !form.slug || !form.title}
+                            className="flex items-center gap-2 px-8 py-2.5 bg-white text-black hover:bg-zinc-200 disabled:bg-zinc-800 disabled:text-zinc-500 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] transition-all active:scale-95"
+                        >
+                            {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                            {initialData ? "Güncelle" : "Kaydet"}
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            {/* EDİTÖR GÖVDESİ */}
-            <div className="bg-zinc-900/20 border border-white/5 p-10 rounded-[3rem] backdrop-blur-xl">
-                <input
-                    value={form.title}
-                    onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
-                    placeholder="Yazı başlığı..."
-                    className="w-full bg-transparent text-5xl font-black text-white outline-none placeholder:text-zinc-800 italic mb-6 tracking-tighter"
-                />
-                <textarea
-                    value={form.excerpt}
-                    onChange={e => setForm(f => ({ ...f, excerpt: e.target.value }))}
-                    placeholder="Kısa özet..."
-                    rows={2}
-                    className="w-full bg-transparent text-lg text-zinc-500 outline-none resize-none leading-relaxed mb-8 border-l border-white/5 pl-6"
-                />
-                <div className="pt-8 border-t border-white/5">
-                    <RichTextEditor
-                        content={form.content}
-                        onChange={(html) => setForm(f => ({ ...f, content: html }))}
-                    />
+            {/* ─── MAİN CONTENT ─── */}
+            <div className="max-w-[1400px] mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-10 pb-20">
+                
+                {/* SOL TARAF: Yazı Alanı (Geniş) */}
+                <div className="lg:col-span-8 space-y-6">
+                    <div className="bg-zinc-900/20 border border-white/5 p-10 rounded-[3rem] backdrop-blur-xl">
+                        <input
+                            value={form.title}
+                            onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
+                            placeholder="Başlık buraya..."
+                            className="w-full bg-transparent text-5xl font-black text-white outline-none placeholder:text-zinc-800 italic mb-6 tracking-tighter border-b border-white/5 pb-4"
+                        />
+                        <textarea
+                            value={form.excerpt}
+                            onChange={e => setForm(f => ({ ...f, excerpt: e.target.value }))}
+                            placeholder="Okuyucuyu etkileyecek kısa bir özet..."
+                            rows={3}
+                            className="w-full bg-transparent text-lg text-zinc-500 outline-none resize-none leading-relaxed mb-8 border-l-2 border-white/5 pl-6 italic"
+                        />
+                        <div className="pt-8 border-t border-white/5 min-h-[500px]">
+                            <RichTextEditor
+                                content={form.content}
+                                onChange={(html) => setForm(f => ({ ...f, content: html }))}
+                            />
+                        </div>
+                    </div>
                 </div>
+
+                {/* SAĞ TARAF: Ayarlar Sidebar (Dar) */}
+                <div className="lg:col-span-4 space-y-6">
+                    
+                    {/* KATEGORİ */}
+                    <div className="bg-zinc-900/40 border border-white/5 p-6 rounded-[2rem] space-y-4">
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500">İçerik Türü</h3>
+                        <div className="grid grid-cols-2 gap-2">
+                            {CATEGORIES.map((cat) => (
+                                <button 
+                                    key={cat.id}
+                                    onClick={() => setForm(f => ({ ...f, type: cat.id as any }))}
+                                    className={`flex items-center gap-2 p-3 rounded-xl border text-[10px] font-bold uppercase transition-all ${
+                                        form.type === cat.id 
+                                        ? "bg-white/10 border-white/20 text-white" 
+                                        : "bg-transparent border-white/5 text-zinc-600 hover:border-white/10"
+                                    }`}
+                                >
+                                    {cat.icon} {cat.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* META BİLGİLER */}
+                    <div className="bg-zinc-900/40 border border-white/5 p-6 rounded-[2rem] space-y-6">
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500">Meta Verileri</h3>
+                        
+                        <div className="space-y-2">
+                            <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest ml-2">URL Slug</label>
+                            <input
+                                value={form.slug}
+                                onChange={e => setForm(f => ({ ...f, slug: e.target.value.toLowerCase().replace(/\s+/g, '-') }))}
+                                className="w-full bg-black/40 border border-white/5 p-3 rounded-xl text-xs text-zinc-300 outline-none focus:border-purple-500/50 transition-all font-mono"
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest ml-2">Etiket</label>
+                                <select
+                                    value={form.tag}
+                                    onChange={e => setForm(f => ({ ...f, tag: e.target.value }))}
+                                    className="w-full bg-black/40 border border-white/5 p-3 rounded-xl text-xs text-zinc-300 outline-none"
+                                >
+                                    {["All", "Guide", "Announcement", "Update", "Info"].map(t => (
+                                        <option key={t} value={t} className="bg-zinc-900">{t}</option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[9px] font-black text-zinc-600 uppercase tracking-widest ml-2">Dk.</label>
+                                <input
+                                    type="number"
+                                    value={form.readTime}
+                                    onChange={e => setForm(f => ({ ...f, readTime: parseInt(e.target.value) || 1 }))}
+                                    className="w-full bg-black/40 border border-white/5 p-3 rounded-xl text-xs text-zinc-300 outline-none"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* KAPAK GÖRSELİ */}
+                    <div className="bg-zinc-900/40 border border-white/5 p-6 rounded-[2rem] space-y-4">
+                        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500">Kapak Görseli</h3>
+                        <div className={`relative aspect-video border-2 border-dashed rounded-2xl transition-all overflow-hidden flex items-center justify-center ${form.coverImage ? "border-purple-500/20 bg-purple-500/5" : "border-white/5 bg-black/40"}`}>
+                            {form.coverImage ? (
+                                <div className="relative w-full h-full group">
+                                    <img src={form.coverImage} alt="" className="w-full h-full object-cover" />
+                                    <button onClick={() => setForm(f => ({ ...f, coverImage: "" }))} className="absolute inset-0 m-auto w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <X size={20} />
+                                    </button>
+                                </div>
+                            ) : (
+                                <label className="flex flex-col items-center justify-center cursor-pointer w-full h-full py-10">
+                                    <ImagePlus size={24} className="text-zinc-700 mb-2" />
+                                    <span className="text-[10px] font-black text-zinc-700 uppercase">Görsel </span>
+                                    <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                                </label>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     );

@@ -86,9 +86,7 @@ export default function RootLayout({
             <main className="flex-grow">
               {/* Sayfalar arası siber-lazer geçiş efekti */}
               <>
-                <SmoothScrolling>
-                  {children}
-                </SmoothScrolling>
+                {children}
               </>
             </main>
 

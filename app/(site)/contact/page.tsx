@@ -7,7 +7,7 @@ import {
   MapPin, Mail, Github, MessageSquare, Fingerprint, AlertTriangle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { sendSignal } from "@/app/actions/send-email"; // SERVER ACTION IMPORTU
+import { sendSignal } from "@/app/(site)/actions/send-email"; // SERVER ACTION IMPORTU
 
 // --- BORDER BEAM ---
 const BorderBeam = ({ className, color = "#FF4F00", duration = 4 }: { className?: string; color?: string; duration?: number }) => (

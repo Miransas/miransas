@@ -4,19 +4,14 @@
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Code2, Zap, Database, ArrowUpRight, Gamepad2 } from "lucide-react";
-import { useRouter } from "next/navigation"; // ─── Next.js Router EKLENDİ ───
+import { useRouter } from "next/navigation";
 
-// ... (RustBadge, ArrowIcon, Beam, CircuitBeams, Chip, BorderBeam bileşenleri aynı kalıyor) ...
+// ─── YARDIMCI BİLEŞENLER (Aynı kalıyor, sadece isim/tasarım rötuşu) ───
+
 const RustBadge = () => (
   <svg width="14" height="14" viewBox="0 0 16 16" className="inline align-middle mx-[2px] mb-[3px]">
     <circle cx="8" cy="8" r="7" stroke="#CE422B" strokeWidth="1.2" fill="none" />
     <text x="8" y="11.5" textAnchor="middle" fontSize="8" fontWeight="bold" fill="#CE422B">R</text>
-  </svg>
-);
-
-const ArrowIcon = () => (
-  <svg width="13" height="13" viewBox="0 0 14 14" className="inline ml-1 align-middle text-neutral-600">
-    <path d="M3 11L11 3M11 3H6M11 3V8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -99,7 +94,7 @@ const Chip = () => (
         <div key={i} className="absolute -right-3 w-3 h-[2px] bg-neutral-800 rounded-full" style={{ top: `${35 + i * 30}%` }} />
       ))}
       <span className="text-neutral-300 text-sm font-medium tracking-[0.2em] font-mono uppercase selection:bg-[#FF4F00]">
-        Miransas Core
+        Miransas Neural Node
       </span>
     </div>
     <div className="flex gap-1.5 mt-[-3px]">
@@ -117,7 +112,7 @@ const Chip = () => (
 const BorderBeam = ({ color, active, duration = 1.8 }: { color: string; active: boolean; duration?: number }) => {
   if (!active) return null;
   return (
-    <div className="absolute inset-0 rounded-[16px] overflow-hidden pointer-events-none z-[2]">
+    <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-[2]">
       <style>{`
         @keyframes beam-spin {
           from { transform: rotate(0deg); }
@@ -125,55 +120,53 @@ const BorderBeam = ({ color, active, duration = 1.8 }: { color: string; active: 
         }
       `}</style>
       <div 
-        className="absolute inset-[-4px] rounded-[18px]"
+        className="absolute inset-[-4px] rounded-2xl"
         style={{
           background: `conic-gradient(from 0deg, transparent 300deg, ${color} 340deg, white 350deg, ${color} 360deg)`,
           animation: `beam-spin ${duration}s linear infinite`,
         }} 
       />
-      <div className="absolute inset-[1.5px] rounded-[15px] bg-neutral-950" />
+      <div className="absolute inset-[1.5px] rounded-2xl bg-neutral-950" />
     </div>
   );
 };
 
 
+// ─── İNGİLİZCE METİNLER (Premium Aura) ───
 const CARDS = [
   {
     icon: <Code2 className="text-blue-500" size={30} />,
-    title: "UI Engineering",
+    title: "UI Architecture",
     accent: "#3B82F6",
     glow: "rgba(59,130,246,0.18)",
-    desc: <>High-performance, SEO-critical studio interfaces. Engineered using Next.js and React Server Components for maximum efficiency.</>,
-    link: "/projects", // ─── Linkleri temiz tutmakta fayda var
+    desc: "Crafting high-performance, SEO-critical digital experiences. Engineered with Next.js 15 and React Server Components for zero-latency rendering.",
+    link: "/projects", 
   },
   {
     icon: <Zap className="text-[#FF4F00]" size={30} />,
-    title: "Systems Architecture",
+    title: "Systems & Networking",
     accent: "#FF4F00",
     glow: "rgba(255,79,0,0.22)",
-    desc: <>Low-level optimization powered by **Rust** <RustBadge /> and **Go**. driving memory-safe macOS VPN solutions.</>,
+    desc: "Low-level optimization powered by Rust and Go. Driving memory-safe tunneling protocols like binboi and custom macOS VPN solutions.",
     link: "/projects",
   },
   {
     icon: <Gamepad2 className="text-yellow-500" size={30} />,
-    title: "Game Engines",
+    title: "Engine Development",
     accent: "#EAB308",
     glow: "rgba(234,179,8,0.18)",
-    desc: <>Propelling the **Lost Signal** universe. Typed data handling via Drizzle ORM interfacing with scalable distributed PostgreSQL nodes.</>,
-    link: "/games", // ─── Oyunlar sayfasına yönlendirir
+    desc: "Propelling the Lost Signal universe under Sadpera Studio. Seamlessly integrating complex logic with scalable distributed database nodes.",
+    link: "/games", 
   },
 ];
 
 
 const Card = ({ card, index, hovered, setHovered, beamActive }: any) => {
   const active = hovered === index;
-  const router = useRouter(); // ─── Router'ı başlattık ───
+  const router = useRouter(); 
 
-  // ─── Tıklama İşlevi (Click Handler) EKLENDİ ───
   const handleCardClick = () => {
-    if (card.link) {
-      router.push(card.link);
-    }
+    if (card.link) router.push(card.link);
   };
 
   return (
@@ -183,12 +176,12 @@ const Card = ({ card, index, hovered, setHovered, beamActive }: any) => {
       transition={{ delay: 0.6 + index * 0.1, duration: 0.6 }}
       onHoverStart={() => setHovered(index)}
       onHoverEnd={() => setHovered(1)}
-      onClick={handleCardClick} // ─── onClick eventi karta eklendi ───
+      onClick={handleCardClick} 
       className={cn(
-        "flex-1 min-w-[380px] max-w-[480px] p-12 rounded-2xl cursor-pointer relative overflow-hidden transition-all duration-300 group", // ─── group eklendi (iç ikon hoverları için)
-        "bg-gradient-to-br from-neutral-900 to-black border-1.5",
-        active || beamActive ? "border-transparent" : "border-neutral-800",
-        active && "shadow-[0_20px_60px_rgba(0,0,0,0.7)]",
+        "flex-1 min-w-[380px] max-w-[480px] p-10 rounded-2xl cursor-pointer relative overflow-hidden transition-all duration-300 group", 
+        "bg-gradient-to-br from-[#0a0a0a] to-[#030303] border",
+        active || beamActive ? "border-transparent" : "border-white/5",
+        active && "shadow-[0_20px_60px_rgba(0,0,0,0.8)]",
         "selection:bg-[#FF4F00]/30"
       )}
       style={{ borderColor: active || beamActive ? card.accent : undefined }}
@@ -206,17 +199,24 @@ const Card = ({ card, index, hovered, setHovered, beamActive }: any) => {
       </AnimatePresence>
 
       <div className="relative z-[4]">
-        <div className="mb-6 drop-shadow-[0_0_8px_currentColor]">{card.icon}</div>
-        <div className="flex items-center mb-2">
-          <span className="text-white text-lg font-bold tracking-tight uppercase font-mono">{card.title}</span>
-          <motion.span 
-            animate={{ x: active ? 4 : 0, y: active ? -4 : 0 }} // ─── Ok animasyonu daha belirgin ───
-            className="text-neutral-600 transition-colors group-hover:text-white" // ─── Hover olunca ok rengi beyazlar ───
-          >
-            <ArrowUpRight size={18} />
-          </motion.span>
+        <div className="mb-8 p-3 rounded-xl bg-white/5 w-fit border border-white/10 group-hover:scale-110 transition-transform duration-300">
+            {card.icon}
         </div>
-        <p className="text-neutral-500 text-sm leading-relaxed font-light">{card.desc}</p>
+        
+        <div className="flex items-center justify-between mb-4">
+          <span className="text-white text-xl font-black tracking-tight uppercase font-sans italic">{card.title}</span>
+          <motion.div 
+            animate={{ x: active ? 4 : 0, y: active ? -4 : 0 }} 
+            className="text-zinc-600 transition-colors group-hover:text-white" 
+          >
+            <ArrowUpRight size={20} />
+          </motion.div>
+        </div>
+        
+        {/* Desc kısmını JSX yerine düz metin (string) yapıp burada render ediyoruz */}
+        <p className="text-zinc-400 text-sm leading-relaxed font-light">
+            {card.desc}
+        </p>
       </div>
     </motion.div>
   );
@@ -250,29 +250,32 @@ export default function TechStackSections() {
   const inView = useInView(ref, { once: true, margin: "-100px" });
 
   return (
-    <section ref={ref} className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-6 relative overflow-hidden selection:bg-[#FF4F00]/20 selection:text-white">
-      <div className="absolute inset-0 opacity-[0.1] pointer-events-none" 
-        style={{ backgroundImage: `linear-gradient(#404040 1px, transparent 1px), linear-gradient(90deg, #404040 1px, transparent 1px)`, backgroundSize: "50px 50px" }} 
+    <section ref={ref} className="min-h-screen bg-[#030303] flex flex-col items-center justify-center py-32 px-6 relative overflow-hidden selection:bg-purple-500/30 selection:text-white">
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" 
+        style={{ backgroundImage: `linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)`, backgroundSize: "64px 64px" }} 
       />
 
-      <motion.h2
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{duration: 0.6}}
-        className="text-white text-3xl md:text-4xl font-black text-center mb-20 tracking-tighter uppercase z-10 font-mono leading-none"
+        className="text-center mb-24 z-10"
       >
-        Built on a foundation of fast, <br />
-        <span className="text-neutral-700 decoration-[#FF4F00] decoration-2 underline underline-offset-8">production-grade</span> tooling.
-      </motion.h2>
+        <span className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-500 mb-6 block">Core Architecture</span>
+        <h2 className="text-white text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.85]">
+          Engineered for <br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-500 to-zinc-700">Zero Latency.</span>
+        </h2>
+      </motion.div>
 
-      <div className="relative w-full flex flex-col items-center">
+      <div className="relative w-full flex flex-col items-center max-w-7xl mx-auto">
         <Chip />
         
         <div className="relative w-full h-[180px] mt-[-56px] z-[5]">
           <CircuitBeams />
         </div>
         
-        <div className="flex flex-wrap justify-center gap-6 w-full relative z-20">
+        <div className="flex flex-col lg:flex-row justify-center gap-8 w-full relative z-20">
           {CARDS.map((card, i) => (
             <Card key={i} card={card} index={i} hovered={hovered} setHovered={setHovered} beamActive={beamActive[i]} />
           ))}

@@ -2,6 +2,7 @@
 import AdminSidebar from "@/components/admin/admin-sidebar";
 import { auth } from "@/auth";
 import Link from "next/link";
+import { Toaster } from "../../components/ui/sonner";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -40,6 +41,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     <div className="flex min-h-screen bg-[#030303] text-white">
       <AdminSidebar />
       <section className="flex-1 p-10 overflow-y-auto">
+        <Toaster theme="dark" position="bottom-right" richColors />
         {children}
       </section>
     </div>

@@ -1,127 +1,81 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
-import React from "react";
 import { motion } from "framer-motion";
-import { 
-  Activity, Code2, Gamepad2, Mic, Shield, 
-  Cpu, Github, ArrowRight 
-} from "lucide-react";
-import { cn } from "@/lib/utils";
+import { ArrowUpRight, Code2, Cpu } from "lucide-react";
+import { AnimatedBadge } from "../shared/animated-badge";
+// BADGE IMPORTU BURADA
 
-// --- BORDER BEAM ---
-const BorderBeam = ({ color = "#FF4F00", duration = 4 }: { color?: string; duration?: number }) => (
-  <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-10">
-    <motion.div
-      className="absolute w-[2px] h-[40%] blur-[2px]"
-      style={{
-        background: `linear-gradient(180deg, ${color} 0%, rgba(255,255,255,0.8) 50%, ${color} 100%)`,
-        filter: `drop-shadow(0 0 8px ${color})`,
-      }}
-      animate={{ top: ["-40%", "100%", "100%", "-40%", "-40%"], left: ["0%", "0%", "100%", "100%", "0%"] }}
-      transition={{ duration: duration, repeat: Infinity, ease: "linear" }}
-    />
-  </div>
-);
-
-// --- CATEGORY MAP ---
-const TYPE_MAP: any = {
-  "Systems Engineering": { color: "#3B82F6", icon: <Shield size={24} className="text-blue-500" /> },
-  "Network Infrastructure": { color: "#A855F7", icon: <Activity size={24} className="text-purple-500" /> },
-  "Artificial Intelligence": { color: "#F43F5E", icon: <Mic size={24} className="text-rose-500" /> },
-  "Interactive IP": { color: "#EF4444", icon: <Gamepad2 size={24} className="text-red-500" /> },
-  "default": { color: "#10B981", icon: <Code2 size={24} className="text-emerald-500" /> }
-};
-
-interface ProjectDisplayProps {
-  project: any; // DB'den gelen post objesi
-  index: number;
-}
-
-export function ProjectDisplay({ project, index }: ProjectDisplayProps) {
-  // Tag'e göre ikon ve renk seç, bulamazsa default'u kullan
-  const style = TYPE_MAP[project.tag] || TYPE_MAP["default"];
-  
-  // Zebra düzeni (bir sağda bir solda)
-  const isEven = index % 2 !== 0;
+export function ProjectDisplay({ project, index }: { project: any; index: number }) {
+  const isEven = index % 2 === 0;
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-100px" }}
-      transition={{ duration: 0.7 }}
-      className={cn(
-        "flex flex-col lg:flex-row gap-12 lg:gap-20 items-center",
-        isEven ? "lg:flex-row-reverse" : ""
-      )}
+      transition={{ duration: 0.8, delay: index * 0.1 }}
+      className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 items-center`}
     >
-      {/* MOCKUP & KOD EKRANI (SOL/SAĞ) */}
-      <div className="w-full lg:w-1/2 relative group">
-        <div className="relative bg-[#0A0A0A] border border-neutral-800 rounded-2xl p-6 shadow-2xl overflow-hidden min-h-[400px] flex flex-col">
-          <BorderBeam color={style.color} />
-          
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-neutral-800/50 relative z-20">
-            <div className="flex gap-1.5">
-              <div className="w-3 h-3 rounded-full bg-neutral-700" />
-              <div className="w-3 h-3 rounded-full bg-neutral-700" />
-              <div className="w-3 h-3 rounded-full bg-neutral-700" />
+      {/* 1. GÖRSEL / KART ALANI */}
+      <div className="flex-1 w-full group relative">
+        <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-blue-600 rounded-[2.5rem] blur opacity-20 group-hover:opacity-40 transition duration-1000"></div>
+        <div className="relative aspect-[16/10] bg-zinc-900 border border-white/5 rounded-[2.5rem] overflow-hidden">
+          {project.coverImage ? (
+             // grayscale sınıfını ekledik, üzerine gelince renklenmesi için
+            <img src={project.coverImage} className="w-full h-full object-cover  group-hover:grayscale-0 transition-all duration-700 scale-105 group-hover:scale-100" />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-zinc-950">
+               <Cpu size={80} className="text-zinc-800 animate-pulse" />
             </div>
-            <div className="flex items-center gap-2 text-[10px] font-mono text-neutral-500 uppercase tracking-widest">
-              <Cpu size={12} /> {project.slug}.sys
-            </div>
-          </div>
+          )}
+        </div>
+        {/* İndeks Numarası */}
+        <span className="absolute -top-6 -left-6 text-8xl font-black text-white/5 italic pointer-events-none">0{index + 1}</span>
+      </div>
 
-          <div className="flex-1 overflow-hidden relative z-20">
-            <pre className="text-[11px] md:text-sm font-mono leading-loose text-neutral-400 whitespace-pre-wrap">
-              <code 
-                dangerouslySetInnerHTML={{
-                  __html: project.content // Editörden gelen HTML kod bloğu
-                    .replace(/(const|let|var|async|await|func|use|import|export|from|type|def|public|class|void|if)/g, `<span style="color: ${style.color}">$1</span>`)
-                }} 
-              />
-            </pre>
-          </div>
-
-          <div className="mt-6 pt-4 border-t border-neutral-800/50 flex justify-between items-center text-[10px] font-mono uppercase tracking-widest text-neutral-500 relative z-20">
-            <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full animate-pulse" style={{ backgroundColor: style.color }} />
-              Production Ready
+      {/* 2. BİLGİ ALANI */}
+      <div className="flex-1 space-y-6">
+        
+        {/* ETİKET (TAG) VE BADGE ALANI */}
+        <div className="flex items-center gap-4">
+          {/* Eğer proje binboi ise animasyonlu badge göster, değilse normal tag göster */}
+          {project.slug?.includes("binboi") ? (
+            <AnimatedBadge text="LAUNCHING SOON" color="purple" />
+          ) : (
+            <span className="px-4 py-1.5 bg-white/5 border border-white/10 rounded-full text-[10px] font-black uppercase tracking-widest text-purple-400">
+              {project.tag}
             </span>
-            <span>Miransas Node Online</span>
+          )}
+          
+          <span className="text-[10px] font-black uppercase tracking-widest text-zinc-600 italic">
+            {project.readTime} MIN READ
+          </span>
+        </div>
+
+        <h2 className="text-5xl md:text-6xl font-black uppercase italic tracking-tighter leading-[0.9] text-white">
+          {project.title}
+        </h2>
+
+        {/* ─── HTML RENDER HATASI BURADA ÇÖZÜLÜYOR ─── */}
+        {/* prose sınıflarındaki marginleri (my-0) sıfırladık ki kartı şişirmesin */}
+        <div 
+          className="text-lg text-zinc-400 font-light leading-relaxed line-clamp-3 prose prose-invert max-w-none prose-p:my-0 prose-headings:my-0 prose-ul:my-0"
+          dangerouslySetInnerHTML={{ __html: project.excerpt || project.content || "" }}
+        />
+
+        {/* BUTONLAR */}
+        <div className="pt-6 flex items-center gap-4">
+          <a 
+            href={`/projects/${project.slug}`}
+            className="group flex items-center gap-3 px-8 py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-zinc-200 transition-all active:scale-95"
+          >
+            Read <ArrowUpRight size={18} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+          </a>
+          
+          <div className="p-4 bg-zinc-900 border border-white/5 rounded-2xl text-zinc-500 hover:text-white transition-colors cursor-pointer">
+            <Code2 size={20} />
           </div>
         </div>
       </div>
-
-      {/* PROJE DETAYLARI (SAĞ/SOL) */}
-      <div className="w-full lg:w-1/2 flex flex-col justify-center">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="p-3 bg-neutral-900 border border-neutral-800 rounded-xl">
-            {style.icon}
-          </div>
-          <span className="text-xs font-mono uppercase tracking-[0.2em] text-neutral-500">
-            {project.tag}
-            </span>
-          </div>
-        </div>
-
-        <h2 className="text-3xl md:text-5xl font-bold uppercase tracking-tight mb-6 text-white italic">
-          {project.title}
-        </h2>
-        
-        <p className="text-neutral-400 font-light leading-relaxed mb-8 text-sm md:text-base">
-          {project.excerpt}
-        </p>
-
-        {/* Aksiyonlar */}
-        <div className="flex items-center gap-4">
-          <a href={`/projects/${project.slug}`} className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest bg-white text-black px-6 py-3 rounded-lg hover:bg-neutral-200 transition-all active:scale-95">
-            Sistemi İncele <ArrowRight size={14} />
-          </a>
-          <a href="#" className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest bg-transparent border border-white/10 text-white px-6 py-3 rounded-lg hover:bg-white/5 transition-all">
-            <Github size={14} /> Source
-          </a>
-        </div>
-    
     </motion.div>
   );
 }

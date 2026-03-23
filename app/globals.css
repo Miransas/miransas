@@ -83,7 +83,7 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
+  --background: oklch(#000000);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -117,15 +117,41 @@
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+  :root {
+    --selection-bg: rgba(9, 109, 9, 0.3);
+    --selection-text: #ffffff;
   }
+
+  ::selection {
+    background-color: var(--selection-bg);
+    color: var(--selection-text);
+  }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-[#030303] text-zinc-400 antialiased selection:bg-purple-500/30;
+    font-feature-settings: "ss01", "ss03", "cv08", "cv11";
   }
-  html {
-    @apply font-sans;
-  }
+}
+
+/* Prose İçindeki Özel Link Animasyonu */
+.prose a {
+  @apply no-underline border-b border-purple-500/30 hover:border-purple-500 transition-colors duration-300;
+}
+
+/* Kod Blokları İçin Modern Scrollbar */
+.prose pre {
+  @apply border border-black shadow-2xl;
+  scrollbar-width: thin;
+  scrollbar-color: #27272a transparent;
+}
+
+.prose pre::-webkit-scrollbar {
+  height: 5px;
+}
+
+.prose pre::-webkit-scrollbar-thumb {
+  background: #000000;
+  border-radius: 10px;
 }
 
 

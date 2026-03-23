@@ -62,8 +62,8 @@ export default async function AdminDashboard({
         
         <div className="flex flex-1 max-w-2xl items-center gap-4">
           <SearchBar />
-          <Link href="/admin/new" className="shrink-0 flex items-center gap-2 px-6 py-3 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-xl shadow-white/5 active:scale-95">
-            <Plus size={18} /> Yeni Ekle
+          <Link href="/admin/blog/new" className="shrink-0 flex items-center gap-2 px-6 py-3 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-zinc-200 transition-all shadow-xl shadow-white/5 active:scale-95">
+            <Plus size={18} /> Yangi
           </Link>
         </div>
       </div>
