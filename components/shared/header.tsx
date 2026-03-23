@@ -2,130 +2,137 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ArrowUpRight, Github, Twitter } from "lucide-react";
 import { headerNavLinks as navLinks } from "@/constants";
+import { cn } from "@/lib/utils";
 
 const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [scrolled, setScrolled] = useState<boolean>(false);
+  const pathname = usePathname();
 
-  // Sayfa kaydırıldığında header'ın arka planını belirginleştirme
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const menuVariants = {
-    closed: {
-      x: "100%" as const,
-      transition: { type: "spring" as const, stiffness: 400, damping: 40 }
-    },
-    opened: {
-      x: 0,
-      transition: { type: "spring" as const, stiffness: 400, damping: 40 }
-    },
-  };
-
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${scrolled
-            ? "border-b border-white/10 bg-black/70 backdrop-blur-xl py-4"
+        className={cn(
+          "fixed top-0 left-0 w-full z-[100] transition-all duration-500",
+          scrolled
+            ? "bg-black/60 backdrop-blur-xl py-3 border-b border-white/[0.05] shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
             : "bg-transparent py-6"
-          }`}
+        )}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-
-          {/* Logo */}
-          <Link href="/" className="text-2xl font-black tracking-tighter text-white flex items-center gap-1">
-            <img src="/logo/logo.png" alt="" className="w-16" />
-            MIRANSAS<span className="text-blue-500"></span>
+          
+          {/* LOGO SECTİON */}
+          <Link href="/" className="group flex items-center gap-3">
+            <div className="relative w-10 h-10 overflow-hidden rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-blue-500/50 transition-all duration-500">
+               <img src="/logo/logo.png" alt="Miransas" className="w-7 h-7 object-contain group-hover:scale-110 transition-transform duration-500" />
+               <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+            </div>
+            <div className="flex flex-col">
+                <span className="text-lg font-black tracking-tighter text-white leading-none uppercase italic">Miransas.</span>
+                <span className="text-[8px] font-bold tracking-[0.3em] text-zinc-500 uppercase leading-none mt-1 group-hover:text-blue-400 transition-colors">Digital Studio</span>
+            </div>
           </Link>
 
-          {/* Desktop Menü */}
-          <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                href={link.href}
-                className="text-sm font-medium text-gray-400 hover:text-white transition-colors"
-              >
-                {link.name}
-              </Link>
-            ))}
-           
+          {/* DESKTOP NAV (Pill Style) */}
+          <div className="hidden md:flex items-center bg-white/[0.03] border border-white/5 rounded-full px-2 py-1 backdrop-blur-md">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className={cn(
+                    "relative px-5 py-2 text-xs font-black uppercase tracking-widest transition-all duration-300",
+                    isActive ? "text-white" : "text-zinc-500 hover:text-zinc-300"
+                  )}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-pill"
+                      className="absolute inset-0 bg-white/5 rounded-full border border-white/10"
+                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                    />
+                  )}
+                  <span className="relative z-10">{link.name}</span>
+                </Link>
+              );
+            })}
           </div>
 
-          {/* Burger Butonu (Next-level Animasyonlu) */}
-          <div className="md:hidden z-[110]">
+          {/* RIGHT SECTİON: ACTIONS */}
+          <div className="flex items-center gap-4">
+            <Link 
+                href="/admin" 
+                className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-white text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-zinc-200 transition-all active:scale-95 shadow-lg shadow-white/5"
+            >
+                Portal <ArrowUpRight size={14} />
+            </Link>
+
+            {/* Burger Butonu */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="p-2 text-white outline-none"
-              aria-label="Toggle Menu"
+              className="md:hidden w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white outline-none hover:bg-white/10 transition-all"
             >
-              <motion.div animate={{ rotate: isOpen ? 90 : 0 }}>
-                {isOpen ? <X size={30} /> : <Menu size={30} />}
-              </motion.div>
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
       </nav>
 
-      {/* Mobil Menü Sistemi */}
+      {/* MOBİL MENÜ (Modern Reveal) */}
       <AnimatePresence>
         {isOpen && (
-          <>
-            {/* Overlay */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-md z-[101]"
-            />
-
-            {/* Sağ Panel */}
-            <motion.div
-              variants={menuVariants}
-              initial="closed"
-              animate="opened"
-              exit="closed"
-              className="fixed top-0 right-0 h-screen w-[80%] sm:w-[400px] bg-[#080808] border-l border-white/5 p-12 z-[105] flex flex-col shadow-[ -20px 0 50px rgba(0,0,0,0.5)]"
-            >
-              <div className="mt-16 flex flex-col gap-10">
-                {navLinks.map((link, i) => (
-                  <motion.div
-                    key={link.name}
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.1 * i + 0.2 }}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="fixed inset-0 z-[90] bg-[#030303] flex flex-col pt-32 px-8"
+          >
+            {/* Arka Plan Glow */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-blue-600/10 blur-[120px] pointer-events-none" />
+            
+            <div className="space-y-6 relative z-10">
+              {navLinks.map((link, i) => (
+                <motion.div
+                  key={link.name}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <Link
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="group flex items-end gap-4 text-5xl font-black uppercase tracking-tighter text-zinc-800 hover:text-white transition-all italic"
                   >
-                    <Link
-                      href={link.href}
-                      onClick={() => setIsOpen(false)}
-                      className="text-4xl font-bold text-white hover:text-blue-500 transition-colors inline-block"
-                    >
-                      {link.name}
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
+                    <span className="text-sm font-mono text-blue-500 mb-2">0{i + 1}</span>
+                    {link.name}
+                    <ArrowUpRight size={32} className="opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all text-blue-500" />
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
 
-              <div className="mt-auto">
-                <div className="h-[1px] w-full bg-white/10 mb-8" />
-                <p className="text-gray-500 text-sm tracking-widest uppercase mb-4">Sosyal Medya</p>
+            <div className="mt-auto pb-12 relative z-10">
+              <div className="h-px w-full bg-white/5 mb-10" />
+              <div className="flex justify-between items-center text-zinc-500">
                 <div className="flex gap-6">
-                  {/* Buraya sosyal medya ikonların gelecek */}
-                  <span className="text-white/40 hover:text-blue-500 cursor-pointer transition-colors">Twitter</span>
-                  <span className="text-white/40 hover:text-blue-500 cursor-pointer transition-colors">Github</span>
+                  <Link href="https://twitter.com/asardorazimov" target="_blank" className="hover:text-white transition-colors"><Twitter size={20}/></Link>
+                  <Link href="https://github.com/sardorazimov" target="_blank" className="hover:text-white transition-colors"><Github size={20}/></Link>
                 </div>
+                <p className="text-[10px] font-black uppercase tracking-widest italic">Miransas © 2026</p>
               </div>
-            </motion.div>
-          </>
+            </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </>

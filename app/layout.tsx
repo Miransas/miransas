@@ -81,7 +81,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="relative flex min-h-screen flex-col">
-            <Navbar />
+            {/* <Navbar /> */}
 
             <main className="flex-grow">
               {/* Sayfalar arası siber-lazer geçiş efekti */}
@@ -92,7 +92,7 @@ export default function RootLayout({
               </>
             </main>
 
-            <Footer />
+            {/* <Footer /> */}
           </div>
         </ThemeProvider>
       </body>

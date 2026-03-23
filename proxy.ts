@@ -10,7 +10,7 @@ export const config = {
   // api, _next/static vb. hariç her tetiklenmede çalışır
   matcher: [
      
-     "/dashboard/:path*",
+    "/admin/:path*",
     //  "/agent/:path*", --- IGNORE ---
   ],
   

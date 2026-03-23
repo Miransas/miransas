@@ -3,10 +3,14 @@ import Hero from '../components/shared/hero'
 import TechStackSection from '../components/shared/TechStackSection'
 import EcosystemSection from '../components/shared/ecosystem'
 import FeaturesGrid from '../components/shared/features-grid'
+import Navbar from '../components/shared/header'
+import Footer from '../components/shared/footer'
 
 const page = () => {
   return (
-    <div className='mt-20'>
+    <main>
+      <Navbar />
+       <div className='mt-20'>
       <Hero />
       <div>
         <TechStackSection />
@@ -14,6 +18,9 @@ const page = () => {
         <FeaturesGrid />
       </div>
     </div>
+    <Footer />
+    </main>
+   
   )
 }
 
