@@ -32,7 +32,7 @@ const AuroraBackground = () => (
 
 export default function AboutPage() {
   return (
-    <main className="relative min-h-screen bg-[#030303] text-white pt-40 pb-32 overflow-hidden selection:bg-purple-500/30 font-sans">
+    <main className="relative min-h-screen bg-[#030303] text-white pt-40 pb-32 overflow-hidden font-sans">
       
       <AuroraBackground />
 

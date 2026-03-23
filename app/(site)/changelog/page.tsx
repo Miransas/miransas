@@ -33,7 +33,7 @@ export default async function ChangelogPage() {
     .orderBy(desc(posts.createdAt));
 
   return (
-    <main className="min-h-screen bg-[#030303] text-white pt-32 pb-24 selection:bg-blue-500/30">
+    <main className="min-h-screen bg-[#030303] text-white pt-32 pb-24 0">
       <div className="max-w-3xl mx-auto px-6">
         
         {/* HEADER */}

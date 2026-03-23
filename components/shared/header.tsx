@@ -23,23 +23,27 @@ const Navbar: React.FC = () => {
     <>
       <nav
         className={cn(
-          "fixed top-0 left-0 w-full z-[100] transition-all duration-500",
+          "fixed top-0 left-0 w-full z-[100] transition-all duration-500 transform-gpu",
+          // 1. Her zaman border-b ekledik, sadece rengi transparan başlattık
+          "border-b border-transparent",
           scrolled
-            ? "bg-black/60 backdrop-blur-xl py-3 border-b border-black shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
+            ? "bg-black/60 backdrop-blur-xl py-3 border-zinc-900 shadow-[0_10px_30px_rgba(0,0,0,0.5)]"
             : "bg-transparent py-6"
         )}
+        // 2. GPU hızlandırmayı zorla
+        style={{ backfaceVisibility: "hidden", perspective: 1000 }}
       >
         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-          
+
           {/* LOGO SECTİON */}
           <Link href="/" className="group flex items-center gap-3">
             <div className="relative w-10 h-10 overflow-hidden rounded-xl bg-white/5 border border-white/10 flex items-center justify-center group-hover:border-blue-500/50 transition-all duration-500">
-               <img src="/logo/logo.png" alt="Miransas" className="w-7 h-7 object-contain group-hover:scale-110 transition-transform duration-500" />
-               <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <img src="/logo/logo.png" alt="Miransas" className="w-7 h-7 object-contain group-hover:scale-110 transition-transform duration-500" />
+              <div className="absolute inset-0 bg-blue-500/10 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
             <div className="flex flex-col">
-                <span className="text-lg font-black tracking-tighter text-white leading-none uppercase italic">Miransas.</span>
-                <span className="text-[8px] font-bold tracking-[0.3em] text-zinc-500 uppercase leading-none mt-1 group-hover:text-blue-400 transition-colors"></span>
+              <span className="text-lg font-black tracking-tighter text-white leading-none uppercase italic">Miransas.</span>
+              <span className="text-[8px] font-bold tracking-[0.3em] text-zinc-500 uppercase leading-none mt-1 group-hover:text-blue-400 transition-colors"></span>
             </div>
           </Link>
 
@@ -71,11 +75,11 @@ const Navbar: React.FC = () => {
 
           {/* RIGHT SECTİON: ACTIONS */}
           <div className="flex items-center gap-4">
-            <Link 
-                href="/admin" 
-                className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-white text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-zinc-200 transition-all active:scale-95 shadow-lg shadow-white/5"
+            <Link
+              href="/admin"
+              className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-white text-black rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-zinc-200 transition-all active:scale-95 shadow-lg shadow-white/5"
             >
-                Portal <ArrowUpRight size={14} />
+              Portal <ArrowUpRight size={14} />
             </Link>
 
             {/* Burger Butonu */}
@@ -100,7 +104,7 @@ const Navbar: React.FC = () => {
           >
             {/* Arka Plan Glow */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-blue-600/10 blur-[120px] pointer-events-none" />
-            
+
             <div className="space-y-6 relative z-10">
               {navLinks.map((link, i) => (
                 <motion.div
@@ -126,8 +130,8 @@ const Navbar: React.FC = () => {
               <div className="h-px w-full bg-white/5 mb-10" />
               <div className="flex justify-between items-center text-zinc-500">
                 <div className="flex gap-6">
-                  <Link href="https://twitter.com/asardorazimov" target="_blank" className="hover:text-white transition-colors"><Twitter size={20}/></Link>
-                  <Link href="https://github.com/sardorazimov" target="_blank" className="hover:text-white transition-colors"><Github size={20}/></Link>
+                  <Link href="https://twitter.com/asardorazimov" target="_blank" className="hover:text-white transition-colors"><Twitter size={20} /></Link>
+                  <Link href="https://github.com/sardorazimov" target="_blank" className="hover:text-white transition-colors"><Github size={20} /></Link>
                 </div>
                 <p className="text-[10px] font-black uppercase tracking-widest italic">Miransas © 2026</p>
               </div>

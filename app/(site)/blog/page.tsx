@@ -1,120 +1,122 @@
 import Link from "next/link";
 import { db } from "@/lib/db";
 import { posts } from "@/lib/db/schema";
-import { eq, desc, and } from "drizzle-orm"; // 'and' importu eklendi
-import { Clock, ArrowUpRight, Plus, User, Sparkles } from "lucide-react";
+import { eq, desc, and } from "drizzle-orm";
+import { Clock, ArrowUpRight, Plus, User, Sparkles, Inbox } from "lucide-react";
 import { auth } from "@/auth";
 
 export default async function BlogPage() {
   const session = await auth();
   
-  // Sadece yayında olan VE tipi 'blog' olanları çekiyoruz
+  // Fetching only published blog posts
   const allPosts = await db.select().from(posts)
     .where(
       and(
         eq(posts.published, true),
-        eq(posts.type, "blog") // Sadece blog yazılarını getir
+        eq(posts.type, "blog")
       )
     )
     .orderBy(desc(posts.createdAt));
 
-  // Yazı yoksa featuredPost undefined olur, hata almamak için güvenli ayırıyoruz
   const featuredPost = allPosts.length > 0 ? allPosts[0] : null;
   const regularPosts = allPosts.length > 1 ? allPosts.slice(1) : [];
 
   return (
-    <main className="min-h-screen bg-[#030303] text-white pt-32 pb-24 selection:bg-purple-500/30">
-      <div className="max-w-5xl mx-auto px-6">
+    <main className="min-h-screen bg-[#030303] text-white pt-40 pb-32 ">
+      <div className="max-w-6xl mx-auto px-6">
         
-        {/* HEADER ALANI */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-20 relative">
-          <div className="absolute -top-20 -left-20 w-64 h-64 bg-purple-600/20 blur-[120px] pointer-events-none" />
+        {/* HEADER SECTION */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-24 relative">
+          <div className="absolute -top-32 -left-20 w-80 h-80 bg-purple-600/10 blur-[150px] pointer-events-none" />
           
           <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-purple-300 mb-6">
-              <Sparkles size={14} className="text-purple-400" />
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.3em] text-purple-400 mb-8 backdrop-blur-md">
+              <Sparkles size={12} className="text-purple-500" />
               <span>Miransas Insights</span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-4 bg-gradient-to-br from-white via-zinc-300 to-zinc-600 bg-clip-text text-transparent">
-              Blog.
+            <h1 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter mb-6 leading-none">
+              Archives<span className="text-zinc-700">.</span>
             </h1>
-            <p className="text-lg text-zinc-400 max-w-xl leading-relaxed">
-              Otomasyon, Yapay Zeka ve Worktionun inşası hakkında en son güncellemeler ve derinlemesine rehberler.
+            <p className="text-xl text-zinc-500 max-w-2xl font-light leading-relaxed border-l-4 border-purple-500/30 pl-8 italic">
+              Deep dives into neural automation, low-level systems, and the engineering behind the Miransas ecosystem.
             </p>
           </div>
 
-          {/* Sadece Admin görebilsin (Buradaki maili kendi mailin yap) */}
+          {/* ADMIN ACTION - Replace email with your actual admin email */}
           {session?.user?.email === "seninemailin@gmail.com" && (
             <Link href="/admin/new"
-              className="group relative flex items-center gap-2 px-6 py-3 bg-white hover:bg-zinc-200 text-black text-sm font-bold rounded-full transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_40px_-10px_rgba(255,255,255,0.3)] z-10"
+              className="group relative flex items-center gap-3 px-8 py-4 bg-white text-black text-xs font-black uppercase tracking-[0.2em] rounded-2xl transition-all duration-500 hover:scale-105 active:scale-95 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.2)] z-10"
             >
-              <Plus size={16} className="transition-transform group-hover:rotate-90 duration-300" /> 
-              Yeni Yazı Yaz
+              <Plus size={16} className="transition-transform group-hover:rotate-90 duration-500" /> 
+              Create Entry
             </Link>
           )}
         </div>
 
         {allPosts.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-32 border border-dashed border-zinc-800 rounded-3xl bg-zinc-900/20">
-            <div className="w-16 h-16 mb-4 rounded-full bg-purple-500/10 flex items-center justify-center text-purple-400">
-              <Sparkles size={24} />
+          <div className="flex flex-col items-center justify-center py-40 border border-dashed border-zinc-800 rounded-[3rem] bg-zinc-900/10">
+            <div className="w-20 h-20 mb-6 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-zinc-700">
+              <Inbox size={32} />
             </div>
-            <p className="text-zinc-400 text-lg font-medium mb-2">Henüz yazı bulunamadı.</p>
+            <p className="text-zinc-600 text-lg font-black uppercase tracking-widest italic">No transmissions found.</p>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-12">
             
-            {/* 1. ÖNE ÇIKAN YAZI */}
+            {/* FEATURED ENTRY */}
             {featuredPost && (
               <Link 
                 href={`/blog/${featuredPost.slug}`}
-                className="group relative block w-full bg-zinc-900/40 border border-white/[0.05] rounded-[2rem] p-2 hover:border-purple-500/30 transition-all duration-500 hover:bg-zinc-900/80 overflow-hidden"
+                className="group relative block w-full bg-[#0a0a0a] border border-white/5 rounded-[3rem] p-3 hover:border-purple-500/40 transition-all duration-700 hover:bg-[#0d0d0d] overflow-hidden"
               >
-                <div className="flex flex-col md:flex-row gap-8 items-center p-6 md:p-8">
-                  <div className="w-full md:w-1/2 aspect-video md:aspect-[4/3] rounded-2xl overflow-hidden relative bg-zinc-950 shrink-0">
+                <div className="flex flex-col lg:flex-row gap-12 items-center p-8 lg:p-10">
+                  <div className="w-full lg:w-1/2 aspect-video lg:aspect-[16/10] rounded-[2rem] overflow-hidden relative bg-zinc-950 shrink-0">
                     {featuredPost.coverImage ? (
                       <img
                         src={featuredPost.coverImage}
                         alt={featuredPost.title}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                        className="w-full h-full object-cover  opacity-60 transition-all duration-700 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-purple-900/20 to-zinc-900">
-                        <span className="text-6xl">📝</span>
+                      <div className="absolute inset-0 flex items-center justify-center bg-zinc-900/50 italic font-black text-zinc-800 text-8xl">
+                        CORE
                       </div>
                     )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                   </div>
 
-                  <div className="w-full md:w-1/2 flex flex-col justify-center">
-                    <div className="flex items-center gap-3 mb-6 flex-wrap">
-                      <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 uppercase">
+                  <div className="w-full lg:w-1/2 flex flex-col justify-center space-y-8">
+                    <div className="flex items-center gap-4">
+                      <span className="text-[10px] font-black px-4 py-1.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 uppercase tracking-[0.2em]">
                         {featuredPost.tag}
                       </span>
-                      <span className="text-xs font-medium text-zinc-500 flex items-center gap-1">
-                        <Clock size={12} /> {featuredPost.readTime} dk okuma
+                      <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest flex items-center gap-2">
+                        <Clock size={12} /> {featuredPost.readTime} MIN READ
                       </span>
                     </div>
 
-                    <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight group-hover:text-purple-300 transition-colors duration-300">
+                    <h2 className="text-4xl md:text-5xl font-black italic uppercase tracking-tighter leading-[0.9] text-white group-hover:text-purple-400 transition-colors duration-500">
                       {featuredPost.title}
                     </h2>
 
-                    <p className="text-zinc-400 text-base md:text-lg leading-relaxed line-clamp-3 mb-8">
+                    <p className="text-zinc-500 text-lg font-light leading-relaxed line-clamp-3">
                       {featuredPost.excerpt}
                     </p>
 
-                    <div className="flex items-center justify-between mt-auto">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center border border-zinc-700">
-                          <User size={16} className="text-zinc-400" />
+                    <div className="flex items-center justify-between pt-6 border-t border-white/5">
+                      <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-2xl bg-zinc-900 flex items-center justify-center border border-white/5 group-hover:border-purple-500/30 transition-colors">
+                          <User size={18} className="text-zinc-500" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-zinc-200">{featuredPost.authorName}</p>
-                          <p className="text-xs text-zinc-500">{new Date(featuredPost.createdAt!).toLocaleDateString("tr-TR")}</p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-300">{featuredPost.authorName}</p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-zinc-600">
+                            {new Date(featuredPost.createdAt!).toLocaleDateString("en-US", { month: 'long', day: 'numeric', year: 'numeric' })}
+                          </p>
                         </div>
                       </div>
-                      <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-purple-600 group-hover:border-purple-600 transition-all duration-300">
-                        <ArrowUpRight size={20} className="text-zinc-400 group-hover:text-white transition-transform duration-300" />
+                      <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center group-hover:bg-purple-600 group-hover:border-purple-600 transition-all duration-500 shadow-2xl">
+                        <ArrowUpRight size={24} className="text-zinc-500 group-hover:text-white transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1" />
                       </div>
                     </div>
                   </div>
@@ -122,52 +124,52 @@ export default async function BlogPage() {
               </Link>
             )}
 
-            {/* 2. DİĞER YAZILAR */}
+            {/* REGULAR GRID */}
             {regularPosts.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-8">
                 {regularPosts.map(post => (
                   <Link 
                     key={post.slug} 
                     href={`/blog/${post.slug}`}
-                    className="group flex flex-col bg-zinc-900/20 border border-white/[0.05] rounded-3xl p-2 hover:bg-zinc-900/60 transition-all duration-300"
+                    className="group flex flex-col bg-[#0a0a0a] border border-white/5 rounded-[2.5rem] p-3 hover:bg-[#0d0d0d] hover:border-purple-500/20 transition-all duration-500"
                   >
-                    <div className="w-full aspect-[2/1] rounded-2xl overflow-hidden relative mb-4 bg-zinc-950">
+                    <div className="w-full aspect-[2/1] rounded-[2rem] overflow-hidden relative mb-6 bg-zinc-950">
                       {post.coverImage ? (
                         <img
                           src={post.coverImage}
                           alt={post.title}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          className="w-full h-full object-cover grayscale opacity-50 transition-all duration-700 group-hover:grayscale-0 group-hover:opacity-100"
                         />
                       ) : (
-                        <div className="absolute inset-0 flex items-center justify-center bg-zinc-900">
-                          <Sparkles className="text-zinc-700" size={32} />
+                        <div className="absolute inset-0 flex items-center justify-center bg-zinc-900 font-black text-zinc-800 text-4xl italic">
+                          NODE
                         </div>
                       )}
                     </div>
 
-                    <div className="p-4 flex flex-col flex-1 text-left">
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-zinc-800 text-zinc-300 border border-zinc-700 uppercase">
+                    <div className="px-6 pb-6 flex flex-col flex-1">
+                      <div className="flex items-center gap-4 mb-4">
+                        <span className="text-[9px] font-black px-3 py-1 rounded-full bg-white/5 text-zinc-400 border border-white/10 uppercase tracking-widest">
                           {post.tag}
                         </span>
-                        <span className="text-xs text-zinc-500 flex items-center gap-1">
-                          <Clock size={12} /> {post.readTime} dk
+                        <span className="text-[9px] font-black text-zinc-600 uppercase tracking-widest flex items-center gap-1">
+                          <Clock size={10} /> {post.readTime} MIN
                         </span>
                       </div>
 
-                      <h3 className="text-xl font-bold text-white mb-2 group-hover:text-purple-300 transition-colors line-clamp-2">
+                      <h3 className="text-2xl font-black italic uppercase tracking-tighter text-white mb-4 group-hover:text-purple-400 transition-colors line-clamp-2 leading-none">
                         {post.title}
                       </h3>
 
-                      <p className="text-sm text-zinc-500 line-clamp-2 mb-6 flex-1">
+                      <p className="text-sm text-zinc-500 font-light leading-relaxed line-clamp-2 mb-8 flex-1">
                         {post.excerpt}
                       </p>
 
-                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/[0.02]">
-                        <span className="text-xs text-zinc-600 font-medium">
-                          {new Date(post.createdAt!).toLocaleDateString("tr-TR")}
+                      <div className="flex items-center justify-between pt-6 border-t border-white/5">
+                        <span className="text-[9px] font-black text-zinc-700 uppercase tracking-widest">
+                          {new Date(post.createdAt!).toLocaleDateString("en-US")}
                         </span>
-                        <ArrowUpRight size={18} className="text-zinc-600 group-hover:text-purple-400 transition-all" />
+                        <ArrowUpRight size={18} className="text-zinc-700 group-hover:text-purple-400 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                       </div>
                     </div>
                   </Link>

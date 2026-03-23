@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { db } from "@/lib/db";
 import { posts } from "@/lib/db/schema";
 import { eq } from "drizzle-orm";
@@ -7,88 +8,119 @@ import Link from "next/link";
 
 type Props = { params: Promise<{ slug: string }> };
 
+// ─── DECODER: Fixes escaped HTML from the database ───
+const decodeHTML = (html: string) => {
+  if (!html) return "";
+  return html
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&amp;/g, "&")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x27;/g, "'")
+    .replace(/&#x2F;/g, "/");
+};
+
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
+  
   const [post] = await db.select().from(posts).where(eq(posts.slug, slug));
 
   if (!post || !post.published) notFound();
 
   return (
-    <main className="min-h-screen bg-[#000000] text-zinc-200 pt-32 pb-32 selection:bg-purple-500/30">
-      <article className="max-w-3xl mx-auto px-6 relative">
+    <main className="min-h-screen bg-[#030303] text-zinc-400 pt-40 pb-32 overflow-x-hidden">
+      <article className="max-w-4xl mx-auto px-6 relative">
         
-        {/* Arka plan parlama efekti */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-purple-600/10 blur-[120px] pointer-events-none rounded-full" />
+        {/* AMBIENT GLOW */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-purple-600/5 blur-[150px] pointer-events-none rounded-full" />
 
-        {/* Geri Dön Butonu */}
+        {/* BACK ACTION */}
         <Link href="/blog"
-          className="group inline-flex items-center gap-2 text-sm font-medium text-zinc-500 hover:text-white mb-12 transition-colors relative z-10"
+          className="group inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 hover:text-white mb-16 transition-colors relative z-10"
         >
-          <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-          Blog&#39;a Dön
+          <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" />
+          Return to Archives
         </Link>
 
-        {/* BAŞLIK VE META BİLGİLERİ */}
-        <header className="mb-12 relative z-10">
-          <div className="flex items-center gap-4 mb-8 flex-wrap">
-            <span className="flex items-center gap-1.5 text-xs font-bold px-3 py-1.5 rounded-full bg-purple-500/10 text-purple-300 border border-purple-500/20 shadow-[0_0_15px_-3px_rgba(168,85,247,0.2)]">
+        {/* HEADER SECTION */}
+        <header className="mb-16 relative z-10">
+          <div className="flex items-center gap-6 mb-10 flex-wrap">
+            <span className="flex items-center gap-2 text-[10px] font-black px-4 py-1.5 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 uppercase tracking-widest">
               <Sparkles size={12} /> {post.tag}
             </span>
-            <span className="flex items-center gap-1.5 text-xs font-medium text-zinc-500">
-              <Clock size={14} /> {post.readTime} dk okuma
+            <span className="flex items-center gap-2 text-[10px] font-black text-zinc-600 uppercase tracking-widest">
+              <Clock size={14} /> {post.readTime} MIN READ
             </span>
-            <span className="flex items-center gap-1.5 text-xs font-medium text-zinc-500">
+            <span className="flex items-center gap-2 text-[10px] font-black text-zinc-600 uppercase tracking-widest">
               <Calendar size={14} /> 
-              {new Date(post.createdAt!).toLocaleDateString("tr-TR", { year: 'numeric', month: 'long', day: 'numeric' })}
+              {new Date(post.createdAt!).toLocaleDateString("en-US", { year: 'numeric', month: 'long', day: 'numeric' })}
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-white mb-6 leading-[1.1]">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-black italic uppercase tracking-tighter text-white mb-8 leading-[0.85]">
             {post.title}
           </h1>
 
-          <p className="text-xl text-zinc-400 leading-relaxed font-light">
+          <p className="text-xl md:text-2xl text-zinc-500 leading-relaxed font-light italic border-l-4 border-purple-500/30 pl-8">
             {post.excerpt}
           </p>
         </header>
 
-        {/* YAZAR KARTI */}
-        <div className="flex items-center gap-4 py-6 border-y border-white/[0.05] mb-12 relative z-10">
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500/20 to-zinc-800 flex items-center justify-center border border-white/10 shadow-inner">
-            <User size={20} className="text-purple-400" />
+        {/* AUTHOR & ORIGIN */}
+        <div className="flex items-center gap-5 py-8 border-y border-white/5 mb-20 relative z-10">
+          <div className="w-14 h-14 rounded-2xl bg-zinc-900 flex items-center justify-center border border-white/10">
+            <User size={24} className="text-zinc-600" />
           </div>
           <div>
-            <div className="text-base font-bold text-white">{post.authorName}</div>
-            <div className="text-sm text-zinc-500">Worktio Insights</div>
+            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-300">{post.authorName}</div>
+            <div className="text-[10px] font-black uppercase tracking-[0.2em] text-purple-500 mt-1">Miransas Neural Node</div>
           </div>
         </div>
 
-        {/* KAPAK GÖRSELİ (Devasa ve Şık) */}
+        {/* HERO IMAGE */}
         {post.coverImage && (
-          <div className="w-full aspect-[21/9] rounded-[2rem] overflow-hidden mb-16 relative z-10 shadow-2xl shadow-black/50 border border-white/[0.05]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
+          <div className="w-full aspect-[21/9] rounded-[3rem] overflow-hidden mb-24 relative z-10 border border-white/5 shadow-2xl hover:grayscale-0 transition-all duration-700">
             <img
               src={post.coverImage}
               alt={post.title || "Cover"}
               className="w-full h-full object-cover"
             />
+            {/* <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-transparent" /> */}
           </div>
         )}
 
-        {/* İÇERİK (Zengin Metin - Typography ile Boyanmış) */}
+        {/* CONTENT RENDERER */}
         <div
-          className="prose prose-invert prose-lg max-w-none 
-            prose-headings:font-black prose-headings:tracking-tight prose-headings:text-white prose-headings:scroll-mt-32
-            prose-p:text-zinc-300 prose-p:leading-relaxed 
-            prose-a:text-purple-400 prose-a:no-underline hover:prose-a:underline
-            prose-strong:text-white prose-strong:font-bold
-            prose-code:text-purple-300 prose-code:bg-purple-500/10 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
-            prose-pre:bg-[#0a0a0a] prose-pre:border prose-pre:border-zinc-800/50 prose-pre:shadow-2xl prose-pre:rounded-xl
-            prose-ul:text-zinc-300 prose-li:marker:text-purple-500
-            prose-img:rounded-2xl prose-img:border prose-img:border-zinc-800/50 prose-img:shadow-2xl
+          className="prose prose-invert prose-miransas max-w-none 
+            prose-headings:font-black prose-headings:italic prose-headings:uppercase prose-headings:tracking-tighter prose-headings:text-white
+            prose-p:text-zinc-400 prose-p:leading-relaxed prose-p:text-lg prose-p:font-light
+            prose-strong:text-zinc-200 prose-strong:font-bold
+            prose-blockquote:border-purple-500 prose-blockquote:bg-purple-500/5 prose-blockquote:py-2 prose-blockquote:rounded-r-2xl
+            prose-code:text-purple-400 prose-code:bg-purple-500/10 prose-code:px-2 prose-code:py-0.5 prose-code:rounded-md prose-code:before:content-none prose-code:after:content-none
+            prose-pre:bg-[#080808] prose-pre:border prose-pre:border-white/5 prose-pre:rounded-[2rem]
+            prose-ul:list-disc prose-li:marker:text-purple-500
+            prose-img:rounded-[2.5rem] prose-img:border prose-img:border-white/5
             relative z-10"
-          dangerouslySetInnerHTML={{ __html: post.content || "<p>İçerik henüz eklenmemiş.</p>" }}
+          dangerouslySetInnerHTML={{ __html: decodeHTML(post.content || "<p>System error: No data payload found.</p>") }}
         />
+
+        {/* FOOTER CTA */}
+        {/* <div className="mt-40 p-12 rounded-[3rem] bg-gradient-to-br from-zinc-900/40 to-black border border-white/5 text-center space-y-8 relative z-10">
+          <h3 className="text-3xl font-black italic uppercase tracking-tighter text-white leading-none">
+            Ready to integrate?
+          </h3>
+          <p className="text-zinc-500 max-w-md mx-auto text-sm font-light leading-relaxed">
+            Discover how Miransas can optimize your infrastructure through custom automation and neural nodes.
+          </p>
+          <Link 
+            href="/contact"
+            className="inline-block px-12 py-4 bg-white text-black rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] hover:scale-105 transition-transform"
+          >
+            Deploy Inquiry
+          </Link>
+        </div> */}
+
       </article>
     </main>
   );

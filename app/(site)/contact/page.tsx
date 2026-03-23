@@ -47,7 +47,7 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white pt-32 pb-32 font-sans selection:bg-[#FF4F00]/30 overflow-hidden relative">
+    <main className="min-h-screen bg-[#050505] text-white pt-32 pb-32 font-sans  overflow-hidden relative">
       
       {/* ─── SİBER ARKA PLAN ─── */}
       <div className="absolute inset-0 z-0 opacity-[0.08] pointer-events-none" 
