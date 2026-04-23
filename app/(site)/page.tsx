@@ -1,6 +1,7 @@
 import EcosystemSection from "../../components/shared/ecosystem"
-import FeaturesGrid from "../../components/shared/features-grid"
-import Hero from "../../components/shared/hero"
+
+
+import MiransasHero from "../../components/shared/mirasnas-hero"
 import TechStackSection from "../../components/shared/TechStackSection"
 
 // import Navbar from "@/components/Navbar"; --- IGNORE ---
@@ -10,7 +11,8 @@ const page = () => {
     <main>
       {/* <Navbar /> */}
        <div className='mt-20'>
-      <Hero />
+      {/* <Hero /> */}
+      <MiransasHero/>
       <div>
         <TechStackSection />
         <EcosystemSection />
