@@ -2,7 +2,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Activity } from "lucide-react";
+import { Activity, Link2 } from "lucide-react";
+import Link from "next/link";
 
 const NAV_LINKS = [
 
@@ -24,8 +25,8 @@ export default function Header() {
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-[200] transition-all duration-500 ${scrolled
-          ? "bg-[#05060a]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] py-3"
-          : "bg-transparent border-b border-transparent py-6"
+        ? "bg-[#05060a]/80 backdrop-blur-xl border-b border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)] py-3"
+        : "bg-transparent border-b border-transparent py-6"
         }`}
     >
       {/* Scroll Olunca Beliren En Üstteki Lazer Çizgisi */}
@@ -40,7 +41,7 @@ export default function Header() {
         {/* ========================================= */}
         {/* 1. LOGO ALANI                             */}
         {/* ========================================= */}
-        <div className="flex items-center gap-4 cursor-pointer group">
+        <Link href="/"><div className="flex items-center gap-4 cursor-pointer group">
           {/* İkon */}
           <div className="flex h-10 w-10 items-center justify-center rounded-xl  shadow-[inset_0_0_10px_rgba(244,63,94,0.2)] transition-shadow group-hover:shadow-[0_0_15px_rgba(244,63,94,0.4)]">
             <img src="/logo/logo.png" alt="MIRANSAS Logo" className="h-full w-full object-contain" />
@@ -50,7 +51,7 @@ export default function Header() {
             <span className="text-lg font-black tracking-tighter text-white">MIRANSAS</span>
 
           </div>
-        </div>
+        </div></Link>
 
         {/* ========================================= */}
         {/* 2. ORTA NAVİGASYON (MASAÜSTÜ)             */}

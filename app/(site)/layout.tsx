@@ -13,7 +13,7 @@ export default function MainLayout({
     return (
         <>
             <Navbar />
-            <main className="flex-grow">
+            <main className="flex-grow mt-20">
                 <SmoothScrolling>
                     {children}
                 </SmoothScrolling>

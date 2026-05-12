@@ -1,8 +1,11 @@
 import React from 'react'
+import ProjectCards from '../../../components/shared/projects-card'
 
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      <ProjectCards/>
+    </div>
   )
 }
 
