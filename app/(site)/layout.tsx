@@ -1,6 +1,7 @@
 // app/(main)/layout.tsx
 
-import Footer from "../../components/shared/footer";
+
+import { Footer } from "../../components/shared/footer";
 import Navbar from "../../components/shared/header";
 import SmoothScrolling from "../../components/shared/smooth-scrolling";
 

@@ -1,11 +1,14 @@
 import React from 'react'
-import { ProjectsHero } from '../../../components/shared/projects-card'
+
+import MiransasAnimations from '../../../components/shared/miransas-animations'
+import ProjectsCard from '../../../components/projects/projects-card'
+
 
 
 const page = () => {
   return (
     <div>
-      <ProjectsHero/>
+      <ProjectsCard/>
     </div>
   )
 }

@@ -25,12 +25,13 @@ type SystemLogCardProps = {
   themeColor: "rose" | "lime";
   Icon: any;
   statusText: string;
+  link ?: string;
 };
 
 // ============================================================================
 // BORDERLESS, PREMIUM INNER-GLOW SYSTEM LOG CARD
 // ============================================================================
-const SystemLogCard = ({ title, description, logs, themeColor, Icon, statusText }: SystemLogCardProps) => {
+const SystemLogCard = ({ title, description, logs, themeColor, Icon, statusText, link }: SystemLogCardProps) => {
   const isRose = themeColor === "rose";
   const textMain = isRose ? "text-rose-500" : "text-[#9eff00]";
   const bgMain = isRose ? "bg-rose-500" : "bg-[#9eff00]";
@@ -165,7 +166,7 @@ const SystemLogCard = ({ title, description, logs, themeColor, Icon, statusText 
         {/* ====================================================================== */}
         <div className="absolute bottom-10 right-8 flex justify-end z-30">
           <button className={cn(
-            "group/btn relative flex items-center gap-2 overflow-hidden rounded-full px-8 py-3.5 transition-all duration-300 border bg-[#09090b]",
+            "group/btn relative flex items-center gap-2 overflow-hidden rounded-full px-8 py-3.5 transition-all duration-300 border bg-[#09090b] cursor-pointer",
             isRose 
               ? "border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.15)] hover:shadow-[0_0_35px_rgba(244,63,94,0.3)]" 
               : "border-[#9eff00]/40 shadow-[0_0_20px_rgba(158,255,0,0.15)] hover:shadow-[0_0_35px_rgba(158,255,0,0.3)]"
@@ -245,6 +246,7 @@ export function MiransasSecurityFeatures() {
           logs={chessLogs}
           themeColor="lime"
           Icon={Cpu}
+          link="/chess"
         />
       </div>
     </section>
