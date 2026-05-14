@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowUpRight } from "lucide-react";
+import { useEffect, useState } from "react";
 
 
 const footerLinks = {
@@ -11,8 +12,10 @@ const footerLinks = {
     // { name: "", href: "#integrations" },
   ],
   Developers: [
-    {name: "Chanelog", href: "/changelog" },
-    { name: "Status", href: "/developers" },
+    {name: "Developer ", href: "/developers" },
+    { name: "Chanelog", href: "/changelog" },
+    { name: "Status", href: "/status" },
+
   ],
   Company: [
     { name: "About", href: "/about" },
@@ -28,19 +31,62 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { name: "Twitter", href: "#" },
-  { name: "GitHub", href: "#" },
-  { name: "LinkedIn", href: "#" },
+  { name: "Twitter", href: "https://twitter.com/miransaas" },
+  { name: "GitHub", href: "https://github.com/miransas" },
+  // { name: "LinkedIn", href: "https://linkedin.com/company/miransas" },
+  { name: "Discord", href: "https://discord.gg/miransas" },
+  {name : "Email", href: "mailto:info@miransas.com"},
+  {name : "Instagram", href: "https://instagram.com/miransaas"}
+
 ];
 
 export function Footer() {
+  const [time, setTime] = useState("");
+  const [uptime, setUptime] = useState("");
+
+  useEffect(() => {
+    const startTime = new Date();
+
+    const updateClock = () => {
+      const now = new Date();
+
+      // canlı saat
+      const currentTime = now.toLocaleTimeString("tr-TR", {
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+
+      setTime(currentTime);
+
+      // uptime hesaplama
+      const diff = Math.floor((now.getTime() - startTime.getTime()) / 1000);
+
+      const hours = Math.floor(diff / 3600);
+      const minutes = Math.floor((diff % 3600) / 60);
+      const seconds = diff % 60;
+
+      setUptime(
+        `${hours.toString().padStart(2, "0")}:${minutes
+          .toString()
+          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
+      );
+    };
+
+    updateClock();
+
+    const interval = setInterval(updateClock, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <footer className="relative border-t border-foreground/10">
       {/* Animated wave background */}
       <div className="absolute inset-0 h-64 opacity-20 pointer-events-none overflow-hidden">
-        
+
       </div>
-      
+
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Main Footer */}
         <div className="py-16 lg:py-24">
@@ -100,13 +146,24 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="py-8 border-t border-foreground/10 flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-sm text-muted-foreground">
-            2025 Optimus. All rights reserved.
+            © 2025-{new Date().getFullYear()} Miransas. All rights reserved.
           </p>
 
-          <div className="flex items-center gap-4 text-sm text-muted-foreground">
+          <div className="flex items-center gap-6 text-sm text-muted-foreground">
+            {/* sistem */}
             <span className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-500" />
+              <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
               All systems operational
+            </span>
+
+            {/* canlı saat */}
+            <span className="font-mono tracking-wider">
+              {time}
+            </span>
+
+            {/* uptime */}
+            <span className="font-mono text-green-400">
+              Uptime {uptime}
             </span>
           </div>
         </div>

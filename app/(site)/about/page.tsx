@@ -5,10 +5,9 @@ import { motion } from "framer-motion";
 import { 
   Terminal, Shield, Gamepad2, 
   Hexagon, Crosshair, Cpu, Box,
-  Code2, Network
+  Code2, Network, Activity
 } from "lucide-react";
 
-// ─── YENİ ARKA PLAN: DEEP CYBER AURORA ─────────────
 const AuroraBackground = () => (
   <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#030303]">
     <motion.div 
@@ -78,13 +77,13 @@ export default function AboutPage() {
             initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}
             className="flex-1 w-full relative flex justify-center lg:justify-end"
           >
-            {/* Cam Efektli (Glassmorphism) Kurumsal Kart - HTML YAPISI DÜZELTİLDİ */}
-            <div className="relative aspect-[4/5] w-full max-w-md rounded-[3rem] overflow-hidden border border-white/5 bg-[#0a0a0a]/50 backdrop-blur-2xl p-8 shadow-2xl group flex flex-col justify-between">
+            {/* Cam Efektli (Glassmorphism) Kurumsal Kart - SADECE MIRANSAS */}
+            <div className="relative aspect-[4/5] w-full max-w-md rounded-[3rem] overflow-hidden border border-white/10 bg-[#0a0a0a]/60 backdrop-blur-3xl p-8 shadow-2xl group flex flex-col justify-between">
               
-              <div className="absolute inset-0 bg-gradient-to-b from-purple-500/5 via-transparent to-black z-10" />
+              <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-black z-10" />
               
               {/* Üst Kısım: Dönen Logo */}
-              <div className="relative z-20 flex justify-center mt-12 opacity-80">
+              <div className="relative z-20 flex justify-center mt-12 opacity-90">
                 <motion.div 
                   animate={{ rotateY: 360 }}
                   transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
@@ -95,15 +94,37 @@ export default function AboutPage() {
                 </motion.div>
               </div>
 
-              {/* Alt Kısım: Core Directive */}
-              <div className="relative z-20 bg-black/40 p-6 rounded-2xl border border-white/5 backdrop-blur-md">
+              {/* Alt Kısım: Miransas System Status */}
+              <div className="relative z-20 bg-black/60 p-6 rounded-2xl border border-white/10 backdrop-blur-md shadow-inner">
                 <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
-                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-purple-400">Core Directive 01</span>
+                  <div className="flex items-center gap-2">
+                    <Activity size={14} className="text-emerald-400" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-purple-400">Miransas_Modules</span>
+                  </div>
                   <Terminal size={14} className="text-zinc-500" />
                 </div>
-                <p className="text-sm font-light text-zinc-400 italic leading-relaxed">
-                  &#34;Light interfaces are a compromise. True efficiency exists in the dark: infrastructure, architecture, and logic built for maximum focus.&#34;
-                </p>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between group cursor-default">
+                    <span className="text-xs font-mono text-zinc-400 group-hover:text-white transition-colors">&gt; Miransoft</span>
+                    <span className="text-[10px] uppercase tracking-wider text-emerald-500 font-bold">Online</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between group cursor-default">
+                    <span className="text-xs font-mono text-zinc-400 group-hover:text-white transition-colors">&gt; Miransaas</span>
+                    <span className="text-[10px] uppercase tracking-wider text-emerald-500 font-bold">Online</span>
+                  </div>
+
+                  <div className="flex items-center justify-between group cursor-default">
+                    <span className="text-xs font-mono text-zinc-400 group-hover:text-white transition-colors">&gt; binboi_node</span>
+                    <span className="text-[10px] uppercase tracking-wider text-blue-400 font-bold">Rust/Go</span>
+                  </div>
+
+                  <div className="flex items-center justify-between group cursor-default">
+                    <span className="text-xs font-mono text-zinc-400 group-hover:text-white transition-colors">&gt; miransas-chess</span>
+                    <span className="text-[10px] uppercase tracking-wider text-purple-400 font-bold">UCI Engine</span>
+                  </div>
+                </div>
               </div>
 
             </div>
@@ -158,7 +179,6 @@ export default function AboutPage() {
         {/* ========================================== */}
         <section className="relative p-12 md:p-20 bg-[#0a0a0a] border border-white/5 rounded-[3rem] overflow-hidden">
           
-          {/* Subtle inner glow */}
           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 pointer-events-none" />
           
           <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
@@ -196,11 +216,9 @@ export default function AboutPage() {
             {/* Minimalist Abstract Representation */}
             <div className="flex justify-center lg:justify-end">
                <div className="relative w-72 h-72">
-                 {/* Dönen iki halka (Software & Games) */}
                  <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute inset-0 border border-dashed border-blue-500/30 rounded-full" />
                  <motion.div animate={{ rotate: -360 }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute inset-6 border border-dashed border-[#FF4F00]/30 rounded-full" />
                  
-                 {/* Merkez Çekirdek */}
                  <div className="absolute inset-0 flex items-center justify-center">
                     <div className="relative w-20 h-20 bg-[#030303] border border-white/10 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(147,51,234,0.1)]">
                       <div className="absolute inset-0 bg-purple-500/10 blur-md rounded-2xl" />

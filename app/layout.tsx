@@ -61,10 +61,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <div className="relative flex min-h-screen flex-col">
-            {/* Navbar ve Footer'ı hazır olduğunda buradan açarsın usta */}
+            
             
             <main className="flex-grow">
-              {/* İçeriklerin buraya akacak */}
+              
               {children}
             </main>
 
