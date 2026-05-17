@@ -1,0 +1,27 @@
+name: Dependabot Auto-Merge Engine
+
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot-merge:
+    runs-on: ubuntu-latest
+    # Sadece Dependabot tarafından açılan PR'larda devreye girer
+    if: github.actor == 'dependabot[bot]'
+    steps:
+      # Dependabot'un getirdiği paketin meta verilerini toplar
+      - name: Fetch Dependabot Metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      
+      # Eğer testlerin başarılı olduysa PR'ı otomatik olarak ana branch ile birleştirir
+      - name: Merge Approved PR Automatically
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

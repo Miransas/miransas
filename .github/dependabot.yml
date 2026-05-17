@@ -1,0 +1,8 @@
+version: 2
+updates:
+  # 👑 TypeScript / Node.js Bağımlılıkları İçin
+  - package-ecosystem: "npm"
+    directory: "/" # Eğer kodlar alt klasörde değil de direkt kök dizindeyse "/" kalabilir
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
