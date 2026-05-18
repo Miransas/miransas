@@ -4,10 +4,11 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { 
   Send, Terminal, ShieldCheck, 
-  MapPin, Mail, Github, MessageSquare, Fingerprint, AlertTriangle
+  MapPin, Mail,  MessageSquare, Fingerprint, AlertTriangle
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { sendSignal } from "@/app/(site)/actions/send-email"; // SERVER ACTION IMPORTU
+import { FaGithub } from "react-icons/fa6";
 
 // --- BORDER BEAM ---
 const BorderBeam = ({ className, color = "#FF4F00", duration = 4 }: { className?: string; color?: string; duration?: number }) => (
@@ -112,7 +113,7 @@ export default function ContactPage() {
                 <span className="text-sm font-bold text-white">Telegram</span>
               </a>
               <a href="https://github.com/sardorazimov" target="_blank" rel="noreferrer" className="bg-[#0A0A0A] border border-white/5 rounded-xl p-6 hover:bg-white/[0.02] hover:border-white/10 transition-all flex flex-col items-center justify-center text-center group">
-                <Github size={24} className="text-white mb-3 group-hover:scale-110 transition-transform" />
+                <FaGithub size={24} className="text-white mb-3 group-hover:scale-110 transition-transform" />
                 <span className="text-[10px] font-mono uppercase tracking-widest text-neutral-500 mb-1">Source Code</span>
                 <span className="text-sm font-bold text-white">GitHub</span>
               </a>

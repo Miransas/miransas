@@ -6,11 +6,12 @@ import {
   Clock, 
   Link as LinkIcon, 
   Activity, 
-  Github, 
+  
   ChevronDown, 
   Code2, 
   Binary 
 } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa6';
 
 export default function ChessEngineBlog() {
   const GITHUB_EDIT_URL = "https://github.com/sardorazimov/miransas/edit/main/blog/chess-engine.tsx";
@@ -46,7 +47,7 @@ export default function ChessEngineBlog() {
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-500 hover:text-white transition-colors group"
             >
-              <Github size={14} className="group-hover:rotate-12 transition-transform" />
+              <FaGithub size={14} className="group-hover:rotate-12 transition-transform" />
               Edit on GitHub
             </a>
           </div>

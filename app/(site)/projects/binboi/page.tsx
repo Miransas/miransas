@@ -7,11 +7,12 @@ import {
   Link as LinkIcon, 
   ChevronDown, 
   Terminal, 
-  Github, 
+  
   ExternalLink,
   Cpu,
   Globe
 } from 'lucide-react';
+import { FaGithub } from 'react-icons/fa';
 
 export default function BinboiBlog() {
   const GITHUB_EDIT_URL = "https://github.com/sardorazimov/miransas/edit/main/blog/binboi.tsx";
@@ -50,7 +51,7 @@ export default function BinboiBlog() {
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-gray-500 hover:text-white transition-colors group"
             >
-              <Github size={14} className="group-hover:rotate-12 transition-transform" />
+              <FaGithub size={14} className="group-hover:rotate-12 transition-transform" />
               Edit on GitHub
             </a>
           </div>

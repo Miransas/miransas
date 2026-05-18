@@ -1,6 +1,6 @@
 "use client";
 import { motion } from 'framer-motion';
-import Link from 'next/link'; // Next.js kullanıyorsan bunu ekle
+import Link from 'next/link'; 
 import { cn } from '../../lib/utils';
 
 const ShinyButton = ({ label, isRose, href }: { label: string, isRose?: boolean, href: string }) => (
