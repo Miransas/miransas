@@ -1,9 +1,9 @@
-"use client";
-import { signIn } from "next-auth/react";
-import LoginClient from "../../components/auth/login-client";
+import React from 'react'
 
-export default function LoginPage() {
+const page = () => {
   return (
-   <LoginClient />
-  );
+    <div>page</div>
+  )
 }
+
+export default page
