@@ -1,0 +1,12 @@
+{
+  "name": "Miransas Studio",
+  "short_name": "Miransas",
+  "description": "Logic & Nightmares",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#050505",
+  "icons": [
+    { "src": "/logo/logo.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
