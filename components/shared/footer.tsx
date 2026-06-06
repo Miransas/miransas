@@ -19,7 +19,7 @@ const footerLinks = {
   ],
   Company: [
     { name: "About", href: "/about" },
-    { name: "Blog", href: "/blog" },
+    { name: "Blog", href: "https://blog.miransas.com" },
     { name: "Careers", href: "/careers", badge: "Hiring" },
     { name: "Contact", href: "/contact" },
   ],

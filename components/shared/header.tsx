@@ -8,7 +8,7 @@ import Link from "next/link";
 const NAV_LINKS = [
 
   { name: "Project", href: "/projects" },
-  { name: "Blog", href: "/blog" },
+  { name: "Blog", href: "https://blog.miransas.com" },
   { name: "Change Log", href: "/changelog" },
   { name: "Contact", href: "/contact" },
 ];
