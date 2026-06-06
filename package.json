@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "preinstall": "npx npm-force-resolutions"
+  },
+  "engines": {
+    "npm": ">=8.0.0"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.2",
