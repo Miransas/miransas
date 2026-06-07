@@ -16,6 +16,18 @@
 
 </div>
 
+## 📖 The Story
+
+**Miransas was born from a single vision.** What started as one person's obsession with building the perfect shadow infrastructure has evolved into a complex ecosystem of interconnected systems. From the first line of code to the intricate tunneling networks, from the neural automation engines to the deep narrative of Lost Signal, the core architecture remains authored by a single mind.
+
+This isn't a tale of corporate-backed development or distributed teams. This is the story of someone who believes that great infrastructure doesn't need committees—it needs obsession, precision, and an unwavering commitment to dark mode aesthetics and zero-latency performance.
+
+Even now, most of the critical infrastructure that keeps this system breathing is still written by one person. Every tunnel, every optimization, every microsecond shaved off the response time—these are the fingerprints of a solitary architect building something vast from the ground up.
+
+**The rest is still being written.**
+
+---
+
 ## 🧬 System Architecture
 
 Miransas is built on a high-concurrency architecture, designed for zero-latency operations across multiple digital fronts.
@@ -65,3 +77,58 @@ npx drizzle-kit push
 
 # Start Dev Engine
 npm run dev
+```
+
+---
+
+## 📦 Project Components
+
+### Core Projects
+- **Worktio** - Neural automation & workflow orchestration
+- **binboi** - Rust-based encrypted proxy & tunneling
+- **Lost Signal** - Interactive media with C++ performance optimization
+
+### Content Areas
+- **Blog** - Technical articles and updates
+- **Projects** - Showcase of development work
+- **Developers** - Developer documentation & APIs
+- **Games** - Interactive experiences
+
+---
+
+## 🔐 License
+
+This project is licensed under the **MIT License** - see the [LICENSE](./LICENSE) file for details.
+
+You are free to:
+- ✅ Use commercially
+- ✅ Modify the source code
+- ✅ Distribute copies
+- ✅ Private use
+
+With the condition:
+- 📋 Include license and copyright notice
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+---
+
+## 📞 Contact & Support
+
+- **Website:** [miransas.com](https://miransas.com)
+- **Contact:** [miransas.com/contact](https://miransas.com/contact)
+- **Status:** [miransas.com/status](https://miransas.com/status)
+
+---
+
+<div align="center">
+
+**Made with precision and dark mode aesthetics by Miransas Studio**
+
+*Engineering the shadows. Everything is in Dark Mode.*
+
+</div>
