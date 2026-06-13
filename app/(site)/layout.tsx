@@ -2,7 +2,7 @@
 
 
 import { Footer } from "../../components/shared/footer";
-import ShinyMiransastext from "../../components/shared/footer-shiny-text";
+
 import Navbar from "../../components/shared/header";
 import SmoothScrolling from "../../components/shared/smooth-scrolling";
 
@@ -21,7 +21,7 @@ export default function MainLayout({
                 </SmoothScrolling>
             </main>
             <Footer />
-            <ShinyMiransastext/>
+            
         </>
     );
 }
