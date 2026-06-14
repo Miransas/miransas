@@ -1,153 +1,151 @@
-"use client";
+import Link from "next/link";
 
-import React from "react";
-import { motion } from "framer-motion";
-import {
-  Shield,
-  AlertTriangle,
-  Gavel,
-  Ban,
-  Globe,
-} from "lucide-react";
-
-const Section = ({
-  title,
-  icon: Icon,
-  children,
-}: {
-  title: string;
-  icon: React.ComponentType<{ className: string; size: number }>;
-  children: React.ReactNode;
-}) => (
-  <section className="mb-12">
-    <div className="flex items-center gap-3 mb-4 border-b border-white/5 pb-3">
-      <Icon className="text-purple-500" size={18} />
-      <h2 className="text-lg font-bold italic uppercase tracking-wider text-white">
-        {title}
-      </h2>
-    </div>
-
-    <div className="space-y-4 text-zinc-400 text-sm leading-relaxed font-light">
-      {children}
-    </div>
-  </section>
-);
+export const metadata = {
+  title: "Terms — Miransas",
+  description: "Terms of service for Miransas products.",
+};
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-[#030303] text-zinc-300 pt-32 pb-24 font-sans">
-      <div className="max-w-3xl mx-auto px-6 relative">
-        {/* Header */}
-        <header className="mb-20">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-[10px] font-mono text-purple-500 uppercase tracking-[0.4em] mb-4"
-          >
-            Protocol // 01-TOS
-          </motion.div>
+    <div className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
+      <p className="mb-3 font-mono text-xs uppercase tracking-widest text-[#8CFF2E]">
+        Legal
+      </p>
+      <h1 className="mb-2 text-4xl font-bold text-white sm:text-5xl">
+        Terms
+      </h1>
+      <p className="mb-12 text-sm text-zinc-500">
+        Last updated: June 14, 2026
+      </p>
 
-          <h1 className="text-5xl font-black italic uppercase tracking-tighter text-white mb-3">
-            Terms of{" "}
-            <span className="text-zinc-700">Service.</span>
-          </h1>
-
-          <p className="text-zinc-500 text-sm max-w-xl leading-relaxed">
-            These Terms govern access to products, services, platforms,
-            games, applications, APIs, and infrastructure operated by
-            Miransas.
+      <div className="space-y-10 text-zinc-300 leading-relaxed">
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            Acceptance
+          </h2>
+          <p className="text-zinc-400">
+            By using any Miransas product — including Binboi, CourierX, or the
+            Miransas blog — you agree to these terms. If you don&apos;t agree,
+            please don&apos;t use the service.
           </p>
+        </section>
 
-          <p className="text-zinc-600 text-[10px] font-mono uppercase tracking-widest italic mt-4">
-            Effective Date: May 15, 2026
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            Acceptable use
+          </h2>
+          <p className="mb-3 text-zinc-400">
+            You may not use Miransas services to:
           </p>
-        </header>
-
-        {/* Use Policy */}
-        <Section title="Acceptable Use" icon={Ban}>
-          <p>
-            By accessing Miransas services, platforms, games, APIs,
-            software, or infrastructure, users agree to comply with all
-            applicable local and international laws and regulations.
+          <ul className="space-y-2 text-zinc-400">
+            <li>— host, distribute, or transmit illegal content</li>
+            <li>— send spam, phishing, or malware</li>
+            <li>— attack, scan, or interfere with other systems</li>
+            <li>— violate someone else&apos;s rights or privacy</li>
+            <li>
+              — bypass quotas or pricing tiers through technical means
+            </li>
+          </ul>
+          <p className="mt-4 text-zinc-400">
+            We may suspend or terminate accounts that violate these rules, with
+            or without notice depending on severity.
           </p>
+        </section>
 
-          <p>
-            Unauthorized access attempts, service abuse, malicious
-            automation, denial-of-service attacks, data scraping, or any
-            activity that may negatively impact platform stability or
-            security may result in suspension or permanent termination
-            of access.
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            Account &amp; billing
+          </h2>
+          <p className="text-zinc-400">
+            You&apos;re responsible for keeping your credentials safe. Paid
+            plans are billed monthly through Polar.sh, which acts as our
+            merchant of record. You can cancel at any time from the dashboard;
+            you&apos;ll keep access until the end of the billing period.
+            Refunds are handled case-by-case.
           </p>
-        </Section>
+        </section>
 
-        {/* Ownership */}
-        <Section title="Intellectual Property" icon={Shield}>
-          <p>
-            Unless otherwise stated, all Miransas products, technologies,
-            software, branding, interfaces, systems, visual assets, and
-            proprietary technologies remain the intellectual property of
-            Miransas and its affiliated projects.
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            Service availability
+          </h2>
+          <p className="text-zinc-400">
+            We aim to keep things up and running, but Miransas is a small
+            operation. There&apos;s no contractual uptime SLA. We&apos;ll
+            communicate scheduled maintenance and major incidents in good
+            faith.
           </p>
+        </section>
 
-          <p>
-            Users may not reproduce, redistribute, reverse engineer, or
-            commercially exploit protected assets without prior written
-            permission.
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            Your content
+          </h2>
+          <p className="text-zinc-400">
+            You retain ownership of any data you send through our services. By
+            using the service, you grant us a limited license to process that
+            data solely to provide the service.
           </p>
-        </Section>
+        </section>
 
-        {/* Availability */}
-        <Section title="Service Availability" icon={AlertTriangle}>
-          <p>
-            Miransas services are provided on an “as available” and “as
-            is” basis. While we strive for high availability and
-            reliability, uninterrupted access cannot be guaranteed at all
-            times.
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            Disclaimers
+          </h2>
+          <p className="text-zinc-400">
+            The services are provided &quot;as is&quot;. To the extent allowed
+            by law, we disclaim all warranties — express or implied — and
+            won&apos;t be liable for indirect, incidental, or consequential
+            damages. Total liability for any direct claim is limited to what
+            you&apos;ve paid us in the prior twelve months.
           </p>
+        </section>
 
-          <p>
-            Temporary interruptions may occur due to maintenance,
-            infrastructure upgrades, third-party provider issues, or
-            unforeseen technical events.
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            Changes
+          </h2>
+          <p className="text-zinc-400">
+            We may update these terms occasionally. Material changes will be
+            announced via email or in-app notice. Continued use after a change
+            means you accept the new terms.
           </p>
-        </Section>
+        </section>
 
-        {/* Global */}
-        <Section title="Global Operations" icon={Globe}>
-          <p>
-            Miransas operates globally and may provide products,
-            experiences, or infrastructure services across multiple
-            regions and jurisdictions.
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            Governing law
+          </h2>
+          <p className="text-zinc-400">
+            These terms are governed by the laws of Türkiye. Any dispute will
+            be resolved in good faith first; otherwise in the competent courts
+            of Türkiye.
           </p>
+        </section>
 
-          <p>
-            Users are responsible for ensuring that their use of
-            Miransas services complies with the laws and regulations of
-            their local jurisdiction.
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">Contact</h2>
+          <p className="text-zinc-400">
+            Questions? Email{" "}
+            
+              <a href="mailto:contact@miransas.com"
+              className="text-[#8CFF2E] underline-offset-4 hover:underline"
+            >
+              contact@miransas.com
+            </a>
+            .
           </p>
-        </Section>
-
-        {/* Law */}
-        <Section title="Governing Law" icon={Gavel}>
-          <p>
-            These Terms shall be governed and interpreted in accordance
-            with applicable international commercial and technology
-            regulations together with the governing laws of the operating
-            jurisdiction of Miransas.
-          </p>
-
-          <p>
-            Any disputes arising from the use of Miransas services shall
-            be resolved through the appropriate legal authorities within
-            the applicable jurisdiction.
-          </p>
-        </Section>
-
-        {/* Footer */}
-        <footer className="mt-20 pt-8 border-t border-white/5 text-[10px] text-zinc-600 uppercase tracking-[0.3em] text-center">
-          Miransas // Global Technology, Infrastructure & Digital Products
-        </footer>
+        </section>
       </div>
-    </main>
+
+      <div className="mt-16">
+        <Link
+          href="/"
+          className="text-sm text-zinc-500 transition-colors hover:text-white"
+        >
+          ← Back home
+        </Link>
+      </div>
+    </div>
   );
 }

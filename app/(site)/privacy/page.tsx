@@ -1,155 +1,159 @@
-"use client";
+import Link from "next/link";
 
-import React from "react";
-import { motion } from "framer-motion";
-import {
-  EyeOff,
-  Lock,
-  Database,
-  Globe,
-  UserCheck,
-} from "lucide-react";
-
-const Section = ({
-  title,
-  icon: Icon,
-  children,
-}: {
-  title: string;
-  icon: React.ComponentType<{
-    size?: number;
-    className?: string;
-  }>;
-  children: React.ReactNode;
-}) => (
-  <section className="mb-12">
-    <div className="flex items-center gap-3 mb-4 border-b border-white/5 pb-3">
-      <Icon className="text-emerald-500" size={18} />
-
-      <h2 className="text-lg font-bold italic uppercase tracking-wider text-white">
-        {title}
-      </h2>
-    </div>
-
-    <div className="space-y-4 text-zinc-400 text-sm leading-relaxed font-light">
-      {children}
-    </div>
-  </section>
-);
+export const metadata = {
+  title: "Privacy — Miransas",
+  description: "How Miransas handles your data.",
+};
 
 export default function PrivacyPage() {
   return (
-    <main className="min-h-screen bg-[#030303] text-zinc-300 pt-32 pb-24 font-sans selection:bg-emerald-500/30">
-      <div className="max-w-3xl mx-auto px-6 relative">
-        {/* Header */}
-        <header className="mb-20">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-[10px] font-mono text-emerald-500 uppercase tracking-[0.4em] mb-4"
-          >
-            Protocol // 02-PRIVACY
-          </motion.div>
+    <div className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
+      <p className="mb-3 font-mono text-xs uppercase tracking-widest text-[#8CFF2E]">
+        Legal
+      </p>
+      <h1 className="mb-2 text-4xl font-bold text-white sm:text-5xl">
+        Privacy
+      </h1>
+      <p className="mb-12 text-sm text-zinc-500">
+        Last updated: June 14, 2026
+      </p>
 
-          <h1 className="text-5xl font-black italic uppercase tracking-tighter text-white mb-3">
-            Privacy{" "}
-            <span className="text-zinc-700">Policy.</span>
-          </h1>
-
-          <p className="text-zinc-500 text-sm max-w-xl leading-relaxed">
-            This Privacy Policy explains how Miransas collects,
-            processes, stores, and protects information across its
-            products, services, applications, games, and digital
-            infrastructure.
+      <div className="space-y-10 text-zinc-300 leading-relaxed">
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">Who we are</h2>
+          <p className="text-zinc-400">
+            Miransas is a solo software studio operated by Sardor Azimov from
+            Turkey. This policy covers all products built under the Miransas
+            umbrella, including Binboi, CourierX, and the Miransas blog.
           </p>
+        </section>
 
-          <p className="text-zinc-600 text-[10px] font-mono uppercase tracking-widest italic mt-4">
-            Last Updated: May 15, 2026
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            What we collect
+          </h2>
+          <ul className="space-y-2 text-zinc-400">
+            <li>
+              <strong className="text-zinc-200">Account data:</strong> email
+              address and name when you sign up.
+            </li>
+            <li>
+              <strong className="text-zinc-200">Usage data:</strong> IP
+              addresses, request metadata, and audit logs to keep services
+              secure and improve reliability.
+            </li>
+            <li>
+              <strong className="text-zinc-200">Authentication:</strong> an
+              HTTP-only cookie or Personal Access Token to keep you signed in.
+            </li>
+          </ul>
+          <p className="mt-4 text-zinc-400">
+            We do not collect payment card details. Billing is processed by
+            Polar.sh, which acts as our merchant of record.
           </p>
-        </header>
+        </section>
 
-        {/* Privacy */}
-        <Section title="Privacy First Approach" icon={EyeOff}>
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            How we use it
+          </h2>
+          <p className="text-zinc-400">
+            Account data is used to provide and secure the service. Usage data
+            is used for abuse prevention, debugging, and reliability. We do not
+            sell your data, and we do not run advertising.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            Third parties
+          </h2>
+          <p className="mb-3 text-zinc-400">
+            We use a small set of trusted providers to operate our services:
+          </p>
+          <ul className="space-y-2 text-zinc-400">
+            <li>
+              <strong className="text-zinc-200">Polar.sh</strong> — billing and
+              payments (merchant of record)
+            </li>
+            <li>
+              <strong className="text-zinc-200">Resend</strong> — transactional
+              email delivery
+            </li>
+            <li>
+              <strong className="text-zinc-200">Neon</strong> — database
+              hosting (AWS us-east-1)
+            </li>
+            <li>
+              <strong className="text-zinc-200">Vercel</strong> — frontend
+              hosting
+            </li>
+            <li>
+              <strong className="text-zinc-200">Linode (Akamai)</strong> —
+              backend hosting (Frankfurt)
+            </li>
+            <li>
+              <strong className="text-zinc-200">Cloudflare</strong> — DNS and
+              CDN
+            </li>
+            <li>
+              <strong className="text-zinc-200">GitHub</strong> — OAuth sign-in
+              (if used)
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">
+            Your rights
+          </h2>
+          <p className="text-zinc-400">
+            You can request access to, correction of, or deletion of your data
+            at any time. Email us and we&apos;ll handle it within a reasonable
+            time. Closing your account removes your data, except where we are
+            legally required to retain it.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">Cookies</h2>
+          <p className="text-zinc-400">
+            We use a single essential cookie to keep you signed in. We don&apos;t
+            run third-party analytics or advertising trackers.
+          </p>
+        </section>
+
+        <section>
+          <h2 className="mb-3 text-xl font-semibold text-white">Contact</h2>
+          <p className="text-zinc-400">
+            Questions? Email{" "}
+            
+              <a href="mailto:contact@miransas.com"
+              className="text-[#8CFF2E] underline-offset-4 hover:underline"
+            >
+              contact@miransas.com
+            </a>
+            .
+          </p>
+        </section>
+
+        <section className="border-t border-white/10 pt-8 text-sm text-zinc-500">
           <p>
-            Privacy is a core principle of the Miransas ecosystem.
-            We aim to minimize data collection and only process
-            information necessary to maintain functionality,
-            security, and service reliability.
+            This document is plain-English and may not cover every legal edge
+            case. If you operate in a regulated industry or have specific
+            compliance needs, please reach out before signing up.
           </p>
-
-          <p>
-            Certain services may use encrypted or protected
-            communication layers designed to improve user security
-            and platform integrity.
-          </p>
-        </Section>
-
-        {/* Security */}
-        <Section title="Security & Protection" icon={Lock}>
-          <p>
-            Miransas uses modern security practices and industry
-            standard encryption technologies to help protect user
-            accounts, authentication systems, and platform
-            infrastructure.
-          </p>
-
-          <p>
-            Network communications may be secured using encrypted
-            transport protocols and access protection mechanisms
-            designed to reduce unauthorized access risks.
-          </p>
-        </Section>
-
-        {/* Data */}
-        <Section title="Data Processing" icon={Database}>
-          <p>
-            Miransas does not sell personal information to third
-            parties or advertising brokers.
-          </p>
-
-          <p>
-            Limited technical information, diagnostics, or anonymous
-            analytics may be processed to improve platform
-            performance, stability, fraud prevention, and overall
-            service quality.
-          </p>
-        </Section>
-
-        {/* Global */}
-        <Section title="Global Infrastructure" icon={Globe}>
-          <p>
-            Our services may operate through global infrastructure
-            providers and distributed cloud environments across
-            multiple regions.
-          </p>
-
-          <p>
-            Depending on the user’s location, certain data may be
-            processed or stored in regional systems necessary for
-            platform operation and performance optimization.
-          </p>
-        </Section>
-
-        {/* Rights */}
-        <Section title="User Rights & Requests" icon={UserCheck}>
-          <p>
-            Users may request access, correction, or deletion of
-            applicable personal information in accordance with
-            relevant privacy regulations and regional laws.
-          </p>
-
-          <p>
-            Miransas will review and process valid privacy-related
-            requests within a reasonable timeframe where legally
-            applicable.
-          </p>
-        </Section>
-
-        {/* Footer */}
-        <footer className="mt-20 pt-8 border-t border-white/5 text-[10px] text-zinc-600 uppercase tracking-[0.3em] text-center">
-          Miransas // Privacy, Security & Digital Infrastructure
-        </footer>
+        </section>
       </div>
-    </main>
+
+      <div className="mt-16">
+        <Link
+          href="/"
+          className="text-sm text-zinc-500 transition-colors hover:text-white"
+        >
+          ← Back home
+        </Link>
+      </div>
+    </div>
   );
 }
