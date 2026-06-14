@@ -17,7 +17,7 @@ const floatingData = [
 
 export const LaserSideDiagnostics = () => {
   return (
-    <div className="absolute inset-0 -translate-y-80 pointer-events-none overflow-hidden">
+    <div className="absolute inset-0 -translate-y-80 pointer-events-none overflow-hidden hidden lg:block">
       {floatingData.map((item, i) => (
         <motion.div
           key={i}
@@ -25,8 +25,8 @@ export const LaserSideDiagnostics = () => {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{
-            duration: 1,
-            delay: 1.5 + i * 0.2, // Lazerden biraz sonra gelmesi için
+            duration: 0.5,
+            delay: 0.1 + i * 0.05,
           }}
           className={`absolute font-mono text-[10px] tracking-[0.3em] font-bold uppercase
             ${item.side === "left" ? "left-[10%] md:left-[20%] text-right" : "right-[10%] md:right-[20%] text-left"}

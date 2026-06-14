@@ -110,7 +110,7 @@ export default function EcosystemSection() {
       : ACCENT_COLORS[2]; // sağ beam'lerde yeşil default
 
   return (
-    <section className="min-h-screen bg-[#050505] text-white py-32 px-6 relative overflow-hidden font-sans selection:bg-[#8CFF2E] selection:text-black">
+    <section className="min-h-screen bg-[#050505] text-white py-20 sm:py-28 lg:py-32 px-6 relative overflow-hidden font-sans selection:bg-[#8CFF2E] selection:text-black">
 
       {/* Siber Grid */}
       <div
@@ -124,17 +124,17 @@ export default function EcosystemSection() {
       <div className="max-w-6xl mx-auto relative z-10">
 
         {/* ─── HEADER ─── */}
-        <div className="mb-20">
+        <div className="mb-12 sm:mb-16 lg:mb-20">
           <div className="flex items-center gap-3 text-[#8CFF2E] font-bold tracking-widest text-[10px] uppercase mb-6">
             <span className="w-8 h-[1px] bg-[#8CFF2E]" />
             <Shield size={14} />
             Miransas Core Architecture
             <span className="w-8 h-[1px] bg-[#8CFF2E]" />
           </div>
-          <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter mb-6">
+          <h2 className="text-3xl sm:text-4xl md:text-6xl font-black italic uppercase tracking-tighter mb-6">
             Unified Ecosystem.
           </h2>
-          <p className="text-white/50 max-w-2xl text-lg font-light leading-relaxed">
+          <p className="text-white/50 max-w-2xl text-base sm:text-lg font-light leading-relaxed">
             A centralized engine powering our flagship applications. Seamlessly orchestrating workflows, gaming nodes, and secure network tunnels with zero latency.
           </p>
         </div>
@@ -247,7 +247,7 @@ export default function EcosystemSection() {
         </div>
 
         {/* ─── ALT FEATURE KARTLARI ─── */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 sm:mt-12 lg:mt-16">
 
           <div className="p-6 rounded-2xl transition-all duration-300 hover:scale-[1.02]" style={nodeStyle("#FFFFFF", 0.05)}>
             <div className="flex items-center gap-3 mb-4">

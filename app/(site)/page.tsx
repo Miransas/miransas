@@ -11,20 +11,12 @@ import TechStackSection from "../../components/shared/TechStackSection"
 const page = () => {
   return (
     <main>
-      {/* <Navbar /> */}
-      <div className='mt-20'>
-        {/* <Hero /> */}
-        <MiransasHero />
-        <LaserSideDiagnostics />
-        <TechStackSection /> 
-        <MiransasSecurityFeatures />
-        <EcosystemSection />
-        {/* <FeaturesGrid /> */}
-
-      </div>
-      {/* <Footer /> */}
+      <MiransasHero />
+      <LaserSideDiagnostics />
+      <TechStackSection />
+      <MiransasSecurityFeatures />
+      <EcosystemSection />
     </main>
-
   )
 }
 

@@ -40,9 +40,8 @@ const SystemLogCard = ({ title, description, logs, themeColor, Icon, statusText,
   return (
     <div
       className={cn(
-        // BORDER KALDIRILDI, SABİT ARKA PLAN RENGİ EKLENDİ
-        "relative flex flex-col w-full h-[600px] overflow-hidden",
-        "rounded-[2rem] bg-[#09090b] z-10 shadow-2xl"
+        "relative flex flex-col w-full min-h-[540px] sm:min-h-[600px] overflow-hidden",
+        "rounded-[1.5rem] sm:rounded-[2rem] bg-[#09090b] z-10 shadow-2xl"
       )}
     >
       {/* ====================================================================== */}
@@ -61,7 +60,7 @@ const SystemLogCard = ({ title, description, logs, themeColor, Icon, statusText,
       )} />
 
       {/* HEADER */}
-      <div className="relative z-10 flex flex-col gap-3 p-8 border-b border-white/5 bg-transparent">
+      <div className="relative z-10 flex flex-col gap-3 p-6 sm:p-8 border-b border-white/5 bg-transparent">
         <div className="flex items-center gap-4">
           <div className="p-3 rounded-xl bg-white/[0.03] shadow-inner relative overflow-hidden">
              <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className={cn("absolute inset-0 border border-dashed rounded-xl opacity-30", isRose ? "border-rose-500" : "border-[#9eff00]")} />
@@ -78,7 +77,7 @@ const SystemLogCard = ({ title, description, logs, themeColor, Icon, statusText,
       <div className="relative z-10 flex-1 flex flex-col pt-6 pb-20">
         
         {/* Canlı Sistem Durumu Kutusu */}
-        <div className="relative z-20 flex items-center justify-between bg-black/40 border border-white/5 rounded-xl px-5 py-4 mx-8 shadow-sm backdrop-blur-md">
+        <div className="relative z-20 flex items-center justify-between bg-black/40 border border-white/5 rounded-xl px-4 sm:px-5 py-3 sm:py-4 mx-6 sm:mx-8 shadow-sm backdrop-blur-md">
           <div className="flex items-center gap-4">
             <motion.div animate={{ rotate: 360 }} transition={{ duration: 3, repeat: Infinity, ease: "linear" }} className="h-4 w-4">
               <Loader2 className={cn("h-full w-full", textMain)} />
@@ -127,7 +126,7 @@ const SystemLogCard = ({ title, description, logs, themeColor, Icon, statusText,
         </div>
 
         {/* Log Listesi */}
-        <div className="flex flex-col gap-8 relative z-10 pt-10 pl-8">
+        <div className="flex flex-col gap-6 sm:gap-8 relative z-10 pt-8 sm:pt-10 pl-6 sm:pl-8 pr-4">
           {logs.map((log, index) => (
             <div key={log.id} className="flex items-start gap-6">
               
@@ -164,9 +163,9 @@ const SystemLogCard = ({ title, description, logs, themeColor, Icon, statusText,
         {/* ====================================================================== */}
         {/* PARLAYAN ACTION BUTONU (ABSOLUTE RIGHT BOTTOM)                         */}
         {/* ====================================================================== */}
-        <div className="absolute bottom-10 right-8 flex justify-end z-30">
+        <div className="absolute bottom-6 sm:bottom-10 right-6 sm:right-8 flex justify-end z-30">
           <button className={cn(
-            "group/btn relative flex items-center gap-2 overflow-hidden rounded-full px-8 py-3.5 transition-all duration-300 border bg-[#09090b] cursor-pointer",
+            "group/btn relative flex items-center gap-2 overflow-hidden rounded-full px-5 sm:px-8 py-3 sm:py-3.5 transition-all duration-300 border bg-[#09090b] cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8CFF2E]/40",
             isRose 
               ? "border-rose-500/40 shadow-[0_0_20px_rgba(244,63,94,0.15)] hover:shadow-[0_0_35px_rgba(244,63,94,0.3)]" 
               : "border-[#9eff00]/40 shadow-[0_0_20px_rgba(158,255,0,0.15)] hover:shadow-[0_0_35px_rgba(158,255,0,0.3)]"
@@ -212,16 +211,16 @@ const chessLogs: LogEntry[] = [
 
 export function MiransasSecurityFeatures() {
   return (
-    <section className="w-full flex flex-col items-center py-32 bg-[#020203] selection:bg-rose-500 selection:text-white">
-      
-      <div className="text-center mb-20 flex flex-col items-center px-6">
-        <div className="flex items-center justify-center p-4 rounded-2xl bg-[#09090b] shadow-2xl relative overflow-hidden">
+    <section className="w-full flex flex-col items-center py-20 sm:py-28 lg:py-32 bg-[#020203] selection:bg-rose-500 selection:text-white">
+
+      <div className="text-center mb-14 sm:mb-20 flex flex-col items-center px-6">
+        <div className="flex items-center justify-center p-4 rounded-2xl bg-[#09090b] shadow-2xl relative overflow-hidden mb-6">
           <motion.div animate={{ rotate: 360 }} transition={{ duration: 10, repeat: Infinity, ease: "linear" }} className="absolute inset-0 border border-dashed border-rose-500/30 rounded-2xl" />
           <TerminalSquare className="h-8 w-8 text-rose-500 relative z-10" />
         </div>
-        <h2 className="text-4xl md:text-6xl font-black uppercase italic tracking-tighter text-white drop-shadow-xl">
-          System <br className="md:hidden" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-white to-[#9eff00]">
+        <h2 className="text-3xl sm:text-4xl md:text-6xl font-black uppercase italic tracking-tighter text-white drop-shadow-xl">
+          System{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-white to-[#9eff00] block sm:inline">
             Diagnostics
           </span>
         </h2>
@@ -230,7 +229,7 @@ export function MiransasSecurityFeatures() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-12 w-full max-w-[1600px] px-6 lg:px-12">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 sm:gap-12 w-full max-w-[1600px] px-6 lg:px-12">
         <SystemLogCard 
           title="Binboi.com Global Defense"
           description="Identify and drop malicious packets before they reach the control plane. Zero-trust architecture enforced at the edge layer."

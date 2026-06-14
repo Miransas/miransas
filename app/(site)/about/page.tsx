@@ -31,54 +31,54 @@ const AuroraBackground = () => (
 
 export default function AboutPage() {
   return (
-    <main className="relative min-h-screen bg-[#030303] text-white pt-40 pb-32 overflow-hidden font-sans">
-      
+    <main className="relative min-h-screen bg-[#030303] text-white pt-24 sm:pt-32 md:pt-40 pb-20 sm:pb-28 lg:pb-32 overflow-hidden font-sans">
+
       <AuroraBackground />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        
+
         {/* ========================================== */}
         {/* 1. HERO: THE STUDIO VISION                 */}
         {/* ========================================== */}
-        <section className="flex flex-col lg:flex-row items-center gap-16 mb-40 mt-10">
-          
-          <motion.div 
-            initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}
-            className="flex-1"
+        <section className="flex flex-col lg:flex-row items-center gap-12 sm:gap-16 mb-24 sm:mb-32 lg:mb-40 mt-6 sm:mt-10">
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
+            className="flex-1 w-full"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 backdrop-blur-md shadow-lg">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6 sm:mb-8 backdrop-blur-md shadow-lg">
               <Network size={14} className="text-purple-500" />
               <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-neutral-400">Global Node Active // Core Systems</span>
             </div>
-            
-            <h1 className="text-6xl md:text-8xl lg:text-[7rem] font-black italic uppercase tracking-tighter leading-[0.85] mb-8">
-              Miransas <br /> 
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-400 to-zinc-600">Ecosystem.</span>
+
+            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[7rem] font-black italic uppercase tracking-tighter leading-[0.9] sm:leading-[0.85] mb-6 sm:mb-8">
+              Miransas{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-400 to-zinc-600 block sm:inline">Ecosystem.</span>
             </h1>
-            
-            <p className="text-lg md:text-xl text-neutral-400 font-light leading-relaxed max-w-xl mb-10 border-l-4 border-purple-500/50 pl-6">
+
+            <p className="text-base sm:text-lg md:text-xl text-neutral-400 font-light leading-relaxed max-w-xl mb-8 sm:mb-10 border-l-4 border-purple-500/50 pl-5 sm:pl-6">
               A multi-disciplinary technology node operating at the intersection of low-level systems engineering, neural automation, and atmospheric interactive media. We engineer secure, zero-latency environments.
             </p>
 
-            <div className="flex gap-8 items-center">
+            <div className="flex flex-wrap gap-6 sm:gap-8 items-center">
               <div className="flex flex-col">
-                <span className="text-4xl font-black text-white italic tracking-tighter">0.1<span className="text-purple-500 text-2xl">ms</span></span>
+                <span className="text-3xl sm:text-4xl font-black text-white italic tracking-tighter">0.1<span className="text-purple-500 text-xl sm:text-2xl">ms</span></span>
                 <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-1">Target Latency</span>
               </div>
-              <div className="w-[1px] h-12 bg-white/10" />
+              <div className="hidden sm:block w-[1px] h-12 bg-white/10" />
               <div className="flex flex-col">
-                <span className="text-4xl font-black text-white italic tracking-tighter">100<span className="text-purple-500 text-2xl">%</span></span>
+                <span className="text-3xl sm:text-4xl font-black text-white italic tracking-tighter">100<span className="text-purple-500 text-xl sm:text-2xl">%</span></span>
                 <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-1">Dark Mode Native</span>
               </div>
             </div>
           </motion.div>
 
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 1 }}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
             className="flex-1 w-full relative flex justify-center lg:justify-end"
           >
             {/* Cam Efektli (Glassmorphism) Kurumsal Kart - SADECE MIRANSAS */}
-            <div className="relative aspect-[4/5] w-full max-w-md rounded-[3rem] overflow-hidden border border-white/10 bg-[#0a0a0a]/60 backdrop-blur-3xl p-8 shadow-2xl group flex flex-col justify-between">
+            <div className="relative aspect-[4/5] w-full max-w-md rounded-[2rem] sm:rounded-[3rem] overflow-hidden border border-white/10 bg-[#0a0a0a]/60 backdrop-blur-3xl p-6 sm:p-8 shadow-2xl group flex flex-col justify-between">
               
               <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-black z-10" />
               
@@ -135,16 +135,16 @@ export default function AboutPage() {
         {/* ========================================== */}
         {/* 2. THE STUDIO DNA (Kurumsal Felsefe)       */}
         {/* ========================================== */}
-        <section className="mb-40">
-          <div className="flex items-center gap-4 mb-16 justify-center md:justify-start">
+        <section className="mb-24 sm:mb-32 lg:mb-40">
+          <div className="flex items-center gap-4 mb-10 sm:mb-16 justify-center md:justify-start text-center md:text-left flex-wrap">
             <Cpu className="text-purple-500" size={28} />
-            <h2 className="text-5xl font-black italic uppercase tracking-tighter">Architecture DNA</h2>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black italic uppercase tracking-tighter">Architecture DNA</h2>
             <div className="hidden md:block h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent ml-6" />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-[#0a0a0a] border border-white/5 p-10 rounded-3xl hover:border-blue-500/30 transition-colors relative overflow-hidden group">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+
+            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.4 }} className="bg-[#0a0a0a] border border-white/5 p-8 sm:p-10 rounded-2xl sm:rounded-3xl hover:border-blue-500/30 transition-colors duration-200 relative overflow-hidden group">
               <div className="absolute top-0 left-0 w-full h-1 bg-blue-500/20 group-hover:bg-blue-500 transition-colors" />
               <Code2 className="text-blue-500 mb-6" size={32} />
               <h3 className="text-xl font-black italic uppercase tracking-tight mb-4 text-white">Algorithmic Precision</h3>
@@ -153,7 +153,7 @@ export default function AboutPage() {
               </p>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="bg-[#0a0a0a] border border-white/5 p-10 rounded-3xl hover:border-emerald-500/30 transition-colors relative overflow-hidden group">
+            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.4, delay: 0.05 }} className="bg-[#0a0a0a] border border-white/5 p-8 sm:p-10 rounded-2xl sm:rounded-3xl hover:border-emerald-500/30 transition-colors duration-200 relative overflow-hidden group">
               <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500/20 group-hover:bg-emerald-500 transition-colors" />
               <Shield className="text-emerald-500 mb-6" size={32} />
               <h3 className="text-xl font-black italic uppercase tracking-tight mb-4 text-white">Encrypted Tunnels</h3>
@@ -162,7 +162,7 @@ export default function AboutPage() {
               </p>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }} className="bg-[#0a0a0a] border border-white/5 p-10 rounded-3xl hover:border-purple-500/30 transition-colors relative overflow-hidden group">
+            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.4, delay: 0.1 }} className="bg-[#0a0a0a] border border-white/5 p-8 sm:p-10 rounded-2xl sm:rounded-3xl hover:border-purple-500/30 transition-colors duration-200 relative overflow-hidden group">
               <div className="absolute top-0 left-0 w-full h-1 bg-purple-500/20 group-hover:bg-purple-500 transition-colors" />
               <Crosshair className="text-purple-500 mb-6" size={32} />
               <h3 className="text-xl font-black italic uppercase tracking-tight mb-4 text-white">Absolute Focus</h3>
@@ -177,16 +177,16 @@ export default function AboutPage() {
         {/* ========================================== */}
         {/* 3. DUAL ENGINE CAPABILITY                  */}
         {/* ========================================== */}
-        <section className="relative p-12 md:p-20 bg-[#0a0a0a] border border-white/5 rounded-[3rem] overflow-hidden">
-          
+        <section className="relative p-6 sm:p-12 md:p-16 lg:p-20 bg-[#0a0a0a] border border-white/5 rounded-[1.5rem] sm:rounded-[3rem] overflow-hidden">
+
           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 pointer-events-none" />
-          
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-center">
             <div>
-              <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter mb-6 leading-none">
-                The <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Dual-Engine</span> <br/> Paradigm.
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black italic uppercase tracking-tighter mb-6 leading-tight">
+                The <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Dual-Engine</span> Paradigm.
               </h2>
-              <p className="text-zinc-400 font-light leading-relaxed mb-12 text-lg border-l-2 border-white/10 pl-6">
+              <p className="text-zinc-400 font-light leading-relaxed mb-10 sm:mb-12 text-base sm:text-lg border-l-2 border-white/10 pl-5 sm:pl-6">
                 Miransas operates two distinct but heavily integrated technological divisions that share core architecture and design philosophies:
               </p>
               

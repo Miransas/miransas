@@ -1,46 +1,34 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-// components/SmoothScrolling.tsx
 "use client";
 
-import { ReactLenis } from 'lenis/react';
-import { ReactNode, useEffect, useRef } from 'react';
-import gsap from 'gsap';
-import ScrollTrigger from 'gsap/ScrollTrigger';
+import { ReactLenis } from "lenis/react";
+import { ReactNode, useEffect, useState } from "react";
+import { useReducedMotion } from "framer-motion";
 
-// GSAP eklentisini kaydediyoruz (Sadece client tarafında çalıştığından emin olarak)
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
-
+// Lenis runs only on non-touch, non-reduced-motion clients.
+// Mobile/touch devices use native scroll for better UX.
 export default function SmoothScrolling({ children }: { children: ReactNode }) {
-  // Lenis instance'ına ulaşmak için ref oluşturuyoruz
-  const lenisRef = useRef<any>(null);
+  const prefersReducedMotion = useReducedMotion();
+  const [enabled, setEnabled] = useState(false);
 
   useEffect(() => {
-    // GSAP'in her frame güncellenmesinde Lenis'i manuel olarak tetikleyen fonksiyon
-    function update(time: number) {
-      lenisRef.current?.lenis?.raf(time * 1000);
-    }
+    if (typeof window === "undefined") return;
+    if (prefersReducedMotion) return;
 
-    // Lenis'i GSAP'in ticker'ına bağlıyoruz
-    gsap.ticker.add(update);
+    const mql = window.matchMedia("(min-width: 1024px) and (hover: hover) and (pointer: fine)");
+    const update = () => setEnabled(mql.matches);
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, [prefersReducedMotion]);
 
-    // Sekme değiştirip geri gelindiğinde animasyonların sıçramaması için önemli:
-    gsap.ticker.lagSmoothing(0);
-
-    return () => {
-      // Component unmount olduğunda temizlik yapıyoruz
-      gsap.ticker.remove(update);
-    };
-  }, []);
+  if (!enabled) return <>{children}</>;
 
   return (
-    <ReactLenis 
-      root 
-      ref={lenisRef}
-      autoRaf={false} // ÖNEMLİ: Lenis'in kendi döngüsünü kapatıp GSAP'e devrediyoruz
+    <ReactLenis
+      root
       options={{
-        lerp: 0.05, 
+        lerp: 0.1,
+        duration: 1.0,
         smoothWheel: true,
       }}
     >

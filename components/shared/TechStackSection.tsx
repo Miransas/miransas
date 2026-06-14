@@ -55,9 +55,9 @@ const SequentialBeams = ({ activeIndex }: { activeIndex: number }) => (
 // ─── ÇİP ───
 const Chip = () => (
   <motion.div
-    initial={{ opacity: 0, scale: 0.85 }}
+    initial={{ opacity: 0, scale: 0.92 }}
     animate={{ opacity: 1, scale: 1 }}
-    transition={{ delay: 0.2, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
     className="flex flex-col items-center relative z-10"
   >
     <div className="flex gap-2 mb-[-4px]">
@@ -141,11 +141,12 @@ const Card = ({ card, index, isActive }: { card: any; index: number; isActive: b
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.5 + index * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-80px" }}
+      transition={{ delay: index * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       onClick={() => card.link && router.push(card.link)}
-      className="flex-1 min-w-[300px] max-w-[480px] p-8 rounded-2xl cursor-pointer relative overflow-hidden"
+      className="flex-1 w-full sm:min-w-[280px] max-w-full lg:max-w-[480px] p-6 sm:p-8 rounded-2xl cursor-pointer relative overflow-hidden"
       style={{
         background: `${card.bgGlow}, #0a0a0a`,
         border: `1px solid ${card.border}`,
@@ -221,7 +222,7 @@ export default function TechStackSections() {
   return (
     <section
       ref={ref}
-      className="min-h-screen bg-[#050505] flex flex-col items-center justify-center py-32 px-6 relative overflow-hidden font-sans"
+      className="min-h-screen bg-[#050505] flex flex-col items-center justify-center py-20 sm:py-28 lg:py-32 px-6 relative overflow-hidden font-sans"
     >
       {/* Siber grid */}
       <div
@@ -234,10 +235,10 @@ export default function TechStackSections() {
 
       {/* Başlık */}
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -12 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="text-center mb-24 z-10"
+        transition={{ duration: 0.4, ease: "easeOut" }}
+        className="text-center mb-16 sm:mb-20 lg:mb-24 z-10"
       >
         <div className="inline-flex items-center gap-2 mb-6">
           <span className="w-8 h-[1px] bg-[#8CFF2E]" />
@@ -246,9 +247,12 @@ export default function TechStackSections() {
           </span>
           <span className="w-8 h-[1px] bg-[#8CFF2E]" />
         </div>
-        <h2 className="text-white text-5xl md:text-7xl font-black tracking-tighter uppercase leading-[0.85]">
-          Engineered for <br />
-          <span className="text-transparent" style={{ WebkitTextStroke: "1px rgba(255,255,255,0.2)" }}>
+        <h2 className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter uppercase leading-[0.9]">
+          Engineered for{" "}
+          <span
+            className="text-transparent block sm:inline"
+            style={{ WebkitTextStroke: "1px rgba(255,255,255,0.2)" }}
+          >
             Zero Latency.
           </span>
         </h2>
@@ -262,7 +266,7 @@ export default function TechStackSections() {
           <SequentialBeams activeIndex={activeBeamIndex} />
         </div>
 
-        <div className="flex flex-col lg:flex-row justify-center gap-6 w-full relative z-20">
+        <div className="flex flex-col lg:flex-row justify-center gap-6 w-full px-0 sm:px-4 relative z-20">
           {CARDS.map((card, i) => (
             <Card
               key={i}

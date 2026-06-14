@@ -725,48 +725,43 @@ export default function MiransasHero() {
       </div>
 
       {/* ============================================================== */}
-      {/* HERO TEXT & CALL TO ACTION (Sol Üst)                           */}
+      {/* HERO TEXT & CALL TO ACTION                                     */}
       {/* ============================================================== */}
-      <div className="absolute top-28 left-12 z-[100] flex max-w-xl flex-col">
+      <div className="relative z-[100] w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 pt-24 sm:pt-28 md:absolute md:top-28 md:left-12 md:max-w-xl md:px-0 md:pt-0 flex flex-col">
         <div className="flex items-center gap-3 mb-4">
           <div className="relative flex h-2.5 w-2.5 items-center justify-center">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full cycle-bg opacity-60" />
             <span className="relative inline-flex h-1.5 w-1.5 rounded-full cycle-bg" />
           </div>
-          <span className="font-mono text-[10px] tracking-[0.5em] uppercase font-bold border bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-sm cycle-text cycle-border">
+          <span className="font-mono text-[10px] tracking-[0.4em] sm:tracking-[0.5em] uppercase font-bold border bg-black/40 px-3 py-1.5 rounded-full backdrop-blur-sm cycle-text cycle-border">
             MIRANSAS_ACTIVE v4.0
           </span>
         </div>
 
-        <h1 className="mt-2 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-white drop-shadow-2xl">
-          Miransas <br />
-          <span className="cycle-text font-black">
+        <h1 className="mt-2 text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-white drop-shadow-2xl">
+          Miransas{" "}
+          <span className="cycle-text font-black block sm:inline">
             Core Logic
           </span>
         </h1>
 
-        <p className="text-xs font-mono text-white/50 tracking-[0.3em] mt-4 mb-8">
-
-        </p>
-
-        <div className="flex flex-col gap-2 border-l-2 cycle-border pl-5 py-1 mb-12">
+        <div className="flex flex-col gap-2 border-l-2 cycle-border pl-5 py-1 mt-6 mb-8 sm:mb-12">
           <span className="text-sm md:text-base font-mono font-bold text-white tracking-wide uppercase">
             Isometric Factory Simulation
           </span>
           <span className="text-xs font-mono text-white/40 tracking-[0.1em] uppercase">
-            Nightmares
-            Engineered.
+            Nightmares Engineered.
           </span>
         </div>
 
-        <div className="mt-8 flex items-center gap-5 pointer-events-auto">
+        <div className="flex items-center gap-5 pointer-events-auto">
           <NeonButton>Explore</NeonButton>
         </div>
       </div>
 
       {/* 3D SCENE */}
-      <div className="relative perspective-view w-full h-[60vh] flex items-center justify-center pointer-events-none z-10 mt-12">
-        <div className="relative isometric-layer w-[1000px] h-[1000px] flex items-center justify-center">
+      <div className="relative perspective-view w-full h-[50vh] sm:h-[60vh] flex items-center justify-center pointer-events-none z-10 mt-8 md:mt-12 overflow-hidden">
+        <div className="relative isometric-layer w-[1000px] h-[1000px] flex items-center justify-center scale-50 sm:scale-75 md:scale-100 origin-center">
 
           <Conveyor x={230} y={500} rotation={0} isInput={true} />
           <Conveyor x={500} y={230} rotation={90} isInput={true} />
@@ -835,43 +830,42 @@ export default function MiransasHero() {
       </div>
 
       {/* ============================================================== */}
-      {/* BOTTOM CARD: LAZERİN ÇARPTIĞI YER (mt-10 ile yukarı çekildi)   */}
+      {/* BOTTOM CARD                                                    */}
       {/* ============================================================== */}
-      <div className="relative z-20 w-full max-w-5xl px-6 pb-12  pt-[44rem]">
+      <div className="relative z-20 w-full max-w-5xl px-4 sm:px-6 pb-12 pt-32 sm:pt-48 md:pt-[44rem]">
 
         {/* Lazerin tam karta vurduğu yerdeki Devasa Işık Patlaması */}
         <div className="absolute top-0 left-1/2 h-32 w-72 -translate-x-1/2 rounded-full blur-[50px] pointer-events-none cycle-bg opacity-30" />
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative grid grid-cols-1 overflow-hidden rounded-[2.5rem] border-x border-b border-white/5 bg-[#05060a]/80 backdrop-blur-xl md:grid-cols-2 shadow-[0_20px_60px_rgba(0,0,0,0.8)] pt-2 cycle-border border-t-2"
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.4 }}
+          className="relative grid grid-cols-1 overflow-hidden rounded-[1.75rem] sm:rounded-[2.5rem] border-x border-b border-white/5 bg-[#05060a]/80 backdrop-blur-xl md:grid-cols-2 shadow-[0_20px_60px_rgba(0,0,0,0.8)] pt-2 cycle-border border-t-2"
         >
-          {/* HAREKETLİ ÜST SINIR ÇİZGİSİ (Lazer enerjisinin kenarlara yayılması) */}
           <motion.div
             animate={{ width: ["20%", "80%", "20%"] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             className="absolute top-0 left-1/2 h-[3px] -translate-x-1/2 cycle-bg"
           />
 
-          <div className="flex flex-col justify-center p-12 lg:p-16 relative z-10">
-            <h2 className="mb-6 text-4xl font-black tracking-tight lg:text-5xl">
-              Miransas <br />
-              <span className="cycle-text">Core Architecture</span>
+          <div className="flex flex-col justify-center p-6 sm:p-10 lg:p-16 relative z-10">
+            <h2 className="mb-4 sm:mb-6 text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight">
+              Miransas{" "}
+              <span className="cycle-text block sm:inline">Core Architecture</span>
             </h2>
-            <p className="mb-10 max-w-md text-lg leading-relaxed text-slate-400">
-              <p className="text-[#8b949e] text-sm leading-relaxed max-w-2xl">
-                Powering the next generation of <span className="text-orange-400">high-performance</span> tools.
-                From self-hosted tunneling solutions to advanced <span className="text-blue-400 font-mono">Rust-based</span> engines,
-                the Miransas ecosystem gives you full control, speed, and absolute efficiency.
-              </p>            </p>
+            <p className="mb-8 sm:mb-10 text-sm sm:text-base text-[#8b949e] leading-relaxed max-w-2xl">
+              Powering the next generation of <span className="text-orange-400">high-performance</span> tools.
+              From self-hosted tunneling solutions to advanced <span className="text-blue-400 font-mono">Rust-based</span> engines,
+              the Miransas ecosystem gives you full control, speed, and absolute efficiency.
+            </p>
             <div className="w-fit">
               <NeonButton>Explore Ecosystem</NeonButton>
             </div>
           </div>
 
-          <div className="relative min-h-[400px] p-8 lg:p-12">
+          <div className="relative min-h-[320px] sm:min-h-[400px] p-4 sm:p-8 lg:p-12">
             <div className="absolute inset-0 cycle-bg opacity-5 blur-[100px] pointer-events-none" />
             <CodeMockup />
           </div>

@@ -48,7 +48,7 @@ export default function ContactPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white pt-32 pb-32 font-sans  overflow-hidden relative">
+    <main className="min-h-screen bg-[#050505] text-white pt-24 sm:pt-28 md:pt-32 pb-20 sm:pb-28 md:pb-32 font-sans overflow-hidden relative">
       
       {/* ─── SİBER ARKA PLAN ─── */}
       <div className="absolute inset-0 z-0 opacity-[0.08] pointer-events-none" 
@@ -60,27 +60,28 @@ export default function ContactPage() {
       <div className="max-w-7xl mx-auto px-6 relative z-10">
         
         {/* ─── HEADER ─── */}
-        <div className="text-center mb-24 max-w-3xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 mb-8 backdrop-blur-md">
+        <div className="text-center mb-16 sm:mb-20 lg:mb-24 max-w-3xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 mb-6 sm:mb-8 backdrop-blur-md">
               <ShieldCheck size={14} className="text-blue-500" />
               <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-blue-400">Connection Encrypted (ChaCha20)</span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter leading-none mb-6">
-              Establish <br /> <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4F00] to-orange-600">Connection.</span>
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black uppercase tracking-tighter leading-[1.05] mb-6">
+              Establish{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF4F00] to-orange-600 block sm:inline">Connection.</span>
             </h1>
-            <p className="text-lg text-neutral-400 font-light leading-relaxed">
+            <p className="text-base sm:text-lg text-neutral-400 font-light leading-relaxed">
               Initiate a direct signal to Miransas Studio. Whether for high-performance infrastructure, interactive IP development, or classified operations.
             </p>
           </motion.div>
         </div>
 
         {/* ─── İLETİŞİM BÖLÜMÜ ─── */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 sm:gap-12 lg:gap-8 items-start">
           
           {/* SOL: TELEMETRİ */}
-          <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="lg:col-span-2 space-y-8">
-            <div className="bg-[#0A0A0A] border border-white/5 rounded-2xl p-8 hover:border-white/10 transition-colors relative overflow-hidden group">
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.05 }} className="lg:col-span-2 space-y-6 sm:space-y-8">
+            <div className="bg-[#0A0A0A] border border-white/5 rounded-2xl p-6 sm:p-8 hover:border-white/10 transition-colors duration-200 relative overflow-hidden group">
               <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#FF4F00] to-transparent opacity-50 group-hover:opacity-100 transition-opacity" />
               <Terminal size={24} className="text-neutral-500 mb-6" />
               <h3 className="text-2xl font-bold uppercase tracking-tight mb-2 text-white">Sardor Azimov</h3>
@@ -121,8 +122,8 @@ export default function ContactPage() {
           </motion.div>
 
           {/* SAĞ: GÜVENLİ İLETİŞİM FORMU */}
-          <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="lg:col-span-3 relative">
-            <div className="relative bg-[#0A0A0A] border border-neutral-800 rounded-2xl p-8 md:p-12 shadow-2xl overflow-hidden min-h-[500px] flex flex-col justify-center">
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: 0.1 }} className="lg:col-span-3 relative">
+            <div className="relative bg-[#0A0A0A] border border-neutral-800 rounded-2xl p-6 sm:p-8 md:p-12 shadow-2xl overflow-hidden min-h-[500px] flex flex-col justify-center">
               
               <BorderBeam color={formState === "error" ? "#EF4444" : "#FF4F00"} duration={5} />
 

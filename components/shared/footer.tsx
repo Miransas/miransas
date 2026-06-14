@@ -94,11 +94,11 @@ export function Footer() {
 
       <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
         {/* Ana Footer Bölümü */}
-        <div className="py-16 lg:py-20">
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-10 md:gap-12 lg:gap-8">
-            
+        <div className="py-14 sm:py-16 lg:py-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-10 md:gap-12 lg:gap-8">
+
             {/* Logo ve Marka Sütunu */}
-            <div className="col-span-2 flex flex-col justify-between">
+            <div className="sm:col-span-2 md:col-span-2 flex flex-col gap-8 sm:justify-between">
               <div>
                 <Link href="/" className="inline-flex items-center gap-2 mb-4 group">
                   <span className="text-2xl font-bold tracking-tight text-white transition-colors group-hover:text-indigo-400">
@@ -136,7 +136,7 @@ export function Footer() {
 
             {/* Link Sütunları */}
             {Object.entries(footerLinks).map(([title, links]) => (
-              <div key={title} className="col-span-1">
+              <div key={title} className="sm:col-span-1">
                 <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-4">
                   {title}
                 </h3>
@@ -152,7 +152,7 @@ export function Footer() {
                         <LinkComponent
                           href={link.href}
                           {...extraProps}
-                          className="text-sm text-zinc-400 hover:text-white transition-colors inline-flex items-center gap-1 group"
+                          className="text-sm text-zinc-400 hover:text-white transition-colors duration-200 inline-flex items-center gap-1 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8CFF2E]/40 rounded-sm"
                         >
                           <span>{link.name}</span>
                           {isExternal && (
@@ -174,13 +174,13 @@ export function Footer() {
         </div>
 
         {/* Alt Bilgi Çubuğu */}
-        <div className="py-8 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="py-8 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           <p className="text-xs text-zinc-500 order-2 md:order-1">
             © {mounted ? `2024-${new Date().getFullYear()}` : "2024"} Miransas. All rights reserved.
           </p>
 
           {/* Sistem Durumu ve Zaman Göstergeleri */}
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-6 gap-y-3 text-xs text-zinc-400 order-1 md:order-2">
+          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-4 sm:gap-x-6 gap-y-3 text-xs text-zinc-400 order-1 md:order-2">
             
             {/* Sistem Durumu */}
             <span className="flex items-center gap-2 text-zinc-300">
