@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight, Box, CheckCircle2 } from "lucide-react"
 import type { Project } from "@/constants/projects"
 
 const statusConfig = {
@@ -14,8 +14,10 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <Link
       href={`/projects/${project.slug}`}
-      className="group relative flex flex-col gap-4 rounded-2xl border border-white/10 bg-white/[0.02] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#8CFF2E]/40 hover:bg-white/[0.04]"
+      className="group relative flex min-h-[340px] flex-col overflow-hidden rounded-2xl border border-white/10 bg-[#0a0a0a] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#8CFF2E]/40 hover:bg-[#101010]"
     >
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#8CFF2E]/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className={`h-2 w-2 rounded-full ${status.dot}`} />
@@ -29,14 +31,23 @@ export function ProjectCard({ project }: { project: Project }) {
         />
       </div>
 
-      <div className="flex flex-col gap-2">
+      <div className="mt-8 flex size-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-[#8CFF2E]">
+        <Box className="size-5" />
+      </div>
+
+      <div className="relative mt-6 flex flex-col gap-2">
         <h3 className="text-xl font-semibold text-white">{project.name}</h3>
         <p className="text-sm text-zinc-400">{project.tagline}</p>
       </div>
 
-      <p className="text-sm leading-relaxed text-zinc-500">
+      <p className="relative text-sm leading-relaxed text-zinc-500">
         {project.description}
       </p>
+
+      <div className="relative mt-2 flex items-center gap-2 text-xs text-zinc-500">
+        <CheckCircle2 className="size-3.5 text-[#8CFF2E]" />
+        Click to view full case page
+      </div>
 
       <div className="mt-auto flex flex-wrap gap-2 pt-2">
         {project.tech.map((t) => (

@@ -1,211 +1,172 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link"; // Next.js projesi için. Standart React ise <a> kullanabilirsiniz.
-import { 
-  ArrowUpRight, 
-  
-  Mail, 
-  Globe, 
-  Clock, 
-  Activity 
-} from "lucide-react";
-import { FaTwitter, FaGithub, FaInstagram } from "react-icons/fa"; // Sosyal medya ikonları
-// Discord ikonu lucide-react içinde doğrudan bulunmadığı için Globe veya özel SVG kullanılabilir.
-// Burada basitlik ve tutarlılık adına MessageSquare yerine özel Discord SVG'si veya standart bir ikon seçtik.
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
+import { FaGithub, FaInstagram, FaX, FaYoutube } from "react-icons/fa6";
 
-const footerLinks = {
-  Project: [
-    { name: "Chess Engine", href: "/projects" },
-    { name: "Binboi", href: "/projects" },
-    { name: "Game", href: "/projects" },
-    { name: "Courierx", href: "/projects" },
-  ],
-  Developers: [
-    { name: "Developers", href: "/developers" },
-    { name: "Changelog", href: "/changelog" },
-    { name: "Status", href: "/status" },
-  ],
-  Company: [
-    { name: "About", href: "/about" },
-    { name: "Blog", href: "https://blog.miransas.com", isExternal: true },
-    { name: "Careers", href: "/careers", badge: "Hiring" },
-    { name: "Contact", href: "/contact" },
-  ],
-  Legal: [
-    { name: "Privacy", href: "/privacy" },
-    { name: "Terms", href: "/terms" },
-    { name: "Security", href: "/security" },
-  ],
-};
+const currentYear = new Date().getFullYear();
 
-const socialLinks = [
-  { name: "Twitter", href: "https://twitter.com/miransaas", icon: FaTwitter },
-  { name: "GitHub", href: "https://github.com/miransas", icon: FaGithub },
-  { name: "Instagram", href: "https://instagram.com/miransaas", icon: FaInstagram },
-  { name: "Email", href: "mailto:info@miransas.com", icon: Mail },
+const footerLinks = [
+  {
+    title: "",
+    links: [
+      // { label: "Overview", href: "/" },
+      // { label: "Features", href: "/features" },
+      // { label: "Pricing", href: "/pricing" },
+      // { label: "Testimonials", href: "/testimonials" },
+      // { label: "FAQs", href: "/faqs" },
+    ],
+  },
+  {
+    title: "About",
+    links: [
+       { label: "Overview", href: "/" },
+      { label: "Features", href: "/features" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Our Story", href: "/about" },
+      // { label: "Team", href: "/team" },
+      { label: "Careers", href: "/careers" },
+      { label: "Blog", href: "/blog" },
+      { label: "Ui ", href: "https://ui.miransas.com" },
+
+    ],
+  },
+  {
+    title: "Contact",
+    links: [
+      { label: "Contact Us", href: "/contact" },
+      { label: "Support", href: "/support" },
+      // { label: "Live Chat", href: "/chat" },
+      // { label: "Help Center", href: "/help" },
+      { label: "Report Issue", href: "https://github.com/Miransas/miransas/issues/new" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy Policy", href: "/privacy" },
+      { label: "Terms of Service", href: "/terms" },
+      { label: "Cookie Policy", href: "/cookies" },
+      // { label: "Licenses", href: "/licenses" },
+      { label: "Security", href: "/security" },
+    ],
+  },
 ];
 
-export function Footer() {
-  const [time, setTime] = useState("");
-  const [uptime, setUptime] = useState("");
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-    const startTime = new Date();
-
-    const updateClock = () => {
-      const now = new Date();
-
-      // Canlı saat (TR formatı)
-      const currentTime = now.toLocaleTimeString("tr-TR", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-      });
-      setTime(currentTime);
-
-      // Session uptime hesaplama
-      const diff = Math.floor((now.getTime() - startTime.getTime()) / 1000);
-      const hours = Math.floor(diff / 3600);
-      const minutes = Math.floor((diff % 3600) / 60);
-      const seconds = diff % 60;
-
-      setUptime(
-        `${hours.toString().padStart(2, "0")}:${minutes
-          .toString()
-          .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`
-      );
-    };
-
-    updateClock();
-    const interval = setInterval(updateClock, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
+export default function Footer() {
   return (
-    <footer className="relative border-t border-zinc-900 bg-neutral-950 text-zinc-100 overflow-hidden">
-      
-      {/* Koyu Tema Arka Plan Parlama Efektleri */}
-      <div className="absolute inset-x-0 top-0 h-64 bg-gradient-to-b from-indigo-500/5 to-transparent pointer-events-none opacity-40" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-64 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-500/10 via-transparent to-transparent pointer-events-none" />
+    <footer className="relative overflow-hidden bg-black text-white">
+      {/* Background Radial Gradient */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,#2d2a25,transparent_55%)]" />
 
-      <div className="relative z-10 max-w-[1400px] mx-auto px-6 lg:px-12">
-        {/* Ana Footer Bölümü */}
-        <div className="py-14 sm:py-16 lg:py-20">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-10 md:gap-12 lg:gap-8">
-
-            {/* Logo ve Marka Sütunu */}
-            <div className="sm:col-span-2 md:col-span-2 flex flex-col gap-8 sm:justify-between">
-              <div>
-                <Link href="/" className="inline-flex items-center gap-2 mb-4 group">
-                  <span className="text-2xl font-bold tracking-tight text-white transition-colors group-hover:text-indigo-400">
-                    Miransas
-                  </span>
-                  <span className="text-[10px] bg-zinc-900 text-zinc-400 border border-zinc-800 font-mono px-1.5 py-0.5 rounded">
-                    TM
-                  </span>
-                </Link>
-
-                <p className="text-zinc-400 text-sm leading-relaxed mb-6 max-w-xs">
-                  The platform for teams who ship. Build, deploy, and scale with unprecedented velocity.
-                </p>
-              </div>
-
-              {/* Sosyal Medya İkonları */}
-              <div className="flex gap-4">
-                {socialLinks.map((link) => {
-                  const Icon = link.icon;
-                  return (
-                    <a
-                      key={link.name}
-                      href={link.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-2 rounded-lg border border-zinc-800 text-zinc-400 hover:text-white hover:border-zinc-700 hover:bg-zinc-900 transition-all"
-                      aria-label={link.name}
-                    >
-                      <Icon className="w-4 h-4" />
-                    </a>
-                  );
-                })}
-              </div>
+      <div className="relative mx-auto max-w-[90rem] px-6 md:px-12">
+        {/* CTA Card */}
+        <div className="pt-16 md:pt-24">
+          <div className="relative overflow-hidden rounded-3xl bg-[#111] px-8 py-12 md:px-16 md:py-16">
+            {/* Giant Background Text inside card */}
+            <div className="pointer-events-none absolute bottom-0 left-0 select-none">
+              <span className="text-[100px] font-bold leading-none tracking-tighter text-white/[0.04] md:text-[220px]">
+                MIRANSAS
+              </span>
             </div>
 
-            {/* Link Sütunları */}
-            {Object.entries(footerLinks).map(([title, links]) => (
-              <div key={title} className="sm:col-span-1">
-                <h3 className="text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-4">
-                  {title}
-                </h3>
-                <ul className="space-y-3">
-                  {links.map((link) => {
-                    const isExternal = "isExternal" in link && link.isExternal;
-                    
-                    const LinkComponent = isExternal ? 'a' : Link;
-                    const extraProps = isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {};
-
-                    return (
-                      <li key={link.name}>
-                        <LinkComponent
-                          href={link.href}
-                          {...extraProps}
-                          className="text-sm text-zinc-400 hover:text-white transition-colors duration-200 inline-flex items-center gap-1 group focus:outline-none focus-visible:ring-2 focus-visible:ring-[#8CFF2E]/40 rounded-sm"
-                        >
-                          <span>{link.name}</span>
-                          {isExternal && (
-                            <ArrowUpRight className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" />
-                          )}
-                          {"badge" in link && link.badge && (
-                            <span className="text-[10px] font-medium px-2 py-0.5 bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 rounded-full">
-                              {link.badge}
-                            </span>
-                          )}
-                        </LinkComponent>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
-            ))}
+            <div className="relative flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
+              <h2 className="max-w-xl text-4xl font-medium leading-[1.1] tracking-tight md:text-6xl">
+                Three Frames • Three Circles <br className="hidden md:block" />
+                Secure • Connect • Evolve
+              </h2>
+              <Link
+                href="/contact"
+                aria-label="Contact Miransas"
+                className="group flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-black transition-all hover:scale-105 hover:bg-neutral-200 md:h-16 md:w-16"
+              >
+                <ArrowUpRight className="h-6 w-6 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+              </Link>
+            </div>
           </div>
         </div>
 
-        {/* Alt Bilgi Çubuğu */}
-        <div className="py-8 border-t border-zinc-900 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
-          <p className="text-xs text-zinc-500 order-2 md:order-1">
-            © {mounted ? `2024-${new Date().getFullYear()}` : "2024"} Miransas. All rights reserved.
-          </p>
-
-          {/* Sistem Durumu ve Zaman Göstergeleri */}
-          <div className="flex flex-wrap items-center justify-center md:justify-end gap-x-4 sm:gap-x-6 gap-y-3 text-xs text-zinc-400 order-1 md:order-2">
-            
-            {/* Sistem Durumu */}
-            <span className="flex items-center gap-2 text-zinc-300">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+        {/* Bottom Section: Grid Links */}
+        <div className="grid grid-cols-1 gap-12 py-16 sm:grid-cols-2 lg:grid-cols-6 lg:gap-8">
+          {/* Brand Info Column */}
+          <div className="flex flex-col items-start lg:col-span-2">
+            <Image
+              src="/icons/logo.png"
+              alt="Miransas Logo"
+              width={80}
+              height={80}
+              className="mb-6 rounded-xl p-1.5 text-black"
+            />
+            <p className="mb-6 max-w-xs text-sm leading-relaxed text-white/50">
+              Designed around three frames and three circles.
+              Built for the future.
+            </p>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
+            >
+              <span className="flex h-5 w-5 items-center justify-center rounded bg-yellow-400">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12h14" />
+                  <path d="m12 5 7 7-7 7" />
+                </svg>
               </span>
-              All systems operational
-            </span>
+              Get started
+            </Link>
+          </div>
 
-            {/* Bölgesel Canlı Saat */}
-            {mounted && time && (
-              <span className="flex items-center gap-1.5 font-mono text-zinc-400">
-                <Clock className="w-3.5 h-3.5 text-zinc-500" />
-                {time}
-              </span>
-            )}
+          {/* Navigation Links Columns */}
+          {footerLinks.map((group) => (
+            <div key={group.title} className="lg:col-span-1">
+              <h3 className="mb-6 text-sm font-medium text-white/40">
+                {group.title}
+              </h3>
+              <ul className="flex flex-col space-y-3">
+                {group.links.map((item) => (
+                  <li key={item.label}>
+                    <Link
+                      href={item.href}
+                      className="text-sm text-white/70 transition-colors hover:text-white"
+                    >
+                      {item.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
 
-            {/* Oturum Süresi (Uptime) */}
-            {mounted && uptime && (
-              <span className="flex items-center gap-1.5 font-mono text-emerald-400 bg-emerald-500/5 px-2 py-1 rounded border border-emerald-500/10">
-                <Activity className="w-3.5 h-3.5" />
-                Session: {uptime}
-              </span>
-            )}
+        {/* Copyright & Socials */}
+        <div className="flex flex-col items-center justify-between border-t border-white/10 py-8 text-sm text-white/50 md:flex-row">
+          <p>&copy; {currentYear} Miransas. All rights reserved.</p>
+          <div className="mt-4 flex items-center gap-4 md:mt-0">
+            <Link href={"https://twitter.com/miransaas"} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
+              <span className="sr-only">Twitter</span>
+              <FaX className="h-5 w-5" />
+            </Link>
+            <Link href={"https://www.instagram.com/miransaas"} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
+              <span className="sr-only">Instagram</span>
+              <FaInstagram className="h-5 w-5" />
+            </Link>
+            <Link href={"https://www.github.com/miransas"} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
+              <span className="sr-only">GitHub</span>
+              <FaGithub className="h-5 w-5" />
+            </Link>
+            <Link href={"https://www.youtube.com/@miransaas"} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
+              <span className="sr-only">YouTube</span>
+              <FaYoutube className="h-5 w-5" />
+            </Link>
           </div>
         </div>
       </div>

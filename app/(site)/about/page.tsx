@@ -1,236 +1,565 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-import { 
-  Terminal, Shield, Gamepad2, 
-  Hexagon, Crosshair, Cpu, Box,
-  Code2, Network, Activity
+import { useEffect, useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  ArrowRight,
+  MapPin,
+  Calendar,
+  Zap,
+  Shield,
+  Globe,
+  Code2,
+  Gamepad2,
+  Server,
+  Cpu,
+  ArrowUpRight,
+  Sparkles,
+  Target,
+  Layers,
+  Clock,
+  Users,
+  ChevronRight,
 } from "lucide-react";
+import * as THREE from "three";
 
-const AuroraBackground = () => (
-  <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none bg-[#030303]">
-    <motion.div 
-      animate={{ transform: ["translate(0px, 0px) scale(1)", "translate(50px, -50px) scale(1.1)", "translate(0px, 0px) scale(1)"] }}
-      transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-purple-600 mix-blend-screen filter blur-[200px] opacity-[0.05]" 
-    />
-    <motion.div 
-      animate={{ transform: ["translate(0px, 0px) scale(1)", "translate(-50px, 50px) scale(1.2)", "translate(0px, 0px) scale(1)"] }}
-      transition={{ duration: 20, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-      className="absolute top-[20%] -right-[10%] w-[60vw] h-[60vw] rounded-full bg-blue-600 mix-blend-screen filter blur-[200px] opacity-[0.04]" 
-    />
-    <motion.div 
-      animate={{ transform: ["translate(0px, 0px) scale(1)", "translate(50px, 50px) scale(0.9)", "translate(0px, 0px) scale(1)"] }}
-      transition={{ duration: 18, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-      className="absolute -bottom-[20%] left-[20%] w-[50vw] h-[50vw] rounded-full bg-emerald-600 mix-blend-screen filter blur-[200px] opacity-[0.03]" 
-    />
-    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay opacity-[0.15]" />
-  </div>
-);
+// --- DATA ---
+
+const timeline = [
+  {
+    year: "2022",
+    title: "Miransas Founded",
+    desc: "Started as a solo engineering studio in Izmir, Turkey. Focus on systems, not products.",
+    icon: Sparkles,
+  },
+  {
+    year: "2023",
+    title: "Binboi Infrastructure",
+    desc: "First production-grade networking system. Built entirely in Go for real-world traffic.",
+    icon: Server,
+  },
+  {
+    year: "2024",
+    title: "Project Sad Begins",
+    desc: "Narrative-driven game development with custom story engine and handcrafted assets.",
+    icon: Gamepad2,
+  },
+  {
+    year: "2025",
+    title: "Rust Engine 1600+ Elo",
+    desc: "High-performance chess engine reaching competitive level. Raw speed, zero shortcuts.",
+    icon: Cpu,
+  },
+  {
+    year: "2026",
+    title: "Global Reach",
+    desc: "Remote-first team. Open source contributions. Infrastructure serving global traffic.",
+    icon: Globe,
+  },
+];
+
+const principles = [
+  {
+    icon: Target,
+    title: "Precision",
+    desc: "Every line of code is intentional. No bloat, no shortcuts, no technical debt we don't understand.",
+  },
+  {
+    icon: Shield,
+    title: "Security",
+    desc: "Privacy-first by design. We don't collect what we don't need. We don't trust what we can't verify.",
+  },
+  {
+    icon: Zap,
+    title: "Performance",
+    desc: "Milliseconds matter. Whether it's a game frame or a network packet, speed is a feature.",
+  },
+  {
+    icon: Layers,
+    title: "Simplicity",
+    desc: "Complex systems built from simple parts. We engineer for maintainability, not impressiveness.",
+  },
+];
+
+const stats = [
+  { value: "12+", label: "Projects", suffix: "Shipped" },
+  { value: "1600+", label: "Engine Elo", suffix: "Chess AI" },
+  { value: "3", label: "Core Products", suffix: "Focused" },
+  { value: "100%", label: "Independent", suffix: "Bootstrapped" },
+];
+
+// --- SHADER (Amber/Gold tones instead of lime) ---
+function ShaderBackdrop() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const animationRef = useRef<number>(0);
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+    const container = containerRef.current;
+
+    const fragmentShader = `
+      precision highp float;
+      uniform vec2 resolution;
+      uniform float time;
+      
+      float hash(float n) {
+        return fract(sin(n) * 43758.5453123);
+      }
+      
+      float noise(vec2 x) {
+        vec2 i = floor(x);
+        vec2 f = fract(x);
+        f = f * f * (3.0 - 2.0 * f);
+        float n = i.x + i.y * 57.0;
+        return mix(mix(hash(n), hash(n + 1.0), f.x),
+                   mix(hash(n + 57.0), hash(n + 58.0), f.x), f.y);
+      }
+      
+      void main() {
+        vec2 uv = (gl_FragCoord.xy * 2.0 - resolution.xy) / min(resolution.x, resolution.y);
+        float t = time * 0.15;
+        
+        vec3 color = vec3(0.0);
+        float lineWidth = 0.002;
+        
+        for (int j = 0; j < 3; j++) {
+          float layerOffset = float(j) * 1.2;
+          for (int i = 1; i <= 4; i++) {
+            float fi = float(i);
+            float freq = fi * 0.25;
+            float amp = fi * fi * 0.012;
+            
+            float wave1 = sin(uv.x * freq + t * (0.4 + layerOffset) + fi) * amp;
+            float wave2 = cos(uv.y * freq * 0.6 + t * (0.25 + layerOffset) + fi * 1.1) * amp;
+            float wave3 = sin((uv.x + uv.y) * freq * 0.4 + t * 0.3 + fi * 0.6) * amp;
+            
+            float pattern = wave1 + wave2 + wave3;
+            float dist = length(uv) + pattern;
+            float line = lineWidth * fi * fi / abs(dist + mod(uv.x + uv.y + t * 0.08, 0.25));
+            color[j] += line;
+          }
+        }
+        
+        // Amber/Gold instead of lime
+        color *= vec3(1.0, 0.75, 0.35);
+        float glow = 0.012 / (length(uv) + 0.5);
+        color += vec3(1.0, 0.75, 0.35) * glow * 0.15;
+        
+        gl_FragColor = vec4(color, 1.0);
+      }
+    `;
+
+    const camera = new THREE.Camera();
+    camera.position.z = 1;
+    const scene = new THREE.Scene();
+    const geometry = new THREE.PlaneGeometry(2, 2);
+    const uniforms = {
+      time: { value: 0.0 },
+      resolution: { value: new THREE.Vector2() },
+    };
+    const material = new THREE.ShaderMaterial({ uniforms, vertexShader: `void main(){gl_Position=vec4(position,1.0);}`, fragmentShader });
+    scene.add(new THREE.Mesh(geometry, material));
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    const onResize = () => {
+      renderer.setSize(container.clientWidth, container.clientHeight);
+      uniforms.resolution.value.set(renderer.domElement.width, renderer.domElement.height);
+    };
+
+    const start = Date.now();
+    const animate = () => {
+      uniforms.time.value = (Date.now() - start) / 1000;
+      renderer.render(scene, camera);
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    onResize();
+    window.addEventListener("resize", onResize);
+    animate();
+
+    return () => {
+      window.removeEventListener("resize", onResize);
+      cancelAnimationFrame(animationRef.current);
+      renderer.dispose();
+      geometry.dispose();
+      material.dispose();
+      if (renderer.domElement.parentElement === container) container.removeChild(renderer.domElement);
+    };
+  }, []);
+
+  return <div ref={containerRef} className="absolute inset-0 h-full w-full" aria-hidden="true" />;
+}
+
+// --- COMPONENTS ---
+
+function AnimatedCounter({ value, suffix }: { value: string; suffix: string }) {
+  return (
+    <div className="flex flex-col">
+      <span className="text-5xl font-bold tracking-tight text-white md:text-6xl">{value}</span>
+      <span className="mt-1 text-sm uppercase tracking-wider text-neutral-500">{suffix}</span>
+    </div>
+  );
+}
 
 export default function AboutPage() {
+  const { scrollYProgress } = useScroll();
+  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
+
   return (
-    <main className="relative min-h-screen bg-[#030303] text-white pt-24 sm:pt-32 md:pt-40 pb-20 sm:pb-28 lg:pb-32 overflow-hidden font-sans">
+    <main className="w-full bg-black selection:bg-neutral-800 selection:text-white">
+      
+      {/* ===== HERO: Full shader background, different tone ===== */}
+      <section className="relative min-h-[90vh] overflow-hidden text-white">
+        <ShaderBackdrop />
+        
+        {/* Overlays */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,transparent_0%,rgba(0,0,0,0.5)_50%,rgba(0,0,0,0.9)_100%)]" />
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent" />
 
-      <AuroraBackground />
-
-      <div className="max-w-7xl mx-auto px-6 relative z-10">
-
-        {/* ========================================== */}
-        {/* 1. HERO: THE STUDIO VISION                 */}
-        {/* ========================================== */}
-        <section className="flex flex-col lg:flex-row items-center gap-12 sm:gap-16 mb-24 sm:mb-32 lg:mb-40 mt-6 sm:mt-10">
-
+        <div className="relative z-10 mx-auto flex min-h-[90vh] max-w-[90rem] flex-col justify-center px-6 md:px-12">
           <motion.div
-            initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
-            className="flex-1 w-full"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6 sm:mb-8 backdrop-blur-md shadow-lg">
-              <Network size={14} className="text-purple-500" />
-              <span className="text-[10px] font-mono uppercase tracking-[0.3em] text-neutral-400">Global Node Active // Core Systems</span>
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-neutral-300 backdrop-blur-xl">
+              <MapPin className="size-4 text-amber-400" />
+              Izmir, Turkey — Remote First
             </div>
 
-            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-[7rem] font-black italic uppercase tracking-tighter leading-[0.9] sm:leading-[0.85] mb-6 sm:mb-8">
-              Miransas{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-zinc-400 to-zinc-600 block sm:inline">Ecosystem.</span>
+            <h1 className="max-w-4xl text-6xl font-semibold leading-[0.95] tracking-tight md:text-8xl lg:text-9xl">
+              Engineering
+              <br />
+              <span className="text-neutral-500">the quiet</span>
+              <br />
+              revolution.
             </h1>
 
-            <p className="text-base sm:text-lg md:text-xl text-neutral-400 font-light leading-relaxed max-w-xl mb-8 sm:mb-10 border-l-4 border-purple-500/50 pl-5 sm:pl-6">
-              A multi-disciplinary technology node operating at the intersection of low-level systems engineering, neural automation, and atmospheric interactive media. We engineer secure, zero-latency environments.
+            <p className="mt-10 max-w-xl text-lg leading-relaxed text-neutral-400 md:text-xl">
+              We build systems that outlast trends. No investors. No agencies. 
+              Just relentless engineering, obsessive detail, and software that 
+              refuses to be ordinary.
             </p>
 
-            <div className="flex flex-wrap gap-6 sm:gap-8 items-center">
-              <div className="flex flex-col">
-                <span className="text-3xl sm:text-4xl font-black text-white italic tracking-tighter">0.1<span className="text-purple-500 text-xl sm:text-2xl">ms</span></span>
-                <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-1">Target Latency</span>
-              </div>
-              <div className="hidden sm:block w-[1px] h-12 bg-white/10" />
-              <div className="flex flex-col">
-                <span className="text-3xl sm:text-4xl font-black text-white italic tracking-tighter">100<span className="text-purple-500 text-xl sm:text-2xl">%</span></span>
-                <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest mt-1">Dark Mode Native</span>
-              </div>
+            <div className="mt-12 flex flex-wrap gap-4">
+              <a
+                href="/contact"
+                className="group inline-flex h-14 items-center gap-3 rounded-full bg-white px-8 text-base font-semibold text-black transition-all hover:bg-neutral-200 hover:scale-[1.02]"
+              >
+                Start a project
+                <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+              </a>
+              <a
+                href="/projects"
+                className="inline-flex h-14 items-center gap-3 rounded-full border border-white/15 bg-white/5 px-8 text-base font-semibold text-white backdrop-blur-xl transition-all hover:bg-white/10"
+              >
+                View our work
+                <ArrowUpRight className="size-5" />
+              </a>
             </div>
           </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.5 }}
-            className="flex-1 w-full relative flex justify-center lg:justify-end"
+          {/* Floating stats bar */}
+          <motion.div 
+            style={{ y }}
+            className="absolute bottom-12 right-6 hidden lg:flex lg:flex-col lg:gap-8 md:right-12"
           >
-            {/* Cam Efektli (Glassmorphism) Kurumsal Kart - SADECE MIRANSAS */}
-            <div className="relative aspect-[4/5] w-full max-w-md rounded-[2rem] sm:rounded-[3rem] overflow-hidden border border-white/10 bg-[#0a0a0a]/60 backdrop-blur-3xl p-6 sm:p-8 shadow-2xl group flex flex-col justify-between">
-              
-              <div className="absolute inset-0 bg-gradient-to-b from-purple-500/10 via-transparent to-black z-10" />
-              
-              {/* Üst Kısım: Dönen Logo */}
-              <div className="relative z-20 flex justify-center mt-12 opacity-90">
-                <motion.div 
-                  animate={{ rotateY: 360 }}
-                  transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-                  className="relative"
-                >
-                  <Hexagon size={160} className="text-purple-500/20" strokeWidth={1} />
-                  <Hexagon size={80} className="text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" strokeWidth={1.5} />
-                </motion.div>
-              </div>
-
-              {/* Alt Kısım: Miransas System Status */}
-              <div className="relative z-20 bg-black/60 p-6 rounded-2xl border border-white/10 backdrop-blur-md shadow-inner">
-                <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
-                  <div className="flex items-center gap-2">
-                    <Activity size={14} className="text-emerald-400" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-purple-400">Miransas_Modules</span>
-                  </div>
-                  <Terminal size={14} className="text-zinc-500" />
-                </div>
-                
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between group cursor-default">
-                    <span className="text-xs font-mono text-zinc-400 group-hover:text-white transition-colors">&gt; Miransoft</span>
-                    <span className="text-[10px] uppercase tracking-wider text-emerald-500 font-bold">Online</span>
-                  </div>
-                  
-                  <div className="flex items-center justify-between group cursor-default">
-                    <span className="text-xs font-mono text-zinc-400 group-hover:text-white transition-colors">&gt; Miransaas</span>
-                    <span className="text-[10px] uppercase tracking-wider text-emerald-500 font-bold">Online</span>
-                  </div>
-
-                  <div className="flex items-center justify-between group cursor-default">
-                    <span className="text-xs font-mono text-zinc-400 group-hover:text-white transition-colors">&gt; binboi_node</span>
-                    <span className="text-[10px] uppercase tracking-wider text-blue-400 font-bold">Rust/Go</span>
-                  </div>
-
-                  <div className="flex items-center justify-between group cursor-default">
-                    <span className="text-xs font-mono text-zinc-400 group-hover:text-white transition-colors">&gt; miransas-chess</span>
-                    <span className="text-[10px] uppercase tracking-wider text-purple-400 font-bold">UCI Engine</span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
+            {stats.slice(0, 2).map((s) => (
+              <AnimatedCounter key={s.label} value={s.value} suffix={s.suffix} />
+            ))}
           </motion.div>
+        </div>
+      </section>
 
-        </section>
-
-        {/* ========================================== */}
-        {/* 2. THE STUDIO DNA (Kurumsal Felsefe)       */}
-        {/* ========================================== */}
-        <section className="mb-24 sm:mb-32 lg:mb-40">
-          <div className="flex items-center gap-4 mb-10 sm:mb-16 justify-center md:justify-start text-center md:text-left flex-wrap">
-            <Cpu className="text-purple-500" size={28} />
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black italic uppercase tracking-tighter">Architecture DNA</h2>
-            <div className="hidden md:block h-[1px] flex-1 bg-gradient-to-r from-white/10 to-transparent ml-6" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-
-            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.4 }} className="bg-[#0a0a0a] border border-white/5 p-8 sm:p-10 rounded-2xl sm:rounded-3xl hover:border-blue-500/30 transition-colors duration-200 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-full h-1 bg-blue-500/20 group-hover:bg-blue-500 transition-colors" />
-              <Code2 className="text-blue-500 mb-6" size={32} />
-              <h3 className="text-xl font-black italic uppercase tracking-tight mb-4 text-white">Algorithmic Precision</h3>
-              <p className="text-zinc-500 text-sm leading-relaxed font-light mb-6">
-                Built on flawless logic. Leveraging strict type safety, modular microservices, and the raw computational performance of Rust and Go to ensure zero dropped packets.
+      {/* ===== MANIFESTO: Large text, no cards ===== */}
+      <section className="relative border-t border-white/10 py-32 md:py-40">
+        <div className="mx-auto max-w-[90rem] px-6 md:px-12">
+          <div className="grid gap-16 lg:grid-cols-12">
+            <div className="lg:col-span-5">
+              <p className="mb-6 text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">
+                Philosophy
               </p>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.4, delay: 0.05 }} className="bg-[#0a0a0a] border border-white/5 p-8 sm:p-10 rounded-2xl sm:rounded-3xl hover:border-emerald-500/30 transition-colors duration-200 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-full h-1 bg-emerald-500/20 group-hover:bg-emerald-500 transition-colors" />
-              <Shield className="text-emerald-500 mb-6" size={32} />
-              <h3 className="text-xl font-black italic uppercase tracking-tight mb-4 text-white">Encrypted Tunnels</h3>
-              <p className="text-zinc-500 text-sm leading-relaxed font-light mb-6">
-                Security by design. From memory-safe protocols to binboi tunneling services, the network infrastructure is isolated, encrypted, and operates flawlessly under stress.
-              </p>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-80px" }} transition={{ duration: 0.4, delay: 0.1 }} className="bg-[#0a0a0a] border border-white/5 p-8 sm:p-10 rounded-2xl sm:rounded-3xl hover:border-purple-500/30 transition-colors duration-200 relative overflow-hidden group">
-              <div className="absolute top-0 left-0 w-full h-1 bg-purple-500/20 group-hover:bg-purple-500 transition-colors" />
-              <Crosshair className="text-purple-500 mb-6" size={32} />
-              <h3 className="text-xl font-black italic uppercase tracking-tight mb-4 text-white">Absolute Focus</h3>
-              <p className="text-zinc-500 text-sm leading-relaxed font-light mb-6">
-                Eliminating the noise. No bloated dependencies, no visual clutter. Every tool, dashboard, and game engine respects the efficiency of minimalist, dark-themed execution.
-              </p>
-            </motion.div>
-
-          </div>
-        </section>
-
-        {/* ========================================== */}
-        {/* 3. DUAL ENGINE CAPABILITY                  */}
-        {/* ========================================== */}
-        <section className="relative p-6 sm:p-12 md:p-16 lg:p-20 bg-[#0a0a0a] border border-white/5 rounded-[1.5rem] sm:rounded-[3rem] overflow-hidden">
-
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 via-transparent to-blue-500/5 pointer-events-none" />
-
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 sm:gap-16 items-center">
-            <div>
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black italic uppercase tracking-tighter mb-6 leading-tight">
-                The <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-blue-500">Dual-Engine</span> Paradigm.
+              <h2 className="text-4xl font-semibold leading-[1.1] tracking-tight text-white md:text-6xl">
+                We don't chase trends.
+                <br />
+                <span className="text-neutral-600">We build software that survives them.</span>
               </h2>
-              <p className="text-zinc-400 font-light leading-relaxed mb-10 sm:mb-12 text-base sm:text-lg border-l-2 border-white/10 pl-5 sm:pl-6">
-                Miransas operates two distinct but heavily integrated technological divisions that share core architecture and design philosophies:
-              </p>
-              
-              <ul className="space-y-8">
-                <li className="flex items-start gap-6 group">
-                  <div className="p-3 bg-black border border-white/5 rounded-xl group-hover:border-blue-500/50 transition-colors">
-                     <Terminal className="text-blue-500" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-black italic uppercase tracking-wide text-lg mb-2">I. Neural & Infrastructure</h4>
-                    <p className="text-zinc-500 text-sm leading-relaxed">Worktio automation engines, Rust-powered network security, autonomous AI agents, and high-speed local proxy tunnels.</p>
-                  </div>
-                </li>
-                
-                <li className="flex items-start gap-6 group">
-                  <div className="p-3 bg-black border border-white/5 rounded-xl group-hover:border-[#FF4F00]/50 transition-colors">
-                     <Gamepad2 className="text-[#FF4F00]" size={24} />
-                  </div>
-                  <div>
-                    <h4 className="text-white font-black italic uppercase tracking-wide text-lg mb-2">II. Interactive Experiences</h4>
-                    <p className="text-zinc-500 text-sm leading-relaxed">The birthplace of the &#34;Lost Signal&#34; universe under Sadpera Studio. Crafting deep narratives and low-level rendering pipelines optimized natively for high-end hardware.</p>
-                  </div>
-                </li>
-              </ul>
             </div>
             
-            {/* Minimalist Abstract Representation */}
-            <div className="flex justify-center lg:justify-end">
-               <div className="relative w-72 h-72">
-                 <motion.div animate={{ rotate: 360 }} transition={{ duration: 20, repeat: Infinity, ease: "linear" }} className="absolute inset-0 border border-dashed border-blue-500/30 rounded-full" />
-                 <motion.div animate={{ rotate: -360 }} transition={{ duration: 25, repeat: Infinity, ease: "linear" }} className="absolute inset-6 border border-dashed border-[#FF4F00]/30 rounded-full" />
-                 
-                 <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="relative w-20 h-20 bg-[#030303] border border-white/10 rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(147,51,234,0.1)]">
-                      <div className="absolute inset-0 bg-purple-500/10 blur-md rounded-2xl" />
-                      <Box className="text-white relative z-10" size={28} />
+            <div className="lg:col-span-6 lg:col-start-7">
+              <div className="space-y-12">
+                {principles.map((p, i) => (
+                  <motion.div
+                    key={p.title}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="group"
+                  >
+                    <div className="flex items-start gap-6">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/5 transition-colors group-hover:bg-white/10">
+                        <p.icon className="size-6 text-amber-400" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-semibold text-white">{p.title}</h3>
+                        <p className="mt-2 text-base leading-relaxed text-neutral-500">{p.desc}</p>
+                      </div>
                     </div>
-                 </div>
-               </div>
+                  </motion.div>
+                ))}
+              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-      </div>
+      {/* ===== TIMELINE: Horizontal scroll on mobile, vertical on desktop ===== */}
+      <section className="relative overflow-hidden bg-[#0a0a0a] py-32">
+        <div className="mx-auto max-w-[90rem] px-6 md:px-12">
+          <div className="mb-20">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">
+              History
+            </p>
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-white md:text-6xl">
+              Built over time.
+            </h2>
+          </div>
+
+          {/* Desktop: Vertical timeline */}
+          <div className="hidden md:block">
+            <div className="relative">
+              {/* Center line */}
+              <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-white/10" />
+              
+              <div className="space-y-24">
+                {timeline.map((item, i) => {
+                  const Icon = item.icon;
+                  const isLeft = i % 2 === 0;
+                  return (
+                    <motion.div
+                      key={item.year}
+                      initial={{ opacity: 0, x: isLeft ? -30 : 30 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, margin: "-100px" }}
+                      transition={{ duration: 0.6 }}
+                      className={`relative flex items-center ${isLeft ? "flex-row" : "flex-row-reverse"}`}
+                    >
+                      <div className={`w-1/2 ${isLeft ? "pr-16 text-right" : "pl-16 text-left"}`}>
+                        <span className="text-sm font-semibold uppercase tracking-wider text-amber-400">
+                          {item.year}
+                        </span>
+                        <h3 className="mt-2 text-2xl font-semibold text-white">{item.title}</h3>
+                        <p className="mt-3 text-base leading-relaxed text-neutral-500">{item.desc}</p>
+                      </div>
+                      
+                      {/* Center dot */}
+                      <div className="absolute left-1/2 top-0 z-10 flex h-12 w-12 -translate-x-1/2 items-center justify-center rounded-full bg-neutral-900 border border-white/10">
+                        <Icon className="size-5 text-white" />
+                      </div>
+                      
+                      <div className="w-1/2" />
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile: Horizontal scroll cards */}
+          <div className="md:hidden -mx-6 flex gap-4 overflow-x-auto px-6 pb-4">
+            {timeline.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.year}
+                  className="w-72 shrink-0 rounded-2xl bg-neutral-900 p-6 border border-white/5"
+                >
+                  <Icon className="size-6 text-amber-400 mb-4" />
+                  <span className="text-sm font-semibold uppercase tracking-wider text-neutral-500">
+                    {item.year}
+                  </span>
+                  <h3 className="mt-2 text-lg font-semibold text-white">{item.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-neutral-500">{item.desc}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== STATS: Bento grid, not cards ===== */}
+      <section className="relative py-32">
+        <div className="mx-auto max-w-[90rem] px-6 md:px-12">
+          <div className="mb-16">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">
+              Studio
+            </p>
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-white md:text-6xl">
+              By the numbers.
+            </h2>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="group relative overflow-hidden rounded-3xl bg-[#111] p-8 transition-all duration-500 hover:bg-[#1a1a1a]"
+              >
+                <div className="text-5xl font-bold tracking-tight text-white md:text-6xl">
+                  {stat.value}
+                </div>
+                <div className="mt-2 text-lg font-semibold text-neutral-300">{stat.label}</div>
+                <div className="mt-1 text-sm uppercase tracking-wider text-neutral-600">{stat.suffix}</div>
+                
+                {/* Hover accent */}
+                <div className="absolute -bottom-4 -right-4 h-24 w-24 rounded-full bg-amber-500/10 blur-2xl transition-all group-hover:bg-amber-500/20" />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== FOCUS AREAS: Asymmetric layout, not uniform cards ===== */}
+      <section className="relative bg-[#F6F5F2] py-32 text-neutral-900">
+        <div className="mx-auto max-w-[90rem] px-6 md:px-12">
+          <div className="mb-20">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">
+              What We Build
+            </p>
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-6xl">
+              Three disciplines.
+              <br />
+              One obsession.
+            </h2>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-12">
+            {/* Large feature: Games */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="group relative overflow-hidden rounded-[2.5rem] bg-[#111] p-10 text-white lg:col-span-7 lg:row-span-2"
+            >
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(251,191,36,0.08),transparent_50%)]" />
+              
+              <div className="relative z-10">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/10">
+                  <Gamepad2 className="size-8 text-amber-400" />
+                </div>
+                <p className="mt-8 text-sm font-medium uppercase tracking-[0.3em] text-neutral-500">
+                  Project Sad
+                </p>
+                <h3 className="mt-3 text-4xl font-semibold md:text-5xl">Game Development</h3>
+                <p className="mt-6 max-w-md text-lg leading-relaxed text-neutral-400">
+                  Narrative-driven experiences with custom story engines, dynamic UI systems, 
+                  and handcrafted assets. Every frame is intentional.
+                </p>
+                <div className="mt-8 flex flex-wrap gap-2">
+                  {["Gameplay", "Story", "Assets"].map((tag) => (
+                    <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm font-medium">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                <a href="/projects/project-sad" className="mt-10 inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-amber-400 transition-colors hover:text-amber-300">
+                  Explore Project <ChevronRight className="size-4" />
+                </a>
+              </div>
+            </motion.div>
+
+            {/* Medium: Infrastructure */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="group relative overflow-hidden rounded-[2.5rem] bg-[#111] p-10 text-white lg:col-span-5"
+            >
+              <div className="relative z-10">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
+                  <Server className="size-7 text-amber-400" />
+                </div>
+                <p className="mt-6 text-sm font-medium uppercase tracking-[0.3em] text-neutral-500">
+                  Binboi
+                </p>
+                <h3 className="mt-3 text-3xl font-semibold">Infrastructure</h3>
+                <p className="mt-4 text-base leading-relaxed text-neutral-400">
+                  Scalable backend systems, networking services and cloud architecture 
+                  built in Go for real-world traffic.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Go", "Networking", "Cloud"].map((tag) => (
+                    <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Medium: Performance */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="group relative overflow-hidden rounded-[2.5rem] bg-[#111] p-10 text-white lg:col-span-5"
+            >
+              <div className="relative z-10">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10">
+                  <Cpu className="size-7 text-amber-400" />
+                </div>
+                <p className="mt-6 text-sm font-medium uppercase tracking-[0.3em] text-neutral-500">
+                  Rust Engine
+                </p>
+                <h3 className="mt-3 text-3xl font-semibold">Performance</h3>
+                <p className="mt-4 text-base leading-relaxed text-neutral-400">
+                  High-performance algorithms and chess engines where every millisecond matters. 
+                  1600+ Elo, zero shortcuts.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-2">
+                  {["Rust", "Algorithms", "Optimization"].map((tag) => (
+                    <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== CTA: Simple, not over-designed ===== */}
+      <section className="relative bg-black py-32 text-white">
+        <div className="mx-auto max-w-[90rem] px-6 text-center md:px-12">
+          <h2 className="text-4xl font-semibold tracking-tight md:text-6xl">
+            Ready to build something
+            <br />
+            <span className="text-neutral-500">that lasts?</span>
+          </h2>
+          <p className="mx-auto mt-8 max-w-xl text-lg text-neutral-400">
+            We're selective about projects. If you value precision over speed, 
+            and quality over quantity, we should talk.
+          </p>
+          <a
+            href="/contact"
+            className="group mt-12 inline-flex h-16 items-center gap-3 rounded-full bg-white px-10 text-lg font-semibold text-black transition-all hover:bg-neutral-200 hover:scale-[1.02]"
+          >
+            Start a conversation
+            <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+          </a>
+        </div>
+      </section>
     </main>
   );
 }

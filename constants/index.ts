@@ -11,10 +11,11 @@ export interface NavLink {
 
 export const headerNavLinks: NavLink[] = [
   { name: "Projects", href: "/projects" },
+  { name: "Features", href: "/features" },
   { name: "Blog", href: "/blog" },
   { name: "About Us", href: "/about" },
   { name: "Changelog", href: "/changelog" },
-  // { name: "Careers", href: "/careers" },
+  { name: "Careers", href: "/careers" },
   { name: "Contact", href: "/contact" },
   // { name: "Games", href: "/games" },
 ];
@@ -26,9 +27,8 @@ export const footerNavLinks: NavLink[] = [
   { name: "Terms of Use", href: "/terms" },
   { name: "Privacy Policy", href: "/privacy" },
   { name: "Careers", href: "/careers" },
-  { name: "Cookie Policy", href: "/cookies" },
   { name: "Support", href: "/support" },
-  { name: "Code of Conduct", href: "/conduct" },
+  { name: "Report Bugs", href: "/bugs" },
 ];
 
 // ─── Sidebar Nav Links ────────────────────────────────────────────────────────
@@ -36,11 +36,13 @@ export const footerNavLinks: NavLink[] = [
 export const sidebarNavLinks: NavLink[] = [
   { name: "Home", href: "/" },
   { name: "Projects", href: "/projects" },
+  { name: "Features", href: "/features" },
   { name: "Games", href: "/games" },
   { name: "About Us", href: "/about" },
   { name: "Contact", href: "/contact" },
   { name: "Careers", href: "/careers" },
   { name: "Support", href: "/support" },
+  { name: "Report Bugs", href: "/bugs" },
 ];
 
 

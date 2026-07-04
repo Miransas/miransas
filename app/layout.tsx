@@ -1,16 +1,15 @@
 import type { Metadata, Viewport } from "next";
-import { Space_Grotesk, Fira_Code } from "next/font/google";
+import { Inter, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "../components/provider/theme-provider";
 
-// ── Miransas Fonts ────────────────────────────────────────────────────────
-const sans = Space_Grotesk({
+// ── Fonts ─────────────────────────────────────────────────────────────────
+const sans = Geist({
   variable: "--font-sans",
   subsets: ["latin"],
   display: "swap",
 });
 
-const mono = Fira_Code({
+const mono = Geist_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
   display: "swap",
@@ -19,9 +18,9 @@ const mono = Fira_Code({
 // ── Site Constants ────────────────────────────────────────────────────────
 const SITE_URL = "https://miransas.com";
 const SITE_NAME = "Miransas";
-const SITE_TITLE = "Miransas Studio | Logic & Nightmares";
+const SITE_TITLE = "Miransas — Secure • Connect • Evolve";
 const SITE_DESCRIPTION =
-  "Architects of high-performance software engineering and atmospheric horror experiences. Building crash-safe systems and psychological thrillers. Led by Sardor Azimov.";
+  "Solo engineering studio building high-performance software, infrastructure, and games. No investors. No agencies. Just craft.";
 
 // ── Metadata ──────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
@@ -33,22 +32,21 @@ export const metadata: Metadata = {
   description: SITE_DESCRIPTION,
   keywords: [
     "miransas",
-    "sardor azimov",
-    "software studio",
-    "systems engineering",
+    "software engineering",
+    "indie game studio",
     "rust",
     "go",
-    "developer tools",
+    "next.js",
+    "infrastructure",
     "binboi",
-    "horror game",
-    "psychological thriller",
-    "indie studio",
+    "project sad",
+    "chess engine",
+    "developer tools",
   ],
   authors: [{ name: "Sardor Azimov", url: SITE_URL }],
   creator: "Sardor Azimov",
   publisher: "Miransas",
   applicationName: SITE_NAME,
-  category: "technology",
 
   openGraph: {
     type: "website",
@@ -56,14 +54,13 @@ export const metadata: Metadata = {
     url: SITE_URL,
     siteName: SITE_NAME,
     title: SITE_TITLE,
-    description:
-      "Building crash-safe systems and psychological thrillers. Logic & Nightmares.",
+    description: SITE_DESCRIPTION,
     images: [
       {
-        url: "/og.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Miransas — Logic & Nightmares",
+        alt: "Miransas — Secure • Connect • Evolve",
       },
     ],
   },
@@ -71,19 +68,20 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: SITE_TITLE,
-    description:
-      "Building crash-safe systems and psychological thrillers. Logic & Nightmares.",
-    images: ["/og.png"],
-    creator: "@miransas",
+    description: SITE_DESCRIPTION,
+    images: ["/og-image.png"],
+    creator: "@miransaas",
   },
 
   icons: {
     icon: [
-      { url: "/logo/logo.png", type: "image/png" },
-      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.ico", sizes: "32x32" },
+      { url: "/favicon-16x16.png", sizes: "16x16" },
+      { url: "/favicon-32x32.png", sizes: "32x32" },
+      { url: "/favicon-48x48.png", sizes: "48x48" },
     ],
-    shortcut: "/logo/logo.png",
-    apple: "/icons/apple-touch-icon.png",
+    shortcut: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
 
   robots: {
@@ -109,17 +107,11 @@ export const metadata: Metadata = {
     title: SITE_NAME,
     statusBarStyle: "black-translucent",
   },
-
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
 };
 
 // ── Viewport ──────────────────────────────────────────────────────────────
 export const viewport: Viewport = {
-  themeColor: "#050505",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -133,9 +125,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="scroll-smooth">
+    <html lang="en" className="scroll-smooth">
       <head>
-        {/* Structured data: Organization */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -144,33 +135,28 @@ export default function RootLayout({
               "@type": "Organization",
               name: "Miransas",
               url: SITE_URL,
-              logo: `${SITE_URL}/logo/logo.png`,
+              logo: `${SITE_URL}/logo.svg`,
               description: SITE_DESCRIPTION,
               founder: {
                 "@type": "Person",
                 name: "Sardor Azimov",
               },
               sameAs: [
-                "https://github.com/Miransas",
-                "https://twitter.com/miransas",
+                "https://github.com/miransas",
+                "https://twitter.com/miransaas",
+                "https://www.instagram.com/miransaas",
+                "https://www.youtube.com/@miransaas",
               ],
             }),
           }}
         />
       </head>
       <body
-        className={`${sans.variable} ${mono.variable} antialiased bg-[#050505] text-white selection:bg-[#8CFF2E] selection:text-black`}
+        className={`${sans.variable} ${mono.variable} font-sans antialiased bg-black text-white selection:bg-neutral-800 selection:text-white`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <div className="relative flex min-h-screen flex-col">
-            <main className="flex-grow">{children}</main>
-          </div>
-        </ThemeProvider>
+        <div className="relative flex min-h-screen flex-col">
+          <main className="flex-grow">{children}</main>
+        </div>
       </body>
     </html>
   );

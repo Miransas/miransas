@@ -1,141 +1,320 @@
 "use client";
 
-import React from "react";
-import { motion } from "framer-motion";
-import { 
-  Briefcase, Target, Zap, 
-  ChevronRight, Globe, Code, 
-  Cpu, Terminal 
+import {
+  Sparkles,
+  ArrowRight,
+  X,
+  Check,
+  Clock,
+  Zap,
+  Target,
+  Globe,
+  Cpu,
+  Gamepad2,
+  Server,
+  Code2,
+  ArrowUpRight,
+  Mail,
 } from "lucide-react";
 
-const JobCard = ({ title, department, type, location }: { title: string; department: string; type: string; location: string }) => (
-  <motion.div 
-    whileHover={{ x: 10 }}
-    className="group flex flex-col md:flex-row md:items-center justify-between p-8 rounded-2xl border border-white/5 bg-[#0a0a0a] hover:border-purple-500/40 transition-all cursor-pointer"
-  >
-    <div className="flex flex-col gap-1">
-      <div className="flex items-center gap-2 mb-2">
-        <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-purple-500 bg-purple-500/10 px-2 py-1 rounded">
-          {department}
-        </span>
-        <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-zinc-600">
-          {type}
-        </span>
-      </div>
-      <h3 className="text-xl font-bold text-white italic uppercase tracking-tight group-hover:text-purple-400 transition-colors">
-        {title}
-      </h3>
-    </div>
-    <div className="flex items-center gap-6 mt-4 md:mt-0">
-      <div className="flex items-center gap-2 text-zinc-500">
-        <Globe size={14} />
-        <span className="text-xs font-mono">{location}</span>
-      </div>
-      <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:bg-white group-hover:border-white transition-all">
-        <ChevronRight size={18} className="text-white group-hover:text-black" />
-      </div>
-    </div>
-  </motion.div>
-);
+const philosophy = [
+  {
+    icon: Target,
+    title: "Impact over headcount",
+    desc: "One senior engineer ships more than five juniors. We don't hire to scale ego, we ship to scale systems.",
+  },
+  {
+    icon: Zap,
+    title: "Deep work, no meetings",
+    desc: "No standups, no sprints, no retrospectives. Async communication, documented decisions, shipped code.",
+  },
+  {
+    icon: Globe,
+    title: "Remote by design",
+    desc: "Izmir-based, globally distributed. Work from anywhere, ship to everywhere. Results are the only metric.",
+  },
+];
+
+const currentWork = [
+  {
+    icon: Gamepad2,
+    title: "Project Sad",
+    status: "In Development",
+    desc: "Narrative-driven indie game. Custom ECS, handcrafted assets, emotional storytelling.",
+    stack: ["Rust", "Bevy", "Blender"],
+    type: "Game",
+  },
+  {
+    icon: Server,
+    title: "Binboi Infrastructure",
+    status: "Active",
+    desc: "Zero-allocation Go networking. Reverse proxy, tunneling, load balancing.",
+    stack: ["Go", "gRPC", "Kubernetes"],
+    type: "Infrastructure",
+  },
+  {
+    icon: Cpu,
+    title: "Rust Engine",
+    status: "Active",
+    desc: "1600+ Elo chess AI. Bitboards, magic bitboards, parallel search.",
+    stack: ["Rust", "WASM", "Algorithms"],
+    type: "Engine",
+  },
+  {
+    icon: Code2,
+    title: "Miransas Core",
+    status: "Live",
+    desc: "This website. Next.js 15, Three.js shaders, premium UX without bloat.",
+    stack: ["Next.js", "TypeScript", "Tailwind"],
+    type: "Web",
+  },
+];
+
+const collaborations = [
+  {
+    type: "Technical Partner",
+    desc: "You have deep expertise in a complementary domain (graphics, audio, security) and want to build together.",
+    ideal: "Senior engineer, 5+ years, open source contributor",
+  },
+  {
+    type: "Design Contractor",
+    desc: "You craft interfaces that feel inevitable. No trends, no Dribbble copycats. Timeless design.",
+    ideal: "Product designer, portfolio of shipped work",
+  },
+  {
+    type: "Advisor",
+    desc: "You've built and exited companies. You see around corners. You challenge assumptions.",
+    ideal: "Former CTO/founder, sector-specific expertise",
+  },
+];
 
 export default function CareersPage() {
   return (
-    <main className="min-h-screen bg-[#030303] text-zinc-300 font-sans selection:bg-purple-500/30">
+    <main className="w-full bg-black selection:bg-neutral-800 selection:text-white">
       
-      {/* Aurora Glow */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[10%] -right-[10%] w-[600px] h-[600px] bg-purple-600/5 blur-[150px] rounded-full opacity-50" />
-      </div>
-
-      <div className="max-w-5xl mx-auto px-6 py-32 relative z-10">
-        
-        {/* Hero Section */}
-        <header className="mb-32 text-center md:text-left">
-          <motion.div 
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-8"
-          >
-            <div className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-            <span className="text-[10px] font-mono uppercase tracking-[0.3em]">Talent Acquisition // Open Nodes</span>
-          </motion.div>
+      {/* ===== HERO: Solo studio narrative ===== */}
+      <section className="relative border-b border-white/10 pb-32 pt-32 md:pt-40">
+        <div className="mx-auto max-w-[90rem] px-6 md:px-12">
+          <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-neutral-300 backdrop-blur-xl">
+            <Sparkles className="size-4 text-amber-400" />
+            Solo Studio
+          </div>
           
-          <h1 className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter text-white mb-8 leading-[0.8]">
-            Shape the <br /> <span className="text-zinc-700">Infrastructure.</span>
-          </h1>
-          <p className="max-w-2xl text-xl text-zinc-500 font-light leading-relaxed">
-            Miransas is not a workplace. It is a high-performance environment for engineers who believe that code should be safe, systems should be dark, and latency is the enemy.
+          <div className="grid gap-16 lg:grid-cols-12">
+            <div className="lg:col-span-7">
+              <h1 className="text-5xl font-semibold leading-[0.95] tracking-tight text-white md:text-7xl lg:text-8xl">
+                Not hiring.
+                <br />
+                <span className="text-neutral-500">Always building.</span>
+              </h1>
+            </div>
+            <div className="lg:col-span-5">
+              <p className="text-xl leading-relaxed text-neutral-400">
+                Miransas is intentionally a solo operation. No employees, no managers, 
+                no bureaucracy. Just one engineer, obsessive focus, and a refusal to 
+                compromise on quality.
+              </p>
+              <p className="mt-6 text-lg leading-relaxed text-neutral-500">
+                That said, interesting people with interesting problems sometimes 
+                lead to interesting collaborations. Read on if that's you.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== PHILOSOPHY: Why solo ===== */}
+      <section className="relative py-24 md:py-32">
+        <div className="mx-auto max-w-[90rem] px-6 md:px-12">
+          <div className="mb-16">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">
+              Principles
+            </p>
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight text-white md:text-5xl">
+              Why one person?
+            </h2>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3">
+            {philosophy.map((item) => {
+              const Icon = item.icon;
+              return (
+                <div
+                  key={item.title}
+                  className="group relative overflow-hidden rounded-3xl bg-[#111] p-8 transition-all duration-500 hover:bg-[#1a1a1a] md:p-10"
+                >
+                  <div className="absolute -bottom-4 -right-4 h-24 w-24 rounded-full bg-amber-500/10 blur-2xl transition-all group-hover:bg-amber-500/20" />
+                  
+                  <div className="relative z-10">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/10">
+                      <Icon className="size-6 text-amber-400" />
+                    </div>
+                    <h3 className="mt-6 text-xl font-semibold text-white">
+                      {item.title}
+                    </h3>
+                    <p className="mt-3 text-base leading-relaxed text-neutral-500">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== CURRENT WORK: What I'm building ===== */}
+      <section className="relative bg-[#F6F5F2] py-32 text-neutral-900">
+        <div className="mx-auto max-w-[90rem] px-6 md:px-12">
+          <div className="mb-16">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">
+              Active Projects
+            </p>
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
+              What I'm shipping.
+            </h2>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {currentWork.map((project) => {
+              const Icon = project.icon;
+              return (
+                <div
+                  key={project.title}
+                  className="group relative overflow-hidden rounded-3xl bg-white p-8 shadow-sm transition-all duration-500 hover:shadow-lg md:p-10"
+                >
+                  <div className="relative z-10">
+                    <div className="flex items-start justify-between">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-100">
+                        <Icon className="size-6 text-neutral-900" />
+                      </div>
+                      <span
+                        className={`rounded-full px-3 py-1.5 text-xs font-medium ${
+                          project.status === "Live"
+                            ? "bg-emerald-50 text-emerald-600"
+                            : project.status === "Active"
+                            ? "bg-blue-50 text-blue-600"
+                            : "bg-amber-50 text-amber-600"
+                        }`}
+                      >
+                        {project.status}
+                      </span>
+                    </div>
+
+                    <div className="mt-6">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-neutral-400">
+                        {project.type}
+                      </span>
+                      <h3 className="mt-2 text-2xl font-semibold">{project.title}</h3>
+                      <p className="mt-3 text-base leading-relaxed text-neutral-500">
+                        {project.desc}
+                      </p>
+                    </div>
+
+                    <div className="mt-6 flex flex-wrap gap-2">
+                      {project.stack.map((tech) => (
+                        <span
+                          key={tech}
+                          className="rounded-full bg-neutral-100 px-3 py-1.5 text-xs font-medium text-neutral-600"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== COLLABORATIONS: How to work together ===== */}
+      <section className="relative py-32 text-white">
+        <div className="mx-auto max-w-[90rem] px-6 md:px-12">
+          <div className="mb-16">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500">
+              Collaborations
+            </p>
+            <h2 className="mt-4 text-4xl font-semibold tracking-tight md:text-5xl">
+              When we might work together.
+            </h2>
+            <p className="mt-4 max-w-xl text-lg text-neutral-500">
+              Not employment. Not contracting. Strategic collaborations with 
+              people who raise the bar.
+            </p>
+          </div>
+
+          <div className="grid gap-6 lg:grid-cols-3">
+            {collaborations.map((col, i) => (
+              <div
+                key={col.type}
+                className="group relative overflow-hidden rounded-3xl border border-white/10 bg-[#111] p-8 transition-all duration-500 hover:border-white/20 md:p-10"
+              >
+                <div className="relative z-10">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5">
+                    <span className="text-sm font-bold text-amber-400">0{i + 1}</span>
+                  </div>
+                  
+                  <h3 className="mt-6 text-xl font-semibold text-white">
+                    {col.type}
+                  </h3>
+                  <p className="mt-3 text-base leading-relaxed text-neutral-500">
+                    {col.desc}
+                  </p>
+                  
+                  <div className="mt-6 rounded-2xl bg-white/5 p-4">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-neutral-500">
+                      Ideal profile
+                    </p>
+                    <p className="mt-2 text-sm text-neutral-300">
+                      {col.ideal}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===== CTA: Reach out ===== */}
+      <section className="relative border-t border-white/10 py-32 text-white">
+        <div className="mx-auto max-w-[90rem] px-6 text-center md:px-12">
+          <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
+            Have a problem worth solving?
+          </h2>
+          <p className="mx-auto mt-6 max-w-xl text-lg text-neutral-400">
+            I don't read resumes. I read code, I read writing, and I listen to 
+            people who care deeply about their craft.
           </p>
-        </header>
-
-        {/* Culture / Values */}
-        <section className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-40">
-          <div className="space-y-4">
-            <div className="p-3 w-fit bg-white/5 rounded-xl text-white">
-              <Zap size={20} />
-            </div>
-            <h4 className="text-white font-bold italic uppercase tracking-wide text-sm">Performance First</h4>
-            <p className="text-xs text-zinc-500 leading-relaxed">We don't settle for "fast enough". Our stack is built on Rust and Go to ensure maximum throughput and minimal overhead.</p>
+          
+          <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <a
+              href="mailto:hello@miransas.com"
+              className="group inline-flex h-14 items-center gap-3 rounded-full bg-white px-8 text-base font-semibold text-black transition-all hover:bg-neutral-200 hover:scale-[1.02]"
+            >
+              <Mail className="size-5" />
+              Send something interesting
+              <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" />
+            </a>
+            <a
+              href="https://github.com/miransas"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-14 items-center gap-3 rounded-full border border-white/15 bg-white/5 px-8 text-base font-semibold text-white backdrop-blur-xl transition-all hover:bg-white/10"
+            >
+              <Code2 className="size-5" />
+              Read my code first
+            </a>
           </div>
-          <div className="space-y-4">
-            <div className="p-3 w-fit bg-white/5 rounded-xl text-white">
-              <Terminal size={20} />
-            </div>
-            <h4 className="text-white font-bold italic uppercase tracking-wide text-sm">Dark Native</h4>
-            <p className="text-xs text-zinc-500 leading-relaxed">Our culture respects the flow state. Deep focus, minimalist interfaces, and zero-distraction environments are our core.</p>
-          </div>
-          <div className="space-y-4">
-            <div className="p-3 w-fit bg-white/5 rounded-xl text-white">
-              <Cpu size={20} />
-            </div>
-            <h4 className="text-white font-bold italic uppercase tracking-wide text-sm">System Safety</h4>
-            <p className="text-xs text-zinc-500 leading-relaxed">Safety isn't an afterthought. We leverage memory-safe languages and zero-trust architectures in everything we build.</p>
-          </div>
-        </section>
-
-        {/* Open Positions */}
-        <section>
-          <div className="flex items-center justify-between mb-12">
-            <div className="flex items-center gap-4">
-              <Briefcase className="text-zinc-600" size={24} />
-              <h2 className="text-3xl font-black italic uppercase tracking-tighter text-white">Open Roles</h2>
-            </div>
-            <span className="text-xs font-mono text-zinc-600 tracking-widest">[ 03 ACTIVE NODES ]</span>
-          </div>
-
-          <div className="flex flex-col gap-4">
-            <JobCard 
-              title="Systems Engineer" 
-              department="Infrastructure" 
-              type="Full-Time" 
-              location="Remote / Istanbul"
-            />
-            <JobCard 
-              title="Backend Developer (Rust/Go)" 
-              department="Core Ecosystem" 
-              type="Contract" 
-              location="Remote"
-            />
-            <JobCard 
-              title="Game Engine Specialist" 
-              department="Interactive Media" 
-              type="Full-Time" 
-              location="On-Site / Hybrid"
-            />
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <footer className="mt-40 p-12 rounded-[3rem] bg-gradient-to-br from-zinc-900 to-black border border-white/5 text-center">
-          <h2 className="text-4xl font-black italic uppercase tracking-tighter text-white mb-6">Don't see your role?</h2>
-          <p className="text-zinc-500 mb-10 max-w-md mx-auto">
-            We are always looking for exceptional talent in low-level engineering and atmospheric design.
+          
+          <p className="mt-8 text-sm text-neutral-600">
+            No recruiters. No "quick calls". No "exploring opportunities". 
+            Just craft.
           </p>
-          <button className="px-10 py-4 bg-white text-black font-black italic uppercase tracking-widest text-xs rounded-full hover:bg-purple-500 hover:text-white transition-all">
-            Send Open Application
-          </button>
-        </footer>
-
-      </div>
+        </div>
+      </section>
     </main>
   );
 }
