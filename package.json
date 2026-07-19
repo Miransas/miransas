@@ -18,7 +18,7 @@
     "@neondatabase/serverless": "^1.1.0",
     "@tiptap/extension-color": "^3.27.3",
     "@tiptap/extension-text-style": "^3.28.0",
-    "@tiptap/react": "^3.27.1",
+    "@tiptap/react": "^3.28.0",
     "@tiptap/starter-kit": "^3.28.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
