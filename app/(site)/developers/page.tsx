@@ -21,6 +21,9 @@ import {
   MessageSquare,
 } from "lucide-react";
 import { FaGithub } from "react-icons/fa";
+import { AuroraHero } from "../../../components/ui/aurora-hero";
+import Lightfall from "../../../components/ui/Lightfall";
+import SideRays from "../../../components/SideRays";
 
 const repos = [
   {
@@ -110,23 +113,39 @@ export default function DevelopersPage() {
 
   return (
     <main className="w-full bg-black selection:bg-neutral-800 selection:text-white">
-      
+
       {/* ===== HERO ===== */}
       <section className="relative border-b border-white/10 pb-32 pt-32 md:pt-40">
+        <div className="absolute inset-0 z-0">
+          <SideRays
+            rayColor1="#EAB308"
+            rayColor2="#96c8ff"
+            origin="top-right"
+            speed={1.7}
+            intensity={2.6}
+            spread={2.7}
+            tilt={42}
+            saturation={1.5}
+            blend={0.75}
+            falloff={1.8}
+            opacity={0.95}
+          />
+
+        </div>
         <div className="mx-auto max-w-[90rem] px-6 md:px-12">
           <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm text-neutral-300 backdrop-blur-xl">
             <Terminal className="size-4 text-amber-400" />
             Open Source
           </div>
-          
+
           <h1 className="max-w-4xl text-5xl font-semibold leading-[0.95] tracking-tight text-white md:text-7xl lg:text-8xl">
             Built in public.
             <br />
             <span className="text-neutral-500">One engineer. Zero shortcuts.</span>
           </h1>
-          
+
           <p className="mt-8 max-w-xl text-lg leading-relaxed text-neutral-400 md:text-xl">
-            Miransas is a solo engineering studio. Every line of code is written, 
+            Miransas is a solo engineering studio. Every line of code is written,
             reviewed, and shipped by one person. These are the tools of the trade.
           </p>
 
@@ -176,7 +195,7 @@ export default function DevelopersPage() {
                   className="group relative overflow-hidden rounded-3xl bg-[#111] p-8 transition-all duration-500 hover:bg-[#1a1a1a] md:p-10"
                 >
                   <div className="absolute -bottom-4 -right-4 h-24 w-24 rounded-full bg-amber-500/10 blur-2xl transition-all group-hover:bg-amber-500/20" />
-                  
+
                   <div className="relative z-10 flex items-start justify-between">
                     <div className={`flex h-12 w-12 items-center justify-center rounded-xl ${repo.color}`}>
                       <Icon className="size-6" />
@@ -225,7 +244,7 @@ export default function DevelopersPage() {
               The stack.
             </h2>
             <p className="mt-4 max-w-xl text-lg text-neutral-500">
-              No bloated frameworks. No dependencies we don't understand. 
+              No bloated frameworks. No dependencies we don't understand.
               Every tool is chosen for performance, reliability, and long-term maintainability.
             </p>
           </div>
@@ -300,7 +319,7 @@ export default function DevelopersPage() {
             Want to collaborate?
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-lg text-neutral-400">
-            Open to interesting problems, open source contributions, and 
+            Open to interesting problems, open source contributions, and
             technical discussions. No recruiters, no agencies.
           </p>
           <div className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row">

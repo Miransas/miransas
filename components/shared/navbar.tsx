@@ -12,11 +12,11 @@ function cn(...inputs: (string | boolean | undefined)[]) {
 
 const navLinks = [
   { label: 'Projects', href: '/projects' },
-  { label: 'About', href: '/about' },
+  // { label: 'About', href: '/about' },
    { label: 'Blog', href: 'https://blog.miransas.com' },
-  { label: 'Developers', href: '/developers' },
-  { label: 'Games', href: '/games' },
-  { label: 'Careers', href: '/careers' },
+  // { label: 'Developers', href: '/developers' },
+  // { label: 'Games', href: '/games' },
+  // { label: 'Careers', href: '/careers' },
   { label: 'Status', href: '/status' },
 ]
 

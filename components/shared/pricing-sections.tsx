@@ -15,7 +15,7 @@ const pricingPlans = [
     theme: "light",
     layout: "vertical",
     testimonial: {
-      name: "Alex Chen, Indie Dev",
+      name: "Sardor Azimov, Indie Dev",
       quote: "Perfect ecosystem to start with!",
     },
     features: [
@@ -39,7 +39,7 @@ const pricingPlans = [
     theme: "dark",
     layout: "vertical",
     testimonial: {
-      name: "Sarah Jenkins, CTO",
+      name: "Sardor Azimov, CTO",
       quote: "Saved us countless DevOps hours!",
     },
     features: [
