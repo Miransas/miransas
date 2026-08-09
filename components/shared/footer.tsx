@@ -1,172 +1,228 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
-import Image from "next/image";
-import { FaGithub, FaInstagram, FaX, FaYoutube } from "react-icons/fa6";
+import {
+  FaGithub,
+  FaInstagram,
+  FaXTwitter,
+  FaYoutube,
+} from "react-icons/fa6";
 
 const currentYear = new Date().getFullYear();
 
-const footerLinks = [
+const footerGroups = [
   {
-    title: "",
+    title: "Explore",
     links: [
-      // { label: "Overview", href: "/" },
-      // { label: "Features", href: "/features" },
-      // { label: "Pricing", href: "/pricing" },
-      // { label: "Testimonials", href: "/testimonials" },
-      // { label: "FAQs", href: "/faqs" },
-    ],
-  },
-  {
-    title: "About",
-    links: [
-       { label: "Overview", href: "/" },
-      { label: "Features", href: "/features" },
-      { label: "Pricing", href: "/pricing" },
-      { label: "Our Story", href: "/about" },
-      // { label: "Team", href: "/team" },
-      { label: "Careers", href: "/careers" },
-      { label: "Blog", href: "/blog" },
-      { label: "Ui ", href: "https://ui.miransas.com" },
-
+      { label: "Overview", href: "/" },
+      { label: "Projects", href: "/projects" },
+      { label: "About", href: "/about" },
+      { label: "Blog", href: "https://blog.miransas.com" },
+      // { label: "Careers", href: "/careers" },
+      // { label: "Miransas UI", href: "https://ui.miransas.com" },
     ],
   },
   {
     title: "Contact",
     links: [
-      { label: "Contact Us", href: "/contact" },
+      { label: "Contact", href: "/contact" },
       { label: "Support", href: "/support" },
-      // { label: "Live Chat", href: "/chat" },
-      // { label: "Help Center", href: "/help" },
-      { label: "Report Issue", href: "https://github.com/Miransas/miransas/issues/new" },
+      {
+        label: "Report an issue",
+        href: "https://github.com/Miransas/miransas/issues/new",
+      },
     ],
   },
   {
     title: "Legal",
     links: [
-      { label: "Privacy Policy", href: "/privacy" },
-      { label: "Terms of Service", href: "/terms" },
-      { label: "Cookie Policy", href: "/cookies" },
-      // { label: "Licenses", href: "/licenses" },
-      { label: "Security", href: "/security" },
+      { label: "Privacy", href: "https://privacy.miransas.com" },
+      { label: "Terms", href: "https://privacy.miransas.com/terms" },
+      { label: "Cookies", href: "https://privacy.miransas.com/cookies" },
+      { label: "Security", href: "https://privacy.miransas.com/security" },
     ],
+  },
+];
+
+const socials = [
+  {
+    label: "X",
+    href: "https://twitter.com/miransaas",
+    icon: FaXTwitter,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/miransaas",
+    icon: FaInstagram,
+  },
+  {
+    label: "GitHub",
+    href: "https://github.com/miransas",
+    icon: FaGithub,
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/@miransaas",
+    icon: FaYoutube,
   },
 ];
 
 export default function Footer() {
   return (
-    <footer className="relative overflow-hidden bg-black text-white">
-      {/* Background Radial Gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_left,#2d2a25,transparent_55%)]" />
+    <footer className="relative overflow-hidden bg-[#030303] text-white">
+      {/* Ambient background */}
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute left-1/2 top-0 h-[500px] w-[900px] -translate-x-1/2 rounded-full bg-[#8cff2e]/[0.035] blur-[140px]" />
+        <div className="absolute bottom-0 left-0 h-[400px] w-[400px] rounded-full bg-white/[0.02] blur-[120px]" />
+      </div>
 
-      <div className="relative mx-auto max-w-[90rem] px-6 md:px-12">
-        {/* CTA Card */}
-        <div className="pt-16 md:pt-24">
-          <div className="relative overflow-hidden rounded-3xl bg-[#111] px-8 py-12 md:px-16 md:py-16">
-            {/* Giant Background Text inside card */}
-            <div className="pointer-events-none absolute bottom-0 left-0 select-none">
-              <span className="text-[100px] font-bold leading-none tracking-tighter text-white/[0.04] md:text-[220px]">
+      <div className="relative mx-auto max-w-[90rem] px-6 md:px-10 lg:px-12">
+        {/* CTA */}
+        <div className="pt-20 md:pt-28">
+          <div className="group relative overflow-hidden rounded-[2rem] border border-white/[0.08] bg-[#0b0b0b] px-7 py-12 transition-all duration-500 hover:border-white/[0.14] md:px-14 md:py-16">
+            {/* Grid */}
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.035]"
+              style={{
+                backgroundImage:
+                  "linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)",
+                backgroundSize: "48px 48px",
+              }}
+            />
+
+            {/* Glow */}
+            <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full bg-[#8cff2e]/[0.06] blur-[100px] transition-all duration-700 group-hover:bg-[#8cff2e]/[0.1]" />
+
+            {/* Background word */}
+            <div className="pointer-events-none absolute -bottom-6 left-5 select-none md:left-10">
+              <span className="text-[80px] font-bold leading-none tracking-[-0.08em] text-white/[0.025] sm:text-[120px] md:text-[190px]">
                 MIRANSAS
               </span>
             </div>
 
-            <div className="relative flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
-              <h2 className="max-w-xl text-4xl font-medium leading-[1.1] tracking-tight md:text-6xl">
-                Three Frames • Three Circles <br className="hidden md:block" />
-                Secure • Connect • Evolve
-              </h2>
+            <div className="relative z-10 flex flex-col justify-between gap-10 md:flex-row md:items-end">
+              <div>
+                <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-[#8cff2e]/20 bg-[#8cff2e]/[0.06] px-3 py-1.5 text-xs font-medium text-[#b7ff7a]">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#8cff2e] shadow-[0_0_10px_#8cff2e]" />
+                  Miransas
+                </div>
+
+                <h2 className="max-w-3xl text-4xl font-semibold leading-[0.95] tracking-[-0.04em] sm:text-5xl md:text-7xl">
+                  Build what comes
+                  <br />
+                  <span className="text-white/30">next.</span>
+                </h2>
+
+                <p className="mt-6 max-w-xl text-sm leading-7 text-white/45 sm:text-base">
+                  Secure software, intelligent systems, and infrastructure
+                  engineered for the long run.
+                </p>
+              </div>
+
               <Link
                 href="/contact"
                 aria-label="Contact Miransas"
-                className="group flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white text-black transition-all hover:scale-105 hover:bg-neutral-200 md:h-16 md:w-16"
+                className="group/button inline-flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-white text-black transition-all duration-300 hover:scale-105 hover:bg-[#8cff2e]"
               >
-                <ArrowUpRight className="h-6 w-6 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                <ArrowUpRight className="h-6 w-6 transition-transform duration-300 group-hover/button:-translate-y-1 group-hover/button:translate-x-1" />
               </Link>
             </div>
           </div>
         </div>
 
-        {/* Bottom Section: Grid Links */}
-        <div className="grid grid-cols-1 gap-12 py-16 sm:grid-cols-2 lg:grid-cols-6 lg:gap-8">
-          {/* Brand Info Column */}
-          <div className="flex flex-col items-start lg:col-span-2">
-            <Image
-              src="/icons/logo.png"
-              alt="Miransas Logo"
-              width={80}
-              height={80}
-              className="mb-6 rounded-xl p-1.5 text-black"
-            />
-            <p className="mb-6 max-w-xs text-sm leading-relaxed text-white/50">
+        {/* Main footer */}
+        <div className="grid grid-cols-1 gap-14 py-16 md:grid-cols-2 lg:grid-cols-5 lg:gap-10 lg:py-24">
+          {/* Brand */}
+          <div className="lg:col-span-2">
+            <Link href="/" className="inline-flex">
+              <Image
+                src="/assets/logo.png"
+                alt="Miransas"
+                width={52}
+                height={52}
+                className="rounded-xl"
+              />
+            </Link>
+
+            <p className="mt-6 max-w-sm text-sm leading-7 text-white/40">
               Designed around three frames and three circles.
+              <br />
               Built for the future.
             </p>
+
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-black transition-colors hover:bg-neutral-200"
+              className="group mt-7 inline-flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
             >
-              <span className="flex h-5 w-5 items-center justify-center rounded bg-yellow-400">
-                <svg
-                  width="12"
-                  height="12"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M5 12h14" />
-                  <path d="m12 5 7 7-7 7" />
-                </svg>
-              </span>
-              Get started
+              Start a project
+              <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
             </Link>
           </div>
 
-          {/* Navigation Links Columns */}
-          {footerLinks.map((group) => (
-            <div key={group.title} className="lg:col-span-1">
-              <h3 className="mb-6 text-sm font-medium text-white/40">
+          {/* Links */}
+          {footerGroups.map((group) => (
+            <div key={group.title}>
+              <h3 className="mb-5 text-xs font-semibold uppercase tracking-[0.18em] text-white/30">
                 {group.title}
               </h3>
-              <ul className="flex flex-col space-y-3">
-                {group.links.map((item) => (
-                  <li key={item.label}>
-                    <Link
-                      href={item.href}
-                      className="text-sm text-white/70 transition-colors hover:text-white"
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
+
+              <ul className="space-y-3.5">
+                {group.links.map((item) => {
+                  const external = item.href.startsWith("http");
+
+                  return (
+                    <li key={item.label}>
+                      <Link
+                        href={item.href}
+                        target={external ? "_blank" : undefined}
+                        rel={external ? "noopener noreferrer" : undefined}
+                        className="group/link inline-flex items-center gap-1.5 text-sm text-white/55 transition-colors duration-200 hover:text-white"
+                      >
+                        {item.label}
+
+                        {external && (
+                          <ArrowUpRight className="h-3 w-3 opacity-0 transition-all duration-200 group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 group-hover/link:opacity-60" />
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}
         </div>
 
-        {/* Copyright & Socials */}
-        <div className="flex flex-col items-center justify-between border-t border-white/10 py-8 text-sm text-white/50 md:flex-row">
-          <p>&copy; {currentYear} Miransas. All rights reserved.</p>
-          <div className="mt-4 flex items-center gap-4 md:mt-0">
-            <Link href={"https://twitter.com/miransaas"} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
-              <span className="sr-only">Twitter</span>
-              <FaX className="h-5 w-5" />
-            </Link>
-            <Link href={"https://www.instagram.com/miransaas"} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
-              <span className="sr-only">Instagram</span>
-              <FaInstagram className="h-5 w-5" />
-            </Link>
-            <Link href={"https://www.github.com/miransas"} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
-              <span className="sr-only">GitHub</span>
-              <FaGithub className="h-5 w-5" />
-            </Link>
-            <Link href={"https://www.youtube.com/@miransaas"} target="_blank" rel="noopener noreferrer" className="transition-colors hover:text-white">
-              <span className="sr-only">YouTube</span>
-              <FaYoutube className="h-5 w-5" />
-            </Link>
+        {/* Bottom */}
+        <div className="flex flex-col gap-6 border-t border-white/[0.08] py-8 md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col gap-2">
+            <p className="text-xs text-white/35">
+              © {currentYear} Miransas. All rights reserved.
+            </p>
+
+            <p className="text-xs text-white/20">
+              Secure • Connect • Evolve
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            {socials.map((social) => {
+              const Icon = social.icon;
+
+              return (
+                <Link
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="group flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.025] text-white/40 transition-all duration-300 hover:-translate-y-1 hover:border-white/[0.16] hover:bg-white/[0.07] hover:text-white"
+                >
+                  <Icon className="h-4 w-4 transition-transform duration-300 group-hover:scale-110" />
+                </Link>
+              );
+            })}
           </div>
         </div>
       </div>
