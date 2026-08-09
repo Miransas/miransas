@@ -39,7 +39,7 @@ const page = () => {
   return (
     <div className="bg-[#030303]">
       <Hero />
-      <HeroProjects />
+      {/* <HeroProjects /> */}
       <section className="mx-auto max-w-7xl px-6 py-24 text-white lg:px-8">
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
           <div>
@@ -70,7 +70,7 @@ const page = () => {
           ))}
         </div>
       </section>
-       <PricingSection/>
+       {/* <PricingSection/> */}
       <BentoSection />
         
       <section className="mx-auto max-w-7xl px-6 py-24 text-white lg:px-8">
