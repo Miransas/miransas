@@ -53,7 +53,7 @@
     "@types/three": "^0.185.1",
     "drizzle-kit": "^0.31.10",
     "eslint": "^10",
-    "eslint-config-next": "^16.2.12",
+    "eslint-config-next": "^16.3.0",
     "shadcn": "^4.13.1",
     "tailwindcss": "^4",
     "typescript": "^6.0.3"
