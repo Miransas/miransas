@@ -1,8 +1,12 @@
 import React from 'react'
+import ThinkingSection from '../../../../components/shared/thinksection'
+
 
 const page = () => {
   return (
-    <div>page</div>
+    <div>
+      <ThinkingSection/>
+    </div>
   )
 }
 

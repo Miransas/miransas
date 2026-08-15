@@ -1,10 +1,10 @@
 import React from 'react'
-import { HeroShader } from './hero-about'
+import ThinkingSection from '../../../components/shared/thinksection'
 
 const page = () => {
   return (
     <div>
-      <HeroShader/>
+      <ThinkingSection/>
     </div>
   )
 }
