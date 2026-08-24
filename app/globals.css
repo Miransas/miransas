@@ -32,7 +32,7 @@
 
 /* Dark Mode Only — Miransas Theme */
 :root {
-  --background: #000000;
+  --background: #0a0a0a;
   --foreground: #ffffff;
   --card: #111111;
   --card-foreground: #ffffff;
@@ -75,6 +75,40 @@
   html {
     scroll-behavior: smooth;
   }
+   html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scroll-behavior: smooth;
+    scroll-padding-top: 5.5rem;
+    background: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    min-height: 100dvh;
+    overflow-x: hidden;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  h1, h2, h3, h4 { text-wrap: balance; }
+  p { text-wrap: pretty; }
+
+  ::selection {
+    background: rgb(10 10 10 / 0.12);
+    color: var(--color-fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid rgb(10 10 10 / 0.45);
+    outline-offset: 3px;
+  }
 
   /* Better text rendering */
   body {
@@ -106,6 +140,7 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #404040;
   }
+
 }
 
 @layer utilities {
@@ -147,4 +182,26 @@
   display: block;
   width: 100% !important;
   height: 100% !important;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@utility container-page {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 100%;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container-page { padding-inline: 2rem; }
 }

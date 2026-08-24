@@ -24,6 +24,7 @@
   "registries": {
     "@magicui": "https://magicui.design/r/{name}",
     "@react-bits": "https://reactbits.dev/r/{name}.json",
-    "@animate-ui": "https://animate-ui.com/r/{name}.json"
+    "@animate-ui": "https://animate-ui.com/r/{name}.json",
+    "@smoothui": "https://smoothui.dev/r/{name}.json"
   }
 }

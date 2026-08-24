@@ -2,6 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+import { SmoothScroll } from "../components/provider/smooth-scroll";
+import { SiteHeader } from "../components/layouts/header";
+import { SiteFooter } from "../components/layouts/footer";
+
+
 // ── Fonts ─────────────────────────────────────────────────────────────────
 const sans = Geist({
   variable: "--font-sans",
@@ -152,11 +157,13 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${sans.variable} ${mono.variable} font-sans antialiased bg-black text-white selection:bg-neutral-800 selection:text-white`}
+        className={`${sans.variable} ${mono.variable} font-sans antialiased bg-black text-white selection:bg-lime-800 selection:text-stone-200`}
       >
-        <div className="relative flex min-h-screen flex-col">
-          <main className="flex-grow">{children}</main>
-        </div>
+        <SmoothScroll>
+          <div className="relative flex min-h-screen flex-col">
+            <main className="flex-grow"><SiteHeader/>{children}<SiteFooter /></main>
+          </div>
+        </SmoothScroll>
       </body>
     </html>
   );

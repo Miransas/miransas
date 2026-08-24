@@ -214,7 +214,7 @@ function ShaderBackdrop() {
 
 function HeroStat({ value, label }: { value: string; label: string }) {
   return (
-    <div className="border-l border-white/15 bg-black/20 px-5 py-4 backdrop-blur-sm">
+    <div className="border-l border-white/15 0 px-5 py-4 backdrop-blur-sm">
       <div className="text-2xl font-semibold text-white">{value}</div>
       <div className="mt-1 text-sm text-zinc-400">{label}</div>
     </div>
