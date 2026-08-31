@@ -1,14 +1,13 @@
 export const ROUTES = {
   home: "/",
   developer: "/developer",
-  company: "/company",
-  news: "/news",
+  model: "/model",
 
   products: {
-    studio: "/studio",
-    tts: "/tts",
-    voiceClone: "/voice-clone",
-    realtime: "/realtime",
+    studio: "https://console.miralas.io/studio",
+    tts: "https://console.miralas.io/tts",
+    voiceClone: "https://console.miralas.io/voice-clone",
+    realtime: "https://console.miralas.io/realtime",
   },
 
   console: {
