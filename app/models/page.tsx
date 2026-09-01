@@ -56,77 +56,92 @@ const ARENA_CATEGORIES = [
 
 // Güncel Dil Yol Haritası — Uzbek casting aşamasında
 const UPCOMING_LANGUAGES = [
-  { name: "Uzbek", flag: "🇺🇿", status: "Voice Casting & Data Collection", progress: 22, stage: "early", eta: "Q2 2027" },
-  { name: "Kazakh", flag: "🇰🇿", status: "Phoneme Alignment", progress: 38, stage: "early", eta: "Q4 2026" },
-  { name: "Russian", flag: "🇷🇺", status: "Beta Testing", progress: 94, stage: "late", eta: "Q1 2026" },
-  { name: "Arabic (Gulf)", flag: "🇸🇦", status: "Data Collection", progress: 45, stage: "mid", eta: "Q3 2026" },
-  { name: "Azerbaijani", flag: "🇦🇿", status: "Acoustic Modeling", progress: 61, stage: "mid", eta: "Q2 2026" },
+  { name: "English", flag: "🇬🇧", status: "Baseline / evaluation", progress: 100, stage: "late", eta: "Available" },
+  { name: "Spanish", flag: "🇪🇸", status: "Baseline / evaluation", progress: 100, stage: "late", eta: "Available" },
+  { name: "Chinese", flag: "🇨🇳", status: "Baseline / evaluation", progress: 100, stage: "late", eta: "Available" },
+  { name: "Hindi", flag: "🇮🇳", status: "Baseline / evaluation", progress: 100, stage: "late", eta: "Available" },
+  { name: "Arabic", flag: "🇸🇦", status: "Baseline / evaluation", progress: 100, stage: "late", eta: "Available" },
+  { name: "Japanese", flag: "🇯🇵", status: "Baseline / evaluation", progress: 100, stage: "late", eta: "Available" },
+  { name: "Uzbek", flag: "🇺🇿", status: "Miralas native-language training", progress: 22, stage: "early", eta: "In training" },
 ];
 
 // 2026 Gerçek Benchmark Verileri (Artificial Analysis, Full-Duplex-Bench-v3, Trelis Research)
 const BENCHMARK_DATA = {
-  // Speech-to-Speech Composite Index (Artificial Analysis 2026)
-  composite: {
-    miralas: 79.4,
-    gpt: 77.2,
-    grok: 75.7,
-    gemini: 69.5,
+  // Cross-vendor performance numbers are intentionally NOT fabricated here.
+  // Public vendor documentation does not provide an apples-to-apples benchmark
+  // for latency, MOS, WER, reasoning or tool-use across these systems.
+  // Keep these fields for internal Miralas measurements only.
+  internal: {
+    miralas: {
+      label: "Miralas / Chatterbox pipeline",
+      note: "Internal measurement — replace with your measured run",
+    },
   },
-  // Speech Reasoning Accuracy (%)
-  reasoning: {
-    miralas: 97.8,
-    gpt: 97.0,
-    grok: 97.1,
-    gemini: 97.0,
+
+  // Verified model facts from official documentation (Sep 2026).
+  models: {
+    miralas: {
+      name: "Miralas",
+      engine: "Chatterbox Multilingual V3 + Miralas training",
+      params: "500M baseline",
+      languages: "23+ baseline languages",
+      audio: "Voice cloning / TTS",
+      source: "Resemble AI Chatterbox",
+    },
+    gpt: {
+      name: "GPT-Realtime",
+      engine: "GPT-Realtime",
+      audio: "Audio input + output",
+      realtime: "WebRTC / WebSocket / SIP",
+      source: "OpenAI",
+    },
+    gemini: {
+      name: "Gemini 3.1 Flash Live",
+      engine: "gemini-3.1-flash-live-preview",
+      audio: "Low-latency audio-to-audio",
+      realtime: "Live API",
+      source: "Google",
+    },
+    grok: {
+      name: "Grok Voice",
+      engine: "xAI Grok voice stack",
+      audio: "Voice / realtime product capability",
+      source: "xAI",
+    },
   },
-  // Conversational Dynamics / Full Duplex Score (%)
-  conversational: {
-    miralas: 96.2,
-    gpt: 95.5,
-    grok: 77.8,
-    gemini: 74.3,
-  },
-  // MOS (Mean Opinion Score) — Trelis Research 2026
-  mos: {
-    miralas: 4.55,
-    gpt: 4.30,
-    gemini: 4.20,
-    grok: 4.15,
-    elevenlabs: 4.20,
-  },
-  // Time to First Audio (ms) — düşük daha iyi
-  latency: {
-    miralas: 210,
-    gpt: 300,
-    gemini: 630,
-    grok: 780,
-  },
-  // Word Error Rate (WER) — düşük daha iyi (Speech-to-Text)
-  wer: {
-    miralas: 5.2,
-    gpt: 6.8,
-    gemini: 7.1,
-    grok: 8.4,
-  },
-  // Pass@1 Tool Use Accuracy (Full-Duplex-Bench-v3)
-  toolUse: {
-    miralas: 0.640,
-    gpt: 0.600,
-    gemini: 0.540,
-    grok: 0.430,
-  },
-  // Interruption Rate (%) — düşük daha iyi
-  interruption: {
-    miralas: 8.2,
-    gpt: 13.5,
-    gemini: 22.0,
-    grok: 25.5,
-  },
+
+  // Chatterbox Multilingual V3 officially lists these 23 baseline languages.
+  languages: [
+    ["English", "en"],
+    ["Spanish", "es"],
+    ["French", "fr"],
+    ["German", "de"],
+    ["Italian", "it"],
+    ["Portuguese", "pt"],
+    ["Chinese", "zh"],
+    ["Japanese", "ja"],
+    ["Korean", "ko"],
+    ["Hindi", "hi"],
+    ["Arabic", "ar"],
+    ["Russian", "ru"],
+    ["Turkish", "tr"],
+    ["Dutch", "nl"],
+    ["Polish", "pl"],
+    ["Greek", "el"],
+    ["Hebrew", "he"],
+    ["Danish", "da"],
+    ["Finnish", "fi"],
+    ["Norwegian", "no"],
+    ["Swedish", "sv"],
+    ["Malay", "ms"],
+    ["Swahili", "sw"],
+  ],
 };
 
 const FALLBACK_METRICS = {
-  quality: { miralas: 96.6, gpt: 91.2, gemini: 88.4, grok: 85.0 },
-  latency: { miralas: 180, gpt: 320, gemini: 410, grok: 390 },
+  // Internal telemetry only. Do not present these as vendor benchmarks.
+  quality: { miralas: 0, gpt: 0, gemini: 0, grok: 0 },
+  latency: { miralas: 0, gpt: 0, gemini: 0, grok: 0 },
 };
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
@@ -197,81 +212,164 @@ function StatCard({ icon: Icon, label, value, subtext, color }: { icon: any; lab
 
 interface ModelAudioBoxProps {
   modelName: string;
+  provider: string;
   badgeColor: string;
   duration: string;
   transcriptText: string;
-  metrics?: { accuracy?: number; latency?: number; mos?: number };
+  audioSrc?: string;
+  status?: "sample" | "official" | "internal";
+  metrics?: { latency?: number; mos?: number };
 }
 
-function ModelAudioBox({ modelName, badgeColor, duration, transcriptText, metrics }: ModelAudioBoxProps) {
+function ModelAudioBox({
+  modelName,
+  provider,
+  badgeColor,
+  duration,
+  transcriptText,
+  audioSrc,
+  status = "sample",
+  metrics,
+}: ModelAudioBoxProps) {
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [transcriptOpen, setTranscriptOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const onTime = () => {
+      setProgress(audio.duration ? (audio.currentTime / audio.duration) * 100 : 0);
+    };
+    const onEnded = () => {
+      setIsPlaying(false);
+      setProgress(0);
+    };
+
+    audio.addEventListener("timeupdate", onTime);
+    audio.addEventListener("ended", onEnded);
+
+    return () => {
+      audio.removeEventListener("timeupdate", onTime);
+      audio.removeEventListener("ended", onEnded);
+    };
+  }, []);
+
+  const togglePlayback = async () => {
+    const audio = audioRef.current;
+    if (!audioSrc || !audio) return;
+
+    if (audio.paused) {
+      await audio.play();
+      setIsPlaying(true);
+    } else {
+      audio.pause();
+      setIsPlaying(false);
+    }
+  };
+
+  const resetPlayback = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.pause();
+    audio.currentTime = 0;
+    setProgress(0);
+    setIsPlaying(false);
+  };
+
+  const waveform = [
+    18, 34, 52, 28, 68, 42, 78, 55, 30, 64, 84, 48, 72, 38, 58, 91,
+    46, 67, 35, 76, 54, 29, 62, 81, 43, 70, 51, 88, 36, 60, 47, 74,
+    32, 56, 80, 44, 69, 38, 85, 52, 63, 31, 77, 45, 59, 82, 40, 66,
+  ];
 
   return (
-    <div className="flex flex-col justify-between rounded-2xl border border-border bg-card/60 p-5 backdrop-blur-sm dark:bg-card/30 hover:border-border/80 transition-colors">
+    <div className="flex flex-col justify-between rounded-2xl border border-border bg-card/60 p-5 backdrop-blur-sm hover:border-border/80 transition-colors">
+      <audio ref={audioRef} src={audioSrc} preload="metadata" />
+
       <div>
-        {/* Model Başlığı */}
         <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-2">
-            <span className={cn("size-2.5 rounded-full", badgeColor)} />
-            <h4 className="font-semibold text-fg text-sm">{modelName}</h4>
+          <div className="flex items-center gap-2 min-w-0">
+            <span className={cn("size-2.5 shrink-0 rounded-full", badgeColor)} />
+            <div className="min-w-0">
+              <h4 className="font-semibold text-fg text-sm truncate">{modelName}</h4>
+              <p className="text-[10px] text-stone-400 mt-0.5">{provider}</p>
+            </div>
           </div>
-          <span className="text-[10px] font-mono text-stone-300 uppercase tracking-wider">HD Stream</span>
+          <span className="text-[10px] font-mono text-stone-400 uppercase tracking-wider">
+            {status}
+          </span>
         </div>
 
-        {/* Mini Metrikler */}
         {metrics && (
-          <div className="flex gap-3 mb-3">
-            {metrics.accuracy !== undefined && (
-              <div className="flex items-center gap-1 text-[10px] text-stone-300 bg-secondary/50 px-2 py-0.5 rounded-full">
-                <Target className="size-3" />
-                {metrics.accuracy}% accuracy
-              </div>
-            )}
+          <div className="flex flex-wrap gap-2 mb-3">
             {metrics.latency !== undefined && (
               <div className="flex items-center gap-1 text-[10px] text-stone-300 bg-secondary/50 px-2 py-0.5 rounded-full">
                 <Timer className="size-3" />
-                {metrics.latency}ms
+                {metrics.latency}ms internal
+              </div>
+            )}
+            {metrics.mos !== undefined && (
+              <div className="flex items-center gap-1 text-[10px] text-stone-300 bg-secondary/50 px-2 py-0.5 rounded-full">
+                <Volume2 className="size-3" />
+                {metrics.mos} MOS internal
               </div>
             )}
           </div>
         )}
 
-        {/* Ses Dalgası Simülasyonu */}
-        <div className="relative my-4 flex h-20 w-full items-center justify-center rounded-xl bg-secondary/40 px-4 overflow-hidden">
-          <div className="flex items-center gap-[3px] opacity-70">
-            {[35, 60, 20, 80, 45, 90, 100, 65, 40, 85, 50, 30, 75, 95, 40, 60, 20, 70, 50, 30, 55, 85, 45, 70].map((h, i) => (
-              <motion.div
-                key={i}
-                animate={isPlaying ? { height: [`${h}%`, `${Math.max(15, h * 0.3 + Math.random() * 40)}%`, `${h}%`] } : { height: "20%" }}
-                transition={{ repeat: Infinity, duration: 0.6 + Math.random() * 0.4, delay: i * 0.03 }}
-                className={cn("w-[3px] rounded-full", isPlaying ? badgeColor.replace("bg-", "bg-") : "bg-muted/40")}
-                style={{ height: `${h}%`, backgroundColor: isPlaying ? undefined : undefined }}
-              />
-            ))}
+        <div
+          className="relative my-4 flex h-20 w-full items-center rounded-xl bg-secondary/40 px-4 overflow-hidden cursor-pointer"
+          onClick={() => {
+            const audio = audioRef.current;
+            if (!audioSrc || !audio) return;
+            audio.currentTime = (audio.duration || 1) * (progress / 100);
+          }}
+          role="progressbar"
+          aria-valuenow={Math.round(progress)}
+          aria-valuemin={0}
+          aria-valuemax={100}
+        >
+          <div className="absolute inset-y-0 left-0 bg-fg/5" style={{ width: `${progress}%` }} />
+          <div className="relative z-10 flex w-full items-center justify-center gap-[3px]">
+            {waveform.map((h, i) => {
+              const played = (i / waveform.length) * 100 <= progress;
+              return (
+                <motion.div
+                  key={i}
+                  animate={isPlaying ? { scaleY: [1, 0.55 + ((i * 17) % 45) / 100, 1] } : { scaleY: 1 }}
+                  transition={{ repeat: isPlaying ? Infinity : 0, duration: 0.55 + (i % 5) * 0.08 }}
+                  className={cn(
+                    "w-[3px] rounded-full origin-center transition-colors",
+                    played ? badgeColor : "bg-muted/40"
+                  )}
+                  style={{ height: `${Math.max(12, h)}%` }}
+                />
+              );
+            })}
           </div>
-          {isPlaying && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0.3, 0.6, 0.3] }}
-              transition={{ repeat: Infinity, duration: 2 }}
-              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
-            />
-          )}
         </div>
 
-        {/* Oynatıcı Kontrolleri */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setIsPlaying(!isPlaying)}
-              className="flex size-10 items-center justify-center rounded-full bg-fg text-bg transition-transform hover:scale-105 active:scale-95"
+              onClick={togglePlayback}
+              disabled={!audioSrc}
+              aria-label={isPlaying ? "Pause" : "Play"}
+              className={cn(
+                "flex size-10 items-center justify-center rounded-full bg-fg text-bg transition-transform hover:scale-105 active:scale-95",
+                !audioSrc && "opacity-50 cursor-not-allowed"
+              )}
             >
               {isPlaying ? <Pause className="size-4" /> : <Play className="size-4 ml-0.5" />}
             </button>
             <button
-              onClick={() => setIsPlaying(false)}
-              className="text-stone-300 hover:text-fg transition-colors"
+              onClick={resetPlayback}
+              disabled={!audioSrc}
+              aria-label="Reset audio"
+              className="text-stone-300 hover:text-fg transition-colors disabled:opacity-40"
             >
               <RefreshCw className="size-3.5" />
             </button>
@@ -284,9 +382,14 @@ function ModelAudioBox({ modelName, badgeColor, duration, transcriptText, metric
             </div>
           </div>
         </div>
+
+        {!audioSrc && (
+          <p className="mt-3 text-[10px] text-stone-500">
+            Add a licensed/public sample at <code className="font-mono">audioSrc</code> to enable playback.
+          </p>
+        )}
       </div>
 
-      {/* Transcript Açılır Alanı */}
       <div className="mt-4 border-t border-border/60 pt-3">
         <button
           onClick={() => setTranscriptOpen(!transcriptOpen)}
@@ -516,13 +619,15 @@ export default function ModelsPage() {
     }
   };
 
+  // This radar is deliberately a capability map, not a benchmark score.
+  // Values are binary/normalized feature coverage derived from official docs.
   const radarData = [
-    { label: "Composite", miralas: 79.4, gpt: 77.2, gemini: 69.5, grok: 75.7, max: 100 },
-    { label: "Reasoning", miralas: 97.8, gpt: 97.0, gemini: 97.0, grok: 97.1, max: 100 },
-    { label: "Conversational", miralas: 96.2, gpt: 95.5, gemini: 74.3, grok: 77.8, max: 100 },
-    { label: "MOS Score", miralas: 91.0, gpt: 86.0, gemini: 84.0, grok: 83.0, max: 100 },
-    { label: "Low Latency", miralas: 95.0, gpt: 85.0, gemini: 55.0, grok: 35.0, max: 100 },
-    { label: "WER (inv)", miralas: 94.8, gpt: 93.2, gemini: 92.9, grok: 91.6, max: 100 },
+    { label: "Realtime Audio", miralas: 100, gpt: 100, gemini: 100, grok: 80, max: 100 },
+    { label: "Audio Output", miralas: 100, gpt: 100, gemini: 100, grok: 100, max: 100 },
+    { label: "Voice Cloning", miralas: 100, gpt: 0, gemini: 0, grok: 0, max: 100 },
+    { label: "Multilingual", miralas: 100, gpt: 100, gemini: 100, grok: 80, max: 100 },
+    { label: "Open Model", miralas: 100, gpt: 0, gemini: 0, grok: 0, max: 100 },
+    { label: "Custom Training", miralas: 100, gpt: 0, gemini: 0, grok: 0, max: 100 },
   ];
 
   return (
@@ -539,22 +644,22 @@ export default function ModelsPage() {
           2026 Benchmarks Updated
         </div>
         <h1 className="text-4xl font-extrabold tracking-tight text-stone-300 sm:text-5xl">
-          Miralas Voice{" "}
+         Miralas Voice{" "}
           <span className="text-stone-300">
             Model Arena
           </span>
         </h1>
         <p className="mt-4 text-lg text-stone-400">
-          Compare Miransas Chatterbox V3 head-to-head against GPT-Live-1, Gemini Live 3.1, and Grok Voice Think Fast 2.0 across reasoning, emotional tone, latency, and real-world tool use.
+          Compare Miralas against leading voice AI systems using verified model capabilities — then plug in your own measured audio samples and internal benchmarks.
         </p>
       </motion.div>
 
-      {/* HERO STATS */}
+      {/* HERO STATS — VERIFIED CAPABILITY FACTS */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
-        <StatCard icon={Award} label="Composite Score" value={<AnimatedCounter target={79.4} suffix="%" />} subtext="#1 on Artificial Analysis 2026" color="bg-blue-500" />
-        <StatCard icon={Timer} label="Time to First Audio" value={<AnimatedCounter target={210} suffix="ms" />} subtext="Edge-optimized inference" color="bg-emerald-500" />
-        <StatCard icon={BrainCircuit} label="Speech Reasoning" value={<AnimatedCounter target={97.8} suffix="%" />} subtext="Full-Duplex-Bench-v3" color="bg-indigo-500" />
-        <StatCard icon={Volume2} label="MOS Quality" value={<AnimatedCounter target={4.55} suffix="" />} subtext="Trelis Research 2026" color="bg-rose-500" />
+        <StatCard icon={Cpu} label="Miralas Baseline" value="500M" subtext="Chatterbox Multilingual V3" color="bg-blue-500" />
+        <StatCard icon={Languages} label="Baseline Languages" value="23+" subtext="Official Chatterbox multilingual model" color="bg-emerald-500" />
+        <StatCard icon={Volume2} label="Audio I/O" value="Realtime" subtext="Miralas pipeline + voice samples" color="bg-indigo-500" />
+        <StatCard icon={Mic} label="Uzbek Track" value="Native" subtext="Miralas proprietary training direction" color="bg-rose-500" />
       </div>
 
       <div className="flex flex-col lg:flex-row gap-12 relative">
@@ -619,37 +724,45 @@ export default function ModelsPage() {
               </p>
             </div>
 
-            {/* Modellerin Karşılaştırmalı Ses Kartları */}
+            {/* Gerçek model adları + ses örneği alanları */}
             <div className="grid gap-6 md:grid-cols-2">
               <ModelAudioBox
-                modelName="Miralas Chatterbox V3 (Ours)"
+                modelName="Miralas"
+                provider="Chatterbox Multilingual V3 baseline + Miralas training"
                 badgeColor="bg-blue-500"
-                duration="0:52"
-                transcriptText="Initial foot traffic patterns suggest peak hours mismatch. If overhead exceeds morning capture rates without local pastry margins, the 12-month runway collapses by month 8. Three specific failure vectors: lease escalation clause, equipment depreciation, and weather-driven commuter variance..."
-                metrics={{ accuracy: 96.6, latency: 210, mos: 4.55 }}
+                duration="0:12"
+                status="internal"
+                audioSrc="/audio/arena/miralas.wav"
+                transcriptText="This is the Miralas reference sample. Replace this file with your own licensed Uzbek, Turkish or multilingual evaluation recording."
               />
               <ModelAudioBox
-                modelName="GPT-Live-1 (OpenAI)"
+                modelName="GPT-Realtime"
+                provider="OpenAI"
                 badgeColor="bg-emerald-500"
-                duration="1:04"
-                transcriptText="Assuming standard commuter constraints, the primary risk involves lease amortization vs Tuesday-Thursday concentration. Your break-even likely depends on 140 transactions daily, which rail-adjacent footfall may not sustain post-morning rush..."
-                metrics={{ accuracy: 91.2, latency: 300, mos: 4.30 }}
+                duration="0:12"
+                status="official"
+                audioSrc="/audio/arena/gpt-realtime.wav"
+                transcriptText="Official model family: realtime text and audio input/output over WebRTC, WebSocket or SIP. Use an approved sample generated through your own API account."
               />
               <ModelAudioBox
-                modelName="Gemini Live 3.1 (Google)"
+                modelName="Gemini 3.1 Flash Live"
+                provider="Google"
                 badgeColor="bg-purple-500"
-                duration="0:58"
-                transcriptText="Evaluating spatial distribution and slow pour-over delivery times relative to station throughput. The 900 sq ft limits seating to 18 covers, which constrains afternoon revenue recovery. However, grab-and-go potential remains untested..."
-                metrics={{ accuracy: 88.4, latency: 630, mos: 4.20 }}
+                duration="0:12"
+                status="official"
+                audioSrc="/audio/arena/gemini-3.1-live.wav"
+                transcriptText="Official model: gemini-3.1-flash-live-preview. Google documents it as a low-latency audio-to-audio model for real-time dialogue."
               />
               <ModelAudioBox
-                modelName="Grok Voice Think Fast 2.0 (xAI)"
+                modelName="Grok Voice"
+                provider="xAI"
                 badgeColor="bg-rose-500"
-                duration="1:02"
-                transcriptText="Let&apos;s look at raw numbers: high rent coupled with soft Monday afternoons usually breaks small footprint spots. Your 900 sq ft gives you maybe 14 seats. At $6.50 average ticket, you need 127 customers daily just to cover rent..."
-                metrics={{ accuracy: 85.0, latency: 780, mos: 4.15 }}
+                duration="0:12"
+                status="official"
+                audioSrc="/audio/arena/grok-voice.wav"
+                transcriptText="Use a licensed/public xAI sample here. Do not ship scraped or copyrighted audio files."
               />
-            </div>
+            </div>   
           </section>
 
           {/* 3. CHATTERBOX V3 DETAILS */}
@@ -660,47 +773,32 @@ export default function ModelsPage() {
                 Chatterbox Multilingual V3 Engine
               </h2>
               <p className="mt-2 text-stone-300">
-                Engineered for ultra-low latency and hyper-realistic emotional variance across 31+ languages. Edge-deployable with 0.5B parameter streaming architecture.
+                Miralas uses Chatterbox Multilingual V3 as its open-source TTS baseline, then focuses its own training and evaluation work on languages and voices that matter to our users. The official V3 model is listed at 500M parameters and 23+ supported languages.
               </p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 hover:border-blue-500/30 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-full bg-blue-500/10 text-blue-500">
-                    <AudioWaveform className="size-5" />
+              {[
+                { name: "English", meta: "en • reference sample", color: "bg-blue-500/10 text-blue-500", audio: "/audio/languages/en.wav" },
+                { name: "Spanish", meta: "es • reference sample", color: "bg-rose-500/10 text-rose-500", audio: "/audio/languages/es.wav" },
+                { name: "Chinese", meta: "zh • reference sample", color: "bg-amber-500/10 text-amber-500", audio: "/audio/languages/zh.wav" },
+                { name: "Hindi", meta: "hi • reference sample", color: "bg-emerald-500/10 text-emerald-500", audio: "/audio/languages/hi.wav" },
+                { name: "Arabic", meta: "ar • reference sample", color: "bg-indigo-500/10 text-indigo-500", audio: "/audio/languages/ar.wav" },
+                { name: "Japanese", meta: "ja • reference sample", color: "bg-purple-500/10 text-purple-500", audio: "/audio/languages/ja.wav" },
+              ].map((sample) => (
+                <div key={sample.name} className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 hover:border-blue-500/30 transition-colors">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className={cn("flex size-10 shrink-0 items-center justify-center rounded-full", sample.color)}>
+                      <AudioWaveform className="size-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="font-semibold text-fg text-sm">{sample.name}</h4>
+                      <p className="text-xs text-stone-300">{sample.meta}</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-semibold text-fg text-sm">Narrative Synthesis</h4>
-                    <p className="text-xs text-stone-300">English • 0:12 • 4.6 MOS</p>
-                  </div>
+                  <audio controls preload="none" src={sample.audio} className="h-8 w-28" />
                 </div>
-                <Play className="size-4 text-stone-300 hover:text-fg cursor-pointer" />
-              </div>
-              <div className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 hover:border-indigo-500/30 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-full bg-indigo-500/10 text-indigo-500">
-                    <AudioWaveform className="size-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-fg text-sm">Conversational Flow</h4>
-                    <p className="text-xs text-stone-300">Turkish • 0:08 • 4.5 MOS</p>
-                  </div>
-                </div>
-                <Play className="size-4 text-stone-300 hover:text-fg cursor-pointer" />
-              </div>
-              <div className="flex items-center justify-between rounded-2xl border border-border bg-card p-4 hover:border-emerald-500/30 transition-colors">
-                <div className="flex items-center gap-3">
-                  <div className="flex size-10 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-500">
-                    <Languages className="size-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-fg text-sm">Code-Switching</h4>
-                    <p className="text-xs text-stone-300">Tr-En Mixed • 0:15 • 4.4 MOS</p>
-                  </div>
-                </div>
-                <Play className="size-4 text-stone-300 hover:text-fg cursor-pointer" />
-              </div>
+              ))}
             </div>
           </section>
 
@@ -723,7 +821,7 @@ export default function ModelsPage() {
                 </div>
                 <div className="flex-1">
                   <h4 className="text-sm font-semibold text-fg">Shahzoda — Custom Voice Pipeline</h4>
-                  <p className="text-xs text-stone-300">Dataset: 45 mins • Status: Production Ready • MOS: 4.52</p>
+                  <p className="text-xs text-stone-300">Dataset: 45 min • Status: Internal evaluation • Add measured MOS after your test run</p>
                 </div>
                 <button className="flex h-9 items-center justify-center rounded-lg bg-fg px-4 text-sm font-medium text-bg transition-transform hover:scale-105">
                   Test Voice
@@ -735,7 +833,7 @@ export default function ModelsPage() {
                 </div>
                 <div className="flex-1">
                   <h4 className="text-sm font-semibold text-fg">Corporate Brand Voice — Acme Corp</h4>
-                  <p className="text-xs text-stone-300">Dataset: 120 mins • Status: Fine-tuning Epoch 8/12 • MOS: 4.18</p>
+                  <p className="text-xs text-stone-300">Dataset: 120 min • Status: Fine-tuning • Metrics shown after internal evaluation</p>
                 </div>
                 <button className="flex h-9 items-center justify-center rounded-lg border border-border px-4 text-sm font-medium text-stone-300 transition-colors hover:text-fg">
                   Preview
@@ -756,131 +854,82 @@ export default function ModelsPage() {
               </p>
             </div>
 
-            {/* Tab Switcher */}
-            <div className="flex gap-2">
-              {([
-                { id: "accuracy" as const, label: "Accuracy & Reasoning", icon: BrainCircuit },
-                { id: "latency" as const, label: "Latency & Speed", icon: Timer },
-                { id: "quality" as const, label: "Voice Quality (MOS)", icon: Volume2 },
-                { id: "tooluse" as const, label: "Tool Use & Agentic", icon: Target },
-              ]).map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveBenchmarkTab(tab.id)}
-                  className={cn(
-                    "flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium transition-all border",
-                    activeBenchmarkTab === tab.id
-                      ? "bg-fg text-bg border-fg"
-                      : "bg-card/50 text-stone-300 border-border hover:border-fg/30"
-                  )}
-                >
-                  <tab.icon className="size-3.5" />
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="grid gap-8 rounded-3xl border border-border p-8 sm:grid-cols-2 bg-card/30 dark:bg-card/10">
-              {/* Sol: Bar Charts */}
-              <div>
-                {activeBenchmarkTab === "accuracy" && (
-                  <>
-                    <h3 className="mb-6 font-semibold text-fg flex items-center gap-2">
-                      <BrainCircuit className="size-4 text-blue-500" />
-                      Speech Reasoning Accuracy
-                    </h3>
-                    <BenchmarkBar label="Miralas Chatterbox V3" score={BENCHMARK_DATA.reasoning.miralas} colorClass="bg-blue-500" />
-                    <BenchmarkBar label="Grok Voice Think Fast 2.0" score={BENCHMARK_DATA.reasoning.grok} colorClass="bg-rose-500" />
-                    <BenchmarkBar label="GPT-Live-1" score={BENCHMARK_DATA.reasoning.gpt} colorClass="bg-emerald-500" />
-                    <BenchmarkBar label="Gemini Live 3.1" score={BENCHMARK_DATA.reasoning.gemini} colorClass="bg-purple-500" />
-                  </>
-                )}
-                {activeBenchmarkTab === "latency" && (
-                  <>
-                    <h3 className="mb-6 font-semibold text-fg flex items-center gap-2">
-                      <Timer className="size-4 text-blue-500" />
-                      Time to First Audio (ms)
-                    </h3>
-                    <BenchmarkBar label="Miralas (Edge)" score={BENCHMARK_DATA.latency.miralas} maxScore={1000} colorClass="bg-blue-500" unit="ms" />
-                    <BenchmarkBar label="GPT-Live-1" score={BENCHMARK_DATA.latency.gpt} maxScore={1000} colorClass="bg-emerald-500" unit="ms" />
-                    <BenchmarkBar label="Gemini Live 3.1" score={BENCHMARK_DATA.latency.gemini} maxScore={1000} colorClass="bg-purple-500" unit="ms" />
-                    <BenchmarkBar label="Grok Voice 2.0" score={BENCHMARK_DATA.latency.grok} maxScore={1000} colorClass="bg-rose-500" unit="ms" />
-                    <p className="text-[10px] text-stone-300 mt-2">Lower is better. Measured end-to-end from audio input to first audio chunk output.</p>
-                  </>
-                )}
-                {activeBenchmarkTab === "quality" && (
-                  <>
-                    <h3 className="mb-6 font-semibold text-fg flex items-center gap-2">
-                      <Volume2 className="size-4 text-blue-500" />
-                      Mean Opinion Score (MOS)
-                    </h3>
-                    <BenchmarkBar label="Miralas Chatterbox V3" score={BENCHMARK_DATA.mos.miralas} maxScore={5} colorClass="bg-blue-500" unit="" />
-                    <BenchmarkBar label="GPT-4o Mini TTS" score={BENCHMARK_DATA.mos.gpt} maxScore={5} colorClass="bg-emerald-500" unit="" />
-                    <BenchmarkBar label="Gemini Flash TTS" score={BENCHMARK_DATA.mos.gemini} maxScore={5} colorClass="bg-purple-500" unit="" />
-                    <BenchmarkBar label="Grok Voice" score={BENCHMARK_DATA.mos.grok} maxScore={5} colorClass="bg-rose-500" unit="" />
-                    <BenchmarkBar label="ElevenLabs v2" score={BENCHMARK_DATA.mos.elevenlabs} maxScore={5} colorClass="bg-orange-500" unit="" />
-                    <p className="text-[10px] text-stone-300 mt-2">Evaluated via UTMOS neural model on 10s clips. 5.0 = indistinguishable from human.</p>
-                  </>
-                )}
-                {activeBenchmarkTab === "tooluse" && (
-                  <>
-                    <h3 className="mb-6 font-semibold text-fg flex items-center gap-2">
-                      <Target className="size-4 text-blue-500" />
-                      Pass@1 Tool Use Accuracy
-                    </h3>
-                    <BenchmarkBar label="Miralas Chatterbox V3" score={BENCHMARK_DATA.toolUse.miralas * 100} colorClass="bg-blue-500" />
-                    <BenchmarkBar label="GPT-Realtime" score={BENCHMARK_DATA.toolUse.gpt * 100} colorClass="bg-emerald-500" />
-                    <BenchmarkBar label="Gemini Live 3.1" score={BENCHMARK_DATA.toolUse.gemini * 100} colorClass="bg-purple-500" />
-                    <BenchmarkBar label="Grok Voice 2.0" score={BENCHMARK_DATA.toolUse.grok * 100} colorClass="bg-rose-500" />
-                    <p className="text-[10px] text-stone-300 mt-2">Full-Duplex-Bench-v3: multi-step API chaining across Travel, Finance, Housing, E-Commerce.</p>
-                  </>
-                )}
-              </div>
-
-              {/* Sağ: Radar Chart */}
-              <div className="flex flex-col items-center justify-center">
-                <h3 className="mb-4 font-semibold text-fg text-sm">Capability Radar</h3>
-                <RadarChart data={radarData} />
-                <p className="text-[10px] text-stone-300 text-center mt-2 max-w-[240px]">
-                  Normalized composite view across 6 dimensions. Higher coverage = more balanced performance.
+            <div className="rounded-3xl border border-border p-8 sm:grid-cols-2 bg-card/30 dark:bg-card/10">
+              <div className="mb-8">
+                <h3 className="mb-2 font-semibold text-fg">Verified Capability Comparison</h3>
+                <p className="text-xs text-stone-400">
+                  These are product/model capabilities documented by the vendors, not fabricated cross-vendor benchmark scores.
+                  For latency, MOS, WER and reasoning, run the same script, prompt, hardware and audio set across every model.
                 </p>
               </div>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-border text-left text-xs text-stone-400">
+                      <th className="py-3 pr-4">Capability</th>
+                      <th className="py-3 px-4">Miralas</th>
+                      <th className="py-3 px-4">GPT-Realtime</th>
+                      <th className="py-3 px-4">Gemini 3.1 Live</th>
+                      <th className="py-3 pl-4">Grok Voice</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-border/60">
+                    {[
+                      ["Realtime audio", "✓", "✓", "✓", "✓"],
+                      ["Audio input/output", "✓", "✓", "✓", "✓"],
+                      ["Voice cloning", "✓", "—", "—", "—"],
+                      ["Open-source baseline", "✓", "—", "—", "—"],
+                      ["Custom language training", "✓", "—", "—", "—"],
+                      ["Uzbek-first training track", "✓", "—", "—", "—"],
+                      ["WebRTC / realtime API", "Internal", "✓", "Live API", "Vendor API"],
+                    ].map(([capability, miralas, gpt, gemini, grok]) => (
+                      <tr key={capability}>
+                        <td className="py-3 pr-4 font-medium text-stone-200">{capability}</td>
+                        <td className="py-3 px-4 text-blue-400">{miralas}</td>
+                        <td className="py-3 px-4 text-stone-300">{gpt}</td>
+                        <td className="py-3 px-4 text-stone-300">{gemini}</td>
+                        <td className="py-3 pl-4 text-stone-300">{grok}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="rounded-2xl border border-border bg-card/40 p-4">
+                  <div className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Miralas Baseline</div>
+                  <div className="text-xl font-bold text-fg">500M</div>
+                  <div className="text-[10px] text-stone-400 mt-1">Chatterbox Multilingual V3</div>
+                </div>
+                <div className="rounded-2xl border border-border bg-card/40 p-4">
+                  <div className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Chatterbox Languages</div>
+                  <div className="text-xl font-bold text-fg">23+</div>
+                  <div className="text-[10px] text-stone-400 mt-1">Official multilingual baseline</div>
+                </div>
+                <div className="rounded-2xl border border-border bg-card/40 p-4">
+                  <div className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">GPT Realtime</div>
+                  <div className="text-xl font-bold text-fg">Audio I/O</div>
+                  <div className="text-[10px] text-stone-400 mt-1">Realtime API</div>
+                </div>
+                <div className="rounded-2xl border border-border bg-card/40 p-4">
+                  <div className="text-[10px] text-stone-400 uppercase tracking-wider mb-1">Gemini Live</div>
+                  <div className="text-xl font-bold text-fg">A2A Audio</div>
+                  <div className="text-[10px] text-stone-400 mt-1">Gemini 3.1 Flash Live</div>
+                </div>
+              </div>
+
+              <div className="mt-8 flex flex-wrap gap-3 text-[10px] text-stone-400">
+                <span>OpenAI: GPT-Realtime supports realtime text/audio over WebRTC, WebSocket and SIP.</span>
+                <span>Google: Gemini 3.1 Flash Live is documented as a low-latency audio-to-audio model.</span>
+                <span>Chatterbox: Multilingual V3 is documented as 500M and 23+ languages.</span>
+              </div>
             </div>
 
-            {/* Ek Metrikler Grid */}
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="rounded-2xl border border-border bg-card/40 p-4">
-                <div className="text-[10px] text-stone-300 uppercase tracking-wider mb-1">Word Error Rate</div>
-                <div className="text-xl font-bold text-fg">{BENCHMARK_DATA.wer.miralas}%</div>
-                <div className="text-[10px] text-emerald-500 flex items-center gap-1 mt-1">
-                  <ArrowUpRight className="size-3" />
-                  vs GPT {BENCHMARK_DATA.wer.gpt}% / Gemini {BENCHMARK_DATA.wer.gemini}%
-                </div>
-              </div>
-              <div className="rounded-2xl border border-border bg-card/40 p-4">
-                <div className="text-[10px] text-stone-300 uppercase tracking-wider mb-1">Interruption Rate</div>
-                <div className="text-xl font-bold text-fg">{BENCHMARK_DATA.interruption.miralas}%</div>
-                <div className="text-[10px] text-emerald-500 flex items-center gap-1 mt-1">
-                  <ArrowUpRight className="size-3" />
-                  vs GPT {BENCHMARK_DATA.interruption.gpt}% / Grok {BENCHMARK_DATA.interruption.grok}%
-                </div>
-              </div>
-              <div className="rounded-2xl border border-border bg-card/40 p-4">
-                <div className="text-[10px] text-stone-300 uppercase tracking-wider mb-1">Conversational Dynamics</div>
-                <div className="text-xl font-bold text-fg">{BENCHMARK_DATA.conversational.miralas}%</div>
-                <div className="text-[10px] text-emerald-500 flex items-center gap-1 mt-1">
-                  <ArrowUpRight className="size-3" />
-                  #1 on Full-Duplex-Bench
-                </div>
-              </div>
-              <div className="rounded-2xl border border-border bg-card/40 p-4">
-                <div className="text-[10px] text-stone-300 uppercase tracking-wider mb-1">Composite Index</div>
-                <div className="text-xl font-bold text-fg">{BENCHMARK_DATA.composite.miralas}%</div>
-                <div className="text-[10px] text-emerald-500 flex items-center gap-1 mt-1">
-                  <ArrowUpRight className="size-3" />
-                  Artificial Analysis 2026
-                </div>
-              </div>
+            <div className="rounded-2xl border border-amber-500/20 bg-amber-500/5 p-5 text-xs text-stone-300">
+              <strong className="text-fg">Benchmark policy:</strong> Miralas performance numbers will only be shown here after
+              you run the same evaluation suite on the same hardware and publish the methodology. This prevents the page from
+              presenting invented MOS, WER, latency or leaderboard claims as independent research.
             </div>
           </section>
 
@@ -892,7 +941,7 @@ export default function ModelsPage() {
                 Real-Time System Metrics
               </h2>
               <p className="mt-2 text-stone-300">
-                Live telemetry from Miralas edge nodes. Refreshes every 5 seconds.
+                Live telemetry from your Miralas endpoint. If the endpoint is unavailable, the page does not invent vendor metrics.
               </p>
             </div>
 
@@ -995,12 +1044,12 @@ export default function ModelsPage() {
                 <div>
                   <h4 className="font-semibold text-fg">Uzbek Voice Pipeline — Active Development</h4>
                   <p className="text-sm text-stone-300 mt-1 leading-relaxed">
-                    Uzbek voice casting is currently in the <strong>data collection and speaker casting phase</strong>. We are actively recruiting native speakers from Tashkent, Samarkand, and Bukhara regions to build a diverse acoustic dataset. Current focus: phoneme coverage for Latin-script Uzbek, regional accent variance, and code-switching scenarios with Russian. Estimated training start: Q4 2026.
+                    Uzbek is the core language research direction for Miralas. The goal is to build a native-quality training pipeline around Uzbek phoneme coverage, natural prosody, regional variation and code-switching. Replace this status with your real dataset and training telemetry as the pipeline progresses.
                   </p>
                   <div className="flex gap-2 mt-3">
-                    <span className="text-[10px] bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full">22% Complete</span>
-                    <span className="text-[10px] bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full">Casting Open</span>
-                    <span className="text-[10px] bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full">ETA: Q2 2027</span>
+                    <span className="text-[10px] bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full">Research Track</span>
+                    <span className="text-[10px] bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full">Native Uzbek</span>
+                    <span className="text-[10px] bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full">Live Dataset Metrics</span>
                   </div>
                 </div>
               </div>
@@ -1040,5 +1089,6 @@ export default function ModelsPage() {
         </aside>
       </div>
     </div>
+  
   );
 }
