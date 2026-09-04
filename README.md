@@ -1,134 +1,81 @@
 <div align="center">
 
-# 🌌 MIRANSAS CORE
-**The Dual-Engine Technology Node**
+# Miransas
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![Rust](https://img.shields.io/badge/Rust-Safe-dea584?style=for-the-badge&logo=rust)](https://www.rust-lang.org/)
-[![Go](https://img.shields.io/badge/Go-Performance-00ADD8?style=for-the-badge&logo=go)](https://go.dev/)
-[![Drizzle](https://img.shields.io/badge/Drizzle-ORM-C5F74F?style=for-the-badge&logo=drizzle)](https://orm.drizzle.team/)
+**Software systems for the open web and the infrastructure beneath it.**
 
----
-
-### "Engineering the shadows. Everything is in Dark Mode."
-
-[Explore Projects](https://miransas.com/projects) • [View Changelog](https://miransas.com/changelog) • [Contact Studio](https://miransas.com/contact)
+[Website](https://miransas.com) · [Projects](https://miransas.com/projects) · [GitHub](https://github.com/Miransas) · [Status](https://status.miransas.com)
 
 </div>
 
-## 📖 The Story
+## About
 
-**Miransas was born from a single vision.** What started as one person's obsession with building the perfect shadow infrastructure has evolved into a complex ecosystem of interconnected systems. From the first line of code to the intricate tunneling networks, from the neural automation engines to the deep narrative of Lost Signal, the core architecture remains authored by a single mind.
+Miransas is a software company building high-performance web products, developer tools, and systems software.
 
-This isn't a tale of corporate-backed development or distributed teams. This is the story of someone who believes that great infrastructure doesn't need committees—it needs obsession, precision, and an unwavering commitment to dark mode aesthetics and zero-latency performance.
+We work across two closely connected layers: public products that people can use on the web, and focused infrastructure that makes those products reliable, fast, and maintainable. Our systems are designed with a bias toward clear interfaces, self-hosting, and long-term ownership.
 
-Even now, most of the critical infrastructure that keeps this system breathing is still written by one person. Every tunnel, every optimization, every microsecond shaved off the response time—these are the fingerprints of a solitary architect building something vast from the ground up.
+Our engineering work includes Rust-based services, native macOS software, developer tooling, infrastructure products, and AI voice systems through [Miralas](https://miralas.io).
 
-**The rest is still being written.**
+## What We Build
 
----
+### Web Products
 
-## 🧬 System Architecture
+Our public web products are available at `miransas.com`, `binboi.com`, `blog.miransas.com`, and related product domains. They cover developer infrastructure, AI voice experiences, technical publishing, and practical utilities.
 
-Miransas is built on a high-concurrency architecture, designed for zero-latency operations across multiple digital fronts.
+### Developer Tools and SDKs
 
-### 1. Neural Automation (Worktio)
-- **Engine:** Custom Node.js/Next.js hybrid.
-- **Goal:** Real-time analytics and workflow orchestration.
-- **Latency:** < 10ms target.
+Selected SDKs, APIs, and supporting tools are open source. They are published so developers can inspect the implementation, integrate against stable interfaces, and run the parts of the stack they need on their own infrastructure.
 
-### 2. Networking & Tunnels (binboi)
-- **Engine:** Rust-based encrypted proxy.
-- **Goal:** Exposing local development nodes via global relay points.
-- **Security:** AES-256-GCM authenticated encryption.
+Open source availability is project-specific. Each repository contains its own license, documentation, and support expectations.
 
-### 3. Interactive Media (Lost Signal)
-- **Engine:** Dedicated C++ Nodes & Drizzle PostgreSQL synchronization.
-- **Atmosphere:** Deep psychological narrative driven by high-performance data handling.
+### Private Console and Operations
 
----
+The Miransas and Miralas web experiences are public. The operational console, account systems, internal dashboards, model operations, and production control plane are private and closed source.
 
-## 🛠️ Technical Stack
+This separation lets us keep the public product surface simple while protecting customer data, operational controls, and the systems that run the platform.
 
-| Layer | Technology | Purpose |
-| :--- | :--- | :--- |
-| **Frontend** | `Next.js 15` | Zero-latency UI & Server Components |
-| **Style** | `Tailwind CSS` | Premium Dark-themed Interface |
-| **Animation** | `Framer Motion` | Micro-interactions & Fluidity |
-| **Database** | `PostgreSQL + Neon` | Scalable Serverless Storage |
-| **ORM** | `Drizzle ORM` | Strictly Typed Database Access |
-| **Core Logic** | `Rust / Go` | Low-level Networking & Tunnels |
+## Technical Direction
 
----
+- **Rust** for memory-safe, reliable systems services and performance-sensitive workloads
+- **Go** for networking, agents, and infrastructure tooling
+- **TypeScript and Next.js** for web products and developer-facing interfaces
+- **PostgreSQL** for durable application data and job-backed workflows
+- **Native macOS technologies** where a small, direct system utility is the right tool
 
-## 🖥️ Installation & Local Ops
+We choose technologies according to the system being built. The goal is not a uniform stack; it is dependable software with a small operational footprint.
 
-To spin up a local node of the Miransas Ecosystem:
+## Selected Projects
 
-```bash
-# Clone the repository (Private Node)
-git clone [https://github.com/sardorazimov/miransas-core.git](https://github.com/sardorazimov/miransas-core.git)
+| Project | Description | Status |
+| --- | --- | --- |
+| [Binboi](https://binboi.com) | Self-hosted ngrok alternative for exposing local services through secure HTTPS tunnels | Live |
+| [CourierX](https://github.com/Miransas/courierx) | Resend-compatible, self-hosted email delivery API built with Rust and Axum | In progress |
+| [Miransas Chess](https://github.com/Miransas/miransas-chess) | From-scratch chess engine in Rust with bitboard move generation | In progress |
+| [VS Code Uzbek](https://github.com/sardorazimov/vscode-language-pack-uz) | Uzbek language pack for Visual Studio Code | Live |
+| Miransas Pulse | Native macOS menubar utility for live system metrics | Live |
+| [Miransas Blog](https://blog.miransas.com) | Writing on systems programming, infrastructure, and shipping software | Live |
 
-# Initialize Neural Nodes
-npm install
+See the full project catalogue at [miransas.com/projects](https://miransas.com/projects).
 
-# Push Database Schemas
-npx drizzle-kit push
+## Open Source
 
-# Start Dev Engine
-npm run dev
-```
+Miransas is open where openness creates leverage for users and developers. Some libraries, SDKs, infrastructure components, and experiments are available in the [Miransas GitHub organization](https://github.com/Miransas).
 
----
+The core product console and production operations remain closed. Open source repositories are independent projects and may have different maturity levels, roadmaps, and contribution policies.
 
-## 📦 Project Components
+## Contact
 
-### Core Projects
-- **Worktio** - Neural automation & workflow orchestration
-- **binboi** - Rust-based encrypted proxy & tunneling
-- **Lost Signal** - Interactive media with C++ performance optimization
+- Website: [miransas.com](https://miransas.com)
+- Developer resources: [miransas.com/developers](https://miransas.com/developers)
+- Status: [status.miransas.com](https://status.miransas.com)
+- GitHub: [github.com/Miransas](https://github.com/Miransas)
 
-### Content Areas
-- **Blog** - Technical articles and updates
-- **Projects** - Showcase of development work
-- **Developers** - Developer documentation & APIs
-- **Games** - Interactive experiences
+## License
 
----
-
-## 🔐 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](./LICENSE) file for details.
-
-You are free to:
-- ✅ Use commercially
-- ✅ Modify the source code
-- ✅ Distribute copies
-- ✅ Private use
-
-With the condition:
-- 📋 Include license and copyright notice
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
----
-
-## 📞 Contact & Support
-
-- **Website:** [miransas.com](https://miransas.com)
-- **Contact:** [miransas.com/contact](https://miransas.com/contact)
-- **Status:** [miransas.com/status](https://miransas.com/status)
-
----
+Individual projects use the license stated in their own repository. Unless a repository says otherwise, do not assume that Miransas product code or private platform code is open source.
 
 <div align="center">
 
-**Made with precision and dark mode aesthetics by Miransas Studio**
-
-*Engineering the shadows. Everything is in Dark Mode.*
+**Miransas — build clearly, run reliably.**
 
 </div>
