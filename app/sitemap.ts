@@ -1,7 +1,6 @@
 import { MetadataRoute } from 'next';
 
 // Eğer projects constants'ı varsa import et, yoksa manuel yaz
-// import { projects } from '@/constants/projects';
 
 const projects = [
   { slug: 'project-sad' },

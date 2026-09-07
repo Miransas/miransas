@@ -1,129 +1,154 @@
-"use client"
+"use client";
 
-import { useEffect, useRef } from "react"
-import createGlobe, { type COBEOptions } from "cobe"
-import { useMotionValue, useSpring } from "motion/react"
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { Shdr02 } from "../ui/shdr-02";
 
-import { cn } from "@/lib/utils"
 
-const MOVEMENT_DAMPING = 1400
+export default function ContinuousOrbLoop() {
+  const [stage, setStage] = useState<"orbit" | "merging" | "waveform">("orbit");
+  const [audioVolume, setAudioVolume] = useState(0.2);
 
-const GLOBE_CONFIG: COBEOptions = {
-  width: 800,
-  height: 800,
-  devicePixelRatio: 2,
-  phi: 0,
-  theta: 0.3,
-  dark: 0,
-  diffuse: 0.4,
-  mapSamples: 16000,
-  mapBrightness: 1.2,
-  baseColor: [1, 1, 1],
-  markerColor: [251 / 255, 100 / 255, 21 / 255],
-  glowColor: [1, 1, 1],
-  markers: [
-    { location: [14.5995, 120.9842], size: 0.03 },
-    { location: [19.076, 72.8777], size: 0.1 },
-    { location: [23.8103, 90.4125], size: 0.05 },
-    { location: [30.0444, 31.2357], size: 0.07 },
-    { location: [39.9042, 116.4074], size: 0.08 },
-    { location: [-23.5505, -46.6333], size: 0.1 },
-    { location: [19.4326, -99.1332], size: 0.1 },
-    { location: [40.7128, -74.006], size: 0.1 },
-    { location: [34.6937, 135.5022], size: 0.05 },
-    { location: [41.0082, 28.9784], size: 0.06 },
-  ],
-}
-
-export function Globe({
-  className,
-  config = GLOBE_CONFIG,
-}: {
-  className?: string
-  config?: COBEOptions
-}) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const phiRef = useRef(0)
-  const widthRef = useRef(0)
-  const pointerInteracting = useRef<number | null>(null)
-  const pointerInteractionMovement = useRef(0)
-
-  const r = useMotionValue(0)
-  const rs = useSpring(r, {
-    mass: 1,
-    damping: 30,
-    stiffness: 100,
-  })
-
-  const updatePointerInteraction = (value: number | null) => {
-    pointerInteracting.current = value
-    if (canvasRef.current) {
-      canvasRef.current.style.cursor = value !== null ? "grabbing" : "grab"
-    }
-  }
-
-  const updateMovement = (clientX: number) => {
-    if (pointerInteracting.current !== null) {
-      const delta = clientX - pointerInteracting.current
-      pointerInteractionMovement.current = delta
-      r.set(r.get() + delta / MOVEMENT_DAMPING)
-    }
-  }
 
   useEffect(() => {
-    const onResize = () => {
-      if (canvasRef.current) {
-        widthRef.current = canvasRef.current.offsetWidth
-      }
+    let timer: NodeJS.Timeout;
+
+    if (stage === "orbit") {
+     
+      timer = setTimeout(() => {
+        setStage("merging");
+      }, 1200);
+    } else if (stage === "merging") {
+     
+      timer = setTimeout(() => {
+        setStage("waveform");
+      }, 300);
+    } else if (stage === "waveform") {
+     
+      timer = setTimeout(() => {
+        setStage("orbit");
+      }, 3000);
     }
 
-    window.addEventListener("resize", onResize)
-    onResize()
+    return () => clearTimeout(timer);
+  }, [stage]);
 
-    const globeOptions = {
-      ...config,
-      width: widthRef.current * 2,
-      height: widthRef.current * 2,
-      onRender: (state: { phi: number; width: number; height: number }) => {
-        if (!pointerInteracting.current) phiRef.current += 0.005
-        state.phi = phiRef.current + rs.get()
-        state.width = widthRef.current * 2
-        state.height = widthRef.current * 2
-      },
-    } as unknown as COBEOptions
+  
+  useEffect(() => {
+    if (stage !== "waveform") return;
 
-    const globe = createGlobe(canvasRef.current!, globeOptions)
+    const interval = setInterval(() => {
+      const time = Date.now() * 0.009;
+      const wave = Math.sin(time) * 0.35 + Math.cos(time * 2.8) * 0.25 + 0.45;
+      setAudioVolume(Math.min(Math.max(wave, 0.12), 0.98));
+    }, 40);
 
-    setTimeout(() => (canvasRef.current!.style.opacity = "1"), 0)
-    return () => {
-      globe.destroy()
-      window.removeEventListener("resize", onResize)
-    }
-  }, [rs, config])
+    return () => clearInterval(interval);
+  }, [stage]);
+
+  const orbAngles = [0, 120, 240];
+  const orbitRadius = 100;
 
   return (
-    <div
-      className={cn(
-        "absolute inset-0 mx-auto aspect-square w-full max-w-150",
-        className
+    <div className="relative flex h-auto w-full items-center justify-center overflow-hidden bg-transparent">
+
+     
+      {stage !== "waveform" && (
+        <motion.div
+          className="relative flex w-auto h-auto items-center justify-center"
+          animate={{
+            rotate: stage === "orbit" ? 360 : 720,
+          }}
+          transition={{
+            duration: stage === "orbit" ? 1.2 : 0.3,
+            ease: stage === "orbit" ? "linear" : "easeIn",
+          }}
+        >
+          {orbAngles.map((angle, index) => {
+            const rad = (angle * Math.PI) / 180;
+            const initialX = Math.cos(rad) * orbitRadius;
+            const initialY = Math.sin(rad) * orbitRadius;
+
+            return (
+              <motion.div
+                key={index}
+                className="absolute flex items-center justify-center"
+                initial={{ x: initialX, y: initialY, scale: 1, opacity: 1 }}
+                animate={{
+                  x: stage === "merging" ? 0 : initialX,
+                  y: stage === "merging" ? 0 : initialY,
+                  scale: stage === "merging" ? 0.1 : 1,
+                  opacity: stage === "merging" ? 0.1 : 1,
+                }}
+                transition={{
+                  duration: 0.3,
+                  ease: [0.7, 0, 0.84, 0],
+                }}
+              >
+                <Shdr02
+                  size={85}
+                  state="idle"
+                />
+              </motion.div>
+            );
+          })}
+        </motion.div>
       )}
-    >
-      <canvas
-        className={cn(
-          "size-full opacity-0 transition-opacity duration-500 contain-[layout_paint_size]"
+
+     
+      <AnimatePresence mode="wait">
+        {stage === "waveform" && (
+          <motion.div
+            key="waveform-orb"
+            className="relative flex items-center justify-center"
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 420,
+              damping: 16,
+            }}
+          >
+           
+            <motion.div
+              className="absolute rounded-full border border-indigo-400/40 pointer-events-none"
+              style={{
+                boxShadow: "0 0 25px rgba(99, 102, 241, 0.25)",
+              }}
+              animate={{
+                width: 180 + audioVolume * 150,
+                height: 180 + audioVolume * 150,
+                opacity: [0.3, 0.85, 0.3],
+                borderWidth: `${1 + audioVolume * 3.5}px`,
+              }}
+              transition={{
+                duration: 0.06,
+                ease: "easeOut",
+              }}
+            />
+
+            <motion.div
+              className="absolute rounded-full pointer-events-none"
+              animate={{
+                width: 210 + audioVolume * 210,
+                height: 210 + audioVolume * 210,
+                opacity: [0.15, 0.6, 0.15],
+              }}
+              transition={{
+                duration: 0.1,
+                ease: "easeOut",
+              }}
+            />
+
+           
+            <Shdr02
+              size={410}
+              state={audioVolume > 0.4 ? "speaking" : "thinking"}
+            />
+          </motion.div>
         )}
-        ref={canvasRef}
-        onPointerDown={(e) => {
-          pointerInteracting.current = e.clientX
-          updatePointerInteraction(e.clientX)
-        }}
-        onPointerUp={() => updatePointerInteraction(null)}
-        onPointerOut={() => updatePointerInteraction(null)}
-        onMouseMove={(e) => updateMovement(e.clientX)}
-        onTouchMove={(e) =>
-          e.touches[0] && updateMovement(e.touches[0].clientX)
-        }
-      />
+      </AnimatePresence>
     </div>
-  )
+  );
 }
