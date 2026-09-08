@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Sparkles,
   Volume2,
   Gamepad2,
   Bot,

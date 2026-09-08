@@ -1,4 +1,4 @@
-import { MetadataRoute } from 'next';
+import type { MetadataRoute } from 'next';
 
 // Eğer projects constants'ı varsa import et, yoksa manuel yaz
 

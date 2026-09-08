@@ -3,7 +3,7 @@
 import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
-import { ShaderTone } from "../shaders/glass-shader-card";
+import type { ShaderTone } from "../shaders/glass-shader-card";
 import { Reveal } from "./reval";
 
 
@@ -87,15 +87,15 @@ function VideoFrame({ className }: { className?: string }) {
     if (!el) return;
 
     const src = window.matchMedia("(max-width: 767px)").matches
-      ? "https://res.cloudinary.com/dwdk20m6q/video/upload/v1787512184/229254_medium_qc3ckw.mp4"
-      : "https://res.cloudinary.com/dwdk20m6q/video/upload/v1787512184/229254_medium_qc3ckw.mp4";
+      ? "https://res.cloudinary.com/dwdk20m6q/video/upload/v1788894648/gpu_rcalai.mov"
+      : "https://res.cloudinary.com/dwdk20m6q/video/upload/v1788894648/gpu_rcalai.mov";
 
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
           if (!el.src.endsWith(src)) el.src = src;
           setActive(true);
-          void el.play().catch(() => {});
+          void el.play().catch(() => { });
         } else {
           el.pause();
           setActive(false);

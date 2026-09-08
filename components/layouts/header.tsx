@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,17 +8,14 @@ import { useEffect, useState } from "react";
 
 import { PRODUCT_MENU } from "@/content";
 import { cn } from "@/lib/utils";
-import { Button } from "../ui/button";
 
-// 1. Ana Linkleri Tek Bir Dizide Topla
+import { GlowButton } from "../ui/glow-button";
+
 const NAV_LINKS = [
-  // { label: "Developer", href: "/developer" },
   { label: "Privacy", href: "https://privacy.miransas.com" },
   { label: "Model", href: "/models" },
   { label: "Blog", href: "https://blog.miransas.com" },
-   { label: "News", href: "/news" },
-
-  
+  { label: "News", href: "/news" },
 ];
 
 const EXTERNAL_LINKS = {
@@ -47,148 +44,176 @@ export function SiteHeader() {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [open]);
 
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b border-transparent transition-all duration-200",
-        scrolled ? "bg-bg/80 backdrop-blur-md border-border/40 shadow-[0_1px_0_0_rgb(10_10_10/0.08)]" : "bg-bg",
+        "fixed inset-x-0 top-0 z-50 border-b border-transparent transition-all duration-300",
+        scrolled
+          ? "border-border/40 bg-bg/80 backdrop-blur-xl shadow-md"
+          : "bg-bg/40 backdrop-blur-md",
         open && "bg-bg backdrop-blur-none"
       )}
     >
-      <div className="container-page flex h-[3.75rem] items-center justify-between gap-4">
-        {/* Logo */}
-        <Link href="/" className="shrink-0" aria-label="Home">
-          <img src="/icons/logo.png" alt="Logo" className="w-20" />
-        </Link>
-
-        {/* Desktop Nav */}
-        <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary">
-          {/* Products Dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => setProductsOpen(true)}
-            onMouseLeave={() => setProductsOpen(false)}
+      <div className="container-page flex h-16 md:h-16 items-center justify-between gap-8 px-4 md:px-8">
+        {/* Sol Taraf: Logo ve Navigasyon */}
+        <div className="flex items-center gap-10">
+          <Link 
+            href="/" 
+            className="flex items-center shrink-0 transition-transform active:scale-95 hover:opacity-90" 
+            aria-label="Home"
           >
-            <button
-              type="button"
-              className="inline-flex items-center gap-1 text-[14px] text-fg"
-              aria-expanded={productsOpen}
+            <img 
+              src="/icons/logo.png" 
+              alt="Logo" 
+              className="w-14 object-contain block" 
+            />
+          </Link>
+
+          {/* Masaüstü Navigasyon */}
+          <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
+            {/* Products Dropdown */}
+            <div
+              className="relative"
+              onMouseEnter={() => setProductsOpen(true)}
+              onMouseLeave={() => setProductsOpen(false)}
             >
-              Products
-              <ChevronDown className={cn("size-3.5 text-faint transition-transform duration-200", productsOpen && "rotate-180")} />
-            </button>
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 text-sm md:text-[15px] font-medium text-fg/80 transition-colors hover:text-fg focus-visible:outline-none"
+                aria-expanded={productsOpen}
+              >
+                Products
+                <ChevronDown
+                  className={cn(
+                    "size-4 text-fg/60 transition-transform duration-200",
+                    productsOpen && "rotate-180 text-fg"
+                  )}
+                />
+              </button>
 
-            <AnimatePresence>
-              {productsOpen && (
-                <motion.div
-                  initial={reduce ? false : { opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 6 }}
-                  transition={{ duration: 0.16 }}
-                  className="absolute left-0 top-full pt-3"
-                >
-                  <div className="w-72 rounded-2xl bg-bg p-2 shadow-[0_8px_40px_rgb(10_10_10/0.12)] ring-1 ring-border">
-                    {PRODUCT_MENU.map((item) => (
-                      <Link
-                        key={item.label}
-                        href={item.href}
-                        className="block rounded-xl px-3 py-2.5 transition-colors hover:bg-card"
-                      >
-                        <p className="text-sm font-medium text-stone-200">{item.label}</p>
-                        <p className="text-xs text-stone-400">{item.hint}</p>
-                      </Link>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+              <AnimatePresence>
+                {productsOpen && (
+                  <motion.div
+                    initial={reduce ? false : { opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 6 }}
+                    transition={{ duration: 0.18 }}
+                    className="absolute left-0 top-full pt-3"
+                  >
+                    <div className="w-80 rounded-2xl border border-border/60 bg-bg/95 p-2 shadow-2xl backdrop-blur-2xl">
+                      {PRODUCT_MENU.map((item) => (
+                        <Link
+                          key={item.label}
+                          href={item.href}
+                          className="block rounded-xl px-3.5 py-2.5 transition-colors hover:bg-fg/5"
+                        >
+                          <p className="text-sm font-semibold text-fg">{item.label}</p>
+                          <p className="text-xs text-fg/60 mt-0.5">{item.hint}</p>
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
-          {/* Düz Linkler - Otomatik Render */}
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="text-[14px] text-fg transition-colors hover:text-stone-500"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+            {/* Düz Linkler */}
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm md:text-[15px] font-medium text-fg/80 transition-colors hover:text-fg"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
 
-        {/* Desktop Buttons */}
-        <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-            <a href={EXTERNAL_LINKS.sales} target="_blank" rel="noreferrer">
-              Contact Sales
-            </a>
-          </Button>
-          <Button asChild size="sm" className="hidden sm:inline-flex">
-            <a href={EXTERNAL_LINKS.tryFree} target="_blank" rel="noreferrer">
-              Try for free
-            </a>
-          </Button>
+        {/* Sağ Taraf: Aksiyon Butonları */}
+        <div className="flex items-center gap-3 md:gap-4">
+          <Link
+            href={EXTERNAL_LINKS.sales}
+            className="group hidden items-center gap-2 rounded-full border border-border/70 bg-fg/5 px-4 h-10 text-sm font-medium text-fg transition-all hover:border-border hover:bg-fg/10 sm:inline-flex"
+          >
+            <span>Get in touch</span>
+            <ArrowRight className="size-4 text-fg/70 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-fg" />
+          </Link>
 
+          <GlowButton size="sm" href="/about" color="rose">
+            Get Started
+          </GlowButton>
+
+          {/* Mobil Menü Butonu */}
           <button
             type="button"
-            className="relative flex size-11 items-center justify-center text-fg lg:hidden"
+            className="flex size-10 items-center justify-center rounded-xl text-fg/80 transition-colors hover:bg-fg/5 hover:text-fg lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((val) => !val)}
           >
-            {open ? <X className="size-5" /> : <Menu className="size-5" />}
+            {open ? <X className="size-6" /> : <Menu className="size-6" />}
           </button>
         </div>
       </div>
 
-      {/* Mobile Nav */}
+      {/* Mobil Menü */}
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-x-0 bottom-0 top-[3.75rem] z-40 overflow-y-auto bg-bg lg:hidden"
-            initial={reduce ? false : { opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
+            className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-bg px-6 py-8 lg:hidden"
+            initial={reduce ? false : { opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.2 }}
           >
-            <nav className="container-page flex flex-col gap-1 py-8" aria-label="Mobile">
-              <div className="mb-2">
-                <p className="px-1 py-2 text-sm font-medium text-muted">Products</p>
-                {PRODUCT_MENU.map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="flex min-h-12 flex-col justify-center py-2"
-                    onClick={() => setOpen(false)}
-                  >
-                    <span className="text-xl font-medium tracking-tight">{item.label}</span>
-                    <span className="text-sm text-muted">{item.hint}</span>
-                  </Link>
-                ))}
+            <nav className="flex flex-col gap-8" aria-label="Mobile">
+              <div>
+                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-fg/50">
+                  Products
+                </p>
+                <div className="flex flex-col gap-2">
+                  {PRODUCT_MENU.map((item) => (
+                    <Link
+                      key={item.label}
+                      href={item.href}
+                      className="rounded-xl p-2.5 transition-colors hover:bg-fg/5"
+                      onClick={() => setOpen(false)}
+                    >
+                      <span className="block text-lg font-medium text-fg">{item.label}</span>
+                      <span className="block text-sm text-fg/60 mt-0.5">{item.hint}</span>
+                    </Link>
+                  ))}
+                </div>
               </div>
 
-              {/* Düz Linkler - Mobil Otomatik Render */}
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="flex min-h-12 items-center text-xl font-medium"
-                  onClick={() => setOpen(false)}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              <div>
+                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-fg/50">
+                  Navigation
+                </p>
+                <div className="flex flex-col gap-1">
+                  {NAV_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="rounded-xl px-2.5 py-2.5 text-lg font-medium text-fg transition-colors hover:bg-fg/5"
+                      onClick={() => setOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
-              <a
-                href={EXTERNAL_LINKS.tryFree}
-                target="_blank"
-                rel="noreferrer"
-                className="mt-6 inline-flex h-11 items-center justify-center rounded-full bg-accent text-sm font-medium text-accent-fg"
-              >
-                Try for free
-              </a>
+              <div className="pt-6 border-t border-border/40 flex flex-col gap-3">
+                <GlowButton href={EXTERNAL_LINKS.tryFree} color="rose" size="lg" className="w-full">
+                  Get Started
+                </GlowButton>
+              </div>
             </nav>
           </motion.div>
         )}

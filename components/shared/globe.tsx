@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { Shdr02 } from "../ui/shdr-02";
+import Shdr02 from "../ui/shdr-02";
 
 
 export default function ContinuousOrbLoop() {
@@ -14,17 +14,17 @@ export default function ContinuousOrbLoop() {
     let timer: NodeJS.Timeout;
 
     if (stage === "orbit") {
-     
+
       timer = setTimeout(() => {
         setStage("merging");
       }, 1200);
     } else if (stage === "merging") {
-     
+
       timer = setTimeout(() => {
         setStage("waveform");
       }, 300);
     } else if (stage === "waveform") {
-     
+
       timer = setTimeout(() => {
         setStage("orbit");
       }, 3000);
@@ -33,7 +33,7 @@ export default function ContinuousOrbLoop() {
     return () => clearTimeout(timer);
   }, [stage]);
 
-  
+
   useEffect(() => {
     if (stage !== "waveform") return;
 
@@ -52,7 +52,7 @@ export default function ContinuousOrbLoop() {
   return (
     <div className="relative flex h-auto w-full items-center justify-center overflow-hidden bg-transparent">
 
-     
+
       {stage !== "waveform" && (
         <motion.div
           className="relative flex w-auto h-auto items-center justify-center"
@@ -95,7 +95,7 @@ export default function ContinuousOrbLoop() {
         </motion.div>
       )}
 
-     
+
       <AnimatePresence mode="wait">
         {stage === "waveform" && (
           <motion.div
@@ -110,7 +110,7 @@ export default function ContinuousOrbLoop() {
               damping: 16,
             }}
           >
-           
+
             <motion.div
               className="absolute rounded-full border border-indigo-400/40 pointer-events-none"
               style={{
@@ -141,7 +141,7 @@ export default function ContinuousOrbLoop() {
               }}
             />
 
-           
+
             <Shdr02
               size={410}
               state={audioVolume > 0.4 ? "speaking" : "thinking"}

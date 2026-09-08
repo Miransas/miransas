@@ -7,7 +7,7 @@ import AILoader from "../smoothui/ai-loader";
 
 
 import { useState, useEffect, useRef } from "react";
-import { ChevronDown, Check, Volume2, Play, Pause, Download, Waves, AudioLines } from "lucide-react";
+import { ChevronDown, Check, Play, Pause, Download, AudioLines } from "lucide-react";
 
 
 const THINKING_STEPS = [
@@ -164,9 +164,8 @@ export default function LiveVoiceStream() {
               </div>
 
               <ChevronDown
-                className={`size-3.5 text-zinc-500 transition-transform duration-300 ${
-                  isThoughtOpen ? "rotate-180" : ""
-                }`}
+                className={`size-3.5 text-zinc-500 transition-transform duration-300 ${isThoughtOpen ? "rotate-180" : ""
+                  }`}
               />
             </button>
 
@@ -181,7 +180,7 @@ export default function LiveVoiceStream() {
           {speechText && (
             <div className="flex flex-col items-start space-y-2 pt-2">
               <div className="flex items-center gap-1.5 text-[10px] font-mono text-stone-200">
-                <AudioLines className="animate-"  size={"22"}/>
+                <AudioLines className="animate-" size={"22"} />
                 {/* <Volume2 className="size-3.5 animate-pulse" /> */}
                 <span>MIRALAS AUDIO STREAM</span>
               </div>
@@ -206,9 +205,8 @@ export default function LiveVoiceStream() {
                         return (
                           <span
                             key={index}
-                            className={`w-[2px] rounded-full transition-colors duration-200 ${
-                              isPlayed ? "bg-zinc-200" : "bg-zinc-700/60"
-                            }`}
+                            className={`w-[2px] rounded-full transition-colors duration-200 ${isPlayed ? "bg-zinc-200" : "bg-zinc-700/60"
+                              }`}
                             style={{ height: `${Math.max(15, heightPercent)}%` }}
                           />
                         );

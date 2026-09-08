@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
 import { SmoothScroll } from "../components/provider/smooth-scroll";
@@ -157,11 +157,11 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${sans.variable} ${mono.variable} font-sans antialiased bg-black text-white selection:bg-lime-800 selection:text-stone-200`}
+        className={`${sans.variable} ${mono.variable} font-sans antialiased bg-black text-white selection:bg-rose-500 selection:text-stone-200`}
       >
         <SmoothScroll>
           <div className="relative flex min-h-screen flex-col">
-            <main className="flex-grow"><SiteHeader/>{children}<SiteFooter /></main>
+            <main className="flex-grow"><SiteHeader />{children}<SiteFooter /></main>
           </div>
         </SmoothScroll>
       </body>

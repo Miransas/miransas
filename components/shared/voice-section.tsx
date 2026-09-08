@@ -2,10 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { Check, Network, Cpu, Sparkles, Mic2, Zap, Waves } from "lucide-react";
-import GridReveal from "./globe";
+import { Check, Mic2, Zap, Waves } from "lucide-react";
+import ContinuousOrbLoop from "./globe";
 
-import VoiceDemo from "./voice-demo";
+import LiveVoiceStream from "./voice-demo";
 import Shdr02 from "../ui/shdr-02";
 
 const VOICE_STEPS = [
@@ -134,7 +134,7 @@ function DynamicComponentSlot({ activeIndex }: { activeIndex: number }) {
         {/* ======================================================
           BURAYA SİZİN KENDİ BİLEŞENLERİNİZ IMPORT EDİLİP GELECEK: */}
 
-        {activeIndex === 0 && <GridReveal/>}
+        {activeIndex === 0 && <ContinuousOrbLoop />}
 
         {activeIndex === 1 && <Shdr02
           size={480}
@@ -159,7 +159,7 @@ function DynamicComponentSlot({ activeIndex }: { activeIndex: number }) {
           ariaLabel="Assistant status"
         />}
 
-        {activeIndex === 2 && <VoiceDemo />}
+        {activeIndex === 2 && <LiveVoiceStream />}
 
 
         {/* <div className="px-3 py-1 rounded-full border border-stone-800 bg-stone-900 text-stone-300 text-xs font-mono">

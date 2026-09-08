@@ -4,10 +4,11 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { ProductMock } from "./product-mock";
 import { ShaderAnimation } from "../shaders/shader";
+import { GlowButton } from "../ui/glow-button";
 
 export function HeroScroll() {
   const ref = useRef<HTMLElement>(null);
-  
+
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
@@ -18,7 +19,7 @@ export function HeroScroll() {
   const frameY = useTransform(scrollYProgress, [0, 0.7], [40, -80]);
   const frameScale = useTransform(scrollYProgress, [0, 0.7], [0.94, 1.04]);
   const bgY = useTransform(scrollYProgress, [0, 1], [0, 160]);
-  
+
   // YENİ EKLENEN: Shader için bekleme ve yukarı gitme ayarı
   // [0.2, 0.8] -> Sayfanın %20'si kayana kadar bekle, sonra %80'e kadar animasyonu oynat.
   // [0, -120] -> Önce 0'da dur (bekle), sonra kart gibi yukarı doğru (-120) kay.
@@ -27,18 +28,18 @@ export function HeroScroll() {
   return (
     <section ref={ref} className="relative h-[180vh]">
       <div className="sticky top-0 flex h-screen flex-col overflow-hidden">
-        
+
         {/* SHADER KATMANI: Artık shaderY kullanıyor (Bekler ve yukarı çıkar) */}
-        <motion.div 
-          style={{ y: shaderY }} 
+        <motion.div
+          style={{ y: shaderY }}
           className="absolute inset-0 pointer-events-none z-0"
         >
           <ShaderAnimation />
         </motion.div>
 
         {/* GÖRSEL KATMANI (Hero arka plan) */}
-        <motion.div 
-          style={{ y: bgY }} 
+        <motion.div
+          style={{ y: bgY }}
           className="absolute inset-0 -top-24 pointer-events-none z-0"
         >
           <div
@@ -81,15 +82,11 @@ export function HeroScroll() {
             Fora gives creators, educators, and coaches a fully branded space
             with courses, events, discussions, and members.
           </motion.p>
-          <motion.a
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.7 }}
-            href="#pricing"
-            className="mt-8 rounded-full bg-[#efe8e2] px-6 py-2.5 text-[14px] font-medium text-black transition-transform hover:scale-[1.03] cursor-pointer pointer-events-auto"
-          >
-            Get started free
-          </motion.a>
+          <div className="pt-4">
+            <GlowButton href="/about" color="rose">
+            Get Started
+          </GlowButton>
+          </div>
         </motion.div>
 
         {/* MOCKUP / KART */}

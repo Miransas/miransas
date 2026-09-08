@@ -8,12 +8,12 @@ const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
    ANIMATION VARIANTS (scroll animasyonları)
 ───────────────────────────────────────────────────────────── */
 
-const headerStagger: Variants = {
+const headerStagger = {
   hidden: {},
   show: { transition: { staggerChildren: 0.12 } },
 };
 
-const fadeUp: Variants = {
+const fadeUp = {
   hidden: { opacity: 0, y: 28, filter: "blur(6px)" },
   show: {
     opacity: 1,
@@ -23,7 +23,7 @@ const fadeUp: Variants = {
   },
 };
 
-const card: Variants = {
+const card = {
   hidden: { opacity: 0, y: 48, filter: "blur(8px)" },
   show: {
     opacity: 1,
@@ -33,17 +33,17 @@ const card: Variants = {
   },
 };
 
-const textStagger: Variants = {
+const textStagger = {
   hidden: {},
   show: { transition: { staggerChildren: 0.09, delayChildren: 0.2 } },
 };
 
-const inner: Variants = {
+const inner = {
   hidden: { opacity: 0, y: 20 },
   show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: EASE } },
 };
 
-const visual: Variants = {
+const visual = {
   hidden: { opacity: 0, y: 24, scale: 0.96 },
   show: {
     opacity: 1,
@@ -63,21 +63,21 @@ const items = [
     title: "Agents that answer like your best employee.",
     body: "Real-time voice assistants that pick up in milliseconds, understand context and resolve calls end-to-end. Deploy them on support, sales or ops — 24/7, in every language you serve.",
     aside: "Every call answered. Every time.",
-    visual: "agents" as const,
+    visual: "agents",
   },
   {
     tag: "Studio TTS",
     title: "Our own voices. All the way to Uzbek.",
     body: "We don't rent speech — we train it. Miransas builds its own TTS and voice models in-house, including a native Uzbek model, so your agents sound human everywhere and latency stays under our control.",
     aside: "Speech synthesis, owned end-to-end.",
-    visual: "tts" as const,
+    visual: "tts",
   },
   {
-    tag: "Research Lab",
-    title: "Today voice. Tomorrow, the board.",
-    body: "The same real-time inference stack that powers our agents powers our experiments — chess engines, new architectures, stranger ideas. What we learn on the board comes back to your calls.",
-    aside: "One infrastructure, many intelligences.",
-    visual: "lab" as const,
+    tag: "Voice Clone",
+    title: "Replicate any voice in seconds.",
+    body: "Zero-shot voice cloning with absolute high fidelity. Capture emotions, breathing, and personal accents from just a 3-second audio sample. Built for scale, secured by design.",
+    aside: "Identity preserved. Emotion intact.",
+    visual: "clone",
   },
 ];
 
@@ -85,7 +85,7 @@ const items = [
    MOCK VISUALS
 ───────────────────────────────────────────────────────────── */
 
-function Waveform({ bars = 28 }: { bars?: number }) {
+function Waveform({ bars = 28, color = "bg-[#17c9b6]/80" }: { bars?: number, color?: string }) {
   const reduce = useReducedMotion();
   return (
     <div className="flex h-9 items-center gap-[3px]" aria-hidden="true">
@@ -95,13 +95,13 @@ function Waveform({ bars = 28 }: { bars?: number }) {
           <span
             key={i}
             style={{ height: `${h}%` }}
-            className="w-[3px] rounded-full bg-[#17c9b6]/80"
+            className={`w-[3px] rounded-full ${color}`}
           />
         ) : (
           <motion.span
             key={i}
             style={{ height: `${h}%` }}
-            className="w-[3px] rounded-full bg-[#17c9b6]/80"
+            className={`w-[3px] rounded-full ${color}`}
             animate={{ scaleY: [0.35, 1, 0.5, 0.9, 0.35] }}
             transition={{
               duration: 1.4,
@@ -195,69 +195,59 @@ function TtsMock() {
   );
 }
 
-const BOARD = [
-  "r.bqkb.r",
-  "ppp..ppp",
-  "....pn..",
-  "...p....",
-  "...P....",
-  "..N..N..",
-  "PPP..PPP",
-  "R.BQKB.R",
-];
-
-const GLYPH: Record<string, string> = {
-  K: "♔", Q: "♕", R: "♖", B: "♗", N: "♘", P: "♙",
-  k: "♚", q: "♛", r: "♜", b: "♝", n: "♞", p: "♟",
-};
-
-function ChessMock() {
+function VoiceCloneMock() {
   return (
-    <div className="flex h-full min-h-[280px] gap-5 overflow-hidden rounded-[20px] border border-white/10 bg-black p-5">
-      {/* Board */}
-      <div className="grid h-full aspect-square grid-cols-8 overflow-hidden rounded-lg border border-white/10">
-        {BOARD.flatMap((row, r) =>
-          row.split("").map((cell, c) => (
-            <div
-              key={`${r}-${c}`}
-              className={`flex items-center justify-center text-sm md:text-base ${
-                (r + c) % 2 === 0 ? "bg-white/[0.05]" : "bg-white/[0.12]"
-              }`}
-            >
-              {GLYPH[cell] ? (
-                <span
-                  className={
-                    cell === cell.toUpperCase()
-                      ? "text-white/90"
-                      : "text-white/25"
-                  }
-                >
-                  {GLYPH[cell]}
-                </span>
-              ) : null}
-            </div>
-          ))
-        )}
+    <div className="flex h-full min-h-[280px] flex-col overflow-hidden rounded-[20px] border border-white/10 bg-[#070908] p-5">
+      <div className="flex items-center justify-between text-[11px] text-white/50">
+        <span>Zero-Shot Engine</span>
+        <span className="flex items-center gap-1.5 text-[#17c9b6]">
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#17c9b6]" />
+          Engine Ready
+        </span>
       </div>
 
-      {/* Engine panel */}
-      <div className="flex flex-1 flex-col text-[11px] text-white/50">
-        <span className="text-white/70">miransas-chess-0.1</span>
-        <div className="mt-3 space-y-1.5 tabular-nums">
-          <p>depth <span className="text-white/80">26</span></p>
-          <p>nodes <span className="text-white/80">1.4M n/s</span></p>
-          <p>eval <span className="text-[#17c9b6]">+1.8</span></p>
+      <div className="mt-6 flex flex-col gap-4">
+        {/* Source Audio Card */}
+        <div className="rounded-xl border border-white/5 bg-white/[0.03] p-3 transition-colors hover:bg-white/[0.05]">
+          <div className="mb-3 flex items-center justify-between text-[10.5px] text-white/40">
+            <span>Reference Audio (3.2s)</span>
+            <span>speaker_01.wav</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10 text-[10px] text-white/70">
+              ▶
+            </button>
+            <div className="flex-1 opacity-40">
+              <Waveform bars={14} color="bg-white/80" />
+            </div>
+          </div>
         </div>
-        <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/10">
-          <motion.div
-            className="h-full bg-white/80"
-            initial={{ width: "50%" }}
-            whileInView={{ width: "64%" }}
-            viewport={{ once: true }}
-            transition={{ duration: 1.2, ease: EASE }}
-          />
+
+        {/* Processing Indicator */}
+        <div className="relative flex justify-center py-1">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-white/[0.04]"></div>
+          </div>
+          <div className="relative bg-[#070908] px-3 text-[10px] text-white/30">
+            generating clone
+          </div>
         </div>
-        <p className="mt-auto animate-pulse text-white/35">searching…</p>
+
+        {/* Generated Output Card */}
+        <div className="rounded-xl border border-[#17c9b6]/20 bg-[#17c9b6]/[0.04] p-3 shadow-[0_0_15px_rgba(23,201,182,0.05)]">
+          <div className="mb-3 flex items-center justify-between text-[10.5px] text-[#17c9b6]/70">
+            <span>Synthesized Output</span>
+            <span>Similarity: 99.2%</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <button className="flex h-7 w-7 items-center justify-center rounded-full bg-[#17c9b6]/20 text-[10px] text-[#17c9b6]">
+              ▶
+            </button>
+            <div className="flex-1">
+              <Waveform bars={14} color="bg-[#17c9b6]" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -273,8 +263,6 @@ export function Bento() {
       id="features"
       className="relative overflow-hidden bg-[#050505] px-6 pb-28 pt-24"
     >
-
-
       <div className="relative mx-auto max-w-6xl">
         {/* Header */}
         <motion.div
@@ -300,7 +288,7 @@ export function Bento() {
             className="mt-5 max-w-xl text-[15px] leading-7 text-white/60"
           >
             Miransas builds real-time voice agents for companies that talk to
-            their customers — plus the TTS models, infrastructure and research
+            their customers — plus the TTS models, infrastructure and voice cloning tech
             that make them feel human.
           </motion.p>
         </motion.div>
@@ -361,7 +349,7 @@ export function Bento() {
                 ) : item.visual === "tts" ? (
                   <TtsMock />
                 ) : (
-                  <ChessMock />
+                  <VoiceCloneMock />
                 )}
               </motion.div>
             </motion.div>

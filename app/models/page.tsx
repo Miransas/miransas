@@ -19,10 +19,6 @@ import {
   TrendingUp,
   Volume2,
   Languages,
-  BrainCircuit,
-  Target,
-  Award,
-  ArrowUpRight,
 } from "lucide-react";
 import { useEffect, useState, useRef, type ReactNode } from "react";
 import useSWR from "swr";
@@ -644,7 +640,7 @@ export default function ModelsPage() {
           2026 Benchmarks Updated
         </div>
         <h1 className="text-4xl font-extrabold tracking-tight text-stone-300 sm:text-5xl">
-         Miralas Voice{" "}
+          Miralas Voice{" "}
           <span className="text-stone-300">
             Model Arena
           </span>
@@ -762,7 +758,7 @@ export default function ModelsPage() {
                 audioSrc="/audio/arena/grok-voice.wav"
                 transcriptText="Use a licensed/public xAI sample here. Do not ship scraped or copyrighted audio files."
               />
-            </div>   
+            </div>
           </section>
 
           {/* 3. CHATTERBOX V3 DETAILS */}
@@ -988,8 +984,8 @@ export default function ModelsPage() {
                     lang.stage === "early"
                       ? "border-amber-500/30 bg-amber-500/5"
                       : lang.stage === "mid"
-                      ? "border-blue-500/30 bg-blue-500/5"
-                      : "border-emerald-500/30 bg-emerald-500/5"
+                        ? "border-blue-500/30 bg-blue-500/5"
+                        : "border-emerald-500/30 bg-emerald-500/5"
                   )}
                 >
                   <div>
@@ -1000,8 +996,8 @@ export default function ModelsPage() {
                         lang.stage === "early"
                           ? "bg-amber-500/10 text-amber-600"
                           : lang.stage === "mid"
-                          ? "bg-blue-500/10 text-blue-600"
-                          : "bg-emerald-500/10 text-emerald-600"
+                            ? "bg-blue-500/10 text-blue-600"
+                            : "bg-emerald-500/10 text-emerald-600"
                       )}>
                         {lang.eta}
                       </span>
@@ -1025,8 +1021,8 @@ export default function ModelsPage() {
                           lang.stage === "early"
                             ? "bg-amber-500"
                             : lang.stage === "mid"
-                            ? "bg-blue-500"
-                            : "bg-emerald-500"
+                              ? "bg-blue-500"
+                              : "bg-emerald-500"
                         )}
                       />
                     </div>
@@ -1089,6 +1085,6 @@ export default function ModelsPage() {
         </aside>
       </div>
     </div>
-  
+
   );
 }

@@ -2,29 +2,21 @@
 
 import { AnimatePresence, motion } from "motion/react";
 import {
-  Activity,
   ArrowRight,
   BarChart3,
   BookOpen,
-  Calendar,
   CheckCircle2,
-  Clock,
   Cpu,
   Globe2,
   Megaphone,
   Mic,
   Pause,
   Play,
-  RefreshCw,
   Sparkles,
-  Timer,
   Volume2,
-  Zap,
   Languages,
-  AudioWaveform,
   ChevronDown,
 } from "lucide-react";
-import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 
 import { cn } from "@/lib/utils";
