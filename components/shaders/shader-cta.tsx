@@ -1,6 +1,10 @@
+"use client";
 import { ClientOnly } from "@tanstack/react-router";
 import { GrainGradient } from "@paper-design/shaders-react";
 import { ArrowRight } from "lucide-react";
+
+import LiquidChrome from "../LiquidChrome";
+import { GlowButton } from "../ui/glow-button";
 
 export function ShaderCTA() {
   return (
@@ -8,20 +12,14 @@ export function ShaderCTA() {
       <div className="mx-auto max-w-6xl px-6">
         <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border md:aspect-[16/7]">
           <div className="absolute inset-0">
-            <ClientOnly
-              fallback={<div className="size-full bg-[#04070d]" aria-hidden />}
-            >
-              <GrainGradient
-                style={{ width: "100%", height: "100%" }}
-                colors={["#7cbde3", "#a9d6ef", "#1b4c6b", "#0a0f16"]}
-                colorBack="#000000"
-                softness={0.85}
-                intensity={0.35}
-                noise={0.55}
-                shape="corners"
-                speed={0.6}
+            <div style={{ width: '100%', height: '1250px', position: 'absolute' }}>
+              <LiquidChrome
+                baseColor={[0.1, 0.1, 0.1]}
+                speed={0.3}
+                amplitude={0.3}
+                interactive
               />
-            </ClientOnly>
+            </div>
           </div>
 
           <div
@@ -37,13 +35,12 @@ export function ShaderCTA() {
             <p className="mt-6 max-w-md text-pretty text-sm text-white/90 [text-shadow:0_1px_12px_rgba(0,0,0,0.8)]">
               Build, send and observe — the infrastructure gets out of your way.
             </p>
-            <a
-              href="#start"
-              className="mt-8 inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-white/25 bg-white/10 px-5 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/20"
-            >
-              Start building
-              <ArrowRight className="size-4" />
-            </a>
+            <div className="mt-8 flex gap-4">
+              <GlowButton >
+                Start building
+
+              </GlowButton>
+            </div>
           </div>
         </div>
       </div>

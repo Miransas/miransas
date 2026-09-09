@@ -17,6 +17,7 @@ import {
   LifeBuoy
 } from "lucide-react";
 
+
 // FAQ Data
 const FAQS = [
   {
@@ -61,9 +62,27 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070707] text-white selection:bg-rose-500/30 selection:text-rose-200 py-16 px-4 sm:px-6 lg:px-8 font-sans">
+    <div className="min-h-screen bg-black text-white  py-16 px-4 sm:px-6 lg:px-8 ">
+      {/* <div style={{ width: '100%', height: '1250px', position: 'absolute' }}>
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#f2ecec"
+          raysSpeed={1.3}
+          lightSpread={0.8}
+          rayLength={3}
+          followMouse={true}
+          mouseInfluence={0.1}
+          noiseAmount={0}
+          distortion={0.1}
+          className="custom-rays"
+          pulsating={false}
+          fadeDistance={1.8}
+          saturation={1}
+        />
+      </div> */}
+
       <div className="max-w-6xl mx-auto space-y-16">
-        
+
         {/* Header Section */}
         <div className="text-center space-y-4 max-w-3xl mx-auto">
           <motion.div
@@ -94,7 +113,7 @@ export default function ContactPage() {
 
         {/* Top Highlight Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
+
           {/* Status / Quick Contact */}
           <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 backdrop-blur-xl flex flex-col justify-between hover:border-white/20 transition-all">
             <div className="space-y-3">
@@ -113,11 +132,10 @@ export default function ContactPage() {
           </div>
 
           {/* Bug & Problem Card (Interactive) */}
-          <div className={`border rounded-2xl p-6 backdrop-blur-xl flex flex-col justify-between transition-all relative overflow-hidden ${
-            bugReportActive 
-              ? "bg-rose-950/20 border-rose-500/50 shadow-[0_0_30px_rgba(244,63,94,0.15)]" 
+          <div className={`border rounded-2xl p-6 backdrop-blur-xl flex flex-col justify-between transition-all relative overflow-hidden ${bugReportActive
+              ? "bg-rose-950/20 border-rose-500/50 shadow-[0_0_30px_rgba(244,63,94,0.15)]"
               : "bg-white/[0.03] border-white/10 hover:border-rose-500/40"
-          }`}>
+            }`}>
             <div className="space-y-3">
               <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
                 <Bug className="w-5 h-5" />
@@ -169,7 +187,7 @@ export default function ContactPage() {
 
         {/* Main Content: Contact Form & FAQ Split */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-          
+
           {/* Form Column */}
           <div className="lg:col-span-7 bg-[#0d0d0d] border border-white/10 rounded-3xl p-6 sm:p-8 relative shadow-2xl">
             <div className="flex items-center gap-3 mb-6 pb-6 border-b border-white/5">
@@ -312,9 +330,8 @@ export default function ContactPage() {
                         {faq.question}
                       </span>
                       <ChevronDown
-                        className={`w-4 h-4 text-white/50 shrink-0 transition-transform duration-300 ${
-                          isOpen ? "rotate-180 text-rose-400" : ""
-                        }`}
+                        className={`w-4 h-4 text-white/50 shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180 text-rose-400" : ""
+                          }`}
                       />
                     </button>
 

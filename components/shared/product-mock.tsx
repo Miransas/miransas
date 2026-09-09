@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Mic, Send, Paperclip, Sparkles, MoreHorizontal, Pause, Volume2, Radio } from "lucide-react";
+import SideRays from "../SideRays";
 
 // Canlı Ekualayzır / Frekans Barları
 function Equalizer({ barCount = 28 }: { barCount?: number }) {
@@ -16,7 +17,7 @@ function Equalizer({ barCount = 28 }: { barCount?: number }) {
         return (
           <motion.span
             key={i}
-            className="w-1 rounded-full bg-gradient-to-t from-rose-500 to-pink-300"
+            className="w-1 rounded-full bg-gradient-to-t from-rose-500 to-pink-500"
             animate={{
               height: [`${baseMin}%`, `${baseMax}%`, `${baseMin}%`],
             }}
@@ -36,6 +37,21 @@ function Equalizer({ barCount = 28 }: { barCount?: number }) {
 export function ProductMock() {
   return (
     <div className="flex w-full max-w-3xl flex-col items-center mx-auto mt-12 mb-24">
+        <div style={{ width: '768px', height: 'h-auto', position: 'absolute', borderRadius: '24px', overflow: 'hidden' }}>
+        <SideRays
+          speed={2.8}
+          rayColor1="#EAB308"
+          rayColor2="#96c8ff"
+          intensity={3}
+          spread={2.4}
+          origin="top-left"
+          tilt={7}
+          saturation={2}
+          blend={0.75}
+          falloff={1.6}
+          opacity={1}
+        />
+      </div>
       {/* Ana Kapsayıcı: Glassmorphism Pencere */}
       <div className="w-full rounded-[2rem] border border-white/10  backdrop-blur-2xl shadow-[0_0_80px_rgba(244,63,94,0.12)] overflow-hidden flex flex-col relative z-20">
 

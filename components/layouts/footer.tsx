@@ -289,6 +289,21 @@ export function SiteFooter() {
           opacity={1}
         />
       </div>
+        <div style={{ width: '100%', height: '100%', position: 'absolute' }}>
+        <SideRays
+          speed={2.8}
+          rayColor1="#EAB308"
+          rayColor2="#96c8ff"
+          intensity={3}
+          spread={2.4}
+          origin="top-left"
+          tilt={7}
+          saturation={2}
+          blend={0.75}
+          falloff={1.6}
+          opacity={1}
+        />
+      </div>
       <div className="relative z-10 mx-auto max-w-7xl px-6 pt-16 pb-12 md:px-10 md:pt-20 lg:px-12">
         <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-20">
 
@@ -394,7 +409,7 @@ export function SiteFooter() {
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
 
             <p>© 2023–{currentYear} Miransas Inc. All rights reserved.</p>
-            <p>© 2023–{currentYear} Miransas Inc. All rights reserved.</p>
+           
 
             {/* Araya küçük bir nokta koyarak canlı saati ekliyoruz */}
             <span className="hidden md:block w-1 h-1 rounded-full bg-stone-600"></span>
