@@ -22,34 +22,30 @@ import { useEffect, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { FaRadio } from "react-icons/fa6";
 
-// ─────────────────────────────────────────────────────────────
-// GÜNCEL VERİLER & KATEGORİLER (2026)
-// ─────────────────────────────────────────────────────────────
-
 const NAV_ITEMS = [
   { id: "featured", label: "Featured Update" },
   { id: "all-posts", label: "Latest Updates" },
   { id: "voices", label: "Voice Samples" },
-  { id: "performance", label: "Model Capabilities" },
-  { id: "roadmap", label: "Languages" },
+  { id: "performance", label: "Model Yetenekleri" },
+  { id: "roadmap", label: "Diller" },
 ];
 
 const BLOG_POSTS = [
   {
     id: "post-1",
-    category: "Voice Network",
-    date: "September 01, 2026",
-    readTime: "3 min read",
-    title: "Miralas Voice Network Is Expanding",
+    category: "Ses Ekibi",
+    date: "September 09, 2026",
+    readTime: "3 dk okuma",
+    title: "A New Chapter for the Miralas Voice Team",
     excerpt:
-      "Our Uzbek voice program is moving forward with new speakers and a broader multilingual evaluation set. The next phase is focused on native-language quality, consistency and real-world speech.",
+      "Our voice program continues with Guliruhsar now leading recordings, with Malika set to join the team soon.",
     featured: true,
   },
   {
     id: "post-2",
     category: "Research",
     date: "August 31, 2026",
-    readTime: "5 min read",
+    readTime: "5 dk okuma",
     title: "Why Uzbek Is a First-Class Training Track for Miralas",
     excerpt:
       "Instead of treating Uzbek as a translation afterthought, Miralas is building language-specific data, phoneme coverage and evaluation around native speech.",
@@ -59,7 +55,7 @@ const BLOG_POSTS = [
     id: "post-3",
     category: "Multilingual",
     date: "August 28, 2026",
-    readTime: "4 min read",
+    readTime: "4 dk okuma",
     title: "Adding More Global Languages to the Evaluation Lab",
     excerpt:
       "English, Spanish, Chinese, Hindi, Arabic, Japanese, Korean, French, German, Portuguese, Turkish and Russian are now part of the broader comparison set.",
@@ -67,10 +63,10 @@ const BLOG_POSTS = [
   },
   {
     id: "post-4",
-    category: "Models",
+    category: "Modeller",
     date: "August 25, 2026",
-    readTime: "6 min read",
-    title: "Miralas vs. the New Generation of Voice AI",
+    readTime: "6 dk okuma",
+    title: "Miralas ve Yeni Nesil Sesli Yapay Zeka",
     excerpt:
       "We are comparing Miralas with GPT-Realtime, Gemini Live, Grok Voice and the Chatterbox baseline using transparent capability categories rather than invented leaderboard numbers.",
     featured: false,
@@ -79,66 +75,11 @@ const BLOG_POSTS = [
     id: "post-5",
     category: "Engineering",
     date: "August 22, 2026",
-    readTime: "7 min read",
+    readTime: "7 dk okuma",
     title: "Inside the Miralas Training Pipeline",
     excerpt:
       "From clean speech data and speaker embeddings to evaluation and inference, this is the direction behind our next voice models.",
     featured: false,
-  },
-];
-
-const LANGUAGE_SET = [
-  { name: "English", code: "en", flag: "🇬🇧", status: "Baseline", tone: "blue" },
-  { name: "Spanish", code: "es", flag: "🇪🇸", status: "Baseline", tone: "rose" },
-  { name: "Chinese", code: "zh", flag: "🇨🇳", status: "Baseline", tone: "amber" },
-  { name: "Hindi", code: "hi", flag: "🇮🇳", status: "Baseline", tone: "emerald" },
-  { name: "Arabic", code: "ar", flag: "🇸🇦", status: "Baseline", tone: "indigo" },
-  { name: "Japanese", code: "ja", flag: "🇯🇵", status: "Baseline", tone: "purple" },
-  { name: "Korean", code: "ko", flag: "🇰🇷", status: "Baseline", tone: "blue" },
-  { name: "French", code: "fr", flag: "🇫🇷", status: "Baseline", tone: "rose" },
-  { name: "German", code: "de", flag: "🇩🇪", status: "Baseline", tone: "amber" },
-  { name: "Portuguese", code: "pt", flag: "🇵🇹", status: "Baseline", tone: "emerald" },
-  { name: "Turkish", code: "tr", flag: "🇹🇷", status: "Baseline", tone: "indigo" },
-  { name: "Russian", code: "ru", flag: "🇷🇺", status: "Baseline", tone: "purple" },
-  { name: "Uzbek", code: "uz", flag: "🇺🇿", status: "Miralas native training", tone: "amber" },
-];
-
-const MODEL_CAPABILITIES = [
-  {
-    name: "Miralas",
-    provider: "Miralas / Chatterbox Multilingual V3",
-    badge: "Miralas",
-    color: "bg-blue-500",
-    audio: "/audio/arena/miralas.wav",
-    description: "Open multilingual baseline with Miralas-specific training and evaluation.",
-    capabilities: ["Voice cloning", "Multilingual TTS", "Custom training", "Uzbek research"],
-  },
-  {
-    name: "GPT-Realtime",
-    provider: "OpenAI",
-    badge: "OpenAI",
-    color: "bg-emerald-500",
-    audio: "/audio/arena/gpt-realtime.wav",
-    description: "Realtime text/audio model for conversational voice applications.",
-    capabilities: ["Realtime audio", "Audio input/output", "WebRTC", "WebSocket / SIP"],
-  },
-  {
-    name: "Gemini 3.1 Flash Live",
-    provider: "Google",
-    badge: "Google",
-    color: "bg-purple-500",
-    audio: "/audio/arena/gemini-3.1-live.wav",
-    description: "Google's realtime audio model for natural dialogue through the Live API.",
-    capabilities: ["Realtime dialogue", "Audio input/output", "Live API", "Multimodal"],
-  },
-  {
-    name: "Grok Voice",
-    provider: "xAI",
-    badge: "xAI",
-    color: "bg-rose-500",
-    audio: "/audio/arena/grok-voice.wav",
-    description: "xAI voice capability included as an external comparison reference.",
-    capabilities: ["Voice", "Realtime", "Conversational AI", "External reference"],
   },
 ];
 
@@ -250,139 +191,6 @@ function Waveform({
   );
 }
 
-function AudioSample({
-  modelName,
-  provider,
-  colorClass,
-  audioSrc,
-  duration = "0:12",
-  transcript,
-}: {
-  modelName: string;
-  provider: string;
-  colorClass: string;
-  audioSrc: string;
-  duration?: string;
-  transcript: string;
-}) {
-  const audioRef = useRef<HTMLAudioElement>(null);
-  const [playing, setPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const onTime = () => {
-      setProgress(audio.duration ? (audio.currentTime / audio.duration) * 100 : 0);
-    };
-    const onEnded = () => {
-      setPlaying(false);
-      setProgress(0);
-    };
-
-    audio.addEventListener("timeupdate", onTime);
-    audio.addEventListener("ended", onEnded);
-
-    return () => {
-      audio.removeEventListener("timeupdate", onTime);
-      audio.removeEventListener("ended", onEnded);
-    };
-  }, []);
-
-  const toggle = async () => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    if (audio.paused) {
-      await audio.play();
-      setPlaying(true);
-    } else {
-      audio.pause();
-      setPlaying(false);
-    }
-  };
-
-  const seek = (event: React.MouseEvent<HTMLDivElement>) => {
-    const audio = audioRef.current;
-    if (!audio || !audio.duration) return;
-
-    const rect = event.currentTarget.getBoundingClientRect();
-    const ratio = Math.min(1, Math.max(0, (event.clientX - rect.left) / rect.width));
-    audio.currentTime = audio.duration * ratio;
-    setProgress(ratio * 100);
-  };
-
-  return (
-    <div className="rounded-2xl border border-border bg-black p-5 transition-colors hover:border-border/80">
-      <audio ref={audioRef} preload="metadata" src={audioSrc} />
-
-      <div className="mb-4 flex items-center justify-between gap-4">
-        <div className="flex min-w-0 items-center gap-3">
-          <span className={cn("size-2.5 shrink-0 rounded-full", colorClass)} />
-          <div className="min-w-0">
-            <h4 className="truncate text-sm font-semibold text-fg">{modelName}</h4>
-            <p className="mt-0.5 text-[10px] text-stone-400">{provider}</p>
-          </div>
-        </div>
-        <span className="shrink-0 rounded-full bg-secondary px-2 py-1 text-[9px] uppercase tracking-wider text-stone-400">
-          Audio sample
-        </span>
-      </div>
-
-      <div
-        onClick={seek}
-        className="relative mb-4 cursor-pointer overflow-hidden rounded-xl bg-secondary/40 px-4"
-      >
-        <div
-          className="absolute inset-y-0 left-0 bg-fg/5 transition-[width]"
-          style={{ width: `${progress}%` }}
-        />
-        <div className="relative z-10">
-          <Waveform playing={playing} progress={progress} colorClass={colorClass} />
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button
-            onClick={toggle}
-            aria-label={playing ? `Pause ${modelName}` : `Play ${modelName}`}
-            className="flex size-10 items-center justify-center rounded-full bg-fg text-bg transition-transform hover:scale-105 active:scale-95"
-          >
-            {playing ? <Pause className="size-4" /> : <Play className="ml-0.5 size-4" />}
-          </button>
-          <span className="font-mono text-xs text-stone-300">0:00 / {duration}</span>
-        </div>
-
-        <button
-          onClick={() => setOpen((value) => !value)}
-          className="flex items-center gap-1 text-xs text-stone-400 transition-colors hover:text-fg"
-        >
-          Transcript
-          <ChevronDown className={cn("size-3 transition-transform", open && "rotate-180")} />
-        </button>
-      </div>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="overflow-hidden"
-          >
-            <p className="border-t border-border/60 pt-3 mt-4 text-xs leading-relaxed text-stone-400">
-              {transcript}
-            </p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
 function CapabilityRow({
   label,
   values,
@@ -407,10 +215,6 @@ function CapabilityRow({
     </div>
   );
 }
-
-// ─────────────────────────────────────────────────────────────
-// ANA SAYFA BİLEŞENİ
-// ─────────────────────────────────────────────────────────────
 
 export default function NewsPage() {
   const [activeSection, setActiveSection] = useState("featured");
@@ -463,8 +267,7 @@ export default function NewsPage() {
         </h1>
 
         <p className="mt-5 max-w-3xl text-lg leading-relaxed text-stone-400">
-          Research updates, model comparisons, language expansion and real
-          voice samples from the Miralas team.
+          Research updates, model comparisons, language expansion and real voice samples from the Miralas team.
         </p>
 
         <div className="mt-6 flex flex-wrap gap-2 text-[10px] uppercase tracking-wider text-stone-500">
@@ -475,7 +278,7 @@ export default function NewsPage() {
             Multilingual TTS
           </span>
           <span className="rounded-full border border-border px-3 py-1.5">
-            Voice cloning
+            Ses klonlama
           </span>
           <span className="rounded-full border border-border px-3 py-1.5">
             Realtime evaluation
@@ -517,6 +320,7 @@ export default function NewsPage() {
       <div className="flex flex-col gap-12 lg:flex-row">
         <main className="min-w-0 flex-1 space-y-24">
           {/* FEATURED */}
+          {/* FEATURED */}
           <section id="featured" className="scroll-mt-28 space-y-6">
             <h2 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-stone-400">
               <Sparkles className="size-4 text-blue-400" />
@@ -531,50 +335,45 @@ export default function NewsPage() {
             >
               <div className="mb-5 flex flex-wrap items-center gap-3 text-xs text-stone-400">
                 <span className="rounded-full bg-blue-500/10 px-3 py-1 text-blue-400">
-                  Voice Network
+                  Voice Team
                 </span>
-                <span>September 01, 2026</span>
+                <span>September 09, 2026</span>
                 <span>•</span>
                 <span>3 min read</span>
               </div>
 
               <h3 className="max-w-3xl text-2xl font-bold text-fg sm:text-4xl">
-                Miralas Voice Network Is Expanding
+                A New Chapter for the Miralas Voice Team
               </h3>
 
               <p className="mt-4 max-w-3xl leading-relaxed text-stone-400">
-                We are continuing the Miralas voice program with new speakers
-                and a wider multilingual evaluation set. Uzbek remains a core
-                research direction while popular global languages are used for
-                cross-language quality testing.
+                Our previous voice collaboration has ended and is no longer part of
+                the Miralas voice program. Guliruhsar is now leading our voice
+                recordings, and Malika will be joining the team in the near future.
+                The program's direction — native-language quality and real-world
+                speech — continues uninterrupted.
               </p>
 
               <div className="mt-7 grid gap-3 sm:grid-cols-3">
                 <div className="rounded-2xl border border-border bg-secondary/30 p-4">
-                  <div className="text-xs font-semibold text-fg">New voices</div>
+                  <div className="text-xs font-semibold text-fg">Guliruhsar</div>
                   <div className="mt-1 text-xs text-stone-400">
-                    More speakers are being evaluated.
+                    Now recording the core Miralas voice samples.
                   </div>
                 </div>
                 <div className="rounded-2xl border border-border bg-secondary/30 p-4">
-                  <div className="text-xs font-semibold text-fg">Uzbek</div>
+                  <div className="text-xs font-semibold text-fg">Malika</div>
                   <div className="mt-1 text-xs text-stone-400">
-                    Native-language training remains a priority.
+                    Joining the voice team soon.
                   </div>
                 </div>
                 <div className="rounded-2xl border border-border bg-secondary/30 p-4">
-                  <div className="text-xs font-semibold text-fg">Global</div>
+                  <div className="text-xs font-semibold text-fg">Program</div>
                   <div className="mt-1 text-xs text-stone-400">
-                    More languages enter the evaluation lab.
+                    Same native-language focus, no change in direction.
                   </div>
                 </div>
               </div>
-
-              <p className="mt-7 text-xs leading-relaxed text-stone-500">
-                Previous individual voice collaborations are no longer part of
-                the current Miralas voice program. We are moving forward with
-                new contributors and our own training pipeline.
-              </p>
             </motion.article>
           </section>
 
@@ -616,76 +415,14 @@ export default function NewsPage() {
             </div>
           </section>
 
-          {/* VOICES */}
-          <section id="voices" className="scroll-mt-28 space-y-6">
-            <div>
-              <h2 className="flex items-center gap-2 text-2xl font-bold text-fg">
-                <Mic className="size-6 text-blue-400" />
-                Voice Samples
-              </h2>
-              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-stone-400">
-                Side-by-side reference audio for the models we evaluate.
-                Replace the local files with your own generated or licensed
-                samples before shipping.
-              </p>
-            </div>
 
-            <div className="grid gap-5 md:grid-cols-2">
-              {MODEL_CAPABILITIES.map((model) => (
-                <div
-                  key={model.name}
-                  className="rounded-3xl border border-border bg-card/30 p-5"
-                >
-                  <div className="mb-4">
-                    <div className="flex items-center justify-between gap-4">
-                      <div>
-                        <h3 className="font-semibold text-fg">{model.name}</h3>
-                        <p className="mt-1 text-[10px] text-stone-500">
-                          {model.provider}
-                        </p>
-                      </div>
-                      <span className="rounded-full bg-secondary px-2.5 py-1 text-[9px] uppercase tracking-wider text-stone-400">
-                        {model.badge}
-                      </span>
-                    </div>
-                    <p className="mt-3 text-xs leading-relaxed text-stone-400">
-                      {model.description}
-                    </p>
-                  </div>
-
-                  <AudioSample
-                    modelName={model.name}
-                    provider={model.provider}
-                    colorClass={model.color}
-                    audioSrc={model.audio}
-                    transcript={
-                      model.name === "Miralas"
-                        ? "Miralas evaluation sample. Use the exact same sentence across all models for a fair comparison."
-                        : `${model.name} reference sample. Use a licensed or API-generated recording for this model.`
-                    }
-                  />
-
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {model.capabilities.map((capability) => (
-                      <span
-                        key={capability}
-                        className="rounded-full border border-border px-2 py-1 text-[9px] text-stone-400"
-                      >
-                        {capability}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </section>
 
           {/* MODEL CAPABILITIES */}
           <section id="performance" className="scroll-mt-28 space-y-6">
             <div>
               <h2 className="flex items-center gap-2 text-2xl font-bold text-fg">
                 <BarChart3 className="size-6 text-rose-400" />
-                Model Capabilities
+                Model Yetenekleri
               </h2>
               <p className="mt-2 max-w-3xl text-sm leading-relaxed text-stone-400">
                 A transparent capability map — not a fabricated cross-vendor
@@ -697,7 +434,7 @@ export default function NewsPage() {
 
             <div className="overflow-hidden rounded-3xl border border-border bg-card/30 p-5 sm:p-7">
               <div className="hidden grid-cols-[1.5fr_repeat(4,minmax(90px,1fr))] border-b border-border pb-3 text-[10px] uppercase tracking-wider text-stone-500 sm:grid">
-                <span>Capability</span>
+                <span>Yetenek</span>
                 <span className="text-center">Miralas</span>
                 <span className="text-center">GPT</span>
                 <span className="text-center">Gemini</span>
@@ -713,7 +450,7 @@ export default function NewsPage() {
                 values={["✓", "✓", "✓", "✓"]}
               />
               <CapabilityRow
-                label="Voice cloning"
+                label="Ses klonlama"
                 values={["✓", "—", "—", "—"]}
               />
               <CapabilityRow
@@ -759,52 +496,6 @@ export default function NewsPage() {
 
           {/* LANGUAGES */}
           <section id="roadmap" className="scroll-mt-28 space-y-6">
-            <div>
-              <h2 className="flex items-center gap-2 text-2xl font-bold text-fg">
-                <Globe2 className="size-6 text-emerald-400" />
-                Languages
-              </h2>
-              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-stone-400">
-                Popular global languages are part of our evaluation set.
-                Uzbek has a separate Miralas-native training direction.
-              </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-              {LANGUAGE_SET.map((language) => (
-                <motion.div
-                  key={language.code}
-                  initial={{ opacity: 0, y: 12 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  className={cn(
-                    "rounded-2xl border p-4 transition-colors",
-                    language.code === "uz"
-                      ? "border-amber-500/25 bg-amber-500/5"
-                      : "border-border bg-card/30 hover:bg-card/50"
-                  )}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-2xl">{language.flag}</span>
-                    <span
-                      className={cn(
-                        "rounded-full px-2 py-1 text-[9px] uppercase tracking-wider",
-                        language.code === "uz"
-                          ? "bg-amber-500/10 text-amber-400"
-                          : "bg-secondary text-stone-500"
-                      )}
-                    >
-                      {language.status}
-                    </span>
-                  </div>
-                  <h3 className="mt-3 font-semibold text-fg">{language.name}</h3>
-                  <p className="mt-1 font-mono text-[10px] text-stone-500">
-                    {language.code}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-
             <div className="rounded-3xl border border-amber-500/20 bg-gradient-to-br from-amber-500/5 to-transparent p-7">
               <div className="flex items-start gap-4">
                 <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-amber-500/10 text-amber-400">
@@ -844,7 +535,7 @@ export default function NewsPage() {
         <aside className="hidden w-64 shrink-0 lg:block">
           <div className="sticky top-32 border-l border-border pl-6">
             <span className="mb-3 block text-xs font-semibold uppercase tracking-wider text-stone-500">
-              On this page
+              Bu sayfada
             </span>
 
             <div className="flex flex-col gap-1">

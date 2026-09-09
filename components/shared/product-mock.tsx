@@ -1,128 +1,161 @@
 "use client";
 
-import {
-  Volume2,
-  Gamepad2,
-  Bot,
-  Zap,
-  Layers,
-  Activity,
-  ArrowRight,
-  Code2,
-} from "lucide-react";
-import Link from "next/link";
+import { motion } from "framer-motion";
+import { Mic, Send, Paperclip, Sparkles, MoreHorizontal, Pause, Volume2, Radio } from "lucide-react";
 
-// Miralas Ekosistem Navigasyonu (Gelecek modüller "Soon" badge'li)
-const nav = [
-  { icon: Volume2, label: "Voice Engine", active: true },
-  { icon: Gamepad2, label: "AI Games", soon: true },
-  { icon: Bot, label: "Agents & Bots", soon: true },
-  { icon: Code2, label: "Developer APIs", soon: true },
-  { icon: Zap, label: "Realtime Stream", soon: true },
-  { icon: Layers, label: "Models Hub", soon: true },
-  { icon: Activity, label: "Analytics", soon: true },
-];
-
-export function ProductMock({ compact = false }: { compact?: boolean }) {
+// Canlı Ekualayzır / Frekans Barları
+function Equalizer({ barCount = 28 }: { barCount?: number }) {
   return (
-    <div className="flex h-full min-h-[520px] overflow-hidden rounded-[22px] border border-white/5 bg-black shadow-[0_40px_120px_rgba(0,0,0,0.55)] font-sans">
-      {/* Sol Sidebar */}
-      <aside className="hidden w-[220px] shrink-0 flex-col border-r border-white/5 bg-black p-4 sm:flex">
-        <div className="mb-5 flex items-center justify-between text-xs font-mono text-cyan-400">
-          <span className="flex items-center gap-1.5 font-semibold tracking-wider uppercase text-white">
+    <div className="flex items-center justify-between gap-[3px] h-10 w-full px-2">
+      {Array.from({ length: barCount }).map((_, i) => {
+        // Rastgele görünümlü, organik frekans yükseklikleri
+        const baseMin = (i % 5 + 1) * 15;
+        const baseMax = Math.min(100, baseMin + 60);
+        const duration = 0.4 + (i % 7) * 0.15;
 
-            Miransas
-          </span>
+        return (
+          <motion.span
+            key={i}
+            className="w-1 rounded-full bg-gradient-to-t from-rose-500 to-pink-300"
+            animate={{
+              height: [`${baseMin}%`, `${baseMax}%`, `${baseMin}%`],
+            }}
+            transition={{
+              duration: duration,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: (i % 3) * 0.1,
+            }}
+          />
+        );
+      })}
+    </div>
+  );
+}
 
+export function ProductMock() {
+  return (
+    <div className="flex w-full max-w-3xl flex-col items-center mx-auto mt-12 mb-24">
+      {/* Ana Kapsayıcı: Glassmorphism Pencere */}
+      <div className="w-full rounded-[2rem] border border-white/10  backdrop-blur-2xl shadow-[0_0_80px_rgba(244,63,94,0.12)] overflow-hidden flex flex-col relative z-20">
+
+        {/* Üst Bar (Header) */}
+        <div className="flex items-center justify-between px-6 py-4 ">
+          <div className="flex gap-2">
+            <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-white/10" />
+            <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-white/10" />
+            <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-white/10" />
+          </div>
+
+          <div className="flex items-center gap-2 text-white/80 text-xs font-semibold tracking-wider uppercase">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
+            </span>
+            Miralas Real-time Neural Audio
+          </div>
+
+          <div>
+          </div>
         </div>
 
-        <div className="space-y-1">
-          {nav.map((item) => (
-            <div
-              key={item.label}
-              className={`flex items-center justify-between rounded-lg px-2.5 py-2 text-[13px] font-medium transition-all ${item.active
-                ? "bg-black text-stone-400 border border-white/15"
-                : "text-white/45 hover:text-white/80 hover:bg-white/5"
-                }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <item.icon
-                  size={15}
-                  className={item.active ? "text-cyan-400" : "text-white/40"}
-                />
-                <span>{item.label}</span>
+        {/* Sohbet Geçmişi (Chat Area) */}
+        <div className="flex-1 p-6 flex flex-col gap-6 h-[380px] overflow-hidden justify-end">
+
+          {/* Kullanıcı Mesajı */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="self-end max-w-[85%] rounded-2xl rounded-tr-sm bg-white/10 px-5 py-3.5 text-white/90 text-[15px] leading-relaxed border border-white/5 shadow-sm"
+          >
+            Let's listen live to the voiceover for our new commercial, featuring Şahzoda's voice model.     
+             </motion.div>
+
+          {/* Yapay Zeka (AI) Mesajı & Live Waveform Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="self-start max-w-[92%] w-full rounded-2xl rounded-tl-sm bg-gradient-to-br from-rose-500/10 via-black/40 to-transparent p-5 border border-rose-500/20 shadow-sm flex flex-col gap-4"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-rose-500/20 flex items-center justify-center shrink-0 border border-rose-500/30">
+                  <Sparkles className="w-4 h-4 text-rose-400" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-medium text-white">Live Voice Synthesizer</h4>
+                  <p className="text-[11px] text-white/40">Şahzoda Model (Uzbek/Turkish Neural Voice)</p>
+                </div>
               </div>
 
-              {/* Gelecek modüller için "SOON" Badge */}
-              {item.soon && (
-                <span className="rounded-md bg-white/5 px-1.5 py-0.5 text-[9px] font-mono text-cyan-400 border border-cyan-500/20">
-                  SOON
-                </span>
-              )}
+              <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-rose-500/20 border border-rose-500/30 text-[10px] text-rose-300 font-mono tracking-wider">
+                <Radio className="w-3 h-3 animate-pulse text-rose-400" /> LIVE STREAMING
+              </span>
             </div>
-          ))}
+
+            {/* LIVE WAVEFORM & EQUALIZER OYNATICI */}
+            <div className="bg-black/60 rounded-xl border border-white/10 p-4 flex flex-col gap-3">
+              <div className="flex items-center gap-4">
+                {/* Oynat/Durdur Butonu */}
+                <button className="w-11 h-11 rounded-full bg-rose-500 hover:bg-rose-400 transition-all flex items-center justify-center shrink-0 text-white shadow-lg shadow-rose-500/30 active:scale-95">
+                  <Pause className="w-5 h-5 fill-current" />
+                </button>
+
+                {/* Canlı Ekualayzır Barları */}
+                <div className="flex-1 overflow-hidden">
+                  <Equalizer barCount={32} />
+                </div>
+
+                <div className="flex items-center gap-2 text-white/60 shrink-0">
+                  <Volume2 className="w-4 h-4 text-rose-400" />
+                  <span className="text-xs font-mono text-white/70">24-bit / 48kHz</span>
+                </div>
+              </div>
+
+              {/* Süre ve Dalga Alt Bilgisi */}
+              <div className="flex justify-between items-center text-[11px] font-mono text-white/40 pt-1 border-t border-white/5">
+                <span>00:18.42</span>
+                <span className="text-rose-400/80 font-sans text-[10px]">Buffer: 100% (Ultra Low Latency)</span>
+                <span>00:45.00</span>
+              </div>
+            </div>
+          </motion.div>
         </div>
-      </aside>
 
-      {/* Sağ Ana Ekran */}
-      <div className="relative flex-1 overflow-hidden">
-        {/* Deep Violet & Cyan Radial Gradient */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(110% 80% at 50% 0%, #2e1065 0%, #110c1f 50%, #030303 100%)",
-          }}
-        />
-        {/* Arka planı derinleştiren kontrast katmanı */}
-        <div className="absolute inset-0 bg-neutral-950/20" />
+        {/* Alt Kısım: Canlı oluşturma ve giriş alanı */}
+        <div className="p-4 bg-black/20 border-t border-white/5 backdrop-blur-md">
+          <div className="relative flex items-center bg-white/5 rounded-[1.5rem] border border-white/10 px-2 py-2 hover:border-white/20 transition-all focus-within:border-rose-500/50 focus-within:bg-white/10 focus-within:shadow-[0_0_20px_rgba(244,63,94,0.1)]">
 
+            <button className="p-2 text-white/40 hover:text-white/90 transition-colors rounded-full hover:bg-white/5">
+              <Paperclip className="w-5 h-5" />
+            </button>
 
-        {!compact && (
-          <div className="relative z-10 mx-auto mt-10 w-[min(92%,430px)] rounded-[20px] border border-white/10 bg-black p-6 text-center backdrop-blur-md shadow-2xl">
-            {/* Logo / Badge */}
-            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 via-indigo-600 to-cyan-500 text-white shadow-lg shadow-purple-500/25">
-              <img src="/icons/logo.png" alt="" className="object-contain w-full" />
-            </div>
+            <input
+              type="text"
+              placeholder="Type text to synthesize or speak into the microphone..."
+              className="flex-1 bg-transparent border-none outline-none text-white text-[15px] px-3 placeholder:text-white/30"
+              readOnly
+            />
 
-            <h3 className="text-xl font-bold tracking-tight text-stone-200">
-              Miransas Ecosystem
-            </h3>
-
-            <p className="mt-1 text-xs text-stone-400 font-sans leading-relaxed">
-              TTS Voice Clone 23+ lang
-            </p>
-
-            {/* Orta Aksiyon Butonları (Try Miralas & Join Miralas) */}
-            <div className="mt-5 flex items-center gap-2.5">
-              <Link href={"https://miralas.io"} className="flex-1">
-                <button className="w-full rounded-xl bg-gradient-to-r from-violet-600 via-indigo-500 to-cyan-500 py-2.5 text-xs font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.3)] hover:opacity-95 transition active:scale-[0.98] flex items-center justify-center gap-1.5">
-                  <span>Miralas Web</span>
-                  <ArrowRight size={14} />
-                </button>
-              </Link>
-
-              <Link href={"https://console.miralas.io"} className="flex-1">
-                <button className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] backdrop-blur-md py-2.5 text-xs font-semibold text-zinc-300 hover:text-white hover:bg-white/[0.08] hover:border-white/15 transition active:scale-[0.98]">
-                  Join Miralas
-                </button>
-              </Link>
-            </div>
-
-
-            {/* Ekosistem Özeti */}
-            <div className="mt-4 text-left text-[11px] leading-5 text-white/70 font-mono bg-white/5 p-3 rounded-xl border border-white/5 space-y-1">
-              <div className="flex items-center justify-between text-cyan-400">
-                <span>▸ Active Module:</span>
-                <span className="text-purple-300">Voice Synthesis V1 </span>
-              </div>
-              <div className="flex items-center justify-between text-white/40">
-                <span>▸ Upcoming:</span>
-                <span>Agents Developer Api Telegram bot Api</span>
-              </div>
+            <div className="flex items-center gap-1">
+              <button className="p-2 text-rose-400 hover:text-rose-300 transition-colors rounded-full hover:bg-rose-500/10">
+                <Mic className="w-5 h-5 animate-pulse" />
+              </button>
+              <button className="p-2 bg-rose-500 hover:bg-rose-400 text-white rounded-full transition-all flex items-center justify-center w-10 h-10 shadow-lg shadow-rose-500/20 active:scale-95 ml-1">
+                <Send className="w-4 h-4 translate-x-[-1px] translate-y-[1px]" />
+              </button>
             </div>
           </div>
-        )}
+
+          <div className="text-center mt-3">
+            <span className="text-[10px] text-white/30 uppercase tracking-widest font-medium">
+              Miransas AI Audio Engine • Realtime Neural Synthesis
+            </span>
+          </div>
+        </div>
+
       </div>
     </div>
   );

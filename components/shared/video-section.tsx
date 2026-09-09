@@ -15,7 +15,7 @@ export function VideoSections() {
 
   if (reduce) {
     return (
-      <section className="bg-void">
+      <section className="bg-black">
         <div className="px-4 py-6 md:p-[100px]">
           <VideoFrame className="aspect-video overflow-hidden rounded-[22px] md:rounded-[28px]" />
         </div>
@@ -25,7 +25,7 @@ export function VideoSections() {
   }
 
   return (
-    <section className="bg-void">
+    <section className="bg-black">
       <PinnedVideo />
       <CardRow />
     </section>
@@ -54,8 +54,8 @@ function PinnedVideo() {
   const scale = useTransform(scrollYProgress, [0.08, 0.78], [1.08, 1]);
 
   return (
-    <div ref={ref} className="relative h-[220vh]">
-      <div className="sticky top-0 h-screen overflow-hidden bg-void">
+    <div ref={ref} className="relative h-[220vh] mt-24">
+      <div className="sticky top-0 h-screen overflow-hidden bg-black">
         <motion.div
           style={{
             position: "absolute",
@@ -162,8 +162,8 @@ function VideoFrame({ className }: { className?: string }) {
 
 function CardRow() {
   return (
-    <div className="bg-void px-5 pb-24 pt-6 md:px-8 md:pb-32 md:pt-10">
-      <div className="mx-auto grid max-w-6xl gap-4 md:grid-cols-3">
+    <div className="bg-black px-5 pb-24 pt-6 md:px-8 md:pb-32 md:pt-10">
+      <div className="mx-auto grid max-w-full gap-4 md:grid-cols-3">
         {VIDEO_CARDS.map((card, i) => (
           <Reveal key={card.title} delay={i * 0.08}>
             <article className="h-full rounded-[22px] border border-white/10 bg-[#0a0a0a] p-6 md:p-7">

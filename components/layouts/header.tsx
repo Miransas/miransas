@@ -13,7 +13,7 @@ import { GlowButton } from "../ui/glow-button";
 
 const NAV_LINKS = [
   { label: "Privacy", href: "https://privacy.miransas.com" },
-  { label: "Model", href: "/models" },
+  { label: "Models", href: "/models" },
   { label: "Blog", href: "https://blog.miransas.com" },
   { label: "News", href: "/news" },
 ];
@@ -62,15 +62,15 @@ export function SiteHeader() {
       <div className="container-page flex h-16 md:h-16 items-center justify-between gap-8 px-4 md:px-8">
         {/* Sol Taraf: Logo ve Navigasyon */}
         <div className="flex items-center gap-10">
-          <Link 
-            href="/" 
-            className="flex items-center shrink-0 transition-transform active:scale-95 hover:opacity-90" 
+          <Link
+            href="/"
+            className="flex items-center shrink-0 transition-transform active:scale-95 hover:opacity-90"
             aria-label="Home"
           >
-            <img 
-              src="/icons/logo.png" 
-              alt="Logo" 
-              className="w-14 object-contain block" 
+            <img
+              src="/icons/logo.png"
+              alt="Logo"
+              className="w-14 object-contain block"
             />
           </Link>
 

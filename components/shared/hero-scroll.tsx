@@ -2,9 +2,10 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { ProductMock } from "./product-mock";
+
 import { ShaderAnimation } from "../shaders/shader";
 import { GlowButton } from "../ui/glow-button";
+import { ProductMock } from "./product-mock";
 
 export function HeroScroll() {
   const ref = useRef<HTMLElement>(null);
@@ -20,16 +21,13 @@ export function HeroScroll() {
   const frameScale = useTransform(scrollYProgress, [0, 0.7], [0.94, 1.04]);
   const bgY = useTransform(scrollYProgress, [0, 1], [0, 160]);
 
-  // YENİ EKLENEN: Shader için bekleme ve yukarı gitme ayarı
-  // [0.2, 0.8] -> Sayfanın %20'si kayana kadar bekle, sonra %80'e kadar animasyonu oynat.
-  // [0, -120] -> Önce 0'da dur (bekle), sonra kart gibi yukarı doğru (-120) kay.
   const shaderY = useTransform(scrollYProgress, [0.2, 0.8], [0, -120]);
 
   return (
     <section ref={ref} className="relative h-[180vh]">
       <div className="sticky top-0 flex h-screen flex-col overflow-hidden">
 
-        {/* SHADER KATMANI: Artık shaderY kullanıyor (Bekler ve yukarı çıkar) */}
+        {/* SHADER KATMANI */}
         <motion.div
           style={{ y: shaderY }}
           className="absolute inset-0 pointer-events-none z-0"
@@ -63,7 +61,7 @@ export function HeroScroll() {
             transition={{ delay: 0.15 }}
             className="rounded-full border border-white/12 bg-black/35 px-3 py-1 text-[12px] text-white/75 backdrop-blur"
           >
-            Community platform for creators
+            Miransas Yapay Zeka Ses Teknolojileri
           </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 18 }}
@@ -71,7 +69,7 @@ export function HeroScroll() {
             transition={{ delay: 0.25, duration: 0.7 }}
             className="mt-6 text-[40px] leading-[1.15] tracking-[-0.04em] text-[#fff3f0] md:text-[56px] md:leading-[72.8px]"
           >
-            Your community deserves its own home.
+            Push the limits with flawless voice cloning.
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 18 }}
@@ -79,20 +77,19 @@ export function HeroScroll() {
             transition={{ delay: 0.38, duration: 0.7 }}
             className="mt-5 max-w-xl text-[15px] leading-7 text-white/70 md:text-base"
           >
-            Fora gives creators, educators, and coaches a fully branded space
-            with courses, events, discussions, and members.
+            Miralas provides studio-quality multilingual text-to-speech and advanced voice synthesis infrastructure for creators and developers.
           </motion.p>
           <div className="pt-4">
             <GlowButton href="/about" color="rose">
-            Get Started
-          </GlowButton>
+              Explore the project
+            </GlowButton>
           </div>
         </motion.div>
 
         {/* MOCKUP / KART */}
         <motion.div
           style={{ y: frameY, scale: frameScale }}
-          className="relative z-10 mx-auto mt-10 w-[min(92vw,1100px)] flex-1 px-4 pb-0"
+          className="relative z-10 mx-auto w-[min(92vw,1100px)] flex-1 px-4 pb-0"
         >
           <ProductMock />
         </motion.div>

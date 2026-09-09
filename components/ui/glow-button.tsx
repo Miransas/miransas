@@ -144,7 +144,7 @@ export function GlowButton({
     let bound = container.getBoundingClientRect().width / 2 + 12;
     let x = bound;
     let velocity = 0;
-    let targetX = bound;
+    let targetX = 0;
     let inside = false;
     let last = 0;
 
@@ -272,7 +272,8 @@ export function GlowButton({
     <span
       ref={glowRef}
       aria-hidden="true"
-      className={`pointer-events-none absolute left-1/2 top-1/2 h-[calc(100%+9px)] w-[calc(100%+9px)] rounded-full border-[3px] border-transparent opacity-0 will-change-transform [transform:translate(-50%,-50%)${isLeft ? "_scaleX(-1)" : ""}]`}
+      style={{ transform: `translate(-50%, -50%)${isLeft ? " scaleX(-1)" : ""}` }}
+      className={`pointer-events-none absolute left-1/2 top-1/2 h-[calc(100%+9px)] w-[calc(100%+9px)] rounded-full border-[3px] border-transparent opacity-0 will-change-transform `}
     >
       <span
         className="absolute left-[-3px] top-[-3px] z-20 box-content h-full w-full rounded-full border-[3px] border-transparent blur-[15px]"

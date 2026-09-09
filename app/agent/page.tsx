@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { VoiceChat } from "./VoiceChat";
 
 export const metadata: Metadata = {
-  title: "Miralas Agent — Voice AI Demo",
+  title: "Miralas Agent — Sesli Yapay Zeka Demosu",
   description:
-    "LLaMA-3.1 8B + Whisper tiny (0.69s) + multilingual TTS. Türkçe, İngilizce, Özbekçe, Rusça.",
+    "LLaMA-3.1 8B + Whisper tiny (0.69s) + multilingual TTS. Turkish, English, Uzbek, Russian.",
 };
 
 export default function AgentPage() {
@@ -19,11 +19,11 @@ export default function AgentPage() {
         </div>
 
         <h1 className="max-w-2xl text-center text-4xl font-semibold leading-tight tracking-tight md:text-6xl">
-          Voice agent, <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">canlı</span>.
+          Voice agent, <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">live</span>.
         </h1>
 
         <p className="mt-4 max-w-xl text-center text-base text-white/60 md:text-lg">
-          Türkçe, İngilizce, Özbekçe, Rusça konuş — o da senin dilinde yanıt versin.
+          Speak Turkish, English, Uzbek, or Russian — it replies in your language.
           Sesler edge-tts + Piper, LLM LLaMA-3.1 8B (local Ollama).
         </p>
 
@@ -36,7 +36,7 @@ export default function AgentPage() {
           {[
             { label: "STT", value: "0.69s", sub: "whisper-tiny" },
             { label: "First audio", value: "~7s", sub: "sentence-level" },
-            { label: "Session store", value: "Rust", sub: "DashMap" },
+            { label: "Oturum deposu", value: "Rust", sub: "DashMap" },
             { label: "HTTP", value: "reqwest", sub: "10x faster" },
           ].map((s) => (
             <div

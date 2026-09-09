@@ -45,7 +45,7 @@ export function Features() {
           One platform to run your entire voice stack.
         </h2>
         <p className="mt-5 max-w-xl text-[15px] leading-7 text-white/60">
-          Miransas brings your agents, TTS models, and voice cloning tools into one 
+          Miransas brings your agents, TTS models, and voice cloning tools into one
           unified infrastructure, so you can build human-like experiences without latency issues.
         </p>
 
@@ -55,11 +55,10 @@ export function Features() {
             <button
               key={tab.id}
               onClick={() => setActive(tab.id)}
-              className={`rounded-full px-4 py-1.5 text-sm transition-all duration-300 ${
-                active === tab.id
-                  ? "bg-[#17c9b6] text-black font-medium"
-                  : "bg-white/[0.06] text-white/70 hover:bg-white/10"
-              }`}
+              className={`rounded-full px-4 py-1.5 text-sm transition-all duration-300 ${active === tab.id
+                ? "bg-[#17c9b6] text-black font-medium"
+                : "bg-white/[0.06] text-white/70 hover:bg-white/10"
+                }`}
             >
               {tab.label}
             </button>
@@ -76,7 +75,7 @@ export function Features() {
         >
           {/* Sol taraf video (1.1fr), Sağ taraf içerik (0.9fr) */}
           <div className="grid md:grid-cols-[1.1fr_0.9fr]">
-            
+
             {/* VİDEO ALANI (En Başta) */}
             <div className="relative min-h-[320px] bg-black border-r border-white/10">
               <video
@@ -89,7 +88,7 @@ export function Features() {
                 className="absolute inset-0 h-full w-full object-cover opacity-90"
               />
             </div>
-            
+
             {/* İÇERİK ALANI */}
             <div className="flex flex-col justify-center p-8 md:p-12">
               <p className="text-xl tracking-tight text-white">

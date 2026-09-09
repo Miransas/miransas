@@ -10,6 +10,8 @@ import {
 } from "react-icons/fa6";
 import { ArrowUpRight } from "lucide-react";
 import { AvatarGroupDemo } from "../shared/avatar-grup";
+import { TextHoverEffect } from "../ui/text-hover-effect";
+import SideRays from "../SideRays";
 
 const FOOTER_NAV = [
   {
@@ -31,9 +33,9 @@ const FOOTER_NAV = [
     ],
   },
   {
-    title: "Resources",
+    title: "Kaynaklar",
     links: [
-      { label: "Documentation", href: "/docs" },
+      { label: "Documentation", href: "/developers" },
       { label: "Terms of Service", href: "https://privacy.miransas.com/terms", isExternal: true },
       { label: "Privacy Policy", href: "https://privacy.miransas.com/privacy", isExternal: true },
       { label: "Cookie Policy", href: "https://privacy.miransas.com/cookie", isExternal: true },
@@ -46,8 +48,9 @@ const FOOTER_NAV = [
       { label: "About", href: "/about" },
       { label: "Blog", href: "https://blog.miransas.com", isExternal: true },
       { label: "Contact", href: "/contact" },
-      { label: "Support", href: "/support" },
-      { label: "System Status", href: "https://status.miransas.com", isExternal: true },
+      { label: "Contact", href: "/contact" },
+      { label: "Support", href: "/contact" },
+      { label: "Sistem Durumu", href: "https://status.miransas.com", isExternal: true },
     ],
   },
   {
@@ -271,12 +274,21 @@ export function SiteFooter() {
 
   return (
     <footer className="relative w-full overflow-hidden  bg-black text-white">
-      {/* 🌫️ Arka Plan Duman Katmanı */}
-      <SmokeCanvas />
-
-      {/* Üst Degrade Parlama Çizgisi */}
-
-
+      <div style={{ width: '100%', height: '100%', position: 'absolute' }}>
+        <SideRays
+          speed={2.8}
+          rayColor1="#EAB308"
+          rayColor2="#96c8ff"
+          intensity={3}
+          spread={2.4}
+          origin="bottom-right"
+          tilt={7}
+          saturation={2}
+          blend={0.75}
+          falloff={1.6}
+          opacity={1}
+        />
+      </div>
       <div className="relative z-10 mx-auto max-w-7xl px-6 pt-16 pb-12 md:px-10 md:pt-20 lg:px-12">
         <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-20">
 
@@ -302,6 +314,7 @@ export function SiteFooter() {
 
             {/* Açıklama */}
             <p className="text-sm text-stone-400/90 leading-relaxed mb-6">
+              Building next-generation voice AI and real-time audio intelligence infrastructure for modern applications.
               Building next-generation voice AI and real-time audio intelligence infrastructure for modern applications.
             </p>
 
@@ -379,7 +392,8 @@ export function SiteFooter() {
 
           {/* Sol Kısım: Telif Hakkı ve Canlı Saat */}
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
-          
+
+            <p>© 2023–{currentYear} Miransas Inc. All rights reserved.</p>
             <p>© 2023–{currentYear} Miransas Inc. All rights reserved.</p>
 
             {/* Araya küçük bir nokta koyarak canlı saati ekliyoruz */}
@@ -392,7 +406,7 @@ export function SiteFooter() {
             </p>
           </div>
 
-         
+
           <a
             href="https://status.miransas.com"
             target="_blank"
@@ -404,16 +418,12 @@ export function SiteFooter() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
             <span className="font-medium">All systems operational</span>
+            <span className="font-medium">All systems operational</span>
           </a>
 
         </div>
       </div>
 
-
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 right-0 z-0 h-[350px] w-[500px] translate-x-[20%] translate-y-[20%] rounded-full bg-indigo-500/[0.03] blur-[120px]"
-      />
     </footer>
   );
 }

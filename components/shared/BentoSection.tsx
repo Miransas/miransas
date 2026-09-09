@@ -68,15 +68,15 @@ const items = [
   {
     tag: "Studio TTS",
     title: "Our own voices. All the way to Uzbek.",
-    body: "We don't rent speech — we train it. Miransas builds its own TTS and voice models in-house, including a native Uzbek model, so your agents sound human everywhere and latency stays under our control.",
-    aside: "Speech synthesis, owned end-to-end.",
+    body: "Konuşma kiralamıyoruz; onu eğitiyoruz. Miransas, ana dili Özbekçe olan model dahil kendi TTS ve ses modellerini kurum içinde geliştirir.",
+    aside: "Uçtan uca sahip olunan konuşma sentezi.",
     visual: "tts",
   },
   {
     tag: "Voice Clone",
     title: "Replicate any voice in seconds.",
-    body: "Zero-shot voice cloning with absolute high fidelity. Capture emotions, breathing, and personal accents from just a 3-second audio sample. Built for scale, secured by design.",
-    aside: "Identity preserved. Emotion intact.",
+    body: "Yüksek doğruluklu sıfır örnekli ses klonlama. Yalnızca 3 saniyelik ses örneğinden duyguyu, nefesi ve kişisel aksanları yakalayın.",
+    aside: "Kimlik korunur. Duygu bozulmaz.",
     visual: "clone",
   },
 ];
@@ -173,11 +173,10 @@ function TtsMock() {
         {voices.map((v) => (
           <span
             key={v.lang}
-            className={`rounded-full px-2.5 py-1 text-[11px] ${
-              v.active
-                ? "bg-[#17c9b6]/20 text-[#8ff0e4]"
-                : "bg-white/[0.06] text-white/45"
-            }`}
+            className={`rounded-full px-2.5 py-1 text-[11px] ${v.active
+              ? "bg-[#17c9b6]/20 text-[#8ff0e4]"
+              : "bg-white/[0.06] text-white/45"
+              }`}
           >
             {v.lang} · {v.name}
           </span>
@@ -276,11 +275,13 @@ export function Bento() {
             className="text-[12px] uppercase tracking-[0.22em] text-white/40"
           >
             What we build
+            What we build
           </motion.p>
           <motion.h2
             variants={fadeUp}
             className="mt-5 max-w-2xl text-3xl tracking-[-0.04em] text-white md:text-5xl"
           >
+            Voice first. Never voice only.
             Voice first. Never voice only.
           </motion.h2>
           <motion.p
@@ -290,6 +291,14 @@ export function Bento() {
             Miransas builds real-time voice agents for companies that talk to
             their customers — plus the TTS models, infrastructure and voice cloning tech
             that make them feel human.
+            Miransas müşterileriyle konuşan şirketler için gerçek zamanlı sesli ajanlar;
+            ayrıca bunları insan gibi hissettiren TTS modelleri, altyapı ve ses klonlama teknolojileri geliştirir.
+            Live call · Support
+            Merhaba, #48213 numaralı siparişimin teslimat adresini değiştirmem gerekiyor.
+            Elbette, #48213 numaralı siparişi açtım. Yeni adres nedir?
+            resolved ✓
+            generating clone
+            <span>Synthesized Output</span>
           </motion.p>
         </motion.div>
 
@@ -307,9 +316,8 @@ export function Bento() {
               {/* Text side */}
               <motion.div
                 variants={textStagger}
-                className={`flex flex-col justify-center p-8 md:p-12 ${
-                  index === 1 ? "md:order-2" : ""
-                }`}
+                className={`flex flex-col justify-center p-8 md:p-12 ${index === 1 ? "md:order-2" : ""
+                  }`}
               >
                 <motion.p
                   variants={inner}
@@ -340,9 +348,8 @@ export function Bento() {
               {/* Visual side */}
               <motion.div
                 variants={visual}
-                className={`min-h-[280px] p-4 md:p-6 ${
-                  index === 1 ? "md:order-1" : ""
-                }`}
+                className={`min-h-[280px] p-4 md:p-6 ${index === 1 ? "md:order-1" : ""
+                  }`}
               >
                 {item.visual === "agents" ? (
                   <AgentMock />

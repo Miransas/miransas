@@ -202,22 +202,20 @@ export function VoiceChat() {
           {isLive && (
             <>
               <div
-                className={`absolute inset-0 rounded-full ${
-                  phase === "recording"
+                className={`absolute inset-0 rounded-full ${phase === "recording"
                     ? "bg-red-500/30"
                     : phase === "speaking"
                       ? "bg-emerald-500/30"
                       : "bg-purple-500/30"
-                } animate-ping`}
+                  } animate-ping`}
               />
               <div
-                className={`absolute -inset-4 rounded-full ${
-                  phase === "recording"
+                className={`absolute -inset-4 rounded-full ${phase === "recording"
                     ? "bg-red-500/10"
                     : phase === "speaking"
                       ? "bg-emerald-500/10"
                       : "bg-purple-500/10"
-                } blur-2xl`}
+                  } blur-2xl`}
               />
             </>
           )}
@@ -259,12 +257,12 @@ export function VoiceChat() {
 
         <div className="mt-4 text-center">
           <div className="text-sm font-medium capitalize text-white/80">
-            {phase === "idle" && "mikrofona bas ve konuş"}
+            {phase === "idle" && "press the microphone and speak"}
             {phase === "recording" && `kaydediliyor • ${elapsed.toFixed(1)}s`}
             {phase === "transcribing" && "duyuyorum..."}
-            {phase === "thinking" && `düşünüyor • ${elapsed.toFixed(1)}s`}
-            {phase === "speaking" && "konuşuyor..."}
-            {phase === "done" && "bitti • yeniden başlat"}
+            {phase === "thinking" && `thinking • ${elapsed.toFixed(1)}s`}
+            {phase === "speaking" && "speaking..."}
+            {phase === "done" && "done • restart"}
           </div>
         </div>
       </div>
@@ -304,7 +302,7 @@ export function VoiceChat() {
           onClick={reset}
           className="mt-4 w-full rounded-xl border border-white/10 bg-white/5 py-2.5 text-sm text-white/70 transition hover:bg-white/10"
         >
-          yeni konuşma
+          new conversation
         </button>
       )}
     </div>

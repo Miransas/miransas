@@ -4,42 +4,42 @@ import { useState } from "react";
 
 const groups = {
   General: [
-     {
-    id: "01",
-    q: "What exactly does Miransas build?",
-    a:
-      "High-performance software systems: indie games (Project Sad), secure infrastructure (Binboi), and algorithmic engines (Rust Chess Engine). Every project is built with obsessive attention to performance and long-term maintainability.",
-  },
-  {
-    id: "02",
-    q: "Do I need technical knowledge to work with you?",
-    a:
-      "Not at all. Whether you're a technical founder or a business owner, we translate your vision into working systems. No jargon, no unnecessary complexity — just clear communication and shipped code.",
-  },
-  {
-    id: "03",
-    q: "Can you integrate with our existing stack?",
-    a:
-      "Absolutely. We specialize in seamless integrations using modern APIs, webhooks, gRPC, and custom protocols. Go, Rust, Next.js — we speak your stack's language fluently.",
-  },
-  {
-    id: "04",
-    q: "How does the engagement process work?",
-    a:
-      "1. Discovery: We understand your problem deeply. 2. Design: Wireframes and architecture. 3. Build: Iterative development with weekly demos. 4. Ship: Production deployment with monitoring. No surprises, no scope creep.",
-  },
-  {
-    id: "05",
-    q: "Do you provide ongoing support?",
-    a:
-      "Yes. We don't abandon ship after launch. All plans include a support window, and we offer retainer agreements for continuous improvement, security patches, and feature development as your product scales.",
-  },
-  {
-    id: "06",
-    q: "Are you really a solo studio?",
-    a:
-      "Yes. Miransas is intentionally a one-person operation. This means direct communication with the engineer building your project, no handoffs, no account managers, and no bureaucracy. Just craft.",
-  },
+    {
+      id: "01",
+      q: "What exactly does Miransas build?",
+      a:
+        "Yüksek performanslı yazılım sistemleri: bağımsız oyunlar (Project Sad), güvenli altyapı (Binboi) ve algoritmik motorlar (Rust Chess Engine). Her proje performans ve uzun vadeli sürdürülebilirlik gözetilerek geliştirilir.",
+    },
+    {
+      id: "02",
+      q: "Do I need technical knowledge to work with you?",
+      a:
+        "Hiç gerekmez. İster teknik bir kurucu ister işletme sahibi olun, vizyonunuzu çalışan sistemlere dönüştürürüz. Jargon yok, gereksiz karmaşıklık yok; yalnızca açık iletişim ve yayınlanan kod var.",
+    },
+    {
+      id: "03",
+      q: "Can you integrate with our existing stack?",
+      a:
+        "Kesinlikle. Modern API'ler, webhook'lar, gRPC ve özel protokollerle sorunsuz entegrasyonlar konusunda uzmanız. Go, Rust ve Next.js yığınınızla akıcı biçimde çalışırız.",
+    },
+    {
+      id: "04",
+      q: "How does the engagement process work?",
+      a:
+        "1. Keşif: Probleminizi derinlemesine anlarız. 2. Tasarım: Wireframe ve mimari. 3. Geliştirme: Haftalık demolarla yinelemeli çalışma. 4. Yayın: İzlemeli üretim kurulumu. Sürpriz yok, kapsam kayması yok.",
+    },
+    {
+      id: "05",
+      q: "Do you provide ongoing support?",
+      a:
+        "Evet. Yayından sonra sizi yarı yolda bırakmayız. Tüm planlarda destek süresi bulunur; ürününüz ölçeklenirken sürekli iyileştirme, güvenlik yamaları ve özellik geliştirme için devamlı destek anlaşmaları sunarız.",
+    },
+    {
+      id: "06",
+      q: "Are you really a solo studio?",
+      a:
+        "Evet. Miransas bilinçli olarak tek kişilik bir yapıdır. Projenizi geliştiren mühendisle doğrudan iletişim kurarsınız; devir, müşteri yöneticisi veya bürokrasi yoktur.",
+    },
   ],
   "Community & Features": [
     {
@@ -71,7 +71,7 @@ export function Faq() {
   const items = groups[group];
 
   return (
-    <section className=" px-6 pb-28 mt-10 bg-black "id="faq" >
+    <section className=" px-6 pb-28 mt-10 bg-black " id="faq" >
       <div className="mx-auto grid max-w-6xl gap-10 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
           <p className="eyebrow">FAQ</p>
@@ -79,8 +79,7 @@ export function Faq() {
             Answers to the questions that come up most.
           </h2>
           <p className="mt-5 text-sm leading-6 text-white/55">
-            Learn how Fora works, what&apos;s included in the beta, what your
-            members experience, and what to expect as the platform grows.
+            Learn how Miransas works, what's included, and what to expect as the platform grows.
           </p>
           <div className="mt-8 flex flex-wrap gap-2">
             {(Object.keys(groups) as Group[]).map((key) => (
@@ -90,11 +89,10 @@ export function Faq() {
                   setGroup(key);
                   setOpen(0);
                 }}
-                className={`rounded-full px-3 py-1.5 text-xs ${
-                  group === key
-                    ? "bg-[#fff3f0] text-black"
-                    : "bg-white/6 text-white/65"
-                }`}
+                className={`rounded-full px-3 py-1.5 text-xs ${group === key
+                  ? "bg-[#fff3f0] text-black"
+                  : "bg-white/6 text-white/65"
+                  }`}
               >
                 {key}
               </button>
@@ -103,8 +101,7 @@ export function Faq() {
           <div className="mt-10 rounded-3xl border border-white/8 bg-[#111] p-6">
             <p className="text-lg text-[#fff3f0]">Got questions?</p>
             <p className="mt-2 text-sm text-white/50">
-              Can&apos;t find what you&apos;re looking for? Reach out — we&apos;re
-              fast.
+              Can't find what you're looking for? Reach out — we're fast.
             </p>
             <a href="#contact" className="mt-4 inline-block text-sm text-[#c9f8fa]">
               Contact us →
