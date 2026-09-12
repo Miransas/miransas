@@ -5,6 +5,7 @@ import "./globals.css";
 import { SmoothScroll } from "../components/provider/smooth-scroll";
 import { SiteHeader } from "../components/layouts/header";
 import { SiteFooter } from "../components/layouts/footer";
+import NoticeModal from "../components/provider/site-modal";
 
 
 // ── Fonts ─────────────────────────────────────────────────────────────────
@@ -160,6 +161,7 @@ export default function RootLayout({
         className={`${sans.variable} ${mono.variable} font-sans antialiased bg-black text-white selection:bg-rose-500 selection:text-stone-200`}
       >
         <SmoothScroll>
+          <NoticeModal/>
           <div className="relative flex min-h-screen flex-col">
             <main className="flex-grow"><SiteHeader />{children}<SiteFooter /></main>
           </div>
