@@ -18,8 +18,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       '@paper-design/shaders-react':
-        specifier: ^0.0.80
-        version: 0.0.80(@types/react@19.2.18)(react@19.2.8)
+        specifier: ^0.0.81
+        version: 0.0.81(@types/react@19.2.18)(react@19.2.8)
       '@react-three/drei':
         specifier: ^10.7.8
         version: 10.7.8(@react-three/fiber@9.7.0(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(three@0.185.1))(@types/react@19.2.18)(@types/three@0.185.4)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(three@0.185.1)
@@ -1172,8 +1172,8 @@ packages:
   '@panva/hkdf@1.2.1':
     resolution: {integrity: sha512-6oclG6Y3PiDFcoyk8srjLfVKyMfVCKJ27JwNPViuXziFpmdz+MZnZN/aKY0JGXgYuO/VghU0jcOAZgWXZ1Dmrw==}
 
-  '@paper-design/shaders-react@0.0.80':
-    resolution: {integrity: sha512-Y1oxUeh5D2AECo05O+4UYRbaMfQzKKYH3Q5jcvirOcoX0hTPYbezCLn5g94nvcuzxy5LN/uqwsL3jDUp8r3E+A==}
+  '@paper-design/shaders-react@0.0.81':
+    resolution: {integrity: sha512-3FMkeZqj9sSvK/WkgekGu3crnOQd4R2iH8IT+jVBuQmq1m8p88VFvxh63s9bSt2exBwjBNaRfSo0FSCeNxqh3w==}
     peerDependencies:
       '@types/react': ^18 || ^19
       react: ^18 || ^19
@@ -1181,8 +1181,8 @@ packages:
       '@types/react':
         optional: true
 
-  '@paper-design/shaders@0.0.80':
-    resolution: {integrity: sha512-pcabvt5xDlFoEhpjUj4b1tGJMfqb0i5mXifWMNQf6z7FoOJYxYDo7F8R6k0JAh5D/7ouxjX5+N0cIq5WURyQ1Q==}
+  '@paper-design/shaders@0.0.81':
+    resolution: {integrity: sha512-jeGdyjMscZ2bxmQdo8lhwUufHUf4iq3s1ayjh8PXU7Go42Rw8E3I0It1FZdc3HuWt5J82m//DRWaxsRqRfA4Gg==}
 
   '@radix-ui/number@1.1.3':
     resolution: {integrity: sha512-Road2bidD0uu/1BGDOWNdPI06g0lIRy6IF9GZcIrDK2KGItfor8IQwQa+yM2ERgHM1MmHxaxpTzk0/Jp42lNfA==}
@@ -5841,14 +5841,14 @@ snapshots:
 
   '@panva/hkdf@1.2.1': {}
 
-  '@paper-design/shaders-react@0.0.80(@types/react@19.2.18)(react@19.2.8)':
+  '@paper-design/shaders-react@0.0.81(@types/react@19.2.18)(react@19.2.8)':
     dependencies:
-      '@paper-design/shaders': 0.0.80
+      '@paper-design/shaders': 0.0.81
       react: 19.2.8
     optionalDependencies:
       '@types/react': 19.2.18
 
-  '@paper-design/shaders@0.0.80': {}
+  '@paper-design/shaders@0.0.81': {}
 
   '@radix-ui/number@1.1.3': {}
 
