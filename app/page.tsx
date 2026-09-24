@@ -14,6 +14,7 @@ import ExpandScroll from '../components/shared/expand-scroll'
 import TestimonialSection from '../components/shared/ai-demoSection'
 import Timeline from '../components/shared/heroTimeline'
 import AIDemoSection from '../components/shared/ai-demoSection'
+import RobotEyes from '../components/shared/product-mock'
 
 
 
@@ -23,6 +24,7 @@ const page = () => {
   return (
     <div>
       <HeroScroll />
+      <RobotEyes/>
       <Timeline/>
       <AIDemoSection/>
       <VideoSections />
