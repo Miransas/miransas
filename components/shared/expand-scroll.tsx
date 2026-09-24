@@ -94,7 +94,7 @@ export default function ExpandScroll() {
   return (
     <main className="min-h-screen bg-transparent">
       <ScrollExpand
-        src="https://res.cloudinary.com/dwdk20m6q/image/upload/v1789081538/ChatGPT_Image_Sep_11_2026_02_05_26_AM_vz9rct.png"
+        src="https://res.cloudinary.com/dwdk20m6q/image/upload/v1790186440/PhotoshopExtension_Image_2_hpiyxq.png"
         alt="Miransas — independent software studio"
         scrollHint="Scroll to see what's live"
         title="Independent by design"

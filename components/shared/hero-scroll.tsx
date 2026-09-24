@@ -5,7 +5,7 @@ import { useRef } from "react";
 
 import { ShaderAnimation } from "../shaders/shader";
 import { GlowButton } from "../ui/glow-button";
-import { ProductMock } from "./product-mock";
+
 
 export function HeroScroll() {
   const ref = useRef<HTMLElement>(null);
@@ -91,7 +91,7 @@ export function HeroScroll() {
           style={{ y: frameY, scale: frameScale }}
           className="relative z-10 mx-auto w-[min(92vw,1100px)] flex-1 px-4 pb-0"
         >
-          <ProductMock />
+          {/* <ProductMock /> */}
         </motion.div>
 
       </div>

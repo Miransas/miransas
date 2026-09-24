@@ -13,12 +13,7 @@ export function ShaderCTA() {
         <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl border border-border md:aspect-[16/7]">
           <div className="absolute inset-0">
             <div style={{ width: '100%', height: '1250px', position: 'absolute' }}>
-              <LiquidChrome
-                baseColor={[0.1, 0.1, 0.1]}
-                speed={0.3}
-                amplitude={0.3}
-                interactive
-              />
+              <img src="https://res.cloudinary.com/dwdk20m6q/image/upload/v1790186437/PhotoshopExtension_Image_1_qionxr.png" alt="" />
             </div>
           </div>
 
