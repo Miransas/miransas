@@ -11,8 +11,8 @@
     "lint": "eslint"
   },
   "engines": {
-    "node": ">=24",
-    "pnpm": ">=11"
+    "node": ">=24 <25",
+    "pnpm": ">=11 <12"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.2",
@@ -66,11 +66,5 @@
     "shadcn": "^4.20.1",
     "tailwindcss": "^4",
     "typescript": "^6.0.3"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "sharp",
-      "esbuild"
-    ]
   }
 }
