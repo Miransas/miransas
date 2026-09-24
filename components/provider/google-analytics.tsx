@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -24,6 +24,7 @@ function GoogleAnalyticsTracker() {
         const query = searchParams.toString();
         const pagePath = query ? `${pathname}?${query}` : pathname;
 
+        // Sayfa içi geçişlerde ve güncellemelerde path'i ve UTM'leri tetikle
         window.gtag("config", measurementId, { page_path: pagePath });
     }, [pathname, searchParams]);
 
@@ -37,11 +38,13 @@ function GoogleAnalyticsTracker() {
             />
             <Script id="google-analytics" strategy="afterInteractive">
                 {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${measurementId}', { send_page_view: false });
-        `}
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  // İlk açılışta send_page_view'u kapatmıyoruz ki 
+                  // Instagram'dan gelen UTM'ler anında yakalansın.
+                  gtag('config', '${measurementId}');
+                `}
             </Script>
         </>
     );
