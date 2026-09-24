@@ -112,7 +112,7 @@ export function HeroScroll() {
   return (
     <section
       ref={ref}
-      className="relative h-[220vh] bg-[#020302]"
+      className="relative h-[250vh] bg-[#020302]"
     >
       {/* =================================================
           STICKY SCENE

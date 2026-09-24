@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { FOOTER_NAV, SOCIAL_LINKS } from "@/content";
+import { FOOTER_NAV, SOCIAL_LINKS } from "@/constants";
 import { AvatarGroupDemo } from "../shared/avatar-grup";
 import { TextHoverEffect } from "../ui/text-hover-effect";
 import SideRays from "../SideRays";

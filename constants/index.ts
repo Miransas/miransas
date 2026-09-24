@@ -62,11 +62,18 @@ export const COMPANY_MENU = [
 
 ] as const;
 
+export const PROJECT_MENU = [
+    { label: "Miralas", href: "/projects/miralas" },
+
+
+] as const;
+
 export const HEADER_MENU = [
   { label: "Products", items: PRODUCT_MENU },
   { label: "Explore", items: EXPLORE_MENU },
   { label: "Resources", items: RESOURCE_MENU },
   { label: "Company", items: COMPANY_MENU },
+  { label:  "Projects", items: PROJECT_MENU}
 ] as const;
 
 export const FOOTER_NAV = [

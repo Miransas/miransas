@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { HEADER_MENU } from "@/content";
+import { HEADER_MENU } from "@/constants";
 import { cn } from "@/lib/utils";
 
 import { GlowButton } from "../ui/glow-button";

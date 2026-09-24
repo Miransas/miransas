@@ -47,7 +47,7 @@ export default function Timeline() {
   });
 
   return (
-    <div className="py-24 bg-black min-h-screen">
+    <div className="py-24 bg-black  min-h-screen">
       <div className="max-w-4xl mx-auto relative px-4" ref={containerRef}>
         
         {/* ÇİZGİLER: Hap arkaplanın (z-0) üstünde, içeriklerin (z-30) altında kalması için z-10/20 verildi */}
