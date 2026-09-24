@@ -6,17 +6,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { PRODUCT_MENU } from "@/content";
+import { HEADER_MENU } from "@/content";
 import { cn } from "@/lib/utils";
 
 import { GlowButton } from "../ui/glow-button";
-
-const NAV_LINKS = [
-  { label: "Privacy", href: "https://privacy.miransas.com" },
-  { label: "Models", href: "/models" },
-  { label: "Blog", href: "https://blog.miransas.com" },
-  { label: "News", href: "/news" },
-];
 
 const EXTERNAL_LINKS = {
   sales: "https://console.example.com/studio",
@@ -27,7 +20,7 @@ export function SiteHeader() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [productsOpen, setProductsOpen] = useState(false);
+  const [openMenu, setOpenMenu] = useState<string | null>(null);
   const reduce = useReducedMotion();
 
   useEffect(() => {
@@ -39,7 +32,7 @@ export function SiteHeader() {
 
   useEffect(() => {
     setOpen(false);
-    setProductsOpen(false);
+    setOpenMenu(null);
   }, [pathname]);
 
   useEffect(() => {
@@ -76,62 +69,49 @@ export function SiteHeader() {
 
           {/* Masaüstü Navigasyon */}
           <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-            {/* Products Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setProductsOpen(true)}
-              onMouseLeave={() => setProductsOpen(false)}
-            >
-              <button
-                type="button"
-                className="inline-flex items-center gap-1.5 text-sm md:text-[15px] font-medium text-fg/80 transition-colors hover:text-fg focus-visible:outline-none"
-                aria-expanded={productsOpen}
-              >
-                Products
-                <ChevronDown
-                  className={cn(
-                    "size-4 text-fg/60 transition-transform duration-200",
-                    productsOpen && "rotate-180 text-fg"
-                  )}
-                />
-              </button>
+            {HEADER_MENU.map((menu) => {
+              const isOpen = openMenu === menu.label;
 
-              <AnimatePresence>
-                {productsOpen && (
-                  <motion.div
-                    initial={reduce ? false : { opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 6 }}
-                    transition={{ duration: 0.18 }}
-                    className="absolute left-0 top-full pt-3"
+              return (
+                <div
+                  key={menu.label}
+                  className="relative"
+                  onMouseEnter={() => setOpenMenu(menu.label)}
+                  onMouseLeave={() => setOpenMenu(null)}
+                >
+                  <button
+                    type="button"
+                    className="inline-flex items-center gap-1.5 text-sm md:text-[15px] font-medium text-fg/80 transition-colors hover:text-fg focus-visible:outline-none"
+                    aria-expanded={isOpen}
+                    onClick={() => setOpenMenu(isOpen ? null : menu.label)}
                   >
-                    <div className="w-80 rounded-2xl border border-border/60 bg-bg/95 p-2 shadow-2xl backdrop-blur-2xl">
-                      {PRODUCT_MENU.map((item) => (
-                        <Link
-                          key={item.label}
-                          href={item.href}
-                          className="block rounded-xl px-3.5 py-2.5 transition-colors hover:bg-fg/5"
-                        >
-                          <p className="text-sm font-semibold text-fg">{item.label}</p>
-                          <p className="text-xs text-fg/60 mt-0.5">{item.hint}</p>
-                        </Link>
-                      ))}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                    {menu.label}
+                    <ChevronDown className={cn("size-4 text-fg/60 transition-transform duration-200", isOpen && "rotate-180 text-fg")} />
+                  </button>
 
-            {/* Düz Linkler */}
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm md:text-[15px] font-medium text-fg/80 transition-colors hover:text-fg"
-              >
-                {link.label}
-              </Link>
-            ))}
+                  <AnimatePresence>
+                    {isOpen && (
+                      <motion.div
+                        initial={reduce ? false : { opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        transition={{ duration: 0.18 }}
+                        className="absolute left-0 top-full pt-3"
+                      >
+                        <div className="w-80 rounded-2xl border border-border/60 bg-bg/95 p-2 shadow-2xl backdrop-blur-2xl">
+                          {menu.items.map((item) => (
+                            <Link key={item.label} href={item.href} className="block rounded-xl px-3.5 py-2.5 transition-colors hover:bg-fg/5">
+                              <p className="text-sm font-semibold text-fg">{item.label}</p>
+                              {"hint" in item && <p className="text-xs text-fg/60 mt-0.5">{item.hint}</p>}
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
           </nav>
         </div>
 
@@ -172,42 +152,26 @@ export function SiteHeader() {
             transition={{ duration: 0.2 }}
           >
             <nav className="flex flex-col gap-8" aria-label="Mobile">
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-fg/50">
-                  Products
-                </p>
-                <div className="flex flex-col gap-2">
-                  {PRODUCT_MENU.map((item) => (
-                    <Link
-                      key={item.label}
-                      href={item.href}
-                      className="rounded-xl p-2.5 transition-colors hover:bg-fg/5"
-                      onClick={() => setOpen(false)}
-                    >
-                      <span className="block text-lg font-medium text-fg">{item.label}</span>
-                      <span className="block text-sm text-fg/60 mt-0.5">{item.hint}</span>
-                    </Link>
-                  ))}
+              {HEADER_MENU.map((menu) => (
+                <div key={menu.label}>
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-fg/50">
+                    {menu.label}
+                  </p>
+                  <div className="flex flex-col gap-1">
+                    {menu.items.map((item) => (
+                      <Link
+                        key={item.label}
+                        href={item.href}
+                        className="rounded-xl px-2.5 py-2.5 transition-colors hover:bg-fg/5"
+                        onClick={() => setOpen(false)}
+                      >
+                        <span className="block text-lg font-medium text-fg">{item.label}</span>
+                        {"hint" in item && <span className="mt-0.5 block text-sm text-fg/60">{item.hint}</span>}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-
-              <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-fg/50">
-                  Navigation
-                </p>
-                <div className="flex flex-col gap-1">
-                  {NAV_LINKS.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className="rounded-xl px-2.5 py-2.5 text-lg font-medium text-fg transition-colors hover:bg-fg/5"
-                      onClick={() => setOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
+              ))}
 
               <div className="pt-6 border-t border-border/40 flex flex-col gap-3">
                 <GlowButton href={EXTERNAL_LINKS.tryFree} color="rose" size="lg" className="w-full">

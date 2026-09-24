@@ -2,78 +2,11 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
-import {
-  FaDiscord,
-  FaGithub,
-  FaX,
-  FaYoutube,
-} from "react-icons/fa6";
 import { ArrowUpRight } from "lucide-react";
+import { FOOTER_NAV, SOCIAL_LINKS } from "@/content";
 import { AvatarGroupDemo } from "../shared/avatar-grup";
 import { TextHoverEffect } from "../ui/text-hover-effect";
 import SideRays from "../SideRays";
-
-const FOOTER_NAV = [
-  {
-    title: "Platform",
-    links: [
-      { label: "Features", href: "/#features" },
-      { label: "Voice Agents", href: "/#voice-agents" },
-      { label: "FAQ", href: "/#faq" },
-      {
-        label: "Issues",
-        href: "https://github.com/Miransas/miransas/issues/new",
-        isExternal: true,
-      },
-      {
-        label: "Discussions",
-        href: "https://github.com/orgs/Miransas/discussions/new/choose",
-        isExternal: true,
-      },
-    ],
-  },
-  {
-    title: "Kaynaklar",
-    links: [
-      { label: "Documentation", href: "/developers" },
-      { label: "Terms of Service", href: "https://privacy.miransas.com/terms", isExternal: true },
-      { label: "Privacy Policy", href: "https://privacy.miransas.com/privacy", isExternal: true },
-      { label: "Cookie Policy", href: "https://privacy.miransas.com/cookie", isExternal: true },
-      { label: "Security", href: "https://privacy.miransas.com/security", isExternal: true },
-    ],
-  },
-  {
-    title: "Company",
-    links: [
-      { label: "About", href: "/about" },
-      { label: "Blog", href: "https://blog.miransas.com", isExternal: true },
-      { label: "Contact", href: "/contact" },
-      { label: "Contact", href: "/contact" },
-      { label: "Support", href: "/contact" },
-      { label: "Sistem Durumu", href: "https://status.miransas.com", isExternal: true },
-    ],
-  },
-  {
-    title: "Miralas AI",
-    links: [
-      { label: "Miralas Overview", href: "https://miralas.io", isExternal: true },
-      { label: "Dashboard Console", href: "https://console.miralas.io", isExternal: true },
-      { label: "Studio TTS", href: "https://console.miralas.io/studio/tts", isExternal: true },
-      { label: "Live Streams", href: "https://console.miralas.io/studio/streams", isExternal: true },
-    ],
-  },
-];
-
-// ─────────────────────────────────────────────────────────────
-// SOCIAL LINKS
-// ─────────────────────────────────────────────────────────────
-
-const SOCIAL_LINKS = [
-  { label: "X", href: "https://x.com/miransaas", icon: FaX },
-  { label: "GitHub", href: "https://github.com/Miransas", icon: FaGithub },
-  { label: "Discord", href: "https://discord.gg/miransas", icon: FaDiscord },
-  { label: "YouTube", href: "https://youtube.com/@miransaas", icon: FaYoutube },
-];
 
 // ─────────────────────────────────────────────────────────────
 // ATMOSFERİK CANLI DUMAN EFEKTİ (Optimized Canvas)
@@ -289,7 +222,7 @@ export function SiteFooter() {
           opacity={1}
         />
       </div>
-        <div style={{ width: '100%', height: '100%', position: 'absolute' }}>
+      <div style={{ width: '100%', height: '100%', position: 'absolute' }}>
         <SideRays
           speed={2.8}
           rayColor1="#EAB308"
@@ -366,7 +299,7 @@ export function SiteFooter() {
           {/* ───────────────────────────────────────────────────
               SAĞ TARAF: NAVİGASYON KOLONLARI
           ─────────────────────────────────────────────────── */}
-          <div className="flex-1 grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-10">
+          <div className="flex-1 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 lg:gap-10">
             {FOOTER_NAV.map((column) => (
               <div key={column.title}>
                 <h3 className="mb-5 text-sm font-semibold text-stone-200 tracking-wide">
@@ -376,7 +309,7 @@ export function SiteFooter() {
                 <ul className="space-y-3">
                   {column.links.map((link) => (
                     <li key={link.label}>
-                      {link.isExternal ? (
+                      {"isExternal" in link ? (
                         <a
                           href={link.href}
                           target="_blank"
@@ -409,7 +342,7 @@ export function SiteFooter() {
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
 
             <p>© 2023–{currentYear} Miransas Inc. All rights reserved.</p>
-           
+
 
             {/* Araya küçük bir nokta koyarak canlı saati ekliyoruz */}
             <span className="hidden md:block w-1 h-1 rounded-full bg-stone-600"></span>

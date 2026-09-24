@@ -10,7 +10,7 @@ import { VideoSections } from '../components/shared/video-section'
 
 import { ShaderCTA } from '../components/shaders/shader-cta'
 import ExpandScroll from '../components/shared/expand-scroll'
-import { ProductMock } from '../components/shared/product-mock'
+
 import TestimonialSection from '../components/shared/ai-demoSection'
 import Timeline from '../components/shared/heroTimeline'
 import AIDemoSection from '../components/shared/ai-demoSection'

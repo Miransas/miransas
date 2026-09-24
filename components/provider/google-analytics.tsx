@@ -2,11 +2,19 @@
 
 import Script from "next/script";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 
 const measurementId = process.env.NEXT_PUBLIC_GA_ID;
 
 export function GoogleAnalytics() {
+    return (
+        <Suspense fallback={null}>
+            <GoogleAnalyticsTracker />
+        </Suspense>
+    );
+}
+
+function GoogleAnalyticsTracker() {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
