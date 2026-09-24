@@ -9,6 +9,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
+    
   },
   "engines": {
     "node": ">=24 <25",
@@ -63,6 +64,7 @@
     "drizzle-kit": "^0.31.10",
     "eslint": "^10",
     "eslint-config-next": "^16.3.5",
+    "prettier-plugin-tailwindcss": "^0.8.1",
     "shadcn": "^4.20.1",
     "tailwindcss": "^4",
     "typescript": "^6.0.3"

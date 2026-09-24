@@ -44,9 +44,9 @@ export const PRODUCT_MENU = [
 
 export const RESOURCE_MENU = [
   { label: "Blog", href: "https://blog.miransas.com", isExternal: true },
-  { label: "Support", href: "/contact" },
+  { label: "Support", href: "/support" },
   { label: "Contact", href: "/contact" },
-  { label: "Help", href: "/developers" },
+  // { label: "Help", href: "/developers" },
 ] as const;
 
 export const EXPLORE_MENU = [
@@ -56,8 +56,10 @@ export const EXPLORE_MENU = [
 ] as const;
 
 export const COMPANY_MENU = [
+    { label: "About", href: "/about" },
   { label: "Developers", href: "/developers" },
   { label: "Careers", href: "/careers" },
+
 ] as const;
 
 export const HEADER_MENU = [

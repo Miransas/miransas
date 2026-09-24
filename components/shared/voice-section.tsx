@@ -7,6 +7,7 @@ import ContinuousOrbLoop from "./globe";
 
 import LiveVoiceStream from "./voice-demo";
 import Shdr02 from "../ui/shdr-02";
+import RobotEyes from "./RobotEyes";
 
 const VOICE_STEPS = [
   {
@@ -134,7 +135,7 @@ function DynamicComponentSlot({ activeIndex }: { activeIndex: number }) {
         {/* ======================================================
           BURAYA SİZİN KENDİ BİLEŞENLERİNİZ IMPORT EDİLİP GELECEK: */}
 
-        {activeIndex === 0 && <ContinuousOrbLoop />}
+        {activeIndex === 0 && <RobotEyes />}
 
         {activeIndex === 1 && <Shdr02
           size={480}

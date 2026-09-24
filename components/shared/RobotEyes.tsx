@@ -39,93 +39,21 @@ function RobotEye({
           SOFT OUTER GLOW
       ========================================== */}
       <div
-        className={`
-          pointer-events-none
-          absolute
-          left-1/2
-          top-1/2
-          -translate-x-1/2
-          -translate-y-1/2
-
-          w-[68px]
-          h-[94px]
-
-          rounded-full
-
-          bg-[#72b8ff]/30
-          blur-[20px]
-
-          transition-all
-          duration-100
-          ease-out
-
-          ${
-            closed
-              ? 'scale-y-[0.05] opacity-0'
-              : 'scale-y-100 opacity-100'
-          }
-        `}
+        className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[68px] h-[94px] rounded-full bg-[#72b8ff]/30 blur-[20px] transition-all duration-100 ease-out ${closed ? 'scale-y-[0.05] opacity-0' : 'scale-y-100 opacity-100'}`}
       />
 
       {/* =========================================
           SECONDARY BLUE BLOOM
       ========================================== */}
       <div
-        className={`
-          pointer-events-none
-          absolute
-          left-1/2
-          top-1/2
-          -translate-x-1/2
-          -translate-y-1/2
-
-          w-[50px]
-          h-[78px]
-
-          rounded-full
-
-          bg-[#b9ddff]/30
-          blur-[12px]
-
-          transition-all
-          duration-100
-          ease-out
-
-          ${
-            closed
-              ? 'scale-y-[0.05] opacity-0'
-              : 'scale-y-100 opacity-100'
-          }
-        `}
+        className={`pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[50px] h-[78px] rounded-full bg-[#b9ddff]/30 blur-[12px] transition-all duration-100 ease-out ${closed ? 'scale-y-[0.05] opacity-0' : 'scale-y-100 opacity-100'}`}
       />
 
       {/* =========================================
           MAIN EYE
       ========================================== */}
       <div
-        className={`
-          relative
-
-          w-[30px]
-          h-[58px]
-
-          md:w-[34px]
-          md:h-[64px]
-
-          rounded-[50%]
-
-          overflow-hidden
-
-          transition-transform
-          duration-100
-          ease-out
-
-          ${
-            closed
-              ? 'scale-y-[0.055] scale-x-[1.12]'
-              : 'scale-y-100 scale-x-100'
-          }
-        `}
+        className={`relative w-[30px] h-[58px] md:w-[34px] md:h-[64px] rounded-[50%] overflow-hidden transition-transform duration-100 ease-out ${closed ? 'scale-y-[0.055] scale-x-[1.12]' : 'scale-y-100 scale-x-100'}`}
         style={{
           background: `
             radial-gradient(
@@ -153,96 +81,28 @@ function RobotEye({
             SOFT INNER CORE
         ========================================== */}
         <div
-          className="
-            absolute
-            left-1/2
-            top-1/2
-
-            -translate-x-1/2
-            -translate-y-1/2
-
-            w-[17px]
-            h-[39px]
-
-            rounded-full
-
-            bg-white
-
-            blur-[2.5px]
-
-            opacity-95
-          "
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[17px] h-[39px] rounded-full bg-white blur-[2.5px] opacity-95"
         />
 
         {/* =========================================
             HOT WHITE CENTER
         ========================================== */}
         <div
-          className="
-            absolute
-            left-1/2
-            top-1/2
-
-            -translate-x-1/2
-            -translate-y-1/2
-
-            w-[10px]
-            h-[27px]
-
-            rounded-full
-
-            bg-white
-
-            blur-[2px]
-
-            opacity-100
-          "
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[10px] h-[27px] rounded-full bg-white blur-[2px] opacity-100"
         />
 
         {/* =========================================
             TOP GLASS HIGHLIGHT
         ========================================== */}
         <div
-          className="
-            absolute
-            left-[7px]
-            top-[8px]
-
-            w-[6px]
-            h-[14px]
-
-            rounded-full
-
-            bg-white
-
-            blur-[2px]
-
-            opacity-75
-          "
+          className="absolute left-[7px] top-[8px] w-[6px] h-[14px] rounded-full bg-white blur-[2px] opacity-75"
         />
 
         {/* =========================================
             LOWER SOFT REFLECTION
         ========================================== */}
         <div
-          className="
-            absolute
-            bottom-[7px]
-            left-1/2
-
-            -translate-x-1/2
-
-            w-[11px]
-            h-[12px]
-
-            rounded-full
-
-            bg-[#d9edff]
-
-            blur-[5px]
-
-            opacity-60
-          "
+          className="absolute bottom-[7px] left-1/2 -translate-x-1/2 w-[11px] h-[12px] rounded-full bg-[#d9edff] blur-[5px] opacity-60"
         />
       </div>
 
@@ -250,62 +110,14 @@ function RobotEye({
           TOP EYELID
       ========================================== */}
       <div
-        className={`
-          absolute
-
-          -top-[8px]
-          -left-[8px]
-          -right-[8px]
-
-          h-[38px]
-
-          rounded-b-[50%]
-
-          bg-[#050505]
-
-          origin-top
-
-          transition-transform
-          duration-100
-          ease-in-out
-
-          ${
-            closed
-              ? 'scale-y-100'
-              : 'scale-y-0'
-          }
-        `}
+        className={`absolute -top-[8px] -left-[8px] -right-[8px] h-[38px] rounded-b-[50%] bg-[#050505] origin-top transition-transform duration-100 ease-in-out ${closed ? 'scale-y-100' : 'scale-y-0'}`}
       />
 
       {/* =========================================
           BOTTOM EYELID
       ========================================== */}
       <div
-        className={`
-          absolute
-
-          -bottom-[8px]
-          -left-[8px]
-          -right-[8px]
-
-          h-[18px]
-
-          rounded-t-[50%]
-
-          bg-[#050505]
-
-          origin-bottom
-
-          transition-transform
-          duration-100
-          ease-in-out
-
-          ${
-            closed
-              ? 'scale-y-100'
-              : 'scale-y-0'
-          }
-        `}
+        className={`absolute -bottom-[8px] -left-[8px] -right-[8px] h-[18px] rounded-t-[50%] bg-[#050505] origin-bottom transition-transform duration-100 ease-in-out ${closed ? 'scale-y-100' : 'scale-y-0'}`}
       />
     </div>
   );
@@ -590,40 +402,13 @@ export default function RobotEyes() {
   return (
     <div
       ref={containerRef}
-      className="
-        relative
-
-        w-[400px]
-        h-[400px]
-
-        md:w-[480px]
-        md:h-[480px]
-
-        mx-auto
-
-        flex
-        items-center
-        justify-center
-      "
+      className="relative w-[650px] h-[650px] md:w-[650px] md:h-[650px] mx-auto flex items-center justify-center"
     >
-      {/* ======================================
-          ROBOT BODY
-      ======================================= */}
       <img
         src="https://res.cloudinary.com/dwdk20m6q/image/upload/v1790282774/Firefly_RemoveBackground_mre4pp.png"
         alt="Miransas AI Robot"
         draggable={false}
-        className="
-          pointer-events-none
-          select-none
-
-          w-full
-          h-full
-
-          object-contain
-
-          drop-shadow-[0_22px_45px_rgba(0,0,0,0.14)]
-        "
+        className="pointer-events-none select-none w-full h-full object-contain drop-shadow-[0_22px_45px_rgba(0,0,0,0.14)]"
       />
 
       {/* ======================================
@@ -641,8 +426,7 @@ export default function RobotEyes() {
       ======================================= */}
       <RobotEye
         side="right"
-        offset={eyeOffset}
-        blink={blink}
+        offset={eyeOffset} blink={blink}
         wink={wink}
       />
     </div>

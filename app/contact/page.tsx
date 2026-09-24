@@ -1,377 +1,528 @@
 "use client";
 
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
-  Bug,
-  Send,
-  ChevronDown,
-  Sparkles,
-  ShieldAlert,
-  HelpCircle,
-  CheckCircle2,
-  Mail,
   ArrowUpRight,
-  Terminal,
-  MessageSquare,
-  LifeBuoy
+  Check,
+  Clock3,
+  Mail,
+  MessageCircle,
+  Send,
+  Sparkles,
+  User,
 } from "lucide-react";
+import {
+  motion,
+  AnimatePresence,
+} from "framer-motion";
+import { FormEvent, useState } from "react";
 
-
-// FAQ Data
-const FAQS = [
-  {
-    id: 1,
-    question: "How fast is Miralas real-time neural voice synthesis?",
-    answer:
-      "Our ultra-low latency audio pipeline delivers sub-200ms audio generation over WebSocket streams, making it ideal for interactive conversational AI and live voice applications."
-  },
-  {
-    id: 2,
-    question: "How is my voice actor data protected and licensed?",
-    answer:
-      "All voice samples and trained models are encrypted at rest and in transit. Miransas strictly enforces commercial usage agreements and royalty protection for all custom voice actors."
-  },
-  {
-    id: 3,
-    question: "Can I self-host Miransas audio engines on-premises?",
-    answer:
-      "Yes. Enterprise tier customers can deploy isolated Docker/Kubernetes container instances with dedicated GPU acceleration on private infrastructure."
-  },
-  {
-    id: 4,
-    question: "What audio formats and sample rates are supported?",
-    answer:
-      "We support high-fidelity output up to 24-bit / 48kHz in PCM, WAV, MP3, and OGG formats with customizable compression ratios."
-  }
-];
+type FormState = "idle" | "sending" | "success";
 
 export default function ContactPage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(1);
-  const [formSubmitted, setFormSubmitted] = useState(false);
-  const [bugReportActive, setBugReportActive] = useState(false);
+  const [status, setStatus] = useState<FormState>("idle");
+  const [message, setMessage] = useState("");
 
-  const toggleFaq = (id: number) => {
-    setOpenFaq(openFaq === id ? null : id);
-  };
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormSubmitted(true);
-    setTimeout(() => setFormSubmitted(false), 4000);
+    setStatus("sending");
+
+    /*
+     * Burada daha sonra gerçek API endpoint'ine
+     * bağlayabilirsin.
+     */
+    await new Promise((resolve) =>
+      setTimeout(resolve, 1200)
+    );
+
+    setStatus("success");
   };
 
   return (
-    <div className="min-h-screen bg-black text-white  py-16 px-4 sm:px-6 lg:px-8 ">
-      {/* <div style={{ width: '100%', height: '1250px', position: 'absolute' }}>
-        <LightRays
-          raysOrigin="top-center"
-          raysColor="#f2ecec"
-          raysSpeed={1.3}
-          lightSpread={0.8}
-          rayLength={3}
-          followMouse={true}
-          mouseInfluence={0.1}
-          noiseAmount={0}
-          distortion={0.1}
-          className="custom-rays"
-          pulsating={false}
-          fadeDistance={1.8}
-          saturation={1}
+    <main
+      className="relative min-h-screen overflow-hidden bg-[#020203] text-white"
+    >
+      {/* =====================================================
+          ATMOSPHERE
+      ===================================================== */}
+
+      <div
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        {/* rose */}
+
+        <div
+          className="absolute left-[-120px] top-[15%] h-[420px] w-[420px] rounded-full bg-rose-400/[0.045] blur-[140px]"
         />
-      </div> */}
 
-      <div className="max-w-6xl mx-auto space-y-16">
+        {/* purple */}
 
-        {/* Header Section */}
-        <div className="text-center space-y-4 max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-rose-500/30 bg-rose-500/10 text-rose-400 text-xs font-semibold tracking-wider uppercase"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            Miransas Support & Enquiries
-          </motion.div>
-          <motion.h1
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white"
-          >
-            How can we help your team build?
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="text-white/60 text-base sm:text-lg leading-relaxed"
-          >
-            Have questions about Miralas voice models, API pricing, or technical infrastructure? Reach out directly or submit a system diagnostic report.
-          </motion.p>
-        </div>
+        <div
+          className="absolute right-[-150px] top-[12%] h-[500px] w-[500px] rounded-full bg-purple-400/[0.05] blur-[150px]"
+        />
 
-        {/* Top Highlight Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* lime */}
 
-          {/* Status / Quick Contact */}
-          <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 backdrop-blur-xl flex flex-col justify-between hover:border-white/20 transition-all">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
-                <CheckCircle2 className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-semibold text-white">System Operational</h3>
-              <p className="text-sm text-white/50 leading-relaxed">
-                All AI voice synthesis clusters and API endpoints are running normally at sub-200ms latency.
-              </p>
-            </div>
-            <div className="pt-4 flex items-center gap-2 text-xs text-emerald-400 font-mono">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              99.98% Uptime Last 30 Days
-            </div>
-          </div>
+        <div
+          className="absolute left-1/2 bottom-[-180px] h-[400px] w-[620px] -translate-x-1/2 rounded-full bg-lime-300/[0.018] blur-[150px]"
+        />
 
-          {/* Bug & Problem Card (Interactive) */}
-          <div className={`border rounded-2xl p-6 backdrop-blur-xl flex flex-col justify-between transition-all relative overflow-hidden ${bugReportActive
-              ? "bg-rose-950/20 border-rose-500/50 shadow-[0_0_30px_rgba(244,63,94,0.15)]"
-              : "bg-white/[0.03] border-white/10 hover:border-rose-500/40"
-            }`}>
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/30 flex items-center justify-center text-rose-400">
-                <Bug className="w-5 h-5" />
-              </div>
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-white">Bug & Issue Report</h3>
-                <span className="text-[10px] font-mono uppercase bg-rose-500/20 border border-rose-500/30 text-rose-300 px-2 py-0.5 rounded-full">
-                  Priority
-                </span>
-              </div>
-              <p className="text-sm text-white/50 leading-relaxed">
-                Found an issue with audio synthesis, API latency, or dashboard controls? Send a high-priority ticket directly to engineering.
-              </p>
-            </div>
-            <div className="pt-6">
-              <button
-                onClick={() => setBugReportActive(!bugReportActive)}
-                className="w-full py-2.5 px-4 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-200 border border-rose-500/40 text-sm font-medium transition-all flex items-center justify-center gap-2"
-              >
-                <ShieldAlert className="w-4 h-4" />
-                {bugReportActive ? "Cancel Bug Mode" : "File a Bug Ticket"}
-              </button>
-            </div>
-          </div>
+        {/* dark vignette */}
 
-          {/* Direct Mail Card */}
-          <div className="bg-white/[0.03] border border-white/10 rounded-2xl p-6 backdrop-blur-xl flex flex-col justify-between hover:border-white/20 transition-all">
-            <div className="space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center text-blue-400">
-                <Mail className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-semibold text-white">Enterprise Sales</h3>
-              <p className="text-sm text-white/50 leading-relaxed">
-                Need custom neural model training, voice licensing, or volume SLA commitments?
-              </p>
-            </div>
-            <div className="pt-4">
-              <a
-                href="mailto:contact@miransas.com"
-                className="inline-flex items-center gap-1.5 text-sm font-medium text-white hover:text-rose-400 transition-colors"
-              >
-                contact@miransas.com
-                <ArrowUpRight className="w-4 h-4" />
-              </a>
-            </div>
-          </div>
-
-        </div>
-
-        {/* Main Content: Contact Form & FAQ Split */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
-
-          {/* Form Column */}
-          <div className="lg:col-span-7 bg-[#0d0d0d] border border-white/10 rounded-3xl p-6 sm:p-8 relative shadow-2xl">
-            <div className="flex items-center gap-3 mb-6 pb-6 border-b border-white/5">
-              <div className="p-2.5 bg-rose-500/10 border border-rose-500/20 rounded-xl text-rose-400">
-                {bugReportActive ? <Terminal className="w-5 h-5" /> : <MessageSquare className="w-5 h-5" />}
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-white">
-                  {bugReportActive ? "Report a Technical Issue" : "Send us a Message"}
-                </h2>
-                <p className="text-xs text-white/40">
-                  {bugReportActive
-                    ? "Submitting to Miransas core engineering team"
-                    : "Fill out the form below and we will get back within 24 hours"}
-                </p>
-              </div>
-            </div>
-
-            {formSubmitted ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="py-12 text-center space-y-4"
-              >
-                <div className="w-16 h-16 bg-rose-500/20 border border-rose-500/40 text-rose-400 rounded-full flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
-                <h3 className="text-2xl font-bold text-white">Message Received!</h3>
-                <p className="text-sm text-white/60 max-w-sm mx-auto">
-                  Thank you for reaching out to Miransas. Our team will review your inquiry and respond shortly.
-                </p>
-              </motion.div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium text-white/70 tracking-wide uppercase">
-                      Full Name
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Sardorbek Azimov"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-rose-500/50 focus:bg-white/10 transition-all"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium text-white/70 tracking-wide uppercase">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      required
-                      placeholder="sardor@miransas.com"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-rose-500/50 focus:bg-white/10 transition-all"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium text-white/70 tracking-wide uppercase">
-                      Category
-                    </label>
-                    <select
-                      defaultValue={bugReportActive ? "bug" : "general"}
-                      className="w-full bg-[#141414] border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-rose-500/50 transition-all"
-                    >
-                      <option value="general">General Inquiry</option>
-                      <option value="bug">Bug & Technical Issue</option>
-                      <option value="licensing">Voice Rights & Licensing</option>
-                      <option value="enterprise">Enterprise API & Dedicated Infra</option>
-                    </select>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="text-xs font-medium text-white/70 tracking-wide uppercase">
-                      System Environment
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="e.g., Next.js 16 / Python TTS Worker"
-                      className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-rose-500/50 focus:bg-white/10 transition-all"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <label className="text-xs font-medium text-white/70 tracking-wide uppercase">
-                    Message / Diagnostic Details
-                  </label>
-                  <textarea
-                    rows={5}
-                    required
-                    placeholder={
-                      bugReportActive
-                        ? "Please describe the bug, expected behavior, and steps or log traces to reproduce..."
-                        : "How can Miransas help you with AI audio synthesis?"
-                    }
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-rose-500/50 focus:bg-white/10 transition-all resize-none"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="w-full py-3.5 px-6 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-semibold text-sm transition-all shadow-lg shadow-rose-500/25 active:scale-[0.99] flex items-center justify-center gap-2"
-                >
-                  <Send className="w-4 h-4" />
-                  {bugReportActive ? "Submit Bug Ticket" : "Send Message"}
-                </button>
-              </form>
-            )}
-          </div>
-
-          {/* FAQ Column */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-white/5 rounded-xl text-white/70 border border-white/10">
-                <HelpCircle className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-white">Frequently Asked Questions</h2>
-                <p className="text-xs text-white/40">Quick answers about Miransas platform</p>
-              </div>
-            </div>
-
-            <div className="space-y-3">
-              {FAQS.map((faq) => {
-                const isOpen = openFaq === faq.id;
-                return (
-                  <div
-                    key={faq.id}
-                    className="border border-white/10 rounded-2xl bg-white/[0.02] overflow-hidden transition-all"
-                  >
-                    <button
-                      onClick={() => toggleFaq(faq.id)}
-                      className="w-full p-5 text-left flex items-center justify-between gap-4 hover:bg-white/5 transition-colors"
-                    >
-                      <span className="text-sm font-medium text-white/90">
-                        {faq.question}
-                      </span>
-                      <ChevronDown
-                        className={`w-4 h-4 text-white/50 shrink-0 transition-transform duration-300 ${isOpen ? "rotate-180 text-rose-400" : ""
-                          }`}
-                      />
-                    </button>
-
-                    <AnimatePresence>
-                      {isOpen && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          transition={{ duration: 0.25 }}
-                        >
-                          <div className="px-5 pb-5 text-xs sm:text-sm text-white/60 leading-relaxed border-t border-white/5 pt-3">
-                            {faq.answer}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Support Callout Box */}
-            <div className="p-5 rounded-2xl bg-gradient-to-br from-white/5 to-transparent border border-white/10 flex items-center gap-4">
-              <div className="p-3 bg-rose-500/10 border border-rose-500/30 rounded-xl text-rose-400 shrink-0">
-                <LifeBuoy className="w-5 h-5" />
-              </div>
-              <div className="space-y-1">
-                <h4 className="text-sm font-semibold text-white">Need custom integration support?</h4>
-                <p className="text-xs text-white/50">
-                  Our core engineers are available for architecture reviews and custom dataset pipelines.
-                </p>
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
+        <div
+          className="absolute inset-0 bg-[radial-gradient( circle_at_center, transparent_0%, rgba(0,0,0,0.08)_45%, rgba(0,0,0,0.5)_100% )]"
+        />
       </div>
-    </div>
+
+      {/* =====================================================
+          MAIN
+      ===================================================== */}
+
+      <section className="relative z-10">
+        <div
+          className="mx-auto max-w-7xl px-6 pb-24 pt-28 sm:pb-32 sm:pt-36 lg:px-8 lg:pt-40"
+        >
+          <div
+            className="grid grid-cols-1 items-start gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20"
+          >
+            {/* =================================================
+                LEFT CONTENT
+            ================================================= */}
+
+            <motion.div
+              initial={{
+                opacity: 0,
+                x: -30,
+              }}
+              animate={{
+                opacity: 1,
+                x: 0,
+              }}
+              transition={{
+                duration: 0.75,
+                ease: "easeOut",
+              }}
+              className="lg:sticky lg:top-32"
+            >
+              {/* eyebrow */}
+
+              <div
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.025] px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-white/45 backdrop-blur-xl"
+              >
+                <Sparkles size={11} />
+                Let's talk
+              </div>
+
+              {/* heading */}
+
+              <h1
+                className="mt-7 max-w-xl text-[44px] leading-[0.98] tracking-[-0.055em] text-[#fff3f0] sm:text-[54px] md:text-[64px] lg:text-[70px]"
+              >
+                Let's build
+                <br />
+                something
+                <span className="text-white/45">
+                  {" "}
+                  intelligent.
+                </span>
+              </h1>
+
+              {/* body */}
+
+              <p
+                className="mt-7 max-w-lg text-[15px] leading-7 text-white/50 sm:text-base"
+              >
+                Tell us what you're building, what you
+                need, and where you want to take it.
+                Whether you're exploring an idea or
+                already shipping, we'd love to hear
+                about it.
+              </p>
+
+              {/* availability */}
+
+              <div
+                className="mt-10 max-w-md rounded-[24px] border border-white/[0.08] bg-white/[0.018] p-5 backdrop-blur-xl"
+              >
+                <div
+                  className="flex items-start justify-between gap-6"
+                >
+                  <div>
+                    <span
+                      className="text-[9px] uppercase tracking-[0.22em] text-white/25"
+                    >
+                      Miransas
+                    </span>
+
+                    <h2
+                      className="mt-2 text-sm font-medium text-white/80"
+                    >
+                      Available for new projects
+                    </h2>
+                  </div>
+
+                  <div
+                    className="flex items-center gap-2 rounded-full border border-lime-300/10 bg-lime-300/[0.04] px-2.5 py-1"
+                  >
+                    <span
+                      className="h-1.5 w-1.5 rounded-full bg-lime-300 shadow-[0_0_10px_rgba(181,255,54,.8)]"
+                    />
+
+                    <span
+                      className="text-[10px] text-white/45"
+                    >
+                      Online
+                    </span>
+                  </div>
+                </div>
+
+                <div
+                  className="mt-5 grid grid-cols-2 gap-3"
+                >
+                  <div
+                    className="rounded-2xl border border-white/[0.07] bg-black/[0.18] p-3"
+                  >
+                    <Clock3
+                      size={14}
+                      className="text-white/30"
+                    />
+
+                    <p
+                      className="mt-3 text-[9px] uppercase tracking-[0.16em] text-white/25"
+                    >
+                      Response
+                    </p>
+
+                    <p
+                      className="mt-1 text-xs text-white/65"
+                    >
+                      Within 1 day
+                    </p>
+                  </div>
+
+                  <div
+                    className="rounded-2xl border border-white/[0.07] bg-black/[0.18] p-3"
+                  >
+                    <MessageCircle
+                      size={14}
+                      className="text-white/30"
+                    />
+
+                    <p
+                      className="mt-3 text-[9px] uppercase tracking-[0.16em] text-white/25"
+                    >
+                      Projects
+                    </p>
+
+                    <p
+                      className="mt-1 text-xs text-white/65"
+                    >
+                      AI & automation
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* direct contact */}
+
+              <a
+                href="mailto:hello@miransas.com"
+                className="mt-6 inline-flex items-center gap-2 text-sm text-white/40 transition-colors hover:text-white/80"
+              >
+                <Mail size={15} />
+
+                hello@miransas.com
+
+                <ArrowUpRight size={14} />
+              </a>
+            </motion.div>
+
+            <motion.div
+              initial={{
+                opacity: 0,
+                y: 35,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.12,
+                duration: 0.8,
+                ease: "easeOut",
+              }}
+              className="relative"
+            >
+              {/* ambient glow */}
+
+              <div
+                className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-purple-400/[0.07] blur-[90px]"
+              />
+
+              <div
+                className="relative overflow-hidden rounded-[32px] border border-white/[0.10] bg-[#080809]/65 p-6 shadow-[0_30px_100px_rgba(0,0,0,0.35)] backdrop-blur-2xl sm:p-8"
+              >
+                {/* top line */}
+
+                <div
+                  className="flex items-center justify-between border-b border-white/[0.07] pb-5"
+                >
+                  <div>
+                    <p
+                      className="text-[9px] uppercase tracking-[0.22em] text-white/25"
+                    >
+                      Contact form
+                    </p>
+
+                    <p
+                      className="mt-1 text-sm text-white/70"
+                    >
+                      Start a conversation
+                    </p>
+                  </div>
+
+                  <div
+                    className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.035]"
+                  >
+                    <Send
+                      size={15}
+                      className="text-rose-500"
+                    />
+                  </div>
+                </div>
+
+                <AnimatePresence mode="wait">
+                  {status !== "success" ? (
+                    <motion.form
+                      key="form"
+                      initial={{
+                        opacity: 1,
+                      }}
+                      exit={{
+                        opacity: 0,
+                        y: -10,
+                      }}
+                      onSubmit={handleSubmit}
+                      className="mt-7 space-y-5"
+                    >
+                      {/* name */}
+
+                      <div>
+                        <label
+                          htmlFor="name"
+                          className="mb-2 block text-[10px] uppercase tracking-[0.16em] text-white/30"
+                        >
+                          Name
+                        </label>
+
+                        <div
+                          className="flex items-center gap-3 rounded-2xl border border-white/[0.09] bg-black/[0.20] px-4 transition focus-within:border-white/[0.18]"
+                        >
+                          <User
+                            size={15}
+                            className="text-white/25"
+                          />
+
+                          <input
+                            id="name"
+                            name="name"
+                            required
+                            type="text"
+                            placeholder="Your name"
+                            className="w-full bg-transparent py-4 text-sm text-white outline-none placeholder:text-white/20"
+                          />
+                        </div>
+                      </div>
+
+                      {/* email */}
+
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="mb-2 block text-[10px] uppercase tracking-[0.16em] text-white/30"
+                        >
+                          Email
+                        </label>
+
+                        <div
+                          className="flex items-center gap-3 rounded-2xl border border-white/[0.09] bg-black/[0.20] px-4 transition focus-within:border-white/[0.18]"
+                        >
+                          <Mail
+                            size={15}
+                            className="text-white/25"
+                          />
+
+                          <input
+                            id="email"
+                            name="email"
+                            required
+                            type="email"
+                            placeholder="you@company.com"
+                            className="w-full bg-transparent py-4 text-sm text-white outline-none placeholder:text-white/20 border-none"
+                          />
+                        </div>
+                      </div>
+
+                      {/* company */}
+
+                      <div>
+                        <label
+                          htmlFor="company"
+                          className="mb-2 block text-[10px] uppercase tracking-[0.16em] text-white/30"
+                        >
+                          Company
+                        </label>
+
+                        <input
+                          id="company"
+                          name="company"
+                          type="text"
+                          placeholder="Company name"
+                          className="w-full rounded-2xl border border-white/[0.09] bg-black/[0.20] px-4 py-4 text-sm text-white outline-none transition focus:border-white/[0.18] placeholder:text-white/20"
+                        />
+                      </div>
+
+                      {/* message */}
+
+                      <div>
+                        <label
+                          htmlFor="message"
+                          className="mb-2 block text-[10px] uppercase tracking-[0.16em] text-white/30"
+                        >
+                          Project
+                        </label>
+
+                        <textarea
+                          id="message"
+                          name="message"
+                          required
+                          value={message}
+                          onChange={(event) =>
+                            setMessage(event.target.value)
+                          }
+                          rows={6}
+                          placeholder="Tell us a little about what you're building..."
+                          className="w-full resize-none rounded-2xl border border-white/[0.09] bg-black/[0.20] px-4 py-4 text-sm leading-6 text-white outline-none transition focus:border-white/[0.18] placeholder:text-white/20"
+                        />
+
+                        <div className="mt-2 flex justify-end">
+                          <span
+                            className="text-[9px] text-white/20"
+                          >
+                            {message.length} / 1000
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* submit */}
+
+                      <button
+                        type="submit"
+                        disabled={status === "sending"}
+                        className="group relative flex w-full items-center justify-center gap-2 overflow-hidden rounded-2xl border border-white/20 bg-[#EFEFEF] px-5 py-4 text-sm font-medium text-[#080808] transition-all hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        <span className="relative z-10">
+                          {status === "sending"
+                            ? "Sending..."
+                            : "Send message"}
+                        </span>
+
+                        {status === "sending" ? (
+                          <motion.span
+                            animate={{
+                              rotate: 360,
+                            }}
+                            transition={{
+                              duration: 0.8,
+                              repeat: Infinity,
+                              ease: "linear",
+                            }}
+                            className="relative z-10"
+                          >
+                            <Sparkles size={15} />
+                          </motion.span>
+                        ) : (
+                          <ArrowUpRight
+                            size={16}
+                            className="relative z-10 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                          />
+                        )}
+                      </button>
+                    </motion.form>
+                  ) : (
+                    <motion.div
+                      key="success"
+                      initial={{
+                        opacity: 0,
+                        y: 15,
+                      }}
+                      animate={{
+                        opacity: 1,
+                        y: 0,
+                      }}
+                      transition={{
+                        duration: 0.45,
+                      }}
+                      className="flex min-h-[520px] flex-col items-center justify-center text-center"
+                    >
+                      <div
+                        className="flex h-16 w-16 items-center justify-center rounded-full border border-lime-300/10 bg-lime-300/[0.06] text-lime-200 shadow-[0_0_35px_rgba(181,255,54,0.08)]"
+                      >
+                        <Check size={27} />
+                      </div>
+
+                      <h3
+                        className="mt-7 text-2xl font-medium tracking-[-0.035em] text-white/90"
+                      >
+                        Message received.
+                      </h3>
+
+                      <p
+                        className="mt-3 max-w-sm text-sm leading-7 text-white/40"
+                      >
+                        Thanks for reaching out.
+                        We'll get back to you as soon
+                        as possible.
+                      </p>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setStatus("idle");
+                          setMessage("");
+                        }}
+                        className="mt-7 text-xs text-white/40 underline underline-offset-4 transition hover:text-white/70"
+                      >
+                        Send another message
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* =====================================================
+          BOTTOM
+      ===================================================== */}
+
+      <section className="relative z-10 border-t border-white/[0.06]">
+        <div
+          className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-7 text-xs text-white/25 sm:flex-row sm:items-center sm:justify-between lg:px-8"
+        >
+          <span>
+            Miransas 
+          </span>
+
+          <span>
+            Built for people building what's next.
+          </span>
+        </div>
+      </section>
+    </main>
   );
 }

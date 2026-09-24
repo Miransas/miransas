@@ -105,10 +105,10 @@
     color: var(--color-fg);
   }
 
-  :focus-visible {
+  /* :focus-visible {
     outline: 2px solid rgb(10 10 10 / 0.45);
     outline-offset: 3px;
-  }
+  } */
 
   /* Better text rendering */
   body {
@@ -118,9 +118,9 @@
   }
 
   /* Focus visible styles */
-  :focus-visible {
+  /* :focus-visible {
     @apply outline-none ring-2 ring-amber-500 ring-offset-2 ring-offset-black;
-  }
+  } */
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {

@@ -11,10 +11,10 @@ import { VideoSections } from '../components/shared/video-section'
 import { ShaderCTA } from '../components/shaders/shader-cta'
 import ExpandScroll from '../components/shared/expand-scroll'
 
-import TestimonialSection from '../components/shared/ai-demoSection'
+import { AiTeamSection } from '../components/shared/ai-teamSection'
 import Timeline from '../components/shared/heroTimeline'
-import AIDemoSection from '../components/shared/ai-demoSection'
-import RobotEyes from '../components/shared/product-mock'
+
+import RobotEyes from '../components/shared/RobotEyes'
 
 
 
@@ -24,16 +24,15 @@ const page = () => {
   return (
     <div>
       <HeroScroll />
-      <RobotEyes/>
-      <Timeline/>
-      <AIDemoSection/>
+      <Timeline />
+      <AiTeamSection/>
       <VideoSections />
-      <ExpandScroll /> 
+      <ExpandScroll />
       <VoiceSection />
       <Bento />
       <Faq />
       <Features />
-      <ShaderCTA/>
+      <ShaderCTA />
     </div>
   )
 }

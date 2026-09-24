@@ -7,6 +7,7 @@ import { SiteHeader } from "../components/layouts/header";
 import { SiteFooter } from "../components/layouts/footer";
 import NoticeModal from "../components/provider/site-modal";
 import { GoogleAnalytics } from "../components/provider/google-analytics";
+import { PageTransition } from "../components/provider/page-transition";
 
 
 // ── Fonts ─────────────────────────────────────────────────────────────────
@@ -165,7 +166,11 @@ export default function RootLayout({
         <SmoothScroll>
           <NoticeModal />
           <div className="relative flex min-h-screen flex-col">
-            <main className="flex-grow"><SiteHeader />{children}<SiteFooter /></main>
+            <main className="flex-grow">
+              <SiteHeader />
+              <PageTransition>{children}</PageTransition>
+              <SiteFooter />
+            </main>
           </div>
         </SmoothScroll>
       </body>
