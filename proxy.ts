@@ -31,7 +31,7 @@ function getAttribution(
   const referrer = request.headers.get("referer");
 
   /*
-   * UTM varsa bunu kesin attribution olarak kabul ediyoruz.
+   * UTM varsa kesin attribution.
    */
   if (
     utmSource ||
@@ -53,7 +53,7 @@ function getAttribution(
   }
 
   /*
-   * UTM yok ama dışarıdan Referer geldiyse.
+   * Referer varsa referral.
    */
   if (referrer) {
     try {
@@ -70,41 +70,19 @@ function getAttribution(
         captured_at: new Date().toISOString(),
       };
     } catch {
-      return {
-        source: "referral",
-        medium: "referral",
-        campaign: null,
-        content: null,
-        term: null,
-        referrer,
-        landing_url: href,
-        captured_at: new Date().toISOString(),
-      };
+      return null;
     }
   }
 
   /*
-   * Hiç attribution bilgisi yok.
+   * UTM ve Referer yoksa attribution yok.
    *
-   * Burada NULL döndürüyoruz.
+   * Burada DIRECT yazmıyoruz.
    *
-   * Böylece mevcut kullanıcı:
-   *
-   * Instagram
-   * ↓
-   * /
-   * ↓
-   * /pricing
-   * ↓
-   * /signup
-   *
-   * sırasında "direct" olarak overwrite edilmez.
+   * Çünkü kullanıcı zaten Instagram'dan geldiyse
+   * internal navigation'da attribution bozulmamalı.
    */
   return null;
-}
-
-function getVisitorId(request: NextRequest) {
-  return request.cookies.get(VISITOR_COOKIE)?.value;
 }
 
 function createVisitorId() {
@@ -115,31 +93,31 @@ export function proxy(request: NextRequest) {
   const response = NextResponse.next();
 
   /*
-   * -------------------------------------------------------
-   * VISITOR ID
-   * -------------------------------------------------------
+   * Visitor ID oluştur.
    */
-
-  let visitorId = getVisitorId(request);
+  let visitorId =
+    request.cookies.get(VISITOR_COOKIE)?.value;
 
   if (!visitorId) {
     visitorId = createVisitorId();
 
-    response.cookies.set(VISITOR_COOKIE, visitorId, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: COOKIE_MAX_AGE,
-      path: "/",
-    });
+    response.cookies.set(
+      VISITOR_COOKIE,
+      visitorId,
+      {
+        httpOnly: true,
+        secure:
+          process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: COOKIE_MAX_AGE,
+        path: "/",
+      }
+    );
   }
 
   /*
-   * -------------------------------------------------------
-   * ATTRIBUTION
-   * -------------------------------------------------------
+   * Attribution yakala.
    */
-
   const attribution = getAttribution(request);
 
   const firstTouch = request.cookies.get(
@@ -149,8 +127,7 @@ export function proxy(request: NextRequest) {
   /*
    * FIRST TOUCH
    *
-   * Sadece gerçekten attribution geldiyse ve
-   * daha önce first-touch yoksa oluştur.
+   * Sadece ilk attribution geldiğinde oluştur.
    */
   if (attribution && !firstTouch) {
     response.cookies.set(
@@ -158,7 +135,8 @@ export function proxy(request: NextRequest) {
       JSON.stringify(attribution),
       {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure:
+          process.env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: COOKIE_MAX_AGE,
         path: "/",
@@ -169,12 +147,14 @@ export function proxy(request: NextRequest) {
   /*
    * LAST TOUCH
    *
-   * Sadece yeni attribution geldiyse güncelle.
+   * Sadece yeni attribution varsa güncelle.
    *
-   * Internal navigation:
-   * / → /pricing → /signup
+   * /pricing
+   * /about
+   * /signup
    *
-   * attribution olmadığı için LAST TOUCH değişmez.
+   * gibi internal navigation'larda
+   * attribution değişmez.
    */
   if (attribution) {
     response.cookies.set(
@@ -182,7 +162,8 @@ export function proxy(request: NextRequest) {
       JSON.stringify(attribution),
       {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
+        secure:
+          process.env.NODE_ENV === "production",
         sameSite: "lax",
         maxAge: COOKIE_MAX_AGE,
         path: "/",
@@ -196,9 +177,19 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * API'yi proxy'den çıkarıyoruz.
-     * Static dosyaları ve metadata dosyalarını da çıkarıyoruz.
+     * Sadece gerçek sayfa request'lerini hedefle.
+     *
+     * API
+     * _next
+     * static
+     * image
+     * favicon
+     * sitemap
+     * robots
+     * dosya uzantıları
+     *
+     * tracking'e girmeyecek.
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|css|js|mjs|map|txt|xml|woff|woff2|ttf|otf)$).*)",
   ],
 };

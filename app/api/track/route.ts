@@ -20,7 +20,9 @@ type Attribution = {
   captured_at: string;
 };
 
-function parseCookie<T>(value?: string): T | null {
+function parseCookie<T>(
+  value?: string
+): T | null {
   if (!value) return null;
 
   try {
@@ -30,7 +32,9 @@ function parseCookie<T>(value?: string): T | null {
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest
+) {
   try {
     const visitorId =
       request.cookies.get("visitor_id")?.value;
@@ -45,15 +49,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const firstTouch = parseCookie<Attribution>(
-      request.cookies.get("attribution_first")?.value
-    );
+    const firstTouch =
+      parseCookie<Attribution>(
+        request.cookies.get(
+          "attribution_first"
+        )?.value
+      );
 
-    const lastTouch = parseCookie<Attribution>(
-      request.cookies.get("attribution_last")?.value
-    );
+    const lastTouch =
+      parseCookie<Attribution>(
+        request.cookies.get(
+          "attribution_last"
+        )?.value
+      );
 
-    const body = await request.json().catch(() => ({}));
+    const body =
+      await request.json().catch(
+        () => ({})
+      );
+
+    const eventId =
+      typeof body.eventId === "string"
+        ? body.eventId
+        : null;
 
     const eventName =
       typeof body.eventName === "string"
@@ -66,12 +84,50 @@ export async function POST(request: NextRequest) {
         : null;
 
     /*
-     * ----------------------------------------------------
-     * 1. VISITOR'I OLUŞTUR
-     * ----------------------------------------------------
+     * Event ID olmadan tracking kabul etmiyoruz.
+     */
+    if (!eventId) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "event_id_missing",
+        },
+        { status: 400 }
+      );
+    }
+
+    /*
+     * --------------------------------------------------
+     * DUPLICATE KONTROLÜ
+     * --------------------------------------------------
      *
-     * Aynı visitor_id aynı anda iki kez gelirse
-     * ON CONFLICT sayesinde hata vermez.
+     * Aynı event daha önce kaydedilmiş mi?
+     */
+    const existingEvent =
+      await db
+        .select({
+          id: trackingEvents.id,
+        })
+        .from(trackingEvents)
+        .where(
+          eq(
+            trackingEvents.eventId,
+            eventId
+          )
+        )
+        .limit(1);
+
+    if (existingEvent.length > 0) {
+      return NextResponse.json({
+        success: true,
+        duplicate: true,
+      });
+    }
+
+    /*
+     * --------------------------------------------------
+     * VISITOR OLUŞTUR
+     * --------------------------------------------------
      */
 
     await db
@@ -128,11 +184,9 @@ export async function POST(request: NextRequest) {
       });
 
     /*
-     * ----------------------------------------------------
-     * 2. VISITOR'I GÜNCELLE
-     * ----------------------------------------------------
-     *
-     * Page view +1
+     * --------------------------------------------------
+     * PAGE VIEW +1
+     * --------------------------------------------------
      */
 
     const updateData: {
@@ -147,20 +201,16 @@ export async function POST(request: NextRequest) {
       lastReferrer?: string | null;
       lastLandingUrl?: string | null;
     } = {
-      pageViews: sql`${visitors.pageViews} + 1`,
+      pageViews:
+        sql`${visitors.pageViews} + 1`,
+
       lastSeenAt: new Date(),
     };
 
     /*
-     * Yeni attribution varsa LAST TOUCH'u güncelle.
-     *
-     * Internal navigation'da lastTouch cookie vardır,
-     * fakat aynı attribution tekrar yazılır.
-     *
-     * Direct/internal navigation'da attribution cookie
-     * değişmediği için attribution bozulmaz.
+     * Last touch sadece gerçek attribution
+     * varsa güncellenir.
      */
-
     if (lastTouch) {
       updateData.lastSource =
         lastTouch.source;
@@ -188,34 +238,45 @@ export async function POST(request: NextRequest) {
       .update(visitors)
       .set(updateData)
       .where(
-        eq(visitors.visitorId, visitorId)
+        eq(
+          visitors.visitorId,
+          visitorId
+        )
       );
 
     /*
-     * ----------------------------------------------------
-     * 3. EVENT KAYDET
-     * ----------------------------------------------------
+     * --------------------------------------------------
+     * EVENT INSERT
+     * --------------------------------------------------
      */
 
-    await db.insert(trackingEvents).values({
-      visitorId,
+    await db
+      .insert(trackingEvents)
+      .values({
+        eventId,
 
-      eventName,
+        visitorId,
 
-      page,
+        eventName,
 
-      source:
-        lastTouch?.source ?? "direct",
+        page,
 
-      medium:
-        lastTouch?.medium ?? "none",
+        source:
+          lastTouch?.source ?? "direct",
 
-      campaign:
-        lastTouch?.campaign ?? null,
-    });
+        medium:
+          lastTouch?.medium ?? "none",
+
+        campaign:
+          lastTouch?.campaign ?? null,
+      })
+      .onConflictDoNothing({
+        target: trackingEvents.eventId,
+      });
 
     return NextResponse.json({
       success: true,
+      duplicate: false,
     });
   } catch (error) {
     console.error(

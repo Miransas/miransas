@@ -5,6 +5,7 @@ import {
   timestamp,
   uuid,
   index,
+  uniqueIndex,
 } from "drizzle-orm/pg-core";
 
 export const visitors = pgTable(
@@ -32,7 +33,6 @@ export const visitors = pgTable(
     lastReferrer: text("last_referrer"),
     lastLandingUrl: text("last_landing_url"),
 
-    // Statistics
     pageViews: integer("page_views").notNull().default(0),
 
     firstSeenAt: timestamp("first_seen_at", {
@@ -67,6 +67,14 @@ export const trackingEvents = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey(),
 
+    /*
+     * Browser'ın oluşturduğu unique event ID.
+     *
+     * Aynı event iki kere gönderilirse
+     * database ikinciyi kabul etmeyecek.
+     */
+    eventId: text("event_id").notNull(),
+
     visitorId: text("visitor_id").notNull(),
 
     eventName: text("event_name").notNull(),
@@ -84,22 +92,20 @@ export const trackingEvents = pgTable(
       .notNull(),
   },
   (table) => ({
+    eventIdUnique: uniqueIndex(
+      "tracking_events_event_id_unique"
+    ).on(table.eventId),
+
     visitorIdx: index("tracking_events_visitor_idx").on(
       table.visitorId
     ),
 
-    eventNameIdx: index("tracking_events_event_name_idx").on(
-      table.eventName
-    ),
+    eventNameIdx: index(
+      "tracking_events_event_name_idx"
+    ).on(table.eventName),
 
-    createdAtIdx: index("tracking_events_created_at_idx").on(
-      table.createdAt
-    ),
+    createdAtIdx: index(
+      "tracking_events_created_at_idx"
+    ).on(table.createdAt),
   })
 );
-
-export type Visitor = typeof visitors.$inferSelect;
-export type NewVisitor = typeof visitors.$inferInsert;
-
-export type TrackingEvent = typeof trackingEvents.$inferSelect;
-export type NewTrackingEvent = typeof trackingEvents.$inferInsert;
