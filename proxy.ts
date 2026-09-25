@@ -1,61 +1,148 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const ATTRIBUTION_COOKIE = 'marketing_attribution';
+const FIRST_TOUCH_COOKIE = 'attribution_first';
+const LAST_TOUCH_COOKIE = 'attribution_last';
 
-export function proxy(request: NextRequest) {
-  const { searchParams } = request.nextUrl;
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 90; // 90 gün
 
-  // UTM parametrelerini al
+type Attribution = {
+  source: string;
+  medium: string;
+  campaign: string | null;
+  content: string | null;
+  term: string | null;
+  referrer: string | null;
+  landing_url: string;
+  captured_at: string;
+};
+
+function getAttribution(request: NextRequest): Attribution | null {
+  const { searchParams, href } = request.nextUrl;
+
   const utmSource = searchParams.get('utm_source');
   const utmMedium = searchParams.get('utm_medium');
+
   const utmCampaign = searchParams.get('utm_campaign');
   const utmContent = searchParams.get('utm_content');
   const utmTerm = searchParams.get('utm_term');
 
-  // Kullanıcının geldiği kaynak
   const referrer = request.headers.get('referer');
 
-  // Mevcut attribution cookie'si
-  const existingAttribution = request.cookies.get(
-    ATTRIBUTION_COOKIE
-  )?.value;
-
-  const response = NextResponse.next();
-
-  // Sadece gerçekten attribution bilgisi varsa kaydet
-  const hasAttribution =
-    utmSource ||
-    utmMedium ||
-    utmCampaign ||
-    utmContent ||
-    utmTerm ||
-    referrer;
-
-  // İlk touch attribution:
-  // Kullanıcı daha önce attribution cookie'sine sahipse değiştirme.
-  if (hasAttribution && !existingAttribution) {
-    const attribution = {
-      utm_source: utmSource,
-      utm_medium: utmMedium,
-      utm_campaign: utmCampaign,
-      utm_content: utmContent,
-      utm_term: utmTerm,
-      referrer: referrer ?? null,
-      landing_url: request.nextUrl.href,
+  /*
+   * 1. UTM varsa UTM'i esas al.
+   *
+   * Örnek:
+   * ?utm_source=instagram&utm_medium=bio
+   */
+  if (utmSource || utmMedium) {
+    return {
+      source: utmSource || 'unknown',
+      medium: utmMedium || 'unknown',
+      campaign: utmCampaign,
+      content: utmContent,
+      term: utmTerm,
+      referrer,
+      landing_url: href,
       captured_at: new Date().toISOString(),
     };
+  }
 
+  /*
+   * 2. UTM yok ama Referer varsa
+   */
+  if (referrer) {
+    let source = 'referral';
+
+    try {
+      const referrerUrl = new URL(referrer);
+      source = referrerUrl.hostname;
+    } catch {
+      // Geçersiz referer gelirse referral olarak bırak
+    }
+
+    return {
+      source,
+      medium: 'referral',
+      campaign: null,
+      content: null,
+      term: null,
+      referrer,
+      landing_url: href,
+      captured_at: new Date().toISOString(),
+    };
+  }
+
+  /*
+   * 3. Hiçbir kaynak bilgisi yoksa
+   *
+   * Direct:
+   * Kullanıcı URL'yi direkt yazmış olabilir,
+   * bookmark kullanmış olabilir veya browser/app
+   * Referer göndermemiş olabilir.
+   */
+  return {
+    source: 'direct',
+    medium: 'none',
+    campaign: null,
+    content: null,
+    term: null,
+    referrer: null,
+    landing_url: href,
+    captured_at: new Date().toISOString(),
+  };
+}
+
+export function proxy(request: NextRequest) {
+  const response = NextResponse.next();
+
+  const firstTouch = request.cookies.get(FIRST_TOUCH_COOKIE);
+  const lastTouch = request.cookies.get(LAST_TOUCH_COOKIE);
+
+  const attribution = getAttribution(request);
+
+  /*
+   * Her gelen trafik için LAST TOUCH'u güncelle.
+   *
+   * Örneğin:
+   *
+   * İlk geliş:
+   * Instagram
+   *
+   * Sonra:
+   * Google
+   *
+   * first_touch = Instagram
+   * last_touch  = Google
+   */
+  if (attribution) {
     response.cookies.set(
-      ATTRIBUTION_COOKIE,
+      LAST_TOUCH_COOKIE,
       JSON.stringify(attribution),
       {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
-        maxAge: 60 * 60 * 24 * 90, // 90 gün
+        maxAge: COOKIE_MAX_AGE,
         path: '/',
       }
     );
+
+    /*
+     * FIRST TOUCH sadece ilk kez oluşturulur.
+     */
+    if (!firstTouch) {
+      response.cookies.set(
+        FIRST_TOUCH_COOKIE,
+        JSON.stringify(attribution),
+        {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          maxAge: COOKIE_MAX_AGE,
+          path: '/',
+        }
+      );
+    }
   }
 
   return response;
@@ -64,8 +151,7 @@ export function proxy(request: NextRequest) {
 export const config = {
   matcher: [
     /*
-     * Sayfa request'lerinde çalışır.
-     * Next.js internal/static dosyalarını hariç tutar.
+     * Next.js internal dosyalarını hariç tut.
      */
     '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
