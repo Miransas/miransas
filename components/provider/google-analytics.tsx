@@ -24,8 +24,9 @@ function GoogleAnalyticsTracker() {
         const query = searchParams.toString();
         const pagePath = query ? `${pathname}?${query}` : pathname;
 
-        // Sayfa içi geçişlerde ve güncellemelerde path'i ve UTM'leri tetikle
-        window.gtag("config", measurementId, { page_path: pagePath });
+        window.gtag("config", measurementId, {
+            page_path: pagePath,
+        });
     }, [pathname, searchParams]);
 
     if (!measurementId) return null;
@@ -36,14 +37,15 @@ function GoogleAnalyticsTracker() {
                 src={`https://www.googletagmanager.com/gtag/js?id=${measurementId}`}
                 strategy="afterInteractive"
             />
+
             <Script id="google-analytics" strategy="afterInteractive">
                 {`
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  // İlk açılışta send_page_view'u kapatmıyoruz ki 
-                  // Instagram'dan gelen UTM'ler anında yakalansın.
-                  gtag('config', '${measurementId}');
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){dataLayer.push(arguments);}
+                    gtag('js', new Date());
+                    gtag('config', '${measurementId}', {
+                        send_page_view: false
+                    });
                 `}
             </Script>
         </>
