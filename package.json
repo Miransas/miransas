@@ -63,7 +63,7 @@
     "@types/three": "^0.186.0",
     "drizzle-kit": "^0.31.10",
     "eslint": "^10",
-    "eslint-config-next": "^16.3.5",
+    "eslint-config-next": "^16.3.6",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "shadcn": "^4.20.1",
     "tailwindcss": "^4",
