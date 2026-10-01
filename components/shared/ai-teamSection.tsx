@@ -1,10 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import {
-  motion,
-  useInView,
-} from "framer-motion";
+import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Sparkles, Users, Cpu, ShieldCheck } from "lucide-react";
 import RobotEyes from "./RobotEyes";
@@ -20,56 +17,48 @@ function TeamRobot({
 }) {
   const config = {
     outer: {
-      width: 240,
-      height: 260,
-      scale: 0.42,
+      width: 180,
+      height: 200,
+      scale: 0.38,
       opacity: 0.5,
+      zIndex: 10,
+      margin: "-mx-8 sm:-mx-10 lg:-mx-12",
     },
     medium: {
-      width: 320,
-      height: 350,
-      scale: 0.58,
-      opacity: 0.75,
+      width: 250,
+      height: 280,
+      scale: 0.54,
+      opacity: 0.78,
+      zIndex: 20,
+      margin: "-mx-6 sm:-mx-8 lg:-mx-10",
     },
     center: {
-      width: 440,
-      height: 460,
-      scale: 0.78,
+      width: 360,
+      height: 380,
+      scale: 0.74,
       opacity: 1,
+      zIndex: 30,
+      margin: "z-30 relative",
     },
   }[size];
 
   return (
     <motion.div
-      initial={{
-        opacity: 0,
-        y: 35,
-      }}
-      animate={{
-        opacity: config.opacity,
-        y: 0,
-      }}
-      transition={{
-        delay,
-        duration: 0.9,
-        ease: "easeOut",
-      }}
-      className="relative shrink-0 pointer-events-none"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: config.opacity, y: 0 }}
+      transition={{ delay, duration: 0.8, ease: "easeOut" }}
+      className={`relative shrink-0 pointer-events-none ${config.margin}`}
       style={{
         width: config.width,
         height: config.height,
+        zIndex: config.zIndex,
       }}
     >
       <div
-        className="
-          absolute
-          left-1/2
-          bottom-0
-          origin-bottom
-        "
+        className="absolute left-1/2 bottom-0 origin-bottom"
         style={{
-          width: 650,
-          height: 650,
+          width: 600,
+          height: 600,
           transform: `translateX(-50%) scale(${config.scale})`,
         }}
       >
@@ -81,115 +70,76 @@ function TeamRobot({
 
 export function AiTeamSection() {
   const ref = useRef<HTMLElement>(null);
-
-  const inView = useInView(ref, {
-    once: true,
-    amount: 0.2,
-  });
+  const inView = useInView(ref, { once: true, amount: 0.2 });
 
   return (
     <section
       ref={ref}
-      className="
-        relative  overflow-hidden bg-[#020203] flex flex-col items-center justify-between min-h-[90vh]" >
-
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/3 h-[350px] w-[550px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500/[0.04] blur-[140px]" />
-        <div className="absolute left-[15%] top-1/4 h-[220px] w-[220px] rounded-full bg-rose-500/[0.025] blur-[110px]" />
-        <div className="absolute right-[15%] top-1/4 h-[220px] w-[220px] rounded-full bg-lime-400/[0.02] blur-[110px]" />
-      </div>
-
+      className="relative overflow-hidden bg-[#050505] py-16 md:py-24 flex flex-col items-center justify-between min-h-[80vh] border-t border-border/40"
+    >
+      {/* AMBER & DARK BACKDROP GLOWS */}
+    /
       {/* =================================================
-          CONTENT HEADER
+          CONTENT HEADER (Ortalanmış ve Daraltılmış)
       ================================================= */}
-      <div className="relative z-30 max-w-4xl mx-auto px-4 text-center flex flex-col items-center mb-12">
+      <div className="relative z-30 max-w-3xl mx-auto px-6 text-center flex flex-col items-center">
+        {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: -10 }}
           animate={inView ? { opacity: 1, y: 0 } : undefined}
-          transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-zinc-900/80 border border-zinc-800 text-xs font-medium text-zinc-300 mb-6 backdrop-blur-md shadow-lg"
+          transition={{ duration: 0.5 }}
+          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-card/70 border border-border text-xs font-mono text-muted-foreground backdrop-blur-md shadow-sm"
         >
-          <Sparkles size={14} className="text-purple-400 animate-pulse" />
+          <Sparkles className="size-3.5 text-primary animate-pulse" />
           <span>Autonomous AI Workforce</span>
         </motion.div>
 
+        {/* Title */}
         <motion.h2
-          initial={{
-            opacity: 0,
-            x: -25,
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-          transition={{
-            delay: 0.25,
-            duration: 0.75,
-            ease: "easeOut",
-          }}
-          className="mt-6 w-full max-w-none text-left whitespace-normal break-normal text-[38px] leading-[1.08] tracking-[-0.045em] text-[#fff3f0] sm:text-[46px] md:text-[56px] md:leading-[1.08]"
-
+          initial={{ opacity: 0, y: 15 }}
+          animate={inView ? { opacity: 1, y: 0 } : undefined}
+          transition={{ delay: 0.15, duration: 0.65, ease: "easeOut" }}
+          className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-5xl md:text-6xl leading-[1.1]"
         >
-          An AI team designed to <br className="hidden md:block" /> scale your operations.
+          An AI team designed to <br className="hidden sm:block" /> scale your operations.
         </motion.h2>
 
+        {/* Subtitle */}
         <motion.p
-          initial={{
-            opacity: 0,
-            x: -20,
-          }}
-          animate={{
-            opacity: 1,
-            x: 0,
-          }}
-          transition={{
-            delay: 0.38,
-            duration: 0.75,
-            ease: "easeOut",
-          }}
-          className="mt-6 max-w-[560px] text-left text-[14px] leading-6 text-white/65 md:text-[15px] md:leading-7"
+          initial={{ opacity: 0, y: 15 }}
+          animate={inView ? { opacity: 1, y: 0 } : undefined}
+          transition={{ delay: 0.25, duration: 0.65, ease: "easeOut" }}
+          className="mt-4 max-w-xl text-sm sm:text-base text-muted-foreground leading-relaxed"
         >
           Deploy specialized intelligence agents that collaborate seamlessly in real time, handling customer success, workflow automation, and complex problem solving 24/7.
         </motion.p>
 
+        {/* Features Chips */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 15 }}
           animate={inView ? { opacity: 1, y: 0 } : undefined}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex flex-wrap items-center justify-center gap-3 md:gap-6 text-xs mt-4 text-zinc-400 font-medium"
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 text-xs mt-6 text-muted-foreground font-medium"
         >
-          <div className="flex items-center gap-2 bg-zinc-900/40 px-3 py-1.5 rounded-lg border border-zinc-800/60">
-            <Users size={14} className="text-purple-400" />
+          <div className="flex items-center gap-2 bg-card/60 px-3 py-1.5 rounded-lg border border-border backdrop-blur-sm">
+            <Users className="size-3.5 text-primary" />
             <span>Multi-Agent Sync</span>
           </div>
-          <div className="flex items-center gap-2 bg-zinc-900/40 px-3 py-1.5 rounded-lg border border-zinc-800/60">
-            <Cpu size={14} className="text-rose-400" />
+          <div className="flex items-center gap-2 bg-card/60 px-3 py-1.5 rounded-lg border border-border backdrop-blur-sm">
+            <Cpu className="size-3.5 text-amber-400" />
             <span>Real-time Response</span>
           </div>
-          <div className="flex items-center gap-2 bg-zinc-900/40 px-3 py-1.5 rounded-lg border border-zinc-800/60">
-            <ShieldCheck size={14} className="text-lime-400" />
+          <div className="flex items-center gap-2 bg-card/60 px-3 py-1.5 rounded-lg border border-border backdrop-blur-sm">
+            <ShieldCheck className="size-3.5 text-emerald-400" />
             <span>Enterprise Grade</span>
           </div>
         </motion.div>
       </div>
 
       {/* =================================================
-          ROBOT ROW
+          ROBOT ROW (Sıkılaştırılmış ve Derinlikli Dizilim)
       ================================================= */}
-      <div
-        className="
-          relative
-          z-10
-          flex
-          items-end
-          justify-center
-          w-full
-          mt-6
-          overflow-visible
-          px-2
-          gap-1 md:gap-1
-        "
-      >
+      <div className="relative z-10 flex items-end justify-center w-full mt-8 overflow-visible px-2">
         <div className="hidden xl:block">
           <TeamRobot size="outer" delay={0.1} />
         </div>
@@ -209,48 +159,16 @@ export function AiTeamSection() {
         </div>
       </div>
 
-      {/* =================================================
-          SOFT FLOOR (Geliştirilmiş Zemin Gölgesi ve Blur)
-      ================================================= */}
-      <motion.div
+  
+      {/* <motion.div
         initial={{ opacity: 0, scaleX: 0.65 }}
         animate={inView ? { opacity: 1, scaleX: 1 } : undefined}
-        transition={{ delay: 0.55, duration: 1.2 }}
-        className="
-          pointer-events-none
-          absolute
-          bottom-2
-          left-1/2
-          z-20
-          h-[120px]
-          w-[85%]
-          -translate-x-1/2
-          rounded-full
-          bg-gradient-to-r
-          from-transparent
-          via-purple-500/[0.08]
-          to-transparent
-          blur-[50px]
-        "
+        transition={{ delay: 0.55, duration: 1 }}
+        className="pointer-events-none absolute bottom-0 left-1/2 z-20 h-[100px] w-[80%] -translate-x-1/2 rounded-full bg-gradient-to-r from-transparent via-primary/15 to-transparent blur-[40px]"
       />
 
-      {/* =================================================
-          BOTTOM FADE (Sert Kesimi Yok Eden Derin Gradyan)
-      ================================================= */}
-      <div
-        className="
-          pointer-events-none
-          absolute
-          inset-x-0
-          bottom-0
-          z-30
-          h-[28vh]
-          bg-gradient-to-t
-          from-[#020203]
-          via-[#020203]/95
-          to-transparent
-        "
-      />
+    
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 z-30 h-[20vh] bg-gradient-to-t from-background via-background/80 to-transparent" /> */}
     </section>
   );
 }

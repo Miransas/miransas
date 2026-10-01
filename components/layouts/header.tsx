@@ -1,15 +1,16 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
-import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { ArrowRight, ChevronDown, Menu, X, Sparkles } from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { HEADER_MENU } from "@/constants";
+import { HEADER_MENU } from "@/constants/navbar";
 import { cn } from "@/lib/utils";
-
 import { GlowButton } from "../ui/glow-button";
+import { ModeToggle } from "../provider/mode-toggle";
 
 const EXTERNAL_LINKS = {
   sales: "https://console.example.com/studio",
@@ -45,16 +46,17 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b border-transparent transition-all duration-300",
+        "fixed inset-x-0 top-0 z-50  transition-all duration-300",
         scrolled
-          ? "border-border/40 bg-bg/80 backdrop-blur-xl shadow-md"
-          : "bg-bg/40 backdrop-blur-md",
-        open && "bg-bg backdrop-blur-none"
+          ? " bg-background/80 backdrop-blur-xl shadow-2xl"
+          : "bg-background/40 backdrop-blur-md",
+        open && "bg-background backdrop-blur-none"
       )}
     >
-      <div className="container-page flex h-16 md:h-16 items-center justify-between gap-8 px-4 md:px-8">
+      <div className="container-page flex h-16 items-center justify-between gap-8">
+        
         {/* Sol Taraf: Logo ve Navigasyon */}
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-8 lg:gap-10">
           <Link
             href="/"
             className="flex items-center shrink-0 transition-transform active:scale-95 hover:opacity-90"
@@ -63,12 +65,12 @@ export function SiteHeader() {
             <img
               src="/icons/logo.png"
               alt="Logo"
-              className="w-14 object-contain block"
+              className="h-12 w-auto object-contain "
             />
           </Link>
 
           {/* Masaüstü Navigasyon */}
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
             {HEADER_MENU.map((menu) => {
               const isOpen = openMenu === menu.label;
 
@@ -81,28 +83,49 @@ export function SiteHeader() {
                 >
                   <button
                     type="button"
-                    className="inline-flex items-center gap-1.5 text-sm md:text-[15px] font-medium text-fg/80 transition-colors hover:text-fg focus-visible:outline-none"
+                    className={cn(
+                      "inline-flex items-center gap-1.5 rounded-xl px-3.5 py-2 text-sm font-medium transition-colors focus-visible:outline-none",
+                      isOpen
+                        ? "text-foreground bg-secondary"
+                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+                    )}
                     aria-expanded={isOpen}
                     onClick={() => setOpenMenu(isOpen ? null : menu.label)}
                   >
-                    {menu.label}
-                    <ChevronDown className={cn("size-4 text-fg/60 transition-transform duration-200", isOpen && "rotate-180 text-fg")} />
+                    <span>{menu.label}</span>
+                    <ChevronDown
+                      className={cn(
+                        "size-3.5 text-muted-foreground transition-transform duration-200",
+                        isOpen && "rotate-180 text-foreground"
+                      )}
+                    />
                   </button>
 
+                  {/* Dropdown Menü */}
                   <AnimatePresence>
                     {isOpen && (
                       <motion.div
-                        initial={reduce ? false : { opacity: 0, y: 6 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 6 }}
-                        transition={{ duration: 0.18 }}
-                        className="absolute left-0 top-full pt-3"
+                        initial={reduce ? false : { opacity: 0, y: 8, scale: 0.98 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                        transition={{ duration: 0.18, ease: "easeOut" }}
+                        className="absolute left-0 top-full pt-2 w-80 z-50"
                       >
-                        <div className="w-80 rounded-2xl border border-border/60 bg-bg/95 p-2 shadow-2xl backdrop-blur-2xl">
+                        <div className="overflow-hidden rounded-2xl border border-border bg-card/95 p-2 shadow-2xl backdrop-blur-2xl">
                           {menu.items.map((item) => (
-                            <Link key={item.label} href={item.href} className="block rounded-xl px-3.5 py-2.5 transition-colors hover:bg-fg/5">
-                              <p className="text-sm font-semibold text-fg">{item.label}</p>
-                              {"hint" in item && <p className="text-xs text-fg/60 mt-0.5">{item.hint}</p>}
+                            <Link
+                              key={item.label}
+                              href={item.href}
+                              className="group block rounded-xl px-3.5 py-2.5 transition-colors hover:bg-secondary"
+                            >
+                              <p className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors">
+                                {item.label}
+                              </p>
+                              {"hint" in item && (
+                                <p className="text-xs text-muted-foreground mt-0.5 leading-snug">
+                                  {item.hint}
+                                </p>
+                              )}
                             </Link>
                           ))}
                         </div>
@@ -116,36 +139,37 @@ export function SiteHeader() {
         </div>
 
         {/* Sağ Taraf: Aksiyon Butonları */}
-        <div className="flex items-center gap-3 md:gap-4">
+        <div className="flex items-center gap-3">
+          {/* <ModeToggle/> */}
           <Link
             href={EXTERNAL_LINKS.sales}
-            className="group hidden items-center gap-2 rounded-full border border-border/70 bg-fg/5 px-4 h-10 text-sm font-medium text-fg transition-all hover:border-border hover:bg-fg/10 sm:inline-flex"
+            className="group hidden items-center gap-2 rounded-full border border-border bg-secondary/80 px-4 h-9 text-xs font-medium text-foreground transition-all hover:border-primary/50 hover:bg-secondary sm:inline-flex"
           >
             <span>Get in touch</span>
-            <ArrowRight className="size-4 text-fg/70 transition-transform duration-200 group-hover:translate-x-1 group-hover:text-fg" />
+            <ArrowRight className="size-3.5 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-primary" />
           </Link>
 
-          <GlowButton size="sm" href="/about" color="rose">
+          <GlowButton size="sm" href="/about">
             Get Started
           </GlowButton>
 
           {/* Mobil Menü Butonu */}
           <button
             type="button"
-            className="flex size-10 items-center justify-center rounded-xl text-fg/80 transition-colors hover:bg-fg/5 hover:text-fg lg:hidden"
+            className="flex size-9 items-center justify-center rounded-xl border border-border bg-card text-foreground transition-colors hover:bg-secondary lg:hidden"
             aria-label={open ? "Close menu" : "Open menu"}
             onClick={() => setOpen((val) => !val)}
           >
-            {open ? <X className="size-6" /> : <Menu className="size-6" />}
+            {open ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
         </div>
       </div>
 
-      {/* Mobil Menü */}
+      {/* Mobil Menü Panel */}
       <AnimatePresence>
         {open && (
           <motion.div
-            className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-bg px-6 py-8 lg:hidden"
+            className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-background px-6 py-8 lg:hidden border-t border-border"
             initial={reduce ? false : { opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -154,27 +178,33 @@ export function SiteHeader() {
             <nav className="flex flex-col gap-8" aria-label="Mobile">
               {HEADER_MENU.map((menu) => (
                 <div key={menu.label}>
-                  <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-fg/50">
+                  <p className="mb-3 text-xs font-mono font-semibold uppercase tracking-wider text-muted-foreground">
                     {menu.label}
                   </p>
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-1 pl-2 border-l border-border">
                     {menu.items.map((item) => (
                       <Link
                         key={item.label}
                         href={item.href}
-                        className="rounded-xl px-2.5 py-2.5 transition-colors hover:bg-fg/5"
+                        className="rounded-xl px-3 py-2.5 transition-colors hover:bg-secondary"
                         onClick={() => setOpen(false)}
                       >
-                        <span className="block text-lg font-medium text-fg">{item.label}</span>
-                        {"hint" in item && <span className="mt-0.5 block text-sm text-fg/60">{item.hint}</span>}
+                        <span className="block text-base font-medium text-foreground">
+                          {item.label}
+                        </span>
+                        {"hint" in item && (
+                          <span className="mt-0.5 block text-xs text-muted-foreground">
+                            {item.hint}
+                          </span>
+                        )}
                       </Link>
                     ))}
                   </div>
                 </div>
               ))}
 
-              <div className="pt-6 border-t border-border/40 flex flex-col gap-3">
-                <GlowButton href={EXTERNAL_LINKS.tryFree} color="rose" size="lg" className="w-full">
+              <div className="pt-6 border-t border-border flex flex-col gap-3">
+                <GlowButton href={EXTERNAL_LINKS.tryFree} size="lg" className="w-full">
                   Get Started
                 </GlowButton>
               </div>

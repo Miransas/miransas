@@ -498,8 +498,8 @@ const WRAPPER_SPECS: Record<Exclude<OrbWrapper, "none">, WrapperSpec> = {
     inset: 9,
     over: (
       <>
-        <Layer style={{ ...DISC, border: "1px solid currentColor", opacity: 0.22 }} />
-        <Layer inset="5%" style={{ ...DISC, border: "1px solid currentColor", opacity: 0.1 }} />
+        <Layer style={{ ...DISC, border: "", opacity: 0.22 }} />
+        <Layer inset="5%" style={{ ...DISC, border: "", opacity: 0.1 }} />
       </>
     )
   },

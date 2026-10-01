@@ -1,190 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type MouseEvent } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { FOOTER_NAV, SOCIAL_LINKS } from "@/constants";
+import { FOOTER_NAV, SOCIAL_LINKS } from "@/constants/footer";
 import { AvatarGroupDemo } from "../shared/avatar-grup";
-import { TextHoverEffect } from "../ui/text-hover-effect";
-import SideRays from "../SideRays";
-
-// ─────────────────────────────────────────────────────────────
-// ATMOSFERİK CANLI DUMAN EFEKTİ (Optimized Canvas)
-// ─────────────────────────────────────────────────────────────
-
-type Puff = {
-  x: number;
-  y: number;
-  r: number;
-  vx: number;
-  vy: number;
-  rot: number;
-  vr: number;
-  life: number;
-  speed: number;
-  alpha: number;
-  seed: number;
-};
-
-function SmokeCanvas({ density = 22 }: { density?: number }) {
-  const ref = useRef<HTMLCanvasElement>(null);
-
-  useEffect(() => {
-    const canvas = ref.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let w = 0;
-    let h = 0;
-    let raf = 0;
-
-    const resize = () => {
-      w = canvas.offsetWidth;
-      h = canvas.offsetHeight;
-      canvas.width = Math.max(1, w * dpr);
-      canvas.height = Math.max(1, h * dpr);
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    // Yumuşak duman dokusu sprite'ı
-    const sprite = document.createElement("canvas");
-    sprite.width = sprite.height = 300;
-    const sctx = sprite.getContext("2d")!;
-    const g = sctx.createRadialGradient(150, 150, 0, 150, 150, 150);
-    g.addColorStop(0, "rgba(220, 225, 240, 0.22)");
-    g.addColorStop(0.3, "rgba(180, 190, 210, 0.08)");
-    g.addColorStop(0.7, "rgba(140, 150, 180, 0.02)");
-    g.addColorStop(1, "rgba(0, 0, 0, 0)");
-    sctx.fillStyle = g;
-    sctx.fillRect(0, 0, 300, 300);
-
-    const rand = (a: number, b: number) => a + Math.random() * (b - a);
-
-    const spawn = (initial = false): Puff => {
-      const edge = Math.random();
-      let x: number, y: number, vx: number, vy: number;
-
-      if (edge < 0.6) {
-        x = rand(-0.1, 1.1) * w;
-        y = h + rand(20, 100);
-        vx = rand(-0.08, 0.08);
-        vy = -rand(0.08, 0.2);
-      } else if (edge < 0.8) {
-        x = -rand(50, 150);
-        y = rand(0.3, 1.0) * h;
-        vx = rand(0.05, 0.15);
-        vy = -rand(0.02, 0.08);
-      } else {
-        x = w + rand(50, 150);
-        y = rand(0.3, 1.0) * h;
-        vx = -rand(0.05, 0.15);
-        vy = -rand(0.02, 0.08);
-      }
-
-      return {
-        x,
-        y,
-        vx,
-        vy,
-        r: rand(180, 340), // Daha geniş ve yumuşak duman kütleleri
-        rot: rand(0, Math.PI * 2),
-        vr: rand(-0.0004, 0.0004),
-        life: initial ? Math.random() : 0,
-        speed: rand(0.00003, 0.00007), // Yavaş, doğal akış
-        alpha: rand(0.25, 0.55),
-        seed: rand(0, Math.PI * 2),
-      };
-    };
-
-    const puffs: Puff[] = Array.from({ length: density }, () => spawn(true));
-
-    const draw = (now: number, dt: number) => {
-      ctx.clearRect(0, 0, w, h);
-      ctx.globalCompositeOperation = "screen";
-
-      for (let i = 0; i < puffs.length; i++) {
-        const p = puffs[i];
-        p.life += dt * p.speed;
-
-        if (p.life >= 1) {
-          puffs[i] = spawn();
-          continue;
-        }
-
-        const wind = Math.sin(now * 0.0001 + p.seed) * 0.04;
-
-        p.x += (p.vx + wind) * dt * 0.05;
-        p.y += p.vy * dt * 0.05;
-        p.rot += p.vr * dt;
-        p.r += dt * 0.008;
-
-        // Pürüzsüz fade in / fade out eğrisi
-        const fade = Math.sin(p.life * Math.PI);
-
-        ctx.save();
-        ctx.translate(p.x, p.y);
-        ctx.rotate(p.rot);
-        ctx.globalAlpha = fade * p.alpha * 0.45;
-        ctx.drawImage(sprite, -p.r, -p.r, p.r * 2, p.r * 2);
-        ctx.restore();
-      }
-    };
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      draw(0, 0);
-      return () => window.removeEventListener("resize", resize);
-    }
-
-    let last = performance.now();
-    const tick = (now: number) => {
-      const dt = Math.min(48, now - last);
-      last = now;
-      draw(now, dt);
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", resize);
-    };
-  }, [density]);
-
-  return (
-    <canvas
-      ref={ref}
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-80"
-    />
-  );
-}
-
-// ─────────────────────────────────────────────────────────────
-// MAIN COMPONENT
-// ─────────────────────────────────────────────────────────────
 
 export function SiteFooter() {
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentTime, setCurrentTime] = useState<Date | null>(null);
 
   useEffect(() => {
-
+    setCurrentTime(new Date());
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
 
-
     return () => clearInterval(timer);
   }, []);
 
+  const currentYear = currentTime ? currentTime.getFullYear() : new Date().getFullYear();
+  const formattedTime = currentTime ? currentTime.toLocaleTimeString("tr-TR") : "--:--:--";
 
-  const currentYear = currentTime.getFullYear();
-
-
-  const formattedTime = currentTime.toLocaleTimeString('tr-TR');
   const handleAnchorClick = (
     e: MouseEvent<HTMLAnchorElement>,
     href: string
@@ -206,37 +42,7 @@ export function SiteFooter() {
   };
 
   return (
-    <footer className="relative w-full overflow-hidden  bg-black text-white">
-      <div style={{ width: '100%', height: '100%', position: 'absolute' }}>
-        <SideRays
-          speed={2.8}
-          rayColor1="#EAB308"
-          rayColor2="#96c8ff"
-          intensity={3}
-          spread={2.4}
-          origin="bottom-right"
-          tilt={7}
-          saturation={2}
-          blend={0.75}
-          falloff={1.6}
-          opacity={1}
-        />
-      </div>
-      <div style={{ width: '100%', height: '100%', position: 'absolute' }}>
-        <SideRays
-          speed={2.8}
-          rayColor1="#EAB308"
-          rayColor2="#96c8ff"
-          intensity={3}
-          spread={2.4}
-          origin="top-left"
-          tilt={7}
-          saturation={2}
-          blend={0.75}
-          falloff={1.6}
-          opacity={1}
-        />
-      </div>
+    <footer className="relative w-full overflow-hidden bg-black text-white">
       <div className="relative z-10 mx-auto max-w-7xl px-6 pt-16 pb-12 md:px-10 md:pt-20 lg:px-12">
         <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-20">
 
@@ -260,9 +66,8 @@ export function SiteFooter() {
               </span>
             </Link>
 
-            {/* Açıklama */}
+            {/* Açıklama (Çift yazım düzeltildi) */}
             <p className="text-sm text-stone-400/90 leading-relaxed mb-6">
-              Building next-generation voice AI and real-time audio intelligence infrastructure for modern applications.
               Building next-generation voice AI and real-time audio intelligence infrastructure for modern applications.
             </p>
 
@@ -336,15 +141,16 @@ export function SiteFooter() {
           </div>
 
         </div>
+
+        {/* ───────────────────────────────────────────────────
+            ALT ÇİZGİ, TELİF HAKKI, SAAT VE BİLDİRİM
+        ─────────────────────────────────────────────────── */}
         <div className="mt-16 pt-8 border-t border-white/[0.06] flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-stone-500">
 
           {/* Sol Kısım: Telif Hakkı ve Canlı Saat */}
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
-
             <p>© 2023–{currentYear} Miransas Inc. All rights reserved.</p>
 
-
-            {/* Araya küçük bir nokta koyarak canlı saati ekliyoruz */}
             <span className="hidden md:block w-1 h-1 rounded-full bg-stone-600"></span>
             <p className="font-mono text-stone-400 flex items-center gap-2">
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -354,7 +160,7 @@ export function SiteFooter() {
             </p>
           </div>
 
-
+          {/* Sağ Kısım: Sistem Durumu Rozeti (Çift yazı düzeltildi) */}
           <a
             href="https://status.miransas.com"
             target="_blank"
@@ -366,12 +172,10 @@ export function SiteFooter() {
               <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
             <span className="font-medium">All systems operational</span>
-            <span className="font-medium">All systems operational</span>
           </a>
 
         </div>
       </div>
-
     </footer>
   );
 }
