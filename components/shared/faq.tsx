@@ -1,3 +1,8 @@
+/*
+ Copy Right Miransas
+*/
+
+
 "use client";
 
 import { useState } from "react";
@@ -7,13 +12,15 @@ import { groups } from "../../constants/faq";
 
 type Group = keyof typeof groups;
 
+// custom light mod bg-[#F2F2F2]
+
 export function Faq() {
   const [group, setGroup] = useState<Group>("General");
   const [open, setOpen] = useState<number | null>(0);
   const items = groups[group] || [];
 
   return (
-    <section className="relative w-full bg-[#050505] py-24 border-t border-border/40" id="faq">
+    <section className="relative w-full  py-24 bg-black " id="faq">
       <div className="container-page">
         <div className="mx-auto max-w-7xl grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           
@@ -49,8 +56,8 @@ export function Faq() {
                       }}
                       className={`rounded-full px-4 py-2 text-xs font-medium transition-all duration-200 ${
                         isActive
-                          ? "bg-primary text-primary-foreground shadow-sm shadow-primary/20"
-                          : "border border-border bg-card/50 text-muted-foreground hover:bg-secondary hover:text-foreground"
+                          ? "bg-[#17c9b6] text-primary-foreground shadow-sm shadow-primary/20"
+                          : " bg-white/[0.06] text-muted-foreground hover:bg-secondary hover:text-foreground"
                       }`}
                     >
                       {key}
@@ -61,7 +68,7 @@ export function Faq() {
             </div>
 
             {/* İletişim Kartı */}
-            <div className="mt-10 rounded-2xl border border-border bg-card/60 backdrop-blur-xl p-6 shadow-sm">
+            <div className="mt-10 rounded-2xl border border-border bg-white/10 backdrop-blur-xl p-6 shadow-sm">
               <h3 className="text-base font-semibold text-foreground">Got questions?</h3>
               <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
                 Can't find what you're looking for? Reach out — our support team responds quickly.
@@ -84,19 +91,19 @@ export function Faq() {
               return (
                 <div
                   key={item.q}
-                  className="overflow-hidden rounded-2xl border border-border/70 bg-card/40 backdrop-blur-md transition-colors hover:border-border"
+                  className="overflow-hidden rounded-4xl   bg-white/10  backdrop-blur-md transition-colors hover:border-border"
                 >
                   <button
                     type="button"
                     onClick={() => setOpen(isOpen ? null : index)}
-                    className="flex w-full items-center justify-between gap-4 p-5 sm:p-6 text-left transition-colors hover:bg-secondary/40"
+                    className="flex w-full items-center justify-between gap-4 p-5 sm:p-3.5 text-left transition-colors hover:bg-secondary/40"
                   >
                     <span className="text-sm sm:text-base font-medium text-foreground leading-snug">
                       {item.q}
                     </span>
                     <div
-                      className={`flex size-7 shrink-0 items-center justify-center rounded-lg border border-border bg-background transition-transform duration-200 ${
-                        isOpen ? "rotate-180 border-primary/50 text-primary" : "text-muted-foreground"
+                      className={`flex size-7 shrink-0 items-center justify-center rounded-lg  bg-background transition-transform duration-200 ${
+                        isOpen ? "rotate-180 border-primary/50 text-blue-500" : "text-muted-foreground"
                       }`}
                     >
                       <ChevronDown className="size-4" />
@@ -111,7 +118,7 @@ export function Faq() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.25, ease: "easeInOut" }}
                       >
-                        <div className="border-t border-border/40 px-5 pb-5 pt-3 sm:px-6 sm:pb-6 text-xs sm:text-sm leading-relaxed text-muted-foreground">
+                        <div className="px-3 pb-4 pt-3 sm:px-4 sm:pb-3 text-xs sm:text-sm leading-relaxed text-muted-foreground">
                           {item.a}
                         </div>
                       </motion.div>

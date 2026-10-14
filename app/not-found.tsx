@@ -6,7 +6,7 @@ import { Search, ArrowRight, Home, Globe, X } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#070707] text-white flex items-center justify-center p-4 md:p-8 font-sans selection:bg-white/20">
+    <div className="min-h-screen bg-[#070707] text-white flex items-center justify-center p-4 md:p-8 font-sans ">
       {/* Ana Kart Kapsayıcısı */}
       <div className="relative w-full max-w-5xl bg-[#0d0d0d] border border-white/10 rounded-[2rem] p-6 md:p-12 grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center shadow-2xl overflow-hidden">
         

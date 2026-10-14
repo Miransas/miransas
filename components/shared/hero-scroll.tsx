@@ -246,9 +246,6 @@ export function HeroScroll() {
           </div>
         </motion.div>
 
-        {/* =================================================
-            GRASS LAYER (Çim başlangıcı %125'ten %65'e çekildi - yumuşakça yükselir)
-        ================================================= */}
         <motion.div
           style={{
             y: grassY,

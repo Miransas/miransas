@@ -42,7 +42,7 @@ function StepTextItem({
   return (
     <div
       ref={ref}
-      className={`min-h-[60vh] lg:min-h-[75vh] flex flex-col justify-center transition-opacity duration-500 py-8 ${isInView ? "opacity-100" : "opacity-30"
+      className={`min-h-[60vh] lg:min-h-[75vh] flex flex-col justify-center transition-opacity duration-500 py-8 ${isInView ? "sm:opacity-100 " : "opacity-30"
         }`}
     >
       <div className="space-y-4 max-w-lg">
@@ -120,12 +120,7 @@ function DynamicComponentSlot({ activeIndex }: { activeIndex: number }) {
         {activeIndex === 2 && <LiveVoiceStream />}
 
 
-        {/* <div className="px-3 py-1 rounded-full border border-stone-800 bg-stone-900 text-stone-300 text-xs font-mono">
-          COMPONENT #{activeIndex + 1}
-        </div>
-        <p className="text-xs text-stone-400 max-w-xs">
-          Active Feature: <span className="text-stone-200">{VOICE_STEPS[activeIndex].id}</span>
-        </p> */}
+     
       </motion.div>
     </AnimatePresence>
   );
@@ -149,7 +144,7 @@ export function VoiceSection() {
                 setActiveIndex={setActiveIndex}
               >
                 {/* Mobilde her metnin altına çıkan dinamik bileşen kutusu */}
-                <div className="w-full h-64 rounded-xl border border-stone-800 bg-stone-900/30 overflow-hidden">
+                <div className="w-full h-88 bg-balck overflow-hidden">
                   <DynamicComponentSlot activeIndex={index} />
                 </div>
               </StepTextItem>
@@ -158,7 +153,7 @@ export function VoiceSection() {
 
           {/* SAĞ TARAF: Masaüstü Sabit (Sticky) Bileşen */}
           <div className="hidden lg:block w-1/2 sticky top-[calc(50vh-240px)] h-[480px]">
-            <div className="w-full h-full rounded-2xl backdrop-blur-md relative overflow-hidden flex flex-col justify-center items-center shadow-2xl">
+            <div className="w-full h-full  backdrop-blur-md relative overflow-hidden flex flex-col justify-center items-center shadow-2xl">
               <DynamicComponentSlot activeIndex={activeIndex} />
             </div>
           </div>

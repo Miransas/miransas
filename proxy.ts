@@ -4,7 +4,7 @@ const FIRST_TOUCH_COOKIE = "attribution_first";
 const LAST_TOUCH_COOKIE = "attribution_last";
 const VISITOR_COOKIE = "visitor_id";
 
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 90; // 90 gün
+const COOKIE_MAX_AGE = 60 * 60 * 24 * 90; // 90 day
 
 type Attribution = {
   source: string;

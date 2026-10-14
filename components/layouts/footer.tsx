@@ -46,9 +46,6 @@ export function SiteFooter() {
       <div className="relative z-10 mx-auto max-w-7xl px-6 pt-16 pb-12 md:px-10 md:pt-20 lg:px-12">
         <div className="flex flex-col lg:flex-row justify-between gap-12 lg:gap-20">
 
-          {/* ───────────────────────────────────────────────────
-              SOL TARAF: MARKA, SOSYAL MEDYA VE TOPLULUK
-          ─────────────────────────────────────────────────── */}
           <div className="flex flex-col max-w-sm shrink-0">
             {/* Logo */}
             <Link

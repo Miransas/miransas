@@ -1,5 +1,18 @@
+/**
+ * @license Miransas
+ * @copyright
+ * miransas product
+ *
+ * Copyright (c) Miransas.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ * 
+ *
+ */
+
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 import { SmoothScroll } from "../components/provider/smooth-scroll";
@@ -12,16 +25,19 @@ import { ThemeProvider } from "../components/provider/theme-provider";
 
 
 // ── Fonts ─────────────────────────────────────────────────────────────────
-const sans = Geist({
-  variable: "--font-sans",
+const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
+  variable: "--font-sans-runtime",
   display: "swap",
+  preload: true,
 });
 
-const mono = Geist_Mono({
-  variable: "--font-mono",
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
+  variable: "--font-mono-runtime",
   display: "swap",
+  preload: true,
+  weight: ["400", "500", "600", "700"],
 });
 
 // ── Site Constants ────────────────────────────────────────────────────────
@@ -161,19 +177,19 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${sans.variable} ${mono.variable} font-sans antialiased bg-black text-white selection:bg-rose-500 selection:text-stone-200`}
+        className={`${jakarta.variable} ${plexMono.variable} font-sans antialiased bg-black text-white selection:bg-rose-500 selection:text-stone-200`}
       >
         <GoogleAnalytics />
         <SmoothScroll>
           <NoticeModal />
           <ThemeProvider>
-            <div className="relative flex min-h-screen flex-col">
-              <main className="flex-grow">
+            <main className="relative flex min-h-screen flex-col">
+              <main className="grow">
                 <SiteHeader />
                 <PageTransition>{children}</PageTransition>
                 <SiteFooter />
               </main>
-            </div>
+            </main>
           </ThemeProvider>
         </SmoothScroll>
       </body>

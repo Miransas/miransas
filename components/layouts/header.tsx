@@ -13,8 +13,8 @@ import { GlowButton } from "../ui/glow-button";
 import { ModeToggle } from "../provider/mode-toggle";
 
 const EXTERNAL_LINKS = {
-  sales: "https://console.example.com/studio",
-  tryFree: "https://console.example.com/auth",
+  sales: "https://console.miralas.io/studio",
+  tryFree: "https://console.miralas.io/auth",
 };
 
 export function SiteHeader() {
@@ -149,7 +149,7 @@ export function SiteHeader() {
             <ArrowRight className="size-3.5 text-muted-foreground transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-primary" />
           </Link>
 
-          <GlowButton size="sm" href="/about">
+          <GlowButton size="sm" href="/about" color="emerald" >
             Get Started
           </GlowButton>
 
@@ -204,7 +204,7 @@ export function SiteHeader() {
               ))}
 
               <div className="pt-6 border-t border-border flex flex-col gap-3">
-                <GlowButton href={EXTERNAL_LINKS.tryFree} size="lg" className="w-full">
+                <GlowButton href={EXTERNAL_LINKS.tryFree} size="sm" className="w-full" color="blue">
                   Get Started
                 </GlowButton>
               </div>

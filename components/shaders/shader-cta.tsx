@@ -31,9 +31,8 @@ export function ShaderCTA() {
               Build, send and observe — the infrastructure gets out of your way.
             </p>
             <div className="mt-8 flex gap-4">
-              <GlowButton >
+              <GlowButton color="blue" href="https://console.miralas.io/" >
                 Start building
-
               </GlowButton>
             </div>
           </div>

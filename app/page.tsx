@@ -22,7 +22,7 @@ import RobotEyes from '../components/shared/RobotEyes'
 
 const page = () => {
   return (
-    <div>
+    <main className='smooth-scroll'> 
       <HeroScroll />
       <Timeline />
       <AiTeamSection/>
@@ -33,7 +33,7 @@ const page = () => {
       <Faq />
       <Features />
       <ShaderCTA />
-    </div>
+    </main>
   )
 }
 
