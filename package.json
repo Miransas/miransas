@@ -26,7 +26,7 @@
     "@tiptap/extension-color": "^3.31.2",
     "@tiptap/extension-text-style": "^3.31.2",
     "@tiptap/react": "^3.30.5",
-    "@tiptap/starter-kit": "^3.30.5",
+    "@tiptap/starter-kit": "^3.32.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cn": "^0.4.0",
