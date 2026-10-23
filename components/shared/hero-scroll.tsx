@@ -18,7 +18,7 @@ export function HeroScroll() {
 
   /*
    * =====================================================
-   * TRANSFORM / PARALLAX ANIMATIONS (YUKARI ÇEKİLDİ VE SIKIŞTIRILDI)
+   * TRANSFORM / PARALLAX ANIMATIONS 
    * =====================================================
    */
 
@@ -40,7 +40,7 @@ export function HeroScroll() {
 
   return (
     /* h-[250vh] yerine h-[180vh] yapılarak gereksiz uzun scroll kısaltıldı */
-    <section ref={ref} className="relative h-[180vh] bg-background">
+    <section ref={ref} className="relative h-[100vh] bg-background">
       {/* =================================================
           STICKY SCENE
       ================================================= */}

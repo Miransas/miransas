@@ -26,8 +26,8 @@ const page = () => {
       <HeroScroll />
       <Timeline />
       <AiTeamSection/>
-      <VideoSections />
-      <ExpandScroll />
+      {/* <VideoSections />
+      <ExpandScroll /> */}
       <VoiceSection />
       <Bento />
       <Faq />
