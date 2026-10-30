@@ -15,6 +15,8 @@ import { AiTeamSection } from '../components/shared/ai-teamSection'
 import Timeline from '../components/shared/heroTimeline'
 
 import RobotEyes from '../components/shared/RobotEyes'
+import ScrollText from '../components/shared/scroll-text'
+import StickySplitSection from '../components/shared/StickySplitSection'
 
 
 
@@ -24,7 +26,9 @@ const page = () => {
   return (
     <main className='smooth-scroll'> 
       <HeroScroll />
+      <StickySplitSection/>
       <Timeline />
+      <ScrollText/>
       <AiTeamSection/>
       {/* <VideoSections />
       <ExpandScroll /> */}

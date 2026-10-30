@@ -245,7 +245,7 @@ export function HeroScroll() {
             <RobotEyes />
           </div>
         </motion.div>
-
+       {/* çimen burda  */}
         <motion.div
           style={{
             y: grassY,
