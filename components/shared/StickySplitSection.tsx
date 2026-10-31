@@ -1,4 +1,3 @@
-
 "use client";
 
 import { motion, type Variants } from "framer-motion";
@@ -58,19 +57,18 @@ const capabilities = [
 
 export default function StickySplitSection() {
   return (
-    <section className="relative isolate w-full overflow-clip bg-[#050505] px-5 py-24 text-white sm:px-8 md:py-32 lg:px-12">
+    /* DİKKAT: Ana section'dan overflow-clip silindi, böylece sticky çalışabilir */
+    <section className="relative isolate w-full px-5 py-24 text-white sm:px-8 md:py-32 lg:px-12">
 
-      {/* Subtle background atmosphere */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-      >
-        <div className="absolute -left-40 top-0 h-[420px] w-[420px] rounded-full bg-[#9BAF8A]/[0.055] blur-[140px]" />
+      {/* Arka plan taşmasını engellemek için overflow-hidden sadece buraya verildi */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -left-40 top-0 h-[600px] w-[600px] rounded-full bg-[linear-gradient(175deg,#05070d_0%,#060b18_32%,#0a1f4d_52%,#0b2f7a_70%,#0c3a9c_88%,#0d42b0_100%)] blur-[140px] opacity-70" />
+        <div className="absolute right-[-10%] bottom-0 h-[500px] w-[500px] rounded-full bg-[linear-gradient(175deg,#05070d_0%,#060b18_32%,#0a1f4d_52%,#0b2f7a_70%,#0c3a9c_88%,#0d42b0_100%)] blur-[150px] opacity-50" />
       </div>
 
       <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-start gap-14 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-24">
 
-        {/* LEFT — Sticky content */}
+        {/* LEFT — Sticky content (Artık kusursuz yapışacak) */}
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -97,7 +95,7 @@ export default function StickySplitSection() {
 
           <a
             href="#voice-capabilities"
-            className="group mt-9 inline-flex items-center gap-3 rounded-full border border-white/15 bg-[#0D59FF] px-6 py-3.5 text-sm font-medium text-white transition-all duration-300 hover:border-[#A3B18A]/40 hover:bg-white/[0.08]"
+            className="group mt-9 inline-flex items-center gap-3 rounded-full border border-white/15 bg-[#ffffff] px-6 py-3.5 text-sm font-medium text-black hover:text-white transition-all duration-300 hover:border-[#A3B18A]/40 hover:bg-white/[0.08]"
           >
             Explore capabilities
 

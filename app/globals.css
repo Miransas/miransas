@@ -7,9 +7,28 @@
   --color-foreground: var(--foreground);
     /* Typography */
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", var(--font-jakarta), "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-plex: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "SF Mono", "JetBrains Mono", "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  /* Primary typography */
+  --font-sans:  var(--font-jakarta),"Plus Jakarta Sans", "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  /* Optional technical/editorial font */
+  --font-plex:
+    "IBM Plex Sans",
+    ui-sans-serif,
+    system-ui,
+    sans-serif;
+
+  /* Monospace */
+  --font-mono:
+    "JetBrains Mono",
+    "IBM Plex Mono",
+    "SFMono-Regular",
+    Menlo,
+    Consolas,
+    monospace;
 
   --color-ring: var(--ring);
   --color-input: var(--input);
@@ -211,3 +230,16 @@
 }
 
 
+@layer base {
+  section, h1, span, p {
+    transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+}
+
+@layer base {
+  section, h1, span, p {
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, transform;
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    transition-duration: 300ms;
+  }
+}
