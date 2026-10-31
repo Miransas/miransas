@@ -1,526 +1,794 @@
+
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import type { LucideIcon } from "lucide-react";
+
 import {
+  ArrowRight,
+  BrainCircuit,
   Cpu,
   Languages,
-  Radio,
-  Volume2,
-  Mic,
-  Check,
-  ArrowRight,
-  Calendar,
-  Clock,
-  Sparkles,
-  ChevronRight,
   Layers,
+  Mic,
+  Monitor,
+  Network,
+  Radio,
+  Sparkles,
+  Volume2,
 } from "lucide-react";
-import { main } from "framer-motion/client";
 
 /* =========================================================
-TYPES & TYPESAFE HELPERS
+   TYPES
 ========================================================= */
 
-type Accent = "rose" | "purple" | "lime" | "neutral" | "teal";
+type NavItem = {
+  id: string;
+  label: string;
+};
 
-const NAV_ITEMS = [
-  { id: "featured", label: "Featured Update" },
-  { id: "all-posts", label: "Latest Updates" },
-  { id: "performance", label: "Model Capabilities" },
-  { id: "roadmap", label: "Languages & Uzbek" },
+type ProductArea = {
+  number: string;
+  title: string;
+  description: string;
+  icon: LucideIcon;
+};
+
+type TechnicalPillar = {
+  number: string;
+  label: string;
+  value: string;
+  description: string;
+  icon: LucideIcon;
+};
+
+/* =========================================================
+   DATA
+========================================================= */
+
+const NAV_ITEMS: NavItem[] = [
+  { id: "featured", label: "Our Direction" },
+  { id: "product-areas", label: "Product Areas" },
+  { id: "engineering", label: "Engineering" },
+  { id: "language-focus", label: "Language Focus" },
 ];
 
-const BLOG_POSTS = [
+const PRODUCT_AREAS: ProductArea[] = [
   {
-    id: "post-1",
-    category: "Voice Team",
-    date: "September 09, 2026",
-    readTime: "3 min read",
-    title: "A New Chapter for the Miransas Voice Team",
-    excerpt:
-      "Our voice program continues with Guliruhsar now leading recordings, with Malika set to join the team soon.",
-    featured: true,
+    number: "01",
+    title: "Text to Speech",
+    description:
+      "Transform written content into natural-sounding speech through AI-powered voice technology.",
+    icon: Volume2,
   },
   {
-    id: "post-2",
-    category: "Research",
-    date: "August 31, 2026",
-    readTime: "5 min read",
-    title: "Why Uzbek Is a First-Class Training Track for Miransas",
-    excerpt:
-      "Instead of treating Uzbek as a translation afterthought, Miransas is building language-specific data, phoneme coverage and evaluation around native speech.",
-    featured: false,
-  },
-  {
-    id: "post-3",
-    category: "Multilingual",
-    date: "August 28, 2026",
-    readTime: "4 min read",
-    title: "Adding More Global Languages to the Evaluation Lab",
-    excerpt:
-      "English, Spanish, Chinese, Hindi, Arabic, Japanese, Korean, French, German, Portuguese, Turkish and Russian are now part of the broader comparison set.",
-    featured: false,
-  },
-  {
-    id: "post-4",
-    category: "Models",
-    date: "August 25, 2026",
-    readTime: "6 min read",
-    title: "Miransas and the Next Generation of Voice AI",
-    excerpt:
-      "We are comparing Miransas with GPT-Realtime, Gemini Live, Grok Voice and the Chatterbox baseline using transparent capability categories rather than invented leaderboard numbers.",
-    featured: false,
-  },
-  {
-    id: "post-5",
-    category: "Engineering",
-    date: "August 22, 2026",
-    readTime: "7 min read",
-    title: "Inside the Miransas Training Pipeline",
-    excerpt:
-      "From clean speech data and speaker embeddings to evaluation and inference, this is the direction behind our next voice models.",
-    featured: false,
-  },
-];
-
-const STATS = [
-  {
-    icon: Cpu,
-    label: "Miransas baseline",
-    value: "500M",
-    subtext: "Chatterbox Multilingual V3",
-    accent: "purple" as Accent,
-  },
-  {
-    icon: Languages,
-    label: "Baseline coverage",
-    value: "23+",
-    subtext: "Chatterbox multilingual languages",
-    accent: "lime" as Accent,
-  },
-  {
+    number: "02",
+    title: "Speech to Text",
+    description:
+      "Turn spoken language into text through speech recognition and audio processing.",
     icon: Radio,
-    label: "Audio",
-    value: "Realtime",
-    subtext: "Voice AI evaluation stack",
-    accent: "rose" as Accent,
   },
   {
+    number: "03",
+    title: "Voice Cloning",
+    description:
+      "Explore voice identity and personalized voice reproduction workflows.",
     icon: Mic,
-    label: "Uzbek",
-    value: "Native",
-    subtext: "Miransas training direction",
-    accent: "teal" as Accent,
+  },
+  {
+    number: "04",
+    title: "Real-time Voice",
+    description:
+      "Build responsive voice experiences designed around low-latency interaction.",
+    icon: Network,
   },
 ];
 
-const CAPABILITIES = [
-  { label: "Realtime audio", values: ["✓", "✓", "✓", "✓"] },
-  { label: "Audio input / output", values: ["✓", "✓", "✓", "✓"] },
-  { label: "Voice cloning", values: ["✓", "—", "—", "—"] },
-  { label: "Open-source baseline", values: ["✓", "—", "—", "—"] },
-  { label: "Custom language training", values: ["✓", "—", "—", "—"] },
-  { label: "Uzbek training track", values: ["✓", "—", "—", "—"] },
+const TECHNICAL_PILLARS: TechnicalPillar[] = [
+  {
+    number: "01",
+    label: "Core Backend",
+    value: "Rust",
+    description:
+      "The foundation for backend services, performance-sensitive operations and core application logic.",
+    icon: Cpu,
+  },
+  {
+    number: "02",
+    label: "Communication",
+    value: "gRPC",
+    description:
+      "Service-to-service communication designed around clearly defined interfaces.",
+    icon: Network,
+  },
+  {
+    number: "03",
+    label: "Model Integration",
+    value: "Python",
+    description:
+      "The model-side layer for connecting AI models and inference workflows.",
+    icon: BrainCircuit,
+  },
+  {
+    number: "04",
+    label: "Product Interface",
+    value: "Next.js",
+    description:
+      "The web application experience, built with Next.js, TypeScript and Tailwind CSS.",
+    icon: Monitor,
+  },
 ];
 
-const MODEL_HEADERS = [
-  "Miransas",
-  "GPT-Realtime",
-  "Gemini Live",
-  "Grok Voice",
-];
+/* =========================================================
+   ANIMATION
+========================================================= */
 
-function getToneClasses(accent: Accent) {
-  switch (accent) {
-    case "rose":
-      return {
-        text: "text-rose-400",
-        soft: "bg-rose-500/10",
-        border: "border-rose-500/20",
-        badge: "bg-rose-500/15 text-rose-300 border-rose-500/30",
-      };
-    case "purple":
-      return {
-        text: "text-purple-400",
-        soft: "bg-purple-500/10",
-        border: "border-purple-500/20",
-        badge: "bg-purple-500/15 text-purple-300 border-purple-500/30",
-      };
-    case "lime":
-      return {
-        text: "text-lime-400",
-        soft: "bg-lime-500/10",
-        border: "border-lime-500/20",
-        badge: "bg-lime-500/15 text-lime-300 border-lime-500/30",
-      };
-    case "teal":
-      return {
-        text: "text-[#17c9b6]",
-        soft: "bg-[#17c9b6]/10",
-        border: "border-[#17c9b6]/20",
-        badge: "bg-[#17c9b6]/15 text-[#8ff0e4] border-[#17c9b6]/30",
-      };
-    default:
-      return {
-        text: "text-stone-300",
-        soft: "bg-white/[0.04]",
-        border: "border-white/[0.08]",
-        badge: "bg-white/10 text-stone-200 border-white/10",
-      };
-  }
+const reveal = {
+  hidden: {
+    opacity: 0,
+    y: 16,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.55,
+      ease: [0.22, 1, 0.36, 1] as const,
+    },
+  },
+};
+
+/* =========================================================
+   SECTION HEADING
+========================================================= */
+
+function SectionHeading({
+  eyebrow,
+  title,
+}: {
+  eyebrow: string;
+  title: string;
+}) {
+  return (
+    <div className="mb-8">
+      <div className="mb-3 flex items-center gap-3">
+        <span className="h-px w-6 bg-white/40" />
+
+        <span className="text-[10px] font-medium uppercase tracking-[0.22em] text-stone-500">
+          {eyebrow}
+        </span>
+      </div>
+
+      <h2 className="text-2xl font-medium tracking-tight text-white md:text-3xl">
+        {title}
+      </h2>
+    </div>
+  );
 }
 
 /* =========================================================
-MAIN COMPONENT
+   MAIN COMPONENT
 ========================================================= */
 
 export default function NewsPage() {
   const [activeSection, setActiveSection] = useState("featured");
 
-  // ScrollSpy ile hangi section görünüyorsa TOC'ta aktif yapma
+  /* ---------------------------------------------------------
+     SCROLL SPY
+  --------------------------------------------------------- */
+
   useEffect(() => {
-    const handleScroll = () => {
-      const observerMargin = window.innerHeight * 0.35;
-      for (const item of NAV_ITEMS) {
-        const element = document.getElementById(item.id);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          if (rect.top <= observerMargin && rect.bottom >= 0) {
-            setActiveSection(item.id);
-            break;
-          }
+    const sections = NAV_ITEMS.map((item) =>
+      document.getElementById(item.id)
+    ).filter((section): section is HTMLElement => section !== null);
+
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSections = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort(
+            (a, b) =>
+              a.boundingClientRect.top - b.boundingClientRect.top
+          );
+
+        if (visibleSections.length > 0) {
+          setActiveSection(visibleSections[0].target.id);
         }
+      },
+      {
+        rootMargin: "-20% 0px -65% 0px",
+        threshold: 0,
       }
-    };
+    );
 
+    sections.forEach((section) => observer.observe(section));
 
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-
-
-
+    return () => observer.disconnect();
   }, []);
 
+  /* ---------------------------------------------------------
+     NAVIGATION
+  --------------------------------------------------------- */
+
   const scrollToSection = (id: string) => {
-    setActiveSection(id);
     const element = document.getElementById(id);
-    if (element) {
-      const yOffset = -90;
-      const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
+
+    if (!element) return;
+
+    setActiveSection(id);
+
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
   };
 
-  const featuredPost = BLOG_POSTS.find((p) => p.featured) || BLOG_POSTS[0];
-  const regularPosts = BLOG_POSTS.filter((p) => !p.featured);
+  /* =========================================================
+     RENDER
+  ========================================================= */
+
   return (
-  <main>
-      <header className="relative z-10 pt-20 pb-12 border-b border-stone-800/60 bg-gradient-to-b from-stone-950 to-transparent">
-    <div className="max-w-7xl mx-auto px-6 md:px-12">
-      <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-[#17c9b6] uppercase mb-4">
-        <Sparkles className="w-4 h-4"/>
-        <span>Miransas Newsroom & Research</span>
-      </div>
-      <h1 className="text-4xl md:text-6xl font-semibold tracking-tight text-white max-w-3xl leading-[1.1]">
-        Voice AI Research, Releases & Insights
-      </h1>
-      <p className="mt-4 text-lg text-stone-400 max-w-2xl leading-relaxed">
-        Follow our journey building real-time multilingual voice models, native Uzbek dataset engineering, and next-generation speech pipelines.
-      </p>
-    </div>
-  </header>
+    <main className="min-h-screen  bg-[#0a0a0a] text-white">
 
+      {/* =====================================================
+          HERO
+      ===================================================== */}
 
-  <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 py-12">
-    <div className="flex flex-col lg:flex-row gap-12 lg:gap-16 items-start">
+      <header className="relative border-b border-white/[0.07]">
 
-    
-      <aside className="w-full lg:w-64 shrink-0 lg:sticky lg:top-24 z-20">
-        <div className="p-5 rounded-2xl border border-stone-800/80 bg-stone-950/70 backdrop-blur-xl shadow-2xl">
-          <div className="flex items-center gap-2 pb-3 mb-3 border-b border-stone-800/60 text-xs font-mono font-medium text-stone-400 uppercase tracking-wider">
-            <Layers className="w-3.5 h-3.5 text-[#17c9b6]"/>
-            <span>On This Page</span>
-          </div>
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.035),transparent_50%)]" />
 
-          <nav className="flex lg:flex-col gap-1 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 scrollbar-none">
-            {NAV_ITEMS.map((item) => {
-              const isActive = activeSection === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => scrollToSection(item.id)}
-                  className={`whitespace-nowrap lg:whitespace-normal flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all duration-200 text-left ${
-                    isActive
-                      ? "bg-[#17c9b6]/15 text-[#8ff0e4] border border-[#17c9b6]/30 shadow-[0_0_15px_rgba(23,201,182,0.1)]"
-                      : "text-stone-400 hover:text-stone-200 hover:bg-stone-900/60 border border-transparent"
-                  }`}
-                >
-                  <span>{item.label}</span>
-                  {isActive && (
-                    <motion.span
-                      layoutId="activeTocDot"
-                      className="hidden lg:block w-1.5 h-1.5 rounded-full bg-[#17c9b6]"
-                    />
-                  )}
-                </button>
-              );
-            })}
-          </nav>
-        </div>
-      </aside>
+        <div className="relative mx-auto max-w-7xl px-6 pb-20 pt-32 md:px-12 md:pb-24 md:pt-40">
 
-      <main className="flex-1 w-full space-y-24">
-
-    
-        <section id="featured" className="scroll-mt-28">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xs font-mono uppercase tracking-widest text-stone-400">
-              Featured Update
-            </h2>
-            <span className="h-px bg-stone-800/80 flex-1 ml-4" />
-          </div>
-
-          <motion.article
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="group relative rounded-3xl border border-stone-800/80 bg-stone-950/50 backdrop-blur-md p-8 md:p-10 hover:border-[#17c9b6]/40 transition-all duration-300 shadow-2xl overflow-hidden"
+          <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={reveal}
           >
-            <div className="absolute top-0 right-0 w-80 h-80 bg-[#17c9b6]/[0.03] rounded-full blur-3xl pointer-events-none group-hover:bg-[#17c9b6]/[0.06] transition-colors duration-500" />
+            <div className="mb-7 flex items-center gap-3">
 
-            <div className="flex flex-wrap items-center gap-3 text-xs font-mono text-stone-400 mb-6">
-              <span className="px-3 py-1 rounded-full bg-[#17c9b6]/15 text-[#8ff0e4] border border-[#17c9b6]/30 font-semibold">
-                {featuredPost.category}
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/[0.12] bg-white/[0.04]">
+                <Sparkles className="h-4 w-4 text-stone-300" />
+              </div>
+
+              <span className="text-[10px] font-medium uppercase tracking-[0.28em] text-stone-400">
+                Miransas / Journal
               </span>
-              <span className="flex items-center gap-1">
-                <Calendar className="w-3.5 h-3.5"/>
-                {featuredPost.date}
-              </span>
-              <span>•</span>
-              <span className="flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5"/>
-                {featuredPost.readTime}
-              </span>
+
             </div>
 
-            <h3 className="text-2xl md:text-4xl font-semibold text-white group-hover:text-[#8ff0e4] transition-colors leading-snug tracking-tight">
-              {featuredPost.title}
-            </h3>
+            <h1 className="max-w-4xl text-4xl font-medium leading-[1.12] tracking-[-0.045em] text-white md:text-6xl lg:text-7xl">
+              Engineering the future
+              <br />
+              of voice AI.
+            </h1>
 
-            <p className="mt-4 text-stone-300 text-base md:text-lg leading-relaxed max-w-3xl">
-              {featuredPost.excerpt}
+            <p className="mt-7 max-w-2xl text-base leading-8 text-stone-400 md:text-lg">
+              Explore the ideas, engineering principles and product
+              direction behind Miransas — building voice technology
+              with a focus on language, infrastructure and thoughtful
+              design.
             </p>
 
-            <div className="mt-8 flex items-center gap-2 text-sm font-medium text-[#17c9b6] group-hover:translate-x-1 transition-transform duration-200">
-              <span>Read full announcement</span>
-              <ArrowRight className="w-4 h-4"/>
+            <button
+              onClick={() => scrollToSection("featured")}
+              className="group mt-9 inline-flex items-center gap-3 text-sm font-medium text-white transition-colors hover:text-stone-400"
+            >
+              Discover our approach
+
+              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/[0.12] transition-all group-hover:border-white/30 group-hover:bg-white/[0.06]">
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </button>
+          </motion.div>
+
+          {/* INFORMATION */}
+
+          <div className="mt-20 grid grid-cols-1 gap-6 border-t border-white/[0.07] pt-6 sm:grid-cols-3">
+
+            <div>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-600">
+                Focus
+              </span>
+              <p className="mt-2 text-sm text-stone-300">
+                Voice AI Infrastructure
+              </p>
             </div>
-          </motion.article>
-        </section>
 
-      
-        <section id="all-posts" className="scroll-mt-28">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xs font-mono uppercase tracking-widest text-stone-400">
-              Latest Research & Updates
-            </h2>
-            <span className="h-px bg-stone-800/80 flex-1 ml-4" />
+            <div>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-600">
+                Engineering
+              </span>
+              <p className="mt-2 text-sm text-stone-300">
+                Rust · gRPC · Python
+              </p>
+            </div>
+
+            <div>
+              <span className="text-[10px] uppercase tracking-[0.2em] text-stone-600">
+                Language Focus
+              </span>
+              <p className="mt-2 text-sm text-stone-300">
+                Uzbek Language
+              </p>
+            </div>
+
           </div>
+        </div>
+      </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {regularPosts.map((post, idx) => (
-              <motion.article
-                key={post.id}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: idx * 0.08 }}
-                className="group rounded-2xl border border-stone-800/80 bg-stone-950/40 p-6 flex flex-col justify-between hover:border-stone-700 hover:bg-stone-900/30 transition-all duration-300"
+      {/* =====================================================
+          CONTENT
+      ===================================================== */}
+
+      <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-12 md:py-24">
+
+        <div className="flex flex-col items-start gap-14 lg:flex-row lg:gap-20">
+
+          {/* =================================================
+              SIDEBAR
+          ================================================= */}
+
+          <aside className="sticky top-24 z-20 w-full shrink-0 lg:w-56">
+
+            <div className="rounded-2xl  p-4 backdrop-blur-xl">
+
+              <div className="mb-4 flex items-center gap-2 border-b border-white/[0.07] pb-4">
+
+                <Layers className="h-3.5 w-3.5 text-stone-400" />
+
+                <span className="text-[10px] font-medium uppercase tracking-[0.19em] text-stone-500">
+                  Explore
+                </span>
+
+              </div>
+
+              <nav
+                aria-label="Page navigation"
+                className="flex gap-1 overflow-x-auto lg:flex-col lg:overflow-visible"
               >
-                <div>
-                  <div className="flex items-center justify-between text-xs font-mono text-stone-400 mb-4">
-                    <span className="px-2.5 py-1 rounded-lg bg-stone-900 border border-stone-800 text-stone-300">
-                      {post.category}
+
+                {NAV_ITEMS.map((item) => {
+                  const isActive = activeSection === item.id;
+
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => scrollToSection(item.id)}
+                      aria-current={isActive ? "location" : undefined}
+                      className={`group flex shrink-0 items-center justify-between gap-4 rounded-xl border px-3 py-3 text-left text-xs transition-all duration-200 ${
+                        isActive
+                          ? "border-white/[0.08] bg-white/[0.055] text-white"
+                          : "border-transparent text-stone-500 hover:bg-white/[0.035] hover:text-stone-200"
+                      }`}
+                    >
+                      <span>{item.label}</span>
+
+                      <span
+                        className={`h-1.5 w-1.5 shrink-0 rounded-full transition-all ${
+                          isActive
+                            ? "bg-white"
+                            : "bg-transparent"
+                        }`}
+                      />
+                    </button>
+                  );
+                })}
+
+              </nav>
+            </div>
+
+            <div className="mt-4 hidden rounded-2xl border border-white/[0.06] bg-white/[0.015] p-4 lg:block">
+
+              <span className="text-[9px] uppercase tracking-[0.2em] text-stone-600">
+                MIRANSAS
+              </span>
+
+              <p className="mt-2 text-xs leading-6 text-stone-500">
+                Secure. Connect. Evolve.
+              </p>
+
+            </div>
+          </aside>
+
+          {/* =================================================
+              MAIN CONTENT
+          ================================================= */}
+
+          <div className="min-w-0 flex-1 space-y-28">
+
+            {/* ===============================================
+                FEATURED
+            =============================================== */}
+
+            <section
+              id="featured"
+              className="scroll-mt-28"
+            >
+
+              <SectionHeading
+                eyebrow="01 / Our Direction"
+                title="Built with a clear purpose."
+              />
+
+              <motion.article
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.15 }}
+                variants={reveal}
+                className="group relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0b0b0b] p-7 transition-colors duration-300 hover:border-white/[0.14] md:p-10"
+              >
+
+                <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-white/[0.025] blur-[100px]" />
+
+                <div className="relative z-10">
+
+                  <div className="mb-8 flex flex-wrap items-center gap-3">
+
+                    <span className="rounded-full border border-white/[0.10] bg-white/[0.045] px-3 py-1.5 text-[10px] font-medium uppercase tracking-[0.15em] text-stone-300">
+                      Project Foundation
                     </span>
-                    <span>{post.readTime}</span>
+
+                    <span className="text-[10px] uppercase tracking-[0.15em] text-stone-600">
+                      Origin & Vision
+                    </span>
+
                   </div>
 
-                  <h3 className="text-xl font-semibold text-stone-100 group-hover:text-[#17c9b6] transition-colors leading-snug">
-                    {post.title}
+                  <h3 className="max-w-3xl text-3xl font-medium leading-tight tracking-[-0.035em] text-white md:text-5xl">
+                    A voice platform shaped by an overlooked language.
                   </h3>
 
-                  <p className="mt-3 text-stone-400 text-sm leading-relaxed line-clamp-3">
-                    {post.excerpt}
+                  <p className="mt-6 max-w-3xl text-sm leading-8 text-stone-400 md:text-base">
+                    Miransas began with a simple observation:
+                    Uzbek was not adequately supported by many of
+                    the voice AI tools available at the time.
+                    That gap became the starting point for a broader
+                    vision — building voice experiences with language
+                    as a priority, supported by carefully designed
+                    software architecture.
+                  </p>
+
+                  <div className="mt-12 grid gap-8 border-t border-white/[0.07] pt-8 md:grid-cols-3">
+
+                    <div>
+                      <span className="text-[10px] uppercase tracking-[0.19em] text-stone-600">
+                        The Motivation
+                      </span>
+
+                      <p className="mt-3 text-sm leading-6 text-stone-300">
+                        Making voice technology more accessible
+                        to underserved languages.
+                      </p>
+                    </div>
+
+                    <div>
+                      <span className="text-[10px] uppercase tracking-[0.19em] text-stone-600">
+                        The Approach
+                      </span>
+
+                      <p className="mt-3 text-sm leading-6 text-stone-300">
+                        Treating architecture as the foundation
+                        of a reliable product.
+                      </p>
+                    </div>
+
+                    <div>
+                      <span className="text-[10px] uppercase tracking-[0.19em] text-stone-600">
+                        The Direction
+                      </span>
+
+                      <p className="mt-3 text-sm leading-6 text-stone-300">
+                        Bringing speech technology, model
+                        integration and product design together.
+                      </p>
+                    </div>
+
+                  </div>
+
+                  <button
+                    onClick={() => scrollToSection("engineering")}
+                    className="mt-10 inline-flex items-center gap-2 text-xs font-medium text-stone-300 transition-colors hover:text-white"
+                  >
+                    Explore the engineering approach
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+
+                </div>
+              </motion.article>
+            </section>
+
+            {/* ===============================================
+                PRODUCT AREAS
+            =============================================== */}
+
+            <section
+              id="product-areas"
+              className="scroll-mt-28"
+            >
+
+              <SectionHeading
+                eyebrow="02 / Product Areas"
+                title="Designed around the voice."
+              />
+
+              <p className="mb-8 max-w-2xl text-sm leading-7 text-stone-500">
+                These are the core areas shaping the Miransas
+                product direction. They describe the scope of
+                the platform, not a claim that every capability
+                is currently available.
+              </p>
+
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+
+                {PRODUCT_AREAS.map((area, index) => {
+                  const Icon = area.icon;
+
+                  return (
+                    <motion.article
+                      key={area.number}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, amount: 0.15 }}
+                      variants={reveal}
+                      transition={{
+                        delay: index * 0.06,
+                      }}
+                      className="group relative overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0b0b0b] p-6 transition-all duration-300 hover:border-white/[0.16] hover:bg-[#101010]"
+                    >
+
+                      <div className="mb-8 flex items-center justify-between">
+
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.035] text-stone-300 transition-colors group-hover:bg-white/[0.08] group-hover:text-white">
+                          <Icon className="h-[18px] w-[18px]" />
+                        </div>
+
+                        <span className="font-mono text-[10px] text-stone-600">
+                          {area.number}
+                        </span>
+
+                      </div>
+
+                      <h3 className="text-lg font-medium tracking-tight text-white">
+                        {area.title}
+                      </h3>
+
+                      <p className="mt-3 text-sm leading-7 text-stone-500">
+                        {area.description}
+                      </p>
+
+                      <div className="mt-7 h-px w-full bg-white/[0.05] transition-colors group-hover:bg-white/[0.12]" />
+
+                    </motion.article>
+                  );
+                })}
+
+              </div>
+            </section>
+
+            {/* ===============================================
+                ENGINEERING
+            =============================================== */}
+
+            <section
+              id="engineering"
+              className="scroll-mt-28"
+            >
+
+              <SectionHeading
+                eyebrow="03 / Engineering"
+                title="Architecture before scale."
+              />
+
+              <p className="mb-8 max-w-2xl text-sm leading-7 text-stone-500">
+                Miransas follows a clear separation of responsibilities
+                across its product interface, backend services and
+                model integration layer.
+              </p>
+
+              {/* TECHNICAL STACK */}
+
+              <div className="overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0b0b0b]">
+
+                <div className="flex items-center justify-between border-b border-white/[0.07] px-6 py-5 md:px-8">
+
+                  <div>
+                    <span className="text-[10px] uppercase tracking-[0.2em] text-stone-500">
+                      Technical Foundation
+                    </span>
+
+                    <h3 className="mt-2 text-lg font-medium text-white">
+                      Core technology stack
+                    </h3>
+                  </div>
+
+                  <Layers className="h-5 w-5 text-stone-500" />
+
+                </div>
+
+                <div className="divide-y divide-white/[0.05]">
+
+                  {TECHNICAL_PILLARS.map((pillar, index) => {
+                    const Icon = pillar.icon;
+
+                    return (
+                      <motion.div
+                        key={pillar.number}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, amount: 0.1 }}
+                        variants={reveal}
+                        transition={{
+                          delay: index * 0.05,
+                        }}
+                        className="group grid grid-cols-[42px_1fr] gap-4 px-6 py-7 transition-colors hover:bg-white/[0.02] md:grid-cols-[48px_150px_1fr] md:items-center md:gap-6 md:px-8"
+                      >
+
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.04] text-stone-400 transition-colors group-hover:bg-white/[0.08] group-hover:text-white">
+                          <Icon className="h-[18px] w-[18px]" />
+                        </div>
+
+                        <div>
+                          <span className="block text-[9px] uppercase tracking-[0.18em] text-stone-600">
+                            {pillar.label}
+                          </span>
+
+                          <span className="mt-1 block text-lg font-medium tracking-tight text-white">
+                            {pillar.value}
+                          </span>
+                        </div>
+
+                        <div className="col-span-2 md:col-span-1">
+                          <p className="text-sm leading-7 text-stone-500">
+                            {pillar.description}
+                          </p>
+                        </div>
+
+                      </motion.div>
+                    );
+                  })}
+
+                </div>
+              </div>
+
+              {/* ENGINEERING PRINCIPLE */}
+
+              <div className="mt-5 rounded-2xl border border-white/[0.07] bg-white/[0.015] p-6 md:p-8">
+
+                <span className="text-[10px] uppercase tracking-[0.2em] text-stone-500">
+                  Engineering Principle
+                </span>
+
+                <p className="mt-4 max-w-3xl text-xl font-medium leading-8 tracking-tight text-stone-200 md:text-2xl">
+                  Every component should have a clear responsibility.
+                  Every connection should have a purpose.
+                </p>
+
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-stone-500">
+                  The goal is not to choose technologies because
+                  they are popular. It is to build a system whose
+                  components work together without unnecessary
+                  complexity.
+                </p>
+
+              </div>
+            </section>
+
+            {/* ===============================================
+                LANGUAGE FOCUS
+            =============================================== */}
+
+            <section
+              id="language-focus"
+              className="scroll-mt-28"
+            >
+
+              <SectionHeading
+                eyebrow="04 / Language Focus"
+                title="Uzbek deserves more than an afterthought."
+              />
+
+              <motion.div
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.15 }}
+                variants={reveal}
+                className="relative overflow-hidden rounded-3xl border border-white/[0.08] bg-[#0b0b0b]"
+              >
+
+                <div className="pointer-events-none absolute -right-20 -top-20 h-80 w-80 rounded-full bg-white/[0.025] blur-[100px]" />
+
+                <div className="relative z-10 p-7 md:p-10">
+
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/[0.10] bg-white/[0.04] text-stone-300">
+                    <Languages className="h-5 w-5" />
+                  </div>
+
+                  <div className="mt-9 max-w-3xl">
+
+                    <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-stone-500">
+                      A Core Language Priority
+                    </span>
+
+                    <h3 className="mt-4 text-3xl font-medium leading-tight tracking-[-0.035em] text-white md:text-4xl">
+                      Language is more than translation.
+                    </h3>
+
+                    <p className="mt-6 text-sm leading-8 text-stone-400 md:text-base">
+                      The original motivation behind Miransas was
+                      the lack of meaningful Uzbek support across
+                      popular voice AI tools. That experience
+                      shaped an important principle: language
+                      quality should be considered from the
+                      beginning, not added as an afterthought.
+                    </p>
+
+                    <p className="mt-4 text-sm leading-8 text-stone-400 md:text-base">
+                      The long-term direction is to approach Uzbek
+                      through language-specific speech data,
+                      phonetic characteristics, regional variation
+                      and native-speaker evaluation — rather than
+                      relying on translation alone.
+                    </p>
+
+                  </div>
+
+                  <div className="mt-12 flex flex-col gap-6 border-t border-white/[0.07] pt-8 sm:flex-row sm:items-center sm:justify-between">
+
+                    <div>
+                      <span className="text-[10px] uppercase tracking-[0.18em] text-stone-600">
+                        Primary Language Focus
+                      </span>
+
+                      <p className="mt-2 text-2xl font-medium tracking-tight text-white">
+                        Uzbek
+                      </p>
+                    </div>
+
+                    <div className="max-w-sm">
+                      <p className="text-xs leading-6 text-stone-500">
+                        Language support and model quality will be
+                        communicated based on actual implementation
+                        and evaluation, not assumed capability.
+                      </p>
+                    </div>
+
+                  </div>
+                </div>
+              </motion.div>
+            </section>
+
+            {/* ===============================================
+                FOOTER
+            =============================================== */}
+
+            <footer className="border-t border-white/[0.07] pt-8">
+
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+
+                <div>
+                  <span className="text-sm font-medium tracking-wide text-white">
+                    MIRANSAS
+                  </span>
+
+                  <p className="mt-2 text-xs text-stone-600">
+                    Building with purpose.
                   </p>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-stone-900 flex items-center justify-between text-xs font-mono text-stone-400">
-                  <span>{post.date}</span>
-                  <ChevronRight className="w-4 h-4 text-stone-400 group-hover:text-[#17c9b6] group-hover:translate-x-0.5 transition-all"/>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </section>
+                <span className="text-[10px] uppercase tracking-[0.18em] text-stone-600">
+                  Research · Engineering · Voice AI
+                </span>
 
-       
-        <section id="performance" className="scroll-mt-28">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xs font-mono uppercase tracking-widest text-stone-400">
-              Model Capabilities & Baseline Stats
-            </h2>
-            <span className="h-px bg-stone-800/80 flex-1 ml-4" />
-          </div>
-
-          {/* STAT CARDS */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
-            {STATS.map((stat) => {
-              const Icon = stat.icon;
-              const tone = getToneClasses(stat.accent);
-              return (
-                <div
-                  key={stat.label}
-                  className={`p-5 rounded-2xl border bg-stone-950/60 backdrop-blur-md ${tone.border} relative overflow-hidden group`}
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className={`p-2 rounded-xl ${tone.soft} ${tone.text}`}>
-                      <Icon className="w-4 h-4"/>
-                    </div>
-                    <span className="text-[10px] font-mono text-stone-400 uppercase tracking-widest">
-                      {stat.label}
-                    </span>
-                  </div>
-                  <div className="text-3xl font-semibold text-white tracking-tight">
-                    {stat.value}
-                  </div>
-                  <div className="mt-1 text-xs text-stone-400 font-mono leading-tight">
-                    {stat.subtext}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-      
-          <div className="rounded-2xl border border-stone-800/80 bg-stone-950/60 backdrop-blur-md overflow-hidden shadow-2xl">
-            <div className="p-6 border-b border-stone-800/80">
-              <h3 className="text-lg font-semibold text-white">Transparent Capability Matrix</h3>
-              <p className="text-sm text-stone-400 mt-1">
-                Direct comparison of foundational features without inflated benchmarks.
-              </p>
-            </div>
-
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-sm">
-                <thead>
-                  <tr className="border-b border-stone-800/80 bg-stone-900/40 text-xs font-mono text-stone-400 uppercase">
-                    <th className="py-4 px-6 font-medium">Capability</th>
-                    {MODEL_HEADERS.map((header, idx) => (
-                      <th
-                        key={header}
-                        className={`py-4 px-4 font-medium text-center ${
-                          idx === 0 ? "text-[#17c9b6] bg-[#17c9b6]/[0.03]" : ""
-                        }`}
-                      >
-                        {header}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-stone-900 text-stone-300">
-                  {CAPABILITIES.map((cap) => (
-                    <tr key={cap.label} className="hover:bg-stone-900/30 transition-colors">
-                      <td className="py-4 px-6 font-medium text-stone-200">
-                        {cap.label}
-                      </td>
-                      {cap.values.map((val, idx) => (
-                        <td
-                          key={idx}
-                          className={`py-4 px-4 text-center font-mono ${
-                            idx === 0 ? "bg-[#17c9b6]/[0.02]" : ""
-                          }`}
-                        >
-                          {val === "✓" ? (
-                            <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full ${idx === 0 ? "bg-[#17c9b6]/20 text-[#17c9b6]" : "bg-stone-800 text-stone-300"}`}>
-                              <Check className="w-3.5 h-3.5"/>
-                            </span>
-                          ) : (
-                            <span className="text-stone-400">—</span>
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-      
-        <section id="roadmap" className="scroll-mt-28">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-xs font-mono uppercase tracking-widest text-stone-400">
-              Languages & Uzbek Training Track
-            </h2>
-            <span className="h-px bg-stone-800/80 flex-1 ml-4" />
-          </div>
-
-          <div className="rounded-3xl border border-stone-800/80 bg-gradient-to-br from-stone-950 via-stone-900/40 to-stone-950 p-8 md:p-10 relative overflow-hidden">
-            <div className="absolute -bottom-10 -right-10 w-72 h-72 bg-[#17c9b6]/10 rounded-full blur-3xl pointer-events-none" />
-
-            <div className="max-w-2xl relative z-10">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#17c9b6]/10 border border-[#17c9b6]/30 text-[#8ff0e4] text-xs font-mono mb-4">
-                <Mic className="w-3.5 h-3.5"/>
-                <span>Native Speech Focus</span>
               </div>
+            </footer>
 
-              <h3 className="text-2xl md:text-3xl font-semibold text-white tracking-tight">
-                Uzbek as a First-Class Language Track
-              </h3>
-
-              <p className="mt-4 text-stone-300 text-base leading-relaxed">
-                Most global voice models handle regional languages through generic translation layers. Miransas builds native phoneme coverage, local dialect accents, and custom dataset pipelines specifically optimized for Uzbek alongside 23+ global languages.
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-2">
-                {[
-                  "Uzbek (Native Track)",
-                  "English",
-                  "Turkish",
-                  "Spanish",
-                  "Chinese",
-                  "Arabic",
-                  "Hindi",
-                  "German",
-                  "Russian",
-                  "+ 15 More",
-                ].map((lang, idx) => (
-                  <span
-                    key={lang}
-                    className={`px-3 py-1.5 rounded-xl text-xs font-mono transition-colors ${
-                      idx === 0
-                        ? "bg-[#17c9b6] text-black font-semibold shadow-[0_0_15px_rgba(23,201,182,0.4)]"
-                        : "bg-stone-900 border border-stone-800 text-stone-300"
-                    }`}
-                  >
-                    {lang}
-                  </span>
-                ))}
-              </div>
-            </div>
           </div>
-          
-        </section>
-
-      </main>
-      
-    </div>
-  </div>
-  </main>
-   )
-
+        </div>
+      </div>
+    </main>
+  );
 }
-
