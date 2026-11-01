@@ -74,7 +74,7 @@
     "eslint": "^10",
     "eslint-config-next": "^16.4.3",
     "prettier-plugin-tailwindcss": "^0.8.1",
-    "shadcn": "^4.22.1",
+    "shadcn": "^4.23.0",
     "tailwindcss": "^4",
     "typescript": "^6.0.3"
   }
