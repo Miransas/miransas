@@ -1,6 +1,5 @@
 import { FaDiscord, FaGithub, FaX, FaYoutube } from "react-icons/fa6";
 
-
 export const FOOTER_NAV = [
   {
     title: "Platform",
@@ -15,9 +14,10 @@ export const FOOTER_NAV = [
   {
     title: "Resources",
     links: [
-      { label: "Documentation", href: "/developers" },
+      { label: "Developers", href: "/developers" },
+      { label: "Support", href: "/support" },
       { label: "Blog", href: "https://blog.miransas.com", isExternal: true },
-      { label: "Support", href: "/contact" },
+      { label: "RSS Feed", href: "/news/rss.xml", isExternal: true },
       { label: "Terms of Service", href: "https://privacy.miransas.com/terms", isExternal: true },
       { label: "Privacy Policy", href: "https://privacy.miransas.com/privacy", isExternal: true },
       { label: "Security", href: "https://privacy.miransas.com/security", isExternal: true },
@@ -27,6 +27,7 @@ export const FOOTER_NAV = [
     title: "Explore",
     links: [
       { label: "News", href: "/news" },
+      { label: "Projects", href: "/projects" },
       { label: "Models", href: "/models" },
       { label: "Agent", href: "/agent" },
     ],
@@ -35,7 +36,6 @@ export const FOOTER_NAV = [
     title: "Company",
     links: [
       { label: "About", href: "/about" },
-      { label: "Developers", href: "/developers" },
       { label: "Careers", href: "/careers" },
       { label: "Contact", href: "/contact" },
       { label: "System Status", href: "https://status.miransas.com", isExternal: true },
@@ -44,10 +44,8 @@ export const FOOTER_NAV = [
   {
     title: "Miralas AI",
     links: [
-      { label: "Miralas Overview", href: "https://miralas.io", isExternal: true },
-      { label: "Dashboard Console", href: "https://console.miralas.io", isExternal: true },
-      { label: "Studio TTS", href: "https://console.miralas.io/studio/tts", isExternal: true },
-      { label: "Live Streams", href: "https://console.miralas.io/studio/streams", isExternal: true },
+      { label: "Miralas Overview", href: "/projects/miralas" },
+      { label: "miralas.io", href: "https://miralas.io", isExternal: true },
     ],
   },
 ] as const;

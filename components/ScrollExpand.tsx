@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/refs */
 import { useCallback, useEffect, useRef } from 'react';
 import type { CSSProperties, ReactNode } from 'react';
 

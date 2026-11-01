@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import Link from "next/link";
@@ -146,7 +147,7 @@ export function SiteFooter() {
 
           {/* Sol Kısım: Telif Hakkı ve Canlı Saat */}
           <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4">
-            <p>© 2023–{currentYear} Miransas Inc. All rights reserved.</p>
+            <p>© {currentYear} Miransas. All rights reserved.</p>
 
             <span className="hidden md:block w-1 h-1 rounded-full bg-stone-600"></span>
             <p className="font-mono text-stone-400 flex items-center gap-2">
@@ -162,13 +163,10 @@ export function SiteFooter() {
             href="https://status.miransas.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/10 text-emerald-400 transition-colors hover:bg-emerald-500/15"
+            className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-stone-300 transition-colors hover:bg-white/[0.08]"
           >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-            </span>
-            <span className="font-medium">All systems operational</span>
+            <span className="h-2 w-2 rounded-full bg-stone-500" />
+            <span className="font-medium">System status</span>
           </a>
 
         </div>
