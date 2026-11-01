@@ -1,0 +1,40 @@
+After the Miralas core is solid, the next step is the **Miransas Voice Agent**: a self-hosted voice AI backend for businesses.
+
+## What the agent does
+
+Think of a phone or counter assistant that can hold a natural conversation, understand voice input, take orders and book appointments. The goal is simple logic, done reliably, in Turkish and Uzbek first, with English and Russian also supported.
+
+| Layer | Technology |
+| --- | --- |
+| API | FastAPI |
+| Language model | LLaMA 3.1 8B running on Ollama |
+| Session core | Rust, exposed to Python through PyO3 |
+| Streaming | Binary WebSocket for voice |
+
+## An engineering note: we removed Rust from the hot path
+
+Our first version called the language model from Rust. It looked fast on paper, but it blocked the event loop and was not the real bottleneck. During local development it also made a laptop freeze while Ollama and the dev server ran together.
+
+So we removed that path. Rust now does what it is genuinely best at here, holding the session store, and the model calls live in Python. Less code, fewer surprises.
+
+<Callout type="info">
+  Lesson: a faster language is not an optimization if it is not on the slow path.
+</Callout>
+
+## Streaming moves to WebSocket
+
+The voice endpoint is moving from server-sent events with base64 audio to a binary WebSocket. Raw bytes are smaller and faster than encoded text, and audio fits that model naturally. Regular endpoints for chat, voice requests and sessions stay on REST.
+
+## Also in the works
+
+1. **An internal team workspace** that combines chat, GitHub tracking and company finance in one closed system, built with a Rust backend.
+2. **A reworked status page** with real per-day uptime history.
+3. **An admin dashboard** for Miralas, currently an early prototype.
+
+## Order of work
+
+1. Miralas: voice clone, text-to-speech, speech-to-speech.
+2. Voice Agent.
+3. Everything else.
+
+We would rather finish one thing well than start five things halfway.

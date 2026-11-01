@@ -1,25 +1,31 @@
-import type { NextConfig } from "next";
+import createMDX from '@next/mdx'
 
-const nextConfig: NextConfig = {
-  /* config options here */
-    images: {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  images: {
     remotePatterns: [
       {
-        protocol: 'https',
+        protocol: 'https' as const,
         hostname: 'raw.githubusercontent.com',
       },
-       {
-        protocol: 'https',
+      {
+        protocol: 'https' as const,
         hostname: 'raw.cloudinary.com',
       },
       {
-        protocol: 'https',
+        protocol: 'https' as const,
         hostname: 'res.cloudinary.com',
       },
-
     ],
   },
-  
 };
 
-export default nextConfig;
+const withMDX = createMDX({
+  options: {
+    remarkPlugins: ["remark-gfm", "remark-frontmatter"],
+     rehypePlugins: ["rehype-slug"],
+  },
+})
+
+export default withMDX(nextConfig);
