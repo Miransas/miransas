@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Projects from "./projects.mdx";
 
 export const metadata: Metadata = {
-  title: "Projects | Miransas",
+  title: "Projects",
   description: "Everything built under the Miransas name and where it stands.",
 };
 

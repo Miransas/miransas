@@ -12,7 +12,7 @@ import {
 } from "@/lib/news";
 
 export const metadata: Metadata = {
-  title: "News | Miransas",
+  title: "News",
   description: "Product updates, releases and engineering notes from Miransas.",
   alternates: {
     types: { "application/rss+xml": "/news/rss.xml" },

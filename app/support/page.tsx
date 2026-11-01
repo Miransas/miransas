@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Support from "./support.mdx";
 
 export const metadata: Metadata = {
-  title: "Support | Miransas",
+  title: "Support",
   description: "Answers to common questions and how to reach the Miransas team.",
 };
 

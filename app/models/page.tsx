@@ -1,7 +1,13 @@
-"use client";
 
 import Models from "./models.mdx";
 import { Callout } from "@/components/provider/Callout";
+
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Models",
+  description: "The AI models behind Miransas voice products, starting with Chatterbox.",
+};
 
 export default function ModelsPage() {
   return (

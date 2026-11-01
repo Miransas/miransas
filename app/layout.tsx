@@ -12,7 +12,7 @@
  */
 
 import type { Metadata, Viewport } from "next";
-import {IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 import { SmoothScroll } from "../components/provider/smooth-scroll";
@@ -45,8 +45,7 @@ const SITE_URL = "https://miransas.com";
 const SITE_NAME = "Miransas";
 const SITE_TITLE = "Miransas — Secure • Connect • Evolve";
 const SITE_DESCRIPTION =
-  "Solo engineering studio building high-performance software, infrastructure, and games. No investors. No agencies. Just craft.";
-
+  "Miransas builds voice AI, developer tools and the infrastructure under them. A small bootstrapped team. No investors, just craft.";
 // ── Metadata ──────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -183,15 +182,13 @@ export default function RootLayout({
         <SmoothScroll>
           <NoticeModal />
           <ThemeProvider>
-            <main className="relative flex min-h-screen flex-col">
-              <main className="grow">
-                <SiteHeader />
-                <PageTransition>
-                  <main className="pt-[var(--header-h)]">{children}</main>
-                </PageTransition>
-                <SiteFooter />
-              </main>
-            </main>
+            <div className="relative flex min-h-screen flex-col">
+              <SiteHeader />
+              <PageTransition>
+                <main className="pt-[var(--header-h)]">{children}</main>
+              </PageTransition>
+              <SiteFooter />
+            </div>
           </ThemeProvider>
         </SmoothScroll>
       </body>

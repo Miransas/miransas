@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Developers from "./developers.mdx";
 
 export const metadata: Metadata = {
-  title: "Developers | Miransas",
+  title: "Developers",
   description: "Tools, platform plans and how we build at Miransas.",
 };
 

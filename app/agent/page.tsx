@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Agent from "./agent.mdx";
 
 export const metadata: Metadata = {
-  title: "Voice Agent | Miransas",
+  title: "Voice Agent",
   description: "A self-hosted voice AI for businesses: conversation, orders and appointments.",
 };
 

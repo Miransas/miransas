@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Careers from "./careers.mdx";
 
 export const metadata: Metadata = {
-  title: "Careers | Miransas",
+  title: "Careers",
   description: "Working at Miransas: how we work and how to reach us.",
 };
 
