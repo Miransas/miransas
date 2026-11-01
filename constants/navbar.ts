@@ -63,7 +63,7 @@ export const COMPANY_MENU = [
 ] as const;
 
 export const PROJECT_MENU = [
-    { label: "Miralas", href: "/projects/miralas" },
+    { label: "Projects", href: "/projects/" },
 
 
 ] as const;

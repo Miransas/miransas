@@ -12,7 +12,7 @@
  */
 
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import {IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
 import { SmoothScroll } from "../components/provider/smooth-scroll";
@@ -186,7 +186,9 @@ export default function RootLayout({
             <main className="relative flex min-h-screen flex-col">
               <main className="grow">
                 <SiteHeader />
-                <PageTransition>{children}</PageTransition>
+                <PageTransition>
+                  <main className="pt-[var(--header-h)]">{children}</main>
+                </PageTransition>
                 <SiteFooter />
               </main>
             </main>
