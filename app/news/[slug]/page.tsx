@@ -17,10 +17,12 @@ import {
   getAuthor,
   getNews,
   getRawMdx,
+  getRelated,
   githubEditUrl,
   readingMinutes,
 } from "@/lib/news";
 import { extractToc } from "@/lib/toc";
+import { FaGithub } from "react-icons/fa6";
 
 export const dynamicParams = false;
 
@@ -79,9 +81,9 @@ function PostMeta({
           href={githubEditUrl(item.slug)}
           target="_blank"
           rel="noopener noreferrer"
-          className="rounded-lg border border-border px-3 py-1.5 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground"
+          className="rounded-lg flex border border-border px-3 py-1.5 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground"
         >
-          Edit on GitHub
+          Edit on GitHub <FaGithub className="ml-2" size={16} />
         </a>
       </div>
     </div>
@@ -111,6 +113,7 @@ export default async function NewsPostPage({
   const minutes = readingMinutes(raw);
   const toc = extractToc(raw);
   const { newer, older } = getAdjacent(slug);
+  const related = getRelated(slug)
 
   return (
     <div className="mx-auto min-w-0 max-w-6xl px-6 py-16">
@@ -149,7 +152,7 @@ export default async function NewsPostPage({
             </div>
           </header>
 
-          <div className="relative mt-8 aspect-[1200/630] w-full overflow-hidden rounded-2xl border border-border">
+          <div className="relative mt-8 aspect-[1200/630] w-full overflow-hidden rounded-2xl">
             <Image
               src={item.image ?? DEFAULT_NEWS_IMAGE}
               alt={item.title}
@@ -163,6 +166,31 @@ export default async function NewsPostPage({
           <div className="mt-8">
             <Post />
           </div>
+          {related.length > 0 && (
+            <section className="mt-16 border-t border-border pt-8">
+              <h2 className="mb-4 text-sm font-medium uppercase tracking-wide text-muted-foreground">
+                Related posts
+              </h2>
+              <ul className="grid gap-4 sm:grid-cols-2">
+                {related.map((r) => (
+                  <li key={r.slug}>
+                    <Link
+                      href={`/news/${r.slug}`}
+                      className="block h-full rounded-xl border border-border p-4 transition hover:bg-muted"
+                    >
+                      <div className="text-xs text-muted-foreground">
+                        {formatDate(r.date)}
+                      </div>
+                      <div className="mt-1 font-medium">{r.title}</div>
+                      <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
+                        {r.summary}
+                      </p>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
           <nav
             aria-label="More posts"

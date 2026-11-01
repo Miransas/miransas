@@ -65,3 +65,21 @@ export function getAdjacent(slug: string) {
     older: i >= 0 && i < list.length - 1 ? list[i + 1] : undefined,
   };
 }
+
+export function getRelated(slug: string, limit = 2) {
+  const current = getNews(slug);
+  if (!current) return [];
+  return getAllNews()
+    .filter((n) => n.slug !== slug)
+    .map((n) => ({
+      n,
+      score: n.tags.filter((t) => current.tags.includes(t)).length,
+    }))
+    .sort(
+      (a, b) =>
+        b.score - a.score ||
+        new Date(b.n.date).getTime() - new Date(a.n.date).getTime(),
+    )
+    .slice(0, limit)
+    .map((x) => x.n);
+}

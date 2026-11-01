@@ -14,6 +14,9 @@ import {
 export const metadata: Metadata = {
   title: "News | Miransas",
   description: "Product updates, releases and engineering notes from Miransas.",
+  alternates: {
+    types: { "application/rss+xml": "/news/rss.xml" },
+  },
 };
 
 export default async function NewsPage({
@@ -64,7 +67,7 @@ export default async function NewsPage({
             <li key={item.slug} className="min-w-0">
               <Link
                 href={`/news/${item.slug}`}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/40 transition hover:border-foreground/30 hover:bg-card"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card/40 transition hover:bg-card"
               >
                 <div className="relative aspect-[1200/630] w-full overflow-hidden border-b border-border">
                   <Image
@@ -72,7 +75,7 @@ export default async function NewsPage({
                     alt={item.title}
                     fill
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition duration-300 group-hover:scale-[1.03]"
+                    className="object-cover transition duration-300 group-hover:scale-[1.03] group-hover:brightness-90"
                   />
                 </div>
 
