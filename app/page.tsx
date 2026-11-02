@@ -17,6 +17,7 @@ import Timeline from '../components/shared/heroTimeline'
 import RobotEyes from '../components/shared/RobotEyes'
 import ScrollText from '../components/shared/scroll-text'
 import StickySplitSection from '../components/shared/StickySplitSection'
+import { NewHero } from '../components/shared/new-hero'
 
 
 
@@ -25,7 +26,8 @@ import StickySplitSection from '../components/shared/StickySplitSection'
 const page = () => {
   return (
     <main className='smooth-scroll'> 
-      <HeroScroll />
+      {/* <HeroScroll /> */}
+      <NewHero/>
       <StickySplitSection/>
       <Timeline />
       <ScrollText/>
