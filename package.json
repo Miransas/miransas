@@ -55,7 +55,7 @@
     "remark-frontmatter": "^5.0.0",
     "remark-gfm": "^4.0.1",
     "resend": "^6.37.0",
-    "shiki": "^4.5.0",
+    "shiki": "^4.6.0",
     "sonner": "^2.0.8",
     "swr": "^2.5.1",
     "tailwind-merge": "^3.7.0",
