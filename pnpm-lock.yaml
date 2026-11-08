@@ -152,7 +152,7 @@ importers:
         version: 4.3.4
       '@tailwindcss/typography':
         specifier: ^0.5.20
-        version: 0.5.20(tailwindcss@4.3.3)
+        version: 0.5.20(tailwindcss@4.3.4)
       '@types/mdx':
         specifier: ^2.0.14
         version: 2.0.14
@@ -185,7 +185,7 @@ importers:
         version: 4.23.0
       tailwindcss:
         specifier: ^4
-        version: 4.3.3
+        version: 4.3.4
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
@@ -7666,10 +7666,10 @@ snapshots:
       postcss: 8.5.32
       tailwindcss: 4.3.4
 
-  '@tailwindcss/typography@0.5.20(tailwindcss@4.3.3)':
+  '@tailwindcss/typography@0.5.20(tailwindcss@4.3.4)':
     dependencies:
       postcss-selector-parser: 6.0.10
-      tailwindcss: 4.3.3
+      tailwindcss: 4.3.4
 
   '@tanstack/history@1.162.5': {}
 
