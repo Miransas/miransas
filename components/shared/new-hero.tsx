@@ -139,6 +139,7 @@ export function NewHero({ tone }: { tone?: "light" | "dark" }) {
     <section
       ref={sectionRef}
       data-tone={orbTone}
+      data-site-hero="true"
       className="relative isolate -mt-[var(--header-h)] flex min-h-[760px] flex-col overflow-hidden bg-transparent text-foreground sm:min-h-[820px] lg:min-h-[max(800px,100svh)]"
     >
       {/* Tam ekran, header arkasına da kesintisiz uzanan Küre + Duman/Toz */}
