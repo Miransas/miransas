@@ -1,78 +1,43 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { useState, useSyncExternalStore } from 'react';
+import { motion } from 'framer-motion';
+import { Dialog } from 'radix-ui';
+import { Sparkles, ArrowRight } from 'lucide-react';
+
+const subscribe = (notify: () => void) => {
+  window.addEventListener('storage', notify);
+  return () => window.removeEventListener('storage', notify);
+};
+const getSnapshot = () => !sessionStorage.getItem('hasSeenNotice');
 
 export default function NoticeModal() {
-  const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    // Oturum boyunca bir kez gösterilsin istiyorsan sessionStorage kullanabilirsin.
-    // Her sayfa yenilemede tekrar çıkmasını istersen setIsOpen(true) doğrudan yeterli.
-    const hasSeenNotice = sessionStorage.getItem("hasSeenNotice");
-    if (!hasSeenNotice) {
-      setIsOpen(true);
-    }
-  }, []);
-
-  const handleClose = () => {
-    sessionStorage.setItem("hasSeenNotice", "true");
-    setIsOpen(false);
+  const unseen = useSyncExternalStore(subscribe, getSnapshot, () => false);
+  const [dismissed, setDismissed] = useState(false);
+  const isOpen = unseen && !dismissed;
+  const onOpenChange = (open: boolean) => {
+    if (!open) sessionStorage.setItem('hasSeenNotice', 'true');
+    setDismissed(!open);
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          {/* ARKA PLAN BLUR (BACKDROP) */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={handleClose}
-            className="absolute inset-0 bg-black/40 dark:bg-black/70 backdrop-blur-md"
-          />
-
-          {/* MODAL KART */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.92, y: 12 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.92, y: 12 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="relative w-full max-w-md bg-white/90 dark:bg-zinc-900/90 backdrop-blur-2xl border border-zinc-200/80 dark:border-zinc-800 rounded-[2rem] p-6 sm:p-8 shadow-2xl z-10 overflow-hidden"
-          >
-            {/* AMBIENT LIGHT (Hafif Rose Işık Taşması) */}
-            <div className="absolute -top-12 -right-12 w-36 h-36 bg-rose-500/10 dark:bg-rose-500/20 rounded-full blur-2xl pointer-events-none" />
-
-            <div className="flex flex-col items-center text-center">
-              {/* IKON */}
-              <div className="w-12 h-12 rounded-2xl bg-zinc-100 dark:bg-zinc-800/80 border border-zinc-200/80 dark:border-zinc-700/60 flex items-center justify-center text-zinc-900 dark:text-white mb-5 shadow-sm">
-                <Sparkles size={20} className="text-rose-500" />
-              </div>
-
-              {/* BAŞLIK */}
-              <h3 className="text-xl font-semibold text-zinc-900 dark:text-white tracking-tight mb-2.5">
-                Active Development
-              </h3>
-
-              {/* İÇERİK METNİ */}
-              <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed mb-6">
-                We are constantly updating and refining our platform to provide a better experience. Features and visual elements may evolve as development continues.
-              </p>
-
-              {/* BUTON */}
-              <button
-                onClick={handleClose}
-                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-zinc-900 hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-100 text-white dark:text-black rounded-full font-medium text-sm transition-all active:scale-[0.98] shadow-lg shadow-zinc-900/10 dark:shadow-white/10"
-              >
-                <span>Understand & Proceed</span>
-                <ArrowRight size={16} />
-              </button>
+    <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-md" />
+        <Dialog.Content asChild>
+          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="border-border bg-popover text-popover-foreground fixed top-1/2 left-1/2 z-[61] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-3xl border p-6 text-center shadow-xl sm:p-8">
+            <div className="border-border bg-secondary mx-auto mb-5 flex size-12 items-center justify-center rounded-2xl border">
+              <Sparkles aria-hidden size={20} />
             </div>
+            <Dialog.Title className="mb-3 text-xl font-semibold tracking-tight">Active Development</Dialog.Title>
+            <Dialog.Description className="text-muted-foreground mb-6 text-sm leading-7">We are constantly updating and refining our platform to provide a better experience. Features and visual elements may evolve as development continues.</Dialog.Description>
+            <Dialog.Close className="bg-primary text-primary-foreground inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-medium transition-opacity hover:opacity-85">
+              Understand &amp; Proceed
+              <ArrowRight aria-hidden size={16} />
+            </Dialog.Close>
           </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 }

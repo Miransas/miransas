@@ -1,0 +1,10 @@
+{
+  "components/shared/voice-orb.tsx": {
+    "backup": "voice-orb.tsx.original",
+    "sha256": "93605b3a74e8166e18c4c418e4e6bdf5861d1a020d97b5e6e50c696e0c0b3596"
+  },
+  "components/shared/new-hero.tsx": {
+    "backup": "new-hero.tsx.original",
+    "sha256": "ebba4a001b3e13c6dd691ee74117a58c9c98461f584a08fd3f32a6eceef0a840"
+  }
+}

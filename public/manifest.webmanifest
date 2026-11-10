@@ -1,23 +1,17 @@
 {
   "name": "Miransas",
   "short_name": "Miransas",
-  "description": "Secure • Connect • Evolve",
+  "description": "Secure \u2022 Connect \u2022 Evolve",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "background_color": "#efefef",
+  "theme_color": "#efefef",
   "orientation": "portrait",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
       "sizes": "192x192",
       "type": "image/png"
-    },
-    {
-      "src": "/android-chrome-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
     }
   ],
   "screenshots": [
@@ -29,7 +23,11 @@
       "label": "Miransas Home"
     }
   ],
-  "categories": ["developer", "productivity", "utilities"],
+  "categories": [
+    "developer",
+    "productivity",
+    "utilities"
+  ],
   "lang": "en",
   "dir": "ltr"
 }

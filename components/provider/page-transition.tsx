@@ -1,23 +1,17 @@
-"use client";
+'use client';
 
-import { AnimatePresence, motion } from "motion/react";
-import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
+import { usePathname } from 'next/navigation';
+import type { ReactNode } from 'react';
 
 export function PageTransition({ children }: { children: ReactNode }) {
-    const pathname = usePathname();
-
-    return (
-        <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-                key={pathname}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.28, ease: "easeOut" }}
-            >
-                {children}
-            </motion.div>
-        </AnimatePresence>
-    );
+  const pathname = usePathname();
+  const reduce = useReducedMotion();
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div className="flex flex-1 flex-col" key={pathname} initial={{ opacity: reduce ? 1 : 0 }} animate={{ opacity: 1 }} exit={{ opacity: reduce ? 1 : 0 }} transition={{ duration: reduce ? 0 : 0.2 }}>
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  );
 }

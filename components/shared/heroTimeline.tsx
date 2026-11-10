@@ -1,182 +1,92 @@
-"use client";
+'use client';
 
-import React, { useRef } from "react";
-import { motion, useScroll } from "framer-motion";
-import { Search, PenTool, Settings, RefreshCw, Rocket } from "lucide-react";
+import { useRef, useState } from 'react';
+import { motion, useScroll, useMotionValueEvent, useReducedMotion } from 'framer-motion';
+import { Reveal } from './reval';
+import { Search, PenTool, Settings, RefreshCw, Rocket } from 'lucide-react';
 
 const timelineData = [
   {
-    id: "01",
-    title: "Discovery & Audit",
-    description: "We analyze your business workflows, bottlenecks, and revenue opportunities.",
+    id: '01',
+    title: 'Discovery & Audit',
+    description: 'We analyze your business workflows, bottlenecks, and revenue opportunities.',
     icon: Search,
   },
   {
-    id: "02",
-    title: "Automation Blueprint",
-    description: "We design a detailed automation architecture aligned with KPIs.",
+    id: '02',
+    title: 'Automation Blueprint',
+    description: 'We design a detailed automation architecture aligned with KPIs.',
     icon: PenTool,
   },
   {
-    id: "03",
-    title: "Build & Integration",
-    description: "Our engineers implement AI systems and integrate with your existing tools.",
+    id: '03',
+    title: 'Build & Integration',
+    description: 'Our engineers implement AI systems and integrate with your existing tools.',
     icon: Settings,
   },
   {
-    id: "04",
-    title: "Testing & Optimization",
-    description: "Performance testing, data validation, iterative refinement and optimization.",
+    id: '04',
+    title: 'Testing & Optimization',
+    description: 'Performance testing, data validation, iterative refinement and optimization.',
     icon: RefreshCw,
   },
   {
-    id: "05",
-    title: "Deployment & Scaling",
-    description: "Launch, monitor, and continuously optimize systems to support scalable growth.",
+    id: '05',
+    title: 'Deployment & Scaling',
+    description: 'Launch, monitor, and continuously optimize systems to support scalable growth.',
     icon: Rocket,
   },
 ];
 
 export default function Timeline() {
+  const [active, setActive] = useState(0);
+  const reduce = useReducedMotion();
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Sayfanın kendi scroll'una yük bindirmemek için en hafif takip yöntemi
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start center", "end center"],
+    offset: ['start center', 'end center'],
+  });
+
+  useMotionValueEvent(scrollYProgress, 'change', (progress) => {
+    const next = Math.min(timelineData.length - 1, Math.floor(progress * timelineData.length));
+    setActive((current) => (current === next ? current : next));
   });
 
   return (
-    <div className="py-24 bg-black  min-h-screen">
-      <div className="max-w-4xl mx-auto relative px-4" ref={containerRef}>
-        
-       
-        <div className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-[2px] bg-gray-100 z-10" />
-
-        <motion.div
-          className="absolute left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-[2px] bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500 origin-top z-20"
-          style={{ scaleY: scrollYProgress }}
-        />
-
-        {/* ADIMLAR */}
-        <div className="flex flex-col gap-4">
+    <section aria-label="How we build" className="bg-background text-foreground px-6 py-20 md:py-28">
+      <Reveal className="mx-auto mb-14 max-w-4xl">
+        <p className="text-muted-foreground font-mono text-xs tracking-[0.18em] uppercase">The engineering process</p>
+        <h2 className="mt-4 max-w-2xl text-3xl font-medium tracking-tight sm:text-4xl">From a question to a working system.</h2>
+        <p className="text-muted-foreground mt-5 max-w-xl text-sm leading-7">A sequence of decisions, built around the problem. From discovery to refinement, each step makes the next decision clearer.</p>
+      </Reveal>
+      <div className="relative mx-auto max-w-4xl" ref={containerRef}>
+        <div aria-hidden className="bg-border absolute top-0 bottom-0 left-4 w-px md:left-1/2" />
+        <motion.div aria-hidden className="bg-foreground/60 absolute top-0 bottom-0 left-4 w-px origin-top md:left-1/2" style={{ scaleY: reduce ? 1 : scrollYProgress }} />
+        <div className="flex flex-col gap-6 md:gap-10">
           {timelineData.map((item, index) => {
             const isEven = index % 2 === 0;
             const Icon = item.icon;
-
             return (
-              <motion.div
-                key={item.id}
-                initial="inactive"
-                whileInView="active"
-                viewport={{ once: false, margin: "-20% 0px -20% 0px" }}
-                // Kapsayıcıya z-index VERMİYORUZ ki içindeki katmanlar dışarıyla karışabilsin
-                className="relative flex items-center w-full py-8 px-6"
-              >
-                
-                {/* HAP ARKA PLAN (Sadece opacity değişiyor, DOM'u tıkamaz, GPU kullanır, çizginin ALTINDA z-0) */}
-                <motion.div
-                  variants={{
-                    inactive: { opacity: 0 },
-                    active: { opacity: 1 },
-                  }}
-                  transition={{ duration: 0.4 }}
-                  className="absolute inset-0 bg-[#F4F5F6] rounded-[3rem] z-0"
-                />
-
-                {/* SOL YARI - İÇERİK (Çizginin ÜSTÜNDE z-30) */}
-                <div className="w-1/2 flex items-center justify-end pr-16 gap-6 relative z-30">
-                  {isEven ? (
-                    <>
-                      {/* İkon Kutusu (Crossfade taktiği ile performansı artırıldı) */}
-                      <div className="relative w-20 h-20 rounded-[1.5rem] overflow-hidden shadow-sm flex items-center justify-center">
-                        {/* Pasif Arka Plan */}
-                        <div className="absolute inset-0 bg-[#F3F4F6] text-gray-500 flex items-center justify-center">
-                          <Icon size={32} strokeWidth={1.5} />
-                        </div>
-                        {/* Aktif Arka Plan (Yumuşakça belirir) */}
-                        <motion.div
-                          variants={{ inactive: { opacity: 0 }, active: { opacity: 1 } }}
-                          transition={{ duration: 0.3 }}
-                          className="absolute inset-0 bg-[#333333] text-white flex items-center justify-center"
-                        >
-                          <Icon size={32} strokeWidth={1.5} />
-                        </motion.div>
-                      </div>
-
-                      {/* Numara */}
-                      <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-sm font-semibold text-gray-700 shadow-sm border border-gray-50">
-                        {item.id}
-                      </div>
-                    </>
-                  ) : (
-                    <div className="text-right">
-                      <h3 className="text-lg font-medium text-gray-900 mb-1">{item.title}</h3>
-                      <p className="text-sm text-gray-500 leading-relaxed max-w-xs ml-auto">
-                        {item.description}
-                      </p>
-                    </div>
-                  )}
+              <motion.article key={item.id} initial={false} animate={index === active ? 'active' : 'inactive'} data-active={index === active} aria-current={index === active ? 'step' : undefined} className="relative grid grid-cols-[2rem_minmax(0,1fr)] gap-5 py-6 md:grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] md:gap-8 md:py-8">
+                <motion.div aria-hidden variants={{ inactive: { opacity: 0 }, active: { opacity: 1 } }} transition={{ duration: reduce ? 0 : 0.35 }} className="bg-card absolute -inset-x-3 inset-y-0 rounded-2xl" />
+                <div className={`relative z-10 col-start-2 row-start-1 min-w-0 ${isEven ? 'md:col-start-3' : 'md:col-start-1 md:text-right'}`}>
+                  <p className="text-muted-foreground mb-3 font-mono text-xs tracking-wider">{item.id}</p>
+                  <h3 className={`text-xl font-medium tracking-tight transition-colors ${index === active ? 'text-foreground' : 'text-muted-foreground'}`}>{item.title}</h3>
+                  <p className="text-muted-foreground mt-3 max-w-sm text-sm leading-7">{item.description}</p>
                 </div>
-
-                {/* MERKEZ NOKTASI (Çizginin ÜSTÜNDE z-30) - Şekil değiştirmek yerine crossfade yapıyoruz (Kasma biter) */}
-                <div className="absolute left-1/2 transform -translate-x-1/2 w-8 h-8 z-30 flex items-center justify-center">
-                  
-                  {/* Pasif Hal (Karemsi Çerçeve) */}
-                  <motion.div
-                    variants={{ inactive: { opacity: 1, scale: 1 }, active: { opacity: 0, scale: 0.5 } }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute w-5 h-5 bg-[#F4F5F6] border-2 border-gray-200 rounded-[8px]"
-                  />
-
-                  {/* Aktif Hal (Mor Yuvarlak & İç Siyah Nokta) */}
-                  <motion.div
-                    variants={{ inactive: { opacity: 0, scale: 0.5 }, active: { opacity: 1, scale: 1 } }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute w-7 h-7 bg-white border-4 border-purple-200 rounded-full flex items-center justify-center shadow-sm"
-                  >
-                    <div className="w-2 h-2 bg-black rounded-full" />
-                  </motion.div>
+                <div aria-hidden className="relative z-10 col-start-1 row-start-1 flex justify-center md:col-start-2">
+                  <motion.span variants={{ inactive: { scale: 0.8 }, active: { scale: 1 } }} className="border-background bg-foreground ring-border mt-1 size-4 rounded-full border-[3px] ring-1" />
                 </div>
-
-                {/* SAĞ YARI - İÇERİK (Çizginin ÜSTÜNDE z-30) */}
-                <div className="w-1/2 flex items-center justify-start pl-16 gap-6 relative z-30">
-                  {isEven ? (
-                    <div className="text-left">
-                      <h3 className="text-lg font-medium text-gray-900 mb-1">{item.title}</h3>
-                      <p className="text-sm text-gray-500 leading-relaxed max-w-xs">
-                        {item.description}
-                      </p>
-                    </div>
-                  ) : (
-                    <>
-                      {/* Numara */}
-                      <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center text-sm font-semibold text-gray-700 shadow-sm border border-gray-50">
-                        {item.id}
-                      </div>
-
-                      {/* İkon Kutusu (Crossfade) */}
-                      <div className="relative w-20 h-20 rounded-[1.5rem] overflow-hidden shadow-sm flex items-center justify-center">
-                        <div className="absolute inset-0 bg-[#F3F4F6] text-gray-500 flex items-center justify-center">
-                          <Icon size={32} strokeWidth={1.5} />
-                        </div>
-                        <motion.div
-                          variants={{ inactive: { opacity: 0 }, active: { opacity: 1 } }}
-                          transition={{ duration: 0.3 }}
-                          className="absolute inset-0 bg-[#333333] text-white flex items-center justify-center"
-                        >
-                          <Icon size={32} strokeWidth={1.5} />
-                        </motion.div>
-                      </div>
-                    </>
-                  )}
+                <div aria-hidden className={`relative z-10 hidden items-center md:flex ${isEven ? 'md:col-start-1 md:row-start-1 md:justify-end' : 'md:col-start-3'}`}>
+                  <div className="border-border bg-elevated text-muted-foreground flex size-16 items-center justify-center rounded-2xl border">
+                    <Icon size={28} strokeWidth={1.4} />
+                  </div>
                 </div>
-
-              </motion.div>
+              </motion.article>
             );
           })}
         </div>
       </div>
-    </div>
+    </section>
   );
 }

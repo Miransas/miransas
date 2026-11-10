@@ -1,47 +1,28 @@
-import { Mic2, Waves, Zap } from "lucide-react";
+import { Mic2, Waves, Zap } from 'lucide-react';
 
 export const VOICE_STEPS = [
   {
-    id: "voice-agent",
+    id: 'voice-agent',
     icon: Waves,
-    eyebrow: "Voice Agents",
-    title: "Trained for the real world, not the demo.",
-    description:
-      "Real calls are messy. Customers ramble, interrupt, change their mind mid-sentence, and forget order numbers. Miralas does not just handle it — it was trained on it.",
-    highlights: [
-      "End-to-end call resolution — from hello to resolved, zero handoff to a human.",
-      "Pulls CRM records, checks policy, books appointments and issues refunds mid-call.",
-      "Scales from 10 to 10,000 concurrent calls on the same inference stack.",
-      "Trained on real customer audio, never synthetic data.",
-    ],
+    eyebrow: 'Conversational infrastructure',
+    title: 'Start with the conversation.',
+    description: 'A useful voice system needs to listen, keep context and know what should happen next. These are the questions guiding our Voice Agent work.',
+    highlights: ['Conversation and session handling are being developed together.', 'Orders and appointments are intended use cases, not released integrations.', 'The Voice Agent follows the Miralas core in our order of work.'],
   },
   {
-    id: "tts-clone",
+    id: 'tts-clone',
     icon: Mic2,
-    eyebrow: "Studio TTS & Voice Clone",
-    title: "Your voice, cloned. Every language, fluent.",
-    description:
-      "Miralas builds its own TTS models from scratch and lets you clone any voice from as little as 60 seconds of audio. Native Uzbek, Turkish, English, Arabic and 21 other languages are trained in-house.",
-    highlights: [
-      "Voice cloning in under 60 seconds of clean audio — indistinguishable from the original.",
-      "Native Uzbek model — a production-ready Uzbek TTS model.",
-      "First-token latency under 95ms, streaming-first architecture for real-time agents.",
-      "Full ownership: we own the models, the weights and the inference pipeline.",
-    ],
+    eyebrow: 'Speech and identity',
+    title: 'Give the voice a purpose.',
+    description: 'Miralas is developing voice cloning and multilingual speech, with native Uzbek at the center. The visual study beside this text illustrates that direction.',
+    highlights: ['Voice cloning requires permission from the voice owner.', 'Model notes explain the open-source tools behind the work.', 'Streaming audio is part of the integration direction.'],
   },
   {
-    id: "voice-ai",
+    id: 'voice-ai',
     icon: Zap,
-    eyebrow: "Voice AI",
-    title: "Conversations that feel human.",
-    description:
-      "Miralas uçtan uca yanıt hattını 150 ms'nin altında çalıştırır. Ne zaman konuşacağını, dinleyeceğini ve sözünün kesildiğini bağlamı kaybetmeden anlar.",
-    highlights: [
-      "Canlı konuşma akışı için ayarlanmış, 150 ms'nin altında sesten sese gecikme.",
-      "Anında söz kesme algılama; bağlamı ve amacı kaybetmeden konuşmayı durdurur.",
-      "Arka plan gürültüsünde ve güçlü bölgesel aksanlarda net ses.",
-      "100'den fazla dönüşlü konuşmalarda dinamik bağlam koruma.",
-    ],
+    eyebrow: 'Recorded demonstration',
+    title: 'Hear a voice. See the flow.',
+    description: 'Play a recorded Miralas voice sample and explore an illustrative processing sequence. This demonstration does not call a live model or a production backend.',
+    highlights: ['A real audio file with playback, seeking and download controls.', 'The transcript and processing steps are a presentation of the workflow.', 'Product availability and engineering updates are published in News.'],
   },
 ];
-

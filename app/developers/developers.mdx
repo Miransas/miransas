@@ -1,9 +1,3 @@
-# Developers
-
-Miransas is a small team that builds developer tools, voice AI and the infrastructure under them. This page is honest about what you can use today and what is still on the way.
-
----
-
 ## What you can use today
 
 | Tool | What it is | Where |
@@ -26,7 +20,7 @@ flowchart LR
     API --> W[Voice workers<br/>TTS, STS, cloning]
 ```
 
-Each client gets its own token, its own rate limits and its own scope. Our own bot is internal. Third-party bots will use a public API with per-token limits.
+This is an integration concept. Per-client tokens, scopes and rate limits are part of the intended API design. No public access contract or SDK has been released.
 
 <Callout type="warning">
   The public Miralas API is not open yet. A developer plan is planned, and we will announce it on

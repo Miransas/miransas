@@ -1,23 +1,12 @@
-# Voice Agent
-
-A self-hosted voice AI that talks with your customers, takes orders and books appointments.
-
-<Callout type="info">
-  The Voice Agent is in development. It comes after the Miralas core is finished. Follow progress on
-  [Miransas News](/news/voice-agent).
-</Callout>
-
----
-
-## What it does
+## Intended capabilities
 
 | Capability | What it means |
 | --- | --- |
-| Natural conversation | Talks in a normal, flowing way instead of reading fixed menus |
-| Voice input | Understands spoken requests, not only typed text |
-| Orders | Collects what a customer wants and keeps the order straight |
-| Appointments | Books, checks and organizes appointment times |
-| Memory within a conversation | Remembers what was said earlier in the same session |
+| Natural conversation | Aims for a natural conversation instead of reading fixed menus |
+| Voice input | Intended to understand spoken requests, not only typed text |
+| Orders | Would collect what a customer wants and keeps the order straight |
+| Appointments | Would help book, check and organize appointment times |
+| Memory within a conversation | Designed to retain what was said earlier in the same session |
 
 The goal is simple logic, done reliably. We would rather build an agent that does a few things well than one that promises everything.
 
@@ -25,13 +14,13 @@ The goal is simple logic, done reliably. We would rather build an agent that doe
 
 ## Where it fits
 
-The agent is made for businesses and for homes: any place where someone needs to ask for something by voice, and a clear answer or action should follow, such as placing an order or booking a time.
+The intended audience is businesses and homes: any place where someone needs to ask for something by voice, and a clear answer or action should follow, such as placing an order or booking a time.
 
 ---
 
 ## Languages
 
-Turkish and Uzbek come first. English and Russian are supported too.
+Turkish and Uzbek are the initial language priorities described in our development notes. English and Russian are also part of the planned direction; there is no released language-support guarantee.
 
 ---
 
@@ -43,13 +32,15 @@ flowchart LR
     A --> R[Voice reply]
 ```
 
-This is a simplified view. Inside, the agent keeps a session for each conversation and streams audio in both directions.
+This is a simplified view. The intended design keeps a session for each conversation and streams audio in both directions.
 
 ---
 
-## Why self-hosted
+## Self-hosting direction
 
-You run the agent on your own infrastructure. That means conversations stay with you, and you decide where the data lives.
+Self-hosting is the intended deployment model. The aim is to let operators choose where conversation data is processed and stored.
+
+The following stack is described in the [published engineering note](/news/voice-agent), rather than offered as a released deployment contract.
 
 | Part | Technology |
 | --- | --- |

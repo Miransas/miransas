@@ -1,77 +1,65 @@
-import { Mic2, Waves, Zap } from "lucide-react";
-import { FaDiscord, FaGithub, FaX, FaYoutube } from "react-icons/fa6";
-
 export const ROUTES = {
-  home: "/",
-  developer: "/developer",
-  model: "/model",
+  home: '/',
+  developer: '/developers',
+  model: '/models',
 
   products: {
-    studio: "https://console.miralas.io/studio",
-    tts: "https://console.miralas.io/tts",
-    voiceClone: "https://console.miralas.io/voice-clone",
-    realtime: "https://console.miralas.io/realtime",
-  },
-
-  console: {
-    studio: "https://console.miralas.io/studio",
-    auth: "https://console.miralas.io/auth",
+    studio: '/projects#miralas',
+    tts: '/models',
+    voiceClone: '/models#voice-cloning',
+    realtime: '/agent',
   },
 } as const;
 
 export const PRODUCT_MENU = [
   {
-    label: "Studio",
-    hint: "Create and manage AI voices",
+    label: 'Studio',
+    hint: 'Explore the Miralas project',
     href: ROUTES.products.studio,
   },
   {
-    label: "Text to Speech",
-    hint: "Generate natural AI speech",
+    label: 'Text to Speech',
+    hint: 'Read the speech model notes',
     href: ROUTES.products.tts,
   },
   {
-    label: "Voice Clone",
-    hint: "Create your own AI voice",
+    label: 'Voice Clone',
+    hint: 'Understand authorized voice cloning',
     href: ROUTES.products.voiceClone,
   },
   {
-    label: "Realtime",
-    hint: "Build real-time voice experiences",
+    label: 'Realtime',
+    hint: 'Explore conversational infrastructure',
     href: ROUTES.products.realtime,
   },
 ] as const;
 
 export const RESOURCE_MENU = [
-  { label: "Blog", href: "https://blog.miransas.com", isExternal: true },
-  { label: "Support", href: "/support" },
-  { label: "Contact", href: "/contact" },
+  { label: 'Blog', href: 'https://blog.miransas.com', isExternal: true },
+  { label: 'Support', href: '/support' },
+  { label: 'Contact', href: '/contact' },
   // { label: "Help", href: "/developers" },
 ] as const;
 
 export const EXPLORE_MENU = [
-  { label: "News", href: "/news" },
-  { label: "Models", href: "/models" },
-  { label: "Agent", href: "/agent" },
+  { label: 'News', href: '/news' },
+  { label: 'Lab', href: '/lab' },
+  { label: 'Models', href: '/models' },
+  { label: 'Agent', href: '/agent' },
 ] as const;
 
 export const COMPANY_MENU = [
-    { label: "About", href: "/about" },
-  { label: "Developers", href: "/developers" },
-  { label: "Careers", href: "/careers" },
-
+  { label: 'About', href: '/about' },
+  { label: 'Developers', href: '/developers' },
+  { label: 'Careers', href: '/careers' },
 ] as const;
 
-export const PROJECT_MENU = [
-    { label: "Projects", href: "/projects/" },
-
-
-] as const;
+export const PROJECT_MENU = [{ label: 'Projects', href: '/projects/' }] as const;
 
 export const HEADER_MENU = [
-  { label: "Products", items: PRODUCT_MENU },
-  { label: "Explore", items: EXPLORE_MENU },
-  { label: "Resources", items: RESOURCE_MENU },
-  { label: "Company", items: COMPANY_MENU },
-  { label:  "Projects", items: PROJECT_MENU}
+  { label: 'Products', items: PRODUCT_MENU },
+  { label: 'Explore', items: EXPLORE_MENU },
+  { label: 'Resources', items: RESOURCE_MENU },
+  { label: 'Company', items: COMPANY_MENU },
+  { label: 'Projects', items: PROJECT_MENU },
 ] as const;

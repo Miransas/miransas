@@ -1,19 +1,6 @@
----
-title: "Chatterbox"
-description: "The open-source TTS model family Miransas uses for its voice layer: how it works, which variants exist, and why we chose it."
-provider: "Resemble AI"
-license: "MIT"
-category: "Text-to-Speech"
-updated: "2026-11-01"
----
-
-# Chatterbox
-
-**Chatterbox** is an **open-source** text-to-speech (TTS) model family developed by [Resemble AI](https://www.resemble.ai). It turns text into natural, expressive speech and can **clone a voice** (zero-shot voice cloning) from just a few seconds of reference audio.
-
-At Miransas, we use Chatterbox for our voice layer. This page explains what the model is, how it works, which variants are available, and why it is the right choice for us.
-
----
+<Callout type="info">
+  The [upstream repository](https://github.com/resemble-ai/chatterbox) now describes Chatterbox as retired research. Its code remains available under MIT. These notes describe the model family, not an upstream support commitment or a released Miransas API.
+</Callout>
 
 ## Chatterbox at a Glance
 
@@ -32,7 +19,7 @@ At Miransas, we use Chatterbox for our voice layer. This page explains what the 
 
 ## Why Chatterbox?
 
-1. **Open source and MIT licensed.** We run the model on our own infrastructure. Voice data is never sent to a third-party API.
+1. **Open source and MIT licensed.** The model can be run on operator-controlled infrastructure. A self-hosted deployment can keep processing within the operator’s chosen environment.
 2. **No per-usage fees.** The cost is the cost of the GPU/server. There is no per-minute or per-character billing.
 3. **Zero-shot cloning.** There is no need to train a model for every new voice. A short reference recording is enough.
 4. **Emotion control.** The same text can be read calmly, with emphasis, or dramatically.
@@ -55,7 +42,7 @@ Chatterbox is not a single model. It is a **family**, split by use case.
 
 <Callout type="info">
   The latest release of Chatterbox Multilingual is listed as **V3** in the official repository. When
-  installing, check which version you are pulling from the model ID passed to `from_pretrained`.
+  installing, check the package version and checkpoint selection in the upstream example.
 </Callout>
 
 ### Which variant should we pick?
@@ -172,7 +159,7 @@ Chatterbox-Multilingual supports 23 languages. Turkish is one of them.
 | East Asia | Chinese, Japanese, Korean, Malay |
 | Other | Russian, Swahili |
 
-> The language list may grow between versions. Check the official repository for the current list.
+> The language list may grow between versions. Check the [upstream language list](https://github.com/resemble-ai/chatterbox#supported-languages) for the current list.
 
 ---
 
@@ -218,25 +205,25 @@ Voice cloning is a powerful technology and carries a risk of misuse. Chatterbox 
 
 ### Miransas principles
 
-1. We only work with **authorized** voices (our own team's voice actors or recordings with written permission).
+1. We only work with **authorized** voices (authorized speakers or recordings with written permission).
 2. Generated voices are used with clear disclosure that they are synthetic, and never to deceive anyone.
-3. Reference voice data stays on our own infrastructure.
-4. Our terms of use and privacy policies are prepared with legal counsel.
+3. Data handling depends on the actual deployment and the applicable product terms.
+4. Our [current legal policies](https://privacy.miransas.com/legal/privacy) describe the published terms.
 
 ---
 
 ## Quality and Comparison
 
-For Chatterbox-Turbo, Resemble AI has published comparisons on the independent evaluation platform Podonos, covering overall preference, naturalness, and expressiveness. The comparisons were run against ElevenLabs Turbo v2.5, Cartesia Sonic 3, and VibeVoice 7B. The results are publicly available; we recommend listening for yourself and evaluating with your own use case.
+Evaluate voice quality with a representative test set. This page does not publish Miransas benchmarks or make a production latency guarantee.
 
 ### Key differences between Chatterbox and paid TTS APIs
 
 | Topic | Chatterbox (self-hosted) | Paid cloud TTS APIs |
 | --- | --- | --- |
 | Cost model | Server/GPU cost | Per-character or per-minute fees |
-| Data privacy | Data stays on our infrastructure | Data goes to a third party |
+| Data privacy | Data handling is controlled by the operator | Data goes to a third party |
 | Customization | Full control over code and model | Limited to the provider's settings |
-| Setup and maintenance | We manage it | The provider manages it |
+| Setup and maintenance | The operator manages it | The provider manages it |
 | Scaling | Depends on GPU capacity | The provider scales for you |
 | License | MIT | Provider terms |
 
@@ -301,4 +288,4 @@ The Turbo variant is designed for this: low latency and low VRAM requirements. A
 | Developer | [resemble.ai](https://www.resemble.ai) |
 | Hugging Face model pages | `ResembleAI` organization |
 
-*This page is based on Chatterbox's public documentation. Model versions and features are updated frequently; compare against the current README in the official repository before publishing.*
+*Sources checked on 9 November 2026: the [official repository](https://github.com/resemble-ai/chatterbox) and [Turbo model card](https://huggingface.co/ResembleAI/chatterbox-turbo). Their upstream information is not a Miransas product-support contract.*

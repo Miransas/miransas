@@ -1,60 +1,18 @@
 export const groups = {
   General: [
-    {
-      id: "0",
-      q: "What exactly does Miransas build?",
-      a:
-        "Yüksek performanslı yazılım sistemleri: bağımsız oyunlar (Project Sad), güvenli altyapı (Binboi) ve algoritmik motorlar (Rust Chess Engine). Her proje performans ve uzun vadeli sürdürülebilirlik gözetilerek geliştirilir.",
-    },
-    {
-      id: "1",
-      q: "Do I need technical knowledge to work with you?",
-      a:
-        "Hiç gerekmez. İster teknik bir kurucu ister işletme sahibi olun, vizyonunuzu çalışan sistemlere dönüştürürüz. Jargon yok, gereksiz karmaşıklık yok; yalnızca açık iletişim ve yayınlanan kod var.",
-    },
-    {
-      id: "3",
-      q: "Can you integrate with our existing stack?",
-      a:
-        "Kesinlikle. Modern API'ler, webhook'lar, gRPC ve özel protokollerle sorunsuz entegrasyonlar konusunda uzmanız. Go, Rust ve Next.js yığınınızla akıcı biçimde çalışırız.",
-    },
-    {
-      id: "4",
-      q: "How does the engagement process work?",
-      a:
-        "1. Keşif: Probleminizi derinlemesine anlarız. 2. Tasarım: Wireframe ve mimari. 3. Geliştirme: Haftalık demolarla yinelemeli çalışma. 4. Yayın: İzlemeli üretim kurulumu. Sürpriz yok, kapsam kayması yok.",
-    },
-    {
-      id: "5",
-      q: "Do you provide ongoing support?",
-      a:
-        "Evet. Yayından sonra sizi yarı yolda bırakmayız. Tüm planlarda destek süresi bulunur; ürününüz ölçeklenirken sürekli iyileştirme, güvenlik yamaları ve özellik geliştirme için devamlı destek anlaşmaları sunarız.",
-    },
-    {
-      id: "6",
-      q: "Are you really a solo studio?",
-      a:
-        "Evet. Miransas bilinçli olarak tek kişilik bir yapıdır. Projenizi geliştiren mühendisle doğrudan iletişim kurarsınız; devir, müşteri yöneticisi veya bürokrasi yoktur.",
-    },
+    { q: 'What does Miransas build?', a: 'Miransas is an independent engineering studio working on voice AI, developer tools and infrastructure. Miralas is the current focus; the Projects page documents the wider body of work.' },
+    { q: 'Can I use Miralas today?', a: 'Miralas is in development. Public availability and release updates will be announced in Miransas News. The website demonstrates the direction of the product.' },
+    { q: 'Is the Voice Agent released?', a: 'No public release is scheduled. The Voice Agent follows the Miralas core, with conversation, orders and appointments as intended use cases. The Agent page explains the current direction.' },
+    { q: 'Where can I follow the work?', a: 'Read Miransas News for engineering notes and product updates, or subscribe to its RSS feed. Existing published articles remain the record of earlier announcements.' },
   ],
-  "Community & Features": [
-    {
-      q: "Can members access courses and chat with one login?",
-      a: "Yes. Courses, events, discussions, and the member directory all live in the same branded space under one login.",
-    },
-    {
-      q: "Do you support live events?",
-      a: "You can publish events, collect RSVPs, and keep recaps next to the rest of the community — without a second calendar tool.",
-    },
+  'Voice & Development': [
+    { q: 'Why focus on Uzbek?', a: 'Native Uzbek voice experiences are a central goal of Miralas. Language coverage depends on the model and release; the Models page distinguishes upstream model capabilities from Miransas product plans.' },
+    { q: 'Are the demonstrations connected to a live model?', a: 'The homepage includes a recorded audio sample, visual studies and illustrative interfaces. They are labeled as demonstrations and do not represent a live production backend.' },
+    { q: 'Is there a public API or SDK?', a: 'A public Miralas API is planned but is not open for access. No released SDK or public endpoint is advertised here. The Developers page links to the resources available today.' },
   ],
-  "Privacy & Access": [
-    {
-      q: "Will members see Fora's branding?",
-      a: "No. They sign up and sign in inside your branded space. They never see Fora's name.",
-    },
-    {
-      q: "Can I use my own domain?",
-      a: "Starter includes a Fora subdomain. Pro and Enterprise include a custom domain you own.",
-    },
+  'Privacy & Contact': [
+    { q: 'Can I clone another person’s voice?', a: 'Use your own voice or a voice you have explicit permission to use. Voice ownership and responsible use are part of the product direction. See the published principles and current legal policies for details.' },
+    { q: 'Where can I ask for help?', a: 'Start with Support or write to contact@miransas.com. Include the product, what you expected and what happened. For security reports, use the subject “Security”.' },
+    { q: 'Are you hiring?', a: 'There are no open positions currently listed. Careers explains how we work and how to express an interest in engineering or voice work without implying an advertised role.' },
   ],
 } as const;

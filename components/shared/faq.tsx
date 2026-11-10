@@ -2,63 +2,47 @@
  Copy Right Miransas
 */
 
+'use client';
 
-"use client";
-
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, ArrowRight, HelpCircle } from "lucide-react";
-import { groups } from "../../constants/faq";
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, ArrowRight, HelpCircle } from 'lucide-react';
+import { Reveal } from './reval';
+import { groups } from '../../constants/faq';
 
 type Group = keyof typeof groups;
 
-// custom light mod bg-[#F2F2F2]
-
 export function Faq() {
-  const [group, setGroup] = useState<Group>("General");
+  const [group, setGroup] = useState<Group>('General');
   const [open, setOpen] = useState<number | null>(0);
   const items = groups[group] || [];
+  const groupId = group.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
   return (
-    <section className="relative w-full  py-24 bg-black " id="faq">
+    <section className="bg-background relative w-full py-24" id="faq">
       <div className="container-page">
-        <div className="mx-auto max-w-7xl grid gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-          
-          {/* Sol Kolon: Başlık, Kategori Tabları ve İletişim Kutusu */}
+        <Reveal className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div className="flex flex-col justify-between">
             <div>
-              {/* Badge */}
-              <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card/60 px-3.5 py-1 text-xs font-mono text-muted-foreground backdrop-blur-md">
-                <HelpCircle className="size-3.5 text-primary" />
+              <div className="border-border bg-card/60 text-muted-foreground inline-flex items-center gap-2 rounded-full border px-3.5 py-1 font-mono text-xs backdrop-blur-md">
+                <HelpCircle className="text-primary size-3.5" />
                 <span>FAQ</span>
               </div>
-
-              {/* Title */}
-              <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl leading-[1.1]">
-                Answers to the questions that come up most.
-              </h2>
-
-              {/* Subtitle */}
-              <p className="mt-4 text-sm sm:text-base text-muted-foreground leading-relaxed">
-                Learn how Miransas works, what's included, and what to expect as the platform grows.
-              </p>
-
-              {/* Kategori Tabları (Amber Temasına Uygun) */}
+              <h2 className="text-foreground mt-4 text-3xl leading-[1.1] font-bold tracking-tight sm:text-4xl md:text-5xl">Answers to the questions that come up most.</h2>
+              <p className="text-muted-foreground mt-4 text-sm leading-relaxed sm:text-base">Learn how Miransas works, what&#39;s included, and what to expect as the platform grows.</p>
               <div className="mt-8 flex flex-wrap gap-2">
                 {(Object.keys(groups) as Group[]).map((key) => {
                   const isActive = group === key;
                   return (
                     <button
                       key={key}
+                      type="button"
+                      aria-pressed={isActive}
                       onClick={() => {
                         setGroup(key);
                         setOpen(0);
                       }}
-                      className={`rounded-full px-4 py-2 text-xs font-medium transition-all duration-200 ${
-                        isActive
-                          ? "bg-[#17c9b6] text-primary-foreground shadow-sm shadow-primary/20"
-                          : " bg-white/[0.06] text-muted-foreground hover:bg-secondary hover:text-foreground"
-                      }`}
+                      className={`rounded-full px-4 py-2 text-xs font-medium transition-all duration-200 ${isActive ? 'bg-primary text-primary-foreground' : 'bg-card text-muted-foreground hover:bg-secondary hover:text-foreground'}`}
                     >
                       {key}
                     </button>
@@ -66,61 +50,32 @@ export function Faq() {
                 })}
               </div>
             </div>
-
-            {/* İletişim Kartı */}
-            <div className="mt-10 rounded-2xl border border-border bg-white/10 backdrop-blur-xl p-6 shadow-sm">
-              <h3 className="text-base font-semibold text-foreground">Got questions?</h3>
-              <p className="mt-1.5 text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                Can't find what you're looking for? Reach out — our support team responds quickly.
-              </p>
-              <a
-                href="#contact"
-                className="group mt-4 inline-flex items-center gap-2 text-xs font-semibold text-primary transition-all hover:underline"
-              >
+            <div className="border-border bg-card mt-10 rounded-2xl border p-6 shadow-sm backdrop-blur-xl">
+              <h3 className="text-foreground text-base font-semibold">Got questions?</h3>
+              <p className="text-muted-foreground mt-1.5 text-xs leading-relaxed sm:text-sm">Can&#39;t find what you&#39;re looking for? Reach out — the team will read your message.</p>
+              <a href="/contact" className="group text-primary mt-4 inline-flex items-center gap-2 text-xs font-semibold transition-all hover:underline">
                 <span>Contact us</span>
                 <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-1" />
               </a>
             </div>
           </div>
-
-          {/* Sağ Kolon: Akordeon Soru-Cevap Listesi */}
           <div className="flex flex-col gap-3">
             {items.map((item, index) => {
               const isOpen = open === index;
 
               return (
-                <div
-                  key={item.q}
-                  className="overflow-hidden rounded-4xl   bg-white/10  backdrop-blur-md transition-colors hover:border-border"
-                >
-                  <button
-                    type="button"
-                    onClick={() => setOpen(isOpen ? null : index)}
-                    className="flex w-full items-center justify-between gap-4 p-5 sm:p-3.5 text-left transition-colors hover:bg-secondary/40"
-                  >
-                    <span className="text-sm sm:text-base font-medium text-foreground leading-snug">
-                      {item.q}
-                    </span>
-                    <div
-                      className={`flex size-7 shrink-0 items-center justify-center rounded-lg  bg-background transition-transform duration-200 ${
-                        isOpen ? "rotate-180 border-primary/50 text-blue-500" : "text-muted-foreground"
-                      }`}
-                    >
+                <div key={item.q} className="border-border bg-card hover:border-border overflow-hidden rounded-4xl  backdrop-blur-md transition-colors">
+                  <button type="button" id={`faq-trigger-${groupId}-${index}`} aria-expanded={isOpen} aria-controls={`faq-answer-${groupId}-${index}`} onClick={() => setOpen(isOpen ? null : index)} className="hover:bg-secondary/40 flex w-full items-center rounded-4xl justify-between gap-4 p-5 text-left transition-colors sm:p-6">
+                    <span className="text-foreground text-sm leading-snug font-medium sm:text-base">{item.q}</span>
+                    <div className={`bg-background flex size-7 shrink-0 items-center justify-center rounded-4xl transition-transform duration-200 ${isOpen ? 'border-primary/50 text-foreground rotate-180' : 'text-muted-foreground'}`}>
                       <ChevronDown className="size-4" />
                     </div>
                   </button>
 
                   <AnimatePresence initial={false}>
                     {isOpen && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.25, ease: "easeInOut" }}
-                      >
-                        <div className="px-3 pb-4 pt-3 sm:px-4 sm:pb-3 text-xs sm:text-sm leading-relaxed text-muted-foreground">
-                          {item.a}
-                        </div>
+                      <motion.div id={`faq-answer-${groupId}-${index}`} role="region" aria-labelledby={`faq-trigger-${groupId}-${index}`} initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25, ease: 'easeInOut' }}>
+                        <div className="text-muted-foreground px-5 pb-6 text-xs leading-relaxed sm:px-6 sm:text-sm">{item.a}</div>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -128,8 +83,7 @@ export function Faq() {
               );
             })}
           </div>
-
-        </div>
+        </Reveal>
       </div>
     </section>
   );

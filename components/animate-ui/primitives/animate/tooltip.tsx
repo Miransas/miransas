@@ -1,24 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import {
-  motion,
-  AnimatePresence,
-  LayoutGroup,
-  type Transition,
-  type HTMLMotionProps,
-} from 'motion/react';
-import {
-  useFloating,
-  autoUpdate,
-  offset as floatingOffset,
-  flip,
-  shift,
-  arrow as floatingArrow,
-  FloatingPortal,
-  FloatingArrow,
-  type UseFloatingReturn,
-} from '@floating-ui/react';
+import { motion, AnimatePresence, LayoutGroup, type Transition, type HTMLMotionProps } from 'motion/react';
+import { useFloating, autoUpdate, offset as floatingOffset, flip, shift, arrow as floatingArrow, FloatingPortal, FloatingArrow, type UseFloatingReturn } from '@floating-ui/react';
 
 import { getStrictContext } from '@/lib/get-strict-context';
 import { Slot, type WithAsChild } from '@/components/animate-ui/primitives/animate/slot';
@@ -48,8 +32,7 @@ type GlobalTooltipContextType = {
   referenceElRef: React.RefObject<HTMLElement | null>;
 };
 
-const [GlobalTooltipProvider, useGlobalTooltip] =
-  getStrictContext<GlobalTooltipContextType>('GlobalTooltipProvider');
+const [GlobalTooltipProvider, useGlobalTooltip] = getStrictContext<GlobalTooltipContextType>('GlobalTooltipProvider');
 
 type TooltipContextType = {
   props: HTMLMotionProps<'div'>;
@@ -63,9 +46,7 @@ type TooltipContextType = {
   id: string;
 };
 
-const [LocalTooltipProvider, useTooltip] = getStrictContext<TooltipContextType>(
-  'LocalTooltipProvider',
-);
+const [LocalTooltipProvider, useTooltip] = getStrictContext<TooltipContextType>('LocalTooltipProvider');
 
 type TooltipPosition = { x: number; y: number };
 
@@ -91,16 +72,9 @@ type TooltipProviderProps = {
   transition?: Transition;
 };
 
-function TooltipProvider({
-  children,
-  id,
-  openDelay = 700,
-  closeDelay = 300,
-  transition = { type: 'spring', stiffness: 300, damping: 35 },
-}: TooltipProviderProps) {
+function TooltipProvider({ children, id, openDelay = 700, closeDelay = 300, transition = { type: 'spring', stiffness: 300, damping: 35 } }: TooltipProviderProps) {
   const globalId = React.useId();
-  const [currentTooltip, setCurrentTooltip] =
-    React.useState<TooltipData | null>(null);
+  const [currentTooltip, setCurrentTooltip] = React.useState<TooltipData | null>(null);
   const timeoutRef = React.useRef<number | null>(null);
   const lastCloseTimeRef = React.useRef<number>(0);
   const referenceElRef = React.useRef<HTMLElement | null>(null);
@@ -114,12 +88,9 @@ function TooltipProvider({
       }
       const now = Date.now();
       const delay = now - lastCloseTimeRef.current < closeDelay ? 0 : openDelay;
-      timeoutRef.current = window.setTimeout(
-        () => setCurrentTooltip(data),
-        delay,
-      );
+      timeoutRef.current = window.setTimeout(() => setCurrentTooltip(data), delay);
     },
-    [openDelay, closeDelay, currentTooltip],
+    [openDelay, closeDelay, currentTooltip]
   );
 
   const hideTooltip = React.useCallback(() => {
@@ -148,6 +119,7 @@ function TooltipProvider({
     window.addEventListener('scroll', hideImmediate, true);
     window.addEventListener('resize', hideImmediate, true);
     return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
       window.removeEventListener('keydown', onKeyDown, true);
       window.removeEventListener('scroll', hideImmediate, true);
       window.removeEventListener('resize', hideImmediate, true);
@@ -179,52 +151,38 @@ type RenderedTooltipContextType = {
   open: boolean;
 };
 
-const [RenderedTooltipProvider, useRenderedTooltip] =
-  getStrictContext<RenderedTooltipContextType>('RenderedTooltipContext');
+const [RenderedTooltipProvider, useRenderedTooltip] = getStrictContext<RenderedTooltipContextType>('RenderedTooltipContext');
 
 type FloatingContextType = {
   context: UseFloatingReturn['context'];
-  arrowRef: React.RefObject<SVGSVGElement | null>;
+  setArrowElement: React.Dispatch<React.SetStateAction<SVGSVGElement | null>>;
 };
 
-const [FloatingProvider, useFloatingContext] =
-  getStrictContext<FloatingContextType>('FloatingContext');
+const [FloatingProvider, useFloatingContext] = getStrictContext<FloatingContextType>('FloatingContext');
 
 const MotionTooltipArrow = motion.create(FloatingArrow);
 
-type TooltipArrowProps = Omit<
-  React.ComponentProps<typeof MotionTooltipArrow>,
-  'context'
-> & {
+type TooltipArrowProps = Omit<React.ComponentProps<typeof MotionTooltipArrow>, 'context'> & {
   withTransition?: boolean;
 };
 
-function TooltipArrow({
-  ref,
-  withTransition = true,
-  ...props
-}: TooltipArrowProps) {
+function TooltipArrow({ ref, withTransition = true, ...props }: TooltipArrowProps) {
   const { side, align, open } = useRenderedTooltip();
-  const { context, arrowRef } = useFloatingContext();
+  const { context, setArrowElement } = useFloatingContext();
+  const arrowRef = React.useRef<SVGSVGElement | null>(null);
+  const attachArrow = React.useCallback(
+    (node: SVGSVGElement | null) => {
+      arrowRef.current = node;
+      setArrowElement(node);
+    },
+    [setArrowElement]
+  );
   const { transition, globalId } = useGlobalTooltip();
   React.useImperativeHandle(ref, () => arrowRef.current as SVGSVGElement);
 
   const deg = { top: 0, right: 90, bottom: 180, left: -90 }[side];
 
-  return (
-    <MotionTooltipArrow
-      ref={arrowRef}
-      context={context}
-      data-state={open ? 'open' : 'closed'}
-      data-side={side}
-      data-align={align}
-      data-slot="tooltip-arrow"
-      style={{ rotate: deg }}
-      layoutId={withTransition ? `tooltip-arrow-${globalId}` : undefined}
-      transition={withTransition ? transition : undefined}
-      {...props}
-    />
-  );
+  return <MotionTooltipArrow ref={attachArrow} context={context} data-state={open ? 'open' : 'closed'} data-side={side} data-align={align} data-slot="tooltip-arrow" style={{ rotate: deg }} layoutId={withTransition ? `tooltip-arrow-${globalId}` : undefined} transition={withTransition ? transition : undefined} {...props} />;
 }
 
 type TooltipPortalProps = React.ComponentProps<typeof FloatingPortal>;
@@ -234,15 +192,15 @@ function TooltipPortal(props: TooltipPortalProps) {
 }
 
 function TooltipOverlay() {
-  const { currentTooltip, transition, globalId, referenceElRef } =
-    useGlobalTooltip();
+  const { currentTooltip, transition, globalId, referenceElRef } = useGlobalTooltip();
 
   const [rendered, setRendered] = React.useState<{
+    source: TooltipData | null;
     data: TooltipData | null;
     open: boolean;
-  }>({ data: null, open: false });
+  }>({ source: currentTooltip, data: currentTooltip, open: currentTooltip !== null });
 
-  const arrowRef = React.useRef<SVGSVGElement | null>(null);
+  const [arrowElement, setArrowElement] = React.useState<SVGSVGElement | null>(null);
 
   const side = rendered.data?.side ?? 'top';
   const align = rendered.data?.align ?? 'center';
@@ -257,17 +215,14 @@ function TooltipOverlay() {
       }),
       flip(),
       shift({ padding: 8 }),
-      floatingArrow({ element: arrowRef }),
+      floatingArrow({ element: arrowElement }),
     ],
   });
 
-  React.useEffect(() => {
-    if (currentTooltip) {
-      setRendered({ data: currentTooltip, open: true });
-    } else {
-      setRendered((p) => (p.data ? { ...p, open: false } : p));
-    }
-  }, [currentTooltip]);
+  // Retain the last content during exit without a second effect-driven render.
+  if (rendered.source !== currentTooltip) {
+    setRendered({ source: currentTooltip, data: currentTooltip ?? rendered.data, open: currentTooltip !== null });
+  }
 
   React.useLayoutEffect(() => {
     if (referenceElRef.current) {
@@ -275,6 +230,13 @@ function TooltipOverlay() {
       update();
     }
   }, [referenceElRef, refs, update, rendered.data]);
+
+  const attachFloating = React.useCallback(
+    (node: HTMLDivElement | null) => {
+      refs.setFloating(node);
+    },
+    [refs]
+  );
 
   const ready = x != null && y != null;
   const Component = rendered.data?.contentAsChild ? Slot : motion.div;
@@ -285,7 +247,7 @@ function TooltipOverlay() {
       {rendered.data && ready && (
         <TooltipPortal>
           <div
-            ref={refs.setFloating}
+            ref={attachFloating}
             data-slot="tooltip-overlay"
             data-side={resolvedSide}
             data-align={rendered.data.align}
@@ -298,7 +260,7 @@ function TooltipOverlay() {
               transform: `translate3d(${x!}px, ${y!}px, 0)`,
             }}
           >
-            <FloatingProvider value={{ context, arrowRef }}>
+            <FloatingProvider value={{ context, setArrowElement }}>
               <RenderedTooltipProvider
                 value={{
                   side: resolvedSide,
@@ -332,8 +294,7 @@ function TooltipOverlay() {
                     ...initialFromSide(rendered.data.side),
                   }}
                   onAnimationComplete={() => {
-                    if (!rendered.open)
-                      setRendered({ data: null, open: false });
+                    if (!rendered.open) setRendered((state) => (state.open ? state : { ...state, data: null }));
                   }}
                   transition={transition}
                   {...rendered.data.contentProps}
@@ -359,13 +320,7 @@ type TooltipProps = {
   alignOffset?: number;
 };
 
-function Tooltip({
-  children,
-  side = 'top',
-  sideOffset = 0,
-  align = 'center',
-  alignOffset = 0,
-}: TooltipProps) {
+function Tooltip({ children, side = 'top', sideOffset = 0, align = 'center', alignOffset = 0 }: TooltipProps) {
   const id = React.useId();
   const [props, setProps] = React.useState<HTMLMotionProps<'div'>>({});
   const [asChild, setAsChild] = React.useState(false);
@@ -391,10 +346,7 @@ function Tooltip({
 
 type TooltipContentProps = WithAsChild<HTMLMotionProps<'div'>>;
 
-function shallowEqualWithoutChildren(
-  a?: HTMLMotionProps<'div'>,
-  b?: HTMLMotionProps<'div'>,
-) {
+function shallowEqualWithoutChildren(a?: HTMLMotionProps<'div'>, b?: HTMLMotionProps<'div'>) {
   if (a === b) return true;
   if (!a || !b) return false;
   const keysA = Object.keys(a).filter((k) => k !== 'children');
@@ -409,9 +361,7 @@ function shallowEqualWithoutChildren(
 
 function TooltipContent({ asChild = false, ...props }: TooltipContentProps) {
   const { setProps, setAsChild } = useTooltip();
-  const lastPropsRef = React.useRef<HTMLMotionProps<'div'> | undefined>(
-    undefined,
-  );
+  const lastPropsRef = React.useRef<HTMLMotionProps<'div'> | undefined>(undefined);
 
   React.useEffect(() => {
     if (!shallowEqualWithoutChildren(lastPropsRef.current, props)) {
@@ -429,32 +379,9 @@ function TooltipContent({ asChild = false, ...props }: TooltipContentProps) {
 
 type TooltipTriggerProps = WithAsChild<HTMLMotionProps<'div'>>;
 
-function TooltipTrigger({
-  ref,
-  onMouseEnter,
-  onMouseLeave,
-  onFocus,
-  onBlur,
-  onPointerDown,
-  asChild = false,
-  ...props
-}: TooltipTriggerProps) {
-  const {
-    props: contentProps,
-    asChild: contentAsChild,
-    side,
-    sideOffset,
-    align,
-    alignOffset,
-    id,
-  } = useTooltip();
-  const {
-    showTooltip,
-    hideTooltip,
-    hideImmediate,
-    currentTooltip,
-    setReferenceEl,
-  } = useGlobalTooltip();
+function TooltipTrigger({ ref, onMouseEnter, onMouseLeave, onFocus, onBlur, onPointerDown, asChild = false, ...props }: TooltipTriggerProps) {
+  const { props: contentProps, asChild: contentAsChild, side, sideOffset, align, alignOffset, id } = useTooltip();
+  const { showTooltip, hideTooltip, hideImmediate, currentTooltip, setReferenceEl } = useGlobalTooltip();
 
   const triggerRef = React.useRef<HTMLDivElement>(null);
   React.useImperativeHandle(ref, () => triggerRef.current as HTMLDivElement);
@@ -475,17 +402,7 @@ function TooltipTrigger({
       alignOffset,
       id,
     });
-  }, [
-    showTooltip,
-    setReferenceEl,
-    contentProps,
-    contentAsChild,
-    side,
-    sideOffset,
-    align,
-    alignOffset,
-    id,
-  ]);
+  }, [showTooltip, setReferenceEl, contentProps, contentAsChild, side, sideOffset, align, alignOffset, id]);
 
   const handlePointerDown = React.useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
@@ -498,7 +415,7 @@ function TooltipTrigger({
         });
       }
     },
-    [onPointerDown, currentTooltip?.id, id, hideImmediate],
+    [onPointerDown, currentTooltip?.id, id, hideImmediate]
   );
 
   const handleMouseEnter = React.useCallback(
@@ -506,7 +423,7 @@ function TooltipTrigger({
       onMouseEnter?.(e);
       handleOpen();
     },
-    [handleOpen, onMouseEnter],
+    [handleOpen, onMouseEnter]
   );
 
   const handleMouseLeave = React.useCallback(
@@ -514,7 +431,7 @@ function TooltipTrigger({
       onMouseLeave?.(e);
       hideTooltip();
     },
-    [hideTooltip, onMouseLeave],
+    [hideTooltip, onMouseLeave]
   );
 
   const handleFocus = React.useCallback(
@@ -523,7 +440,7 @@ function TooltipTrigger({
       if (suppressNextFocusRef.current) return;
       handleOpen();
     },
-    [handleOpen, onFocus],
+    [handleOpen, onFocus]
   );
 
   const handleBlur = React.useCallback(
@@ -531,42 +448,12 @@ function TooltipTrigger({
       onBlur?.(e);
       hideTooltip();
     },
-    [hideTooltip, onBlur],
+    [hideTooltip, onBlur]
   );
 
   const Component = asChild ? Slot : motion.div;
 
-  return (
-    <Component
-      ref={triggerRef}
-      onPointerDown={handlePointerDown}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onFocus={handleFocus}
-      onBlur={handleBlur}
-      data-slot="tooltip-trigger"
-      data-side={side}
-      data-align={align}
-      data-state={currentTooltip?.id === id ? 'open' : 'closed'}
-      {...props}
-    />
-  );
+  return <Component ref={triggerRef} onPointerDown={handlePointerDown} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} onFocus={handleFocus} onBlur={handleBlur} data-slot="tooltip-trigger" data-side={side} data-align={align} data-state={currentTooltip?.id === id ? 'open' : 'closed'} {...props} />;
 }
 
-export {
-  TooltipProvider,
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-  TooltipArrow,
-  useGlobalTooltip,
-  useTooltip,
-  type TooltipProviderProps,
-  type TooltipProps,
-  type TooltipContentProps,
-  type TooltipTriggerProps,
-  type TooltipArrowProps,
-  type TooltipPosition,
-  type GlobalTooltipContextType,
-  type TooltipContextType,
-};
+export { TooltipProvider, Tooltip, TooltipContent, TooltipTrigger, TooltipArrow, useGlobalTooltip, useTooltip, type TooltipProviderProps, type TooltipProps, type TooltipContentProps, type TooltipTriggerProps, type TooltipArrowProps, type TooltipPosition, type GlobalTooltipContextType, type TooltipContextType };

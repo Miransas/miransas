@@ -7,16 +7,278 @@ export type OrbMode = { amp: number; freq: number; speed: number };
 type VoiceOrbProps = {
   tone?: "light" | "dark";
   mode?: OrbMode;
+  color?: string;
+  fog?: number;
+  dust?: number;
   className?: string;
 };
 
-const DEFAULT_MODE: OrbMode = { amp: 0.35, freq: 1.0, speed: 1 };
+const DEFAULT_MODE: OrbMode = { amp: 0.42, freq: 1.08, speed: 0.75 };
 
-// ── Vertex shader ─────────────────────────────────────────────────────────
-// Points sit on a unit sphere (Fibonacci distribution). Two layers of 3D
-// simplex noise push every point in or out, which gives the soft, folded,
-// living surface. The pointer pushes nearby dots away and makes them larger.
-const VERTEX = /* glsl */ `
+// ── LaserFlow Renk & Tint Sistemi (#f43f5e tabanlı) ───────────────────────
+const TINTS: [number, number][] = [
+  [0, 1],
+  [-11.5, 0.77],
+  [9.5, 0.95],
+  [-53.5, 0.79],
+  [39.5, 0.77],
+  [16, 0.81],
+  [-16.3, 0.92],
+  [13.3, 0.96],
+  [3, 1.01],
+  [1, 0.68],
+  [1, 1.15],
+  [142.5, 0.51],
+  [113.6, 0.28],
+  [-7.5, 0.13],
+  [-2.7, 0.32],
+  [7.5, 0.81],
+];
+
+const BASE_SATURATION = 0.78;
+const clamp = (v: number, min: number, max: number) =>
+  Math.min(max, Math.max(min, v));
+
+const toHsv = ([r, g, b]: number[]): [number, number] => {
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const delta = max - min;
+  let hue = 0;
+  if (delta > 0) {
+    if (max === r) hue = ((g - b) / delta) % 6;
+    else if (max === g) hue = (b - r) / delta + 2;
+    else hue = (r - g) / delta + 4;
+  }
+  return [(hue * 60 + 360) % 360, max > 0 ? delta / max : 0];
+};
+
+const fromHsv = (hue: number, saturation: number): number[] => {
+  const h = (((hue % 360) + 360) % 360) / 60;
+  const c = saturation;
+  const x = c * (1 - Math.abs((h % 2) - 1));
+  const m = 1 - c;
+  const [r, g, b] =
+    h < 1
+      ? [c, x, 0]
+      : h < 2
+        ? [x, c, 0]
+        : h < 3
+          ? [0, c, x]
+          : h < 4
+            ? [0, x, c]
+            : h < 5
+              ? [x, 0, c]
+              : [c, 0, x];
+  return [r + m, g + m, b + m];
+};
+
+const buildTints = (rgb: number[]) => {
+  const [hue, saturation] = toHsv(rgb);
+  const strength = saturation / BASE_SATURATION;
+  const data = new Float32Array(TINTS.length * 3);
+  TINTS.forEach(([shift, scale], index) => {
+    data.set(
+      fromHsv(hue + shift, clamp(BASE_SATURATION * scale * strength, 0, 1)),
+      index * 3,
+    );
+  });
+  return data;
+};
+
+// ══════════════════════════════════════════════════════════════════════════
+// PASS 1: KÜRE ÇEVRESİNDE YOĞUNLAŞAN, METİN VE KÖŞELERDE AZALAN DUMAN & TOZ
+// ══════════════════════════════════════════════════════════════════════════
+const ATMOS_VERT = /* glsl */ `
+attribute vec2 aPosition;
+void main() {
+  gl_Position = vec4(aPosition, 0.0, 1.0);
+}
+`;
+
+const ATMOS_FRAG = /* glsl */ `
+precision highp float;
+
+uniform vec2 uResolution;
+uniform float uDpr;
+uniform float uScale;
+uniform float uTime;
+uniform float uSpin;
+uniform float uAmp;
+uniform vec4 uLens;
+uniform vec3 uAmount; // x: fog, y: dust, z: dots
+uniform float uTheme; // 0: dark, 1: light
+uniform vec3 uTint[16];
+
+#define BEAM uTint[0]
+#define LEFT uTint[1]
+#define RIGHT uTint[2]
+#define WARM uTint[11]
+#define EMBER uTint[12]
+#define WHITE uTint[13]
+#define HAZE uTint[14]
+
+float sq(float x) { return x * x; }
+
+float hash(vec2 p) {
+  p = fract(p * vec2(123.34, 456.21));
+  p += dot(p, p + 45.32);
+  return fract(p.x * p.y);
+}
+
+float noise(vec2 p) {
+  vec2 i = floor(p);
+  vec2 f = fract(p);
+  vec2 u = f * f * (3.0 - 2.0 * f);
+  return mix(
+    mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
+    mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
+    u.y
+  );
+}
+
+float fbm(vec2 p) {
+  float v = 0.0;
+  float a = 0.5;
+  mat2 m = mat2(1.6, 1.2, -1.2, 1.6);
+  for (int i = 0; i < 5; i++) {
+    v += a * noise(p);
+    p = m * p;
+    a *= 0.5;
+  }
+  return v;
+}
+
+void main() {
+  vec2 frag = vec2(gl_FragCoord.x, uResolution.y * uDpr - gl_FragCoord.y) / uDpr;
+  vec2 uv = frag / uResolution;
+
+  // Küre merkezi: Metinlerin üstünde ferah durması için y = %43 noktasında
+  vec2 center = vec2(uResolution.x * 0.5, uResolution.y * 0.43);
+  float orbRadius = min(uResolution.x, uResolution.y) * 0.255;
+
+  vec2 dVec = frag - center;
+  vec2 p = dVec / orbRadius; // r = 1.0 tam kürenin dış çeperidir
+  float r = length(p);
+  float angle = atan(p.y, p.x);
+
+  float t = uTime;
+
+  // Kürenin doğal dalgalarıyla eşzamanlı hareket eden sınır
+  float waveRim = 0.08 * sin(angle * 3.0 - uSpin * 1.4 + t * 0.5)
+                + 0.05 * cos(angle * 5.0 + uSpin * 0.9 - t * 0.4);
+  float surfaceR = 0.92 + waveRim * (0.7 + uAmp);
+  float distFromRim = r - surfaceR;
+
+  // ── BÖLGE MASKESİ: Metinlerin olduğu alt alanda ve köşelerde dumanı azalt ──
+  // 1) Alt metin bölgesi (başlık ve sağ açıklama metni okunaklılığı için)
+  float bottomTextMask = 1.0 - 0.82 * smoothstep(0.54, 0.80, uv.y);
+  // 2) Sol menü ("OUR TECHNOLOGY") bölgesi
+  float leftMenuMask = 1.0 - 0.55 * (1.0 - smoothstep(0.05, 0.26, uv.x)) * smoothstep(0.25, 0.58, uv.y);
+  // 3) Ekran köşeleri ve en üst/alt sınırları (keskin çizgi oluşmaması için yumuşak vignette)
+  float cornerDist = length((uv - vec2(0.5, 0.45)) * vec2(1.15, 1.1));
+  float cornerMask = 1.0 - smoothstep(0.48, 0.82, cornerDist);
+  float topEdgeMask = smoothstep(0.0, 0.09, uv.y);
+
+  float zoneMask = bottomTextMask * leftMenuMask * cornerMask * topEdgeMask;
+
+  // Mouse Lens etkisi
+  vec2 toLens = frag - uLens.xy;
+  float lens = exp(-dot(toLens, toLens) / sq(uLens.z)) * uLens.w;
+
+  vec3 col = vec3(0.0);
+
+  // ── 1. KÜRE ÇEVRESİNDE YOĞUN, DIŞARI DOĞRU AZALAN DUMAN (FBM SMOKE) ─────
+  float fogAmount = uAmount.x;
+  // Küre merkezinin tam içini boğmaz (smoothstep(0.32, 0.88, r)),
+  // çeperde (r ~ 0.95) zirve yapar, dışarı doğru (r > 1.2) hızla azalır.
+  float innerClear = smoothstep(0.30, 0.88, r);
+  float outerFalloff = exp(-pow(max(r - 0.88, 0.0) * 1.55, 1.75));
+  float rimBoost = exp(-sq(distFromRim / 0.28));
+  float envelope = innerClear * outerFalloff * zoneMask;
+
+  if (fogAmount > 0.001 && envelope > 0.002) {
+    float cs = cos(-uSpin * 0.32);
+    float sn = sin(-uSpin * 0.32);
+    vec2 rotP = vec2(cs * p.x - sn * p.y, sn * p.x + cs * p.y);
+
+    // Küreden dışarı doğru süzülen FBM duman koordinatları
+    vec2 fq = rotP * 1.25 - normalize(p + vec2(0.0001)) * (t * 0.055) + vec2(t * 0.015, -t * 0.028);
+    vec2 fw = vec2(
+      fbm(fq * 1.35 + vec2(1.7, 9.2) + t * 0.03),
+      fbm(fq * 1.35 + vec2(8.3, 2.8) - t * 0.024)
+    );
+    float cloud = fbm(fq + 1.35 * fw);
+
+    float density = smoothstep(0.36, 0.78, cloud);
+    float smoke = smoothstep(0.24, 0.72, cloud);
+
+    vec3 sideK = mix(LEFT, RIGHT, smoothstep(-1.1, 1.1, p.x));
+    vec3 fog = (HAZE * 0.42 + BEAM * (2.6 * rimBoost + 0.9)) * density * envelope;
+    fog += sideK * 1.55 * rimBoost * smoke * envelope;
+    fog += EMBER * 0.35 * smoke * rimBoost * envelope;
+
+    col += fog * fogAmount * (1.0 + 0.75 * lens);
+  }
+
+  // ── 2. DUMAN ÜZERİNDEKİ İNCE NOKTA DOKUSU (DOT GRID) ────────────────────
+  float haze = max(col.r, max(col.g, col.b));
+  float dotGrid = 1.0 - smoothstep(0.16, 0.32, length(fract(frag / 3.0) - 0.5));
+  col += BEAM * dotGrid * clamp(haze * 1.3, 0.0, 1.4) * (0.20 + 0.28 * lens) * uAmount.z * zoneMask;
+
+  // ── 3. KÜRE ÇEVRESİNDE YOĞUNLAŞIP KENARLARDA AZALAN TOZ / KIVILCIMLAR ───
+  float dustAmount = uAmount.y;
+  if (dustAmount > 0.001 && zoneMask > 0.01) {
+    // A) Küre çeperinden (r ≈ 0.85..1.45) dışarı savrulan yoğun toz halkası
+    float normAngle = (angle + 3.14159265) / 6.2831853;
+    float radialStream = log(max(r, 0.35) / 0.80) * 3.4;
+    vec2 flowCell = vec2(radialStream - t * 0.20, (normAngle - uSpin * 0.09) * 30.0);
+    vec2 cellId = floor(flowCell);
+    vec2 cellJitter = vec2(hash(cellId + 1.7), hash(cellId + 8.3));
+    vec2 cellLocal = fract(flowCell) - (0.15 + cellJitter * 0.7);
+    float particleDist = length(cellLocal * vec2(14.5, 9.5));
+    float particleOn = step(0.62, hash(cellId + 3.1));
+    float particleTwinkle = 0.5 + 0.5 * sin(t * 3.8 + hash(cellId + 9.2) * 6.283);
+
+    // Küre kenarında çok yoğun, uzaklaştıkça hızla azalan maske
+    float dustRingZone = exp(-sq((r - 1.02) / 0.34)) * smoothstep(0.60, 0.88, r) * zoneMask;
+    col += mix(WHITE, WARM, 0.22)
+         * exp(-particleDist * particleDist / 0.40)
+         * particleOn * particleTwinkle * dustRingZone * 2.8 * dustAmount;
+
+    // B) Küre etrafında yukarı süzülen ince parıltılı tozlar
+    vec2 localPx = dVec / uScale;
+    vec2 glitterCoord = vec2(localPx.x / 4.5, (localPx.y + t * 12.0) / 10.5);
+    vec2 glitterId = floor(glitterCoord);
+    vec2 glitterJitter = vec2(hash(glitterId + 4.4), hash(glitterId + 2.9));
+    vec2 glitterPos = (glitterId + 0.15 + glitterJitter * 0.7) * vec2(4.5, 10.5);
+    float glitterDist = length(vec2(localPx.x, localPx.y + t * 12.0) - glitterPos);
+    float glitterOn = step(0.72, hash(glitterId + 6.6));
+    float glitterTwinkle = 0.5 + 0.5 * sin(t * 4.4 + hash(glitterId + 1.1) * 6.283);
+
+    // Sadece küre ve yakın çevresinde güçlü, köşelerde çok az
+    float glitterZone = exp(-pow(max(r - 0.85, 0.0) * 1.45, 1.8)) * smoothstep(0.45, 0.85, r) * zoneMask;
+    col += WHITE * exp(-glitterDist * glitterDist / 0.36) * glitterOn * glitterTwinkle * glitterZone * 2.2 * dustAmount;
+  }
+
+  vec3 emit = 1.0 - exp(-col * mix(1.0, 0.68, uTheme));
+  float peak = max(emit.r, max(emit.g, emit.b));
+
+  if (uTheme > 0.5) {
+    float low = min(emit.r, min(emit.g, emit.b));
+    float chroma = peak - low;
+    vec3 hue = (emit - low) / max(chroma, 0.0001);
+    float alpha = clamp(pow(chroma, 1.22) * 1.3, 0.0, 1.0) * 0.85;
+    gl_FragColor = vec4((hue * 0.84 + 0.05) * alpha, alpha);
+  } else {
+    gl_FragColor = vec4(emit, peak);
+  }
+}
+`;
+
+// ══════════════════════════════════════════════════════════════════════════
+// PASS 2: DOĞAL 3B DALGALI (ORGANIC WAVE) NOKTA KÜRE (#f43f5e SABİT)
+// ══════════════════════════════════════════════════════════════════════════
+const ORB_VERT = /* glsl */ `
 precision highp float;
 
 attribute vec3 aPos;
@@ -33,10 +295,10 @@ uniform vec2 uPointer;
 uniform float uPointerOn;
 
 varying float vLight;
+varying float vCrest;
 varying float vAlpha;
 varying float vHeat;
 
-// Simplex noise by Ian McEwan, Ashima Arts (MIT)
 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec4 permute(vec4 x) { return mod289(((x * 34.0) + 1.0) * x); }
@@ -103,71 +365,99 @@ float snoise(vec3 v) {
 }
 
 void main() {
-  vec3 p = aPos;
+  vec3 n0 = normalize(aPos);
+  float baseRadius = length(aPos);
 
-  // Petal twist: swirl the noise domain around Y → rose-like folded layers.
-  float twist = p.y * 1.5 + uTime * 0.06;
+  // Akıcı, doğal su/ses dalgası zamanlaması
+  float t = uTime * 0.24;
+
+  // Gül yaprağı sarmal bükülmesi
+  float twist = n0.y * 1.45 + sin(t * 0.55) * 0.28 + t * 0.16;
   float ctw = cos(twist);
   float stw = sin(twist);
-  vec3 np = vec3(ctw * p.x + stw * p.z, p.y, -stw * p.x + ctw * p.z);
+  vec3 q = vec3(ctw * n0.x + stw * n0.z, n0.y, -stw * n0.x + ctw * n0.z);
 
-  // Single, slow, coherent time vector — the field drifts, never jumps.
-  vec3 drift = vec3(uTime * 0.14, uTime * 0.10, uTime * 0.07);
+  vec3 flow1 = vec3(t * 0.48, -t * 0.36, t * 0.42);
+  vec3 flow2 = vec3(-t * 0.34, t * 0.44, -t * 0.28);
 
-  // Each shell samples a shifted field → visible layers, like folded petals.
-  float n1 = snoise(np * uFreq + drift + vec3(aShell * 1.71, aShell * 0.83, 0.0));
-  float n2 = snoise(np * uFreq * 2.1 - drift * 0.7 + vec3(0.0, aShell * 1.13, aShell * 0.59));
-  float amp = uAmp * (1.0 - aShell * 0.18);
-  float d = clamp(n1 * amp + n2 * amp * 0.28, -0.38, 0.45);
+  // 1) Domain Warping: Kumaş/yaprak gibi katlanan vektör alanı
+  vec3 warp = vec3(
+    snoise(q * (uFreq * 0.95) + flow1),
+    snoise(q * (uFreq * 0.95) + flow1 + vec3(3.7, 1.9, 5.1)),
+    snoise(q * (uFreq * 0.95) + flow1 + vec3(7.3, 4.2, 2.8))
+  );
 
-  // Re-normalize after displacement → silhouette always stays a sphere.
-  vec3 pos = normalize(p) * (1.0 + d);
+  // 2) Büyük doğal yüzey dalgası (Macro Wave) + Simplex sırtları
+  float macroWave = sin(q.x * 2.5 + t * 1.2) * cos(q.y * 2.3 - t * 0.95) * sin(q.z * 2.5 + t * 0.85);
+  vec3 samplePos = q * (uFreq * 1.22) + warp * 0.65 + flow2 + vec3(aShell * 0.42);
+  float n1 = snoise(samplePos);
+  float n2 = snoise(samplePos * 1.85 - flow1 * 0.75 + vec3(0.0, aShell * 0.65, 1.4));
 
-  // Gentle organic "breathing" tied to the surface, not the camera.
-  pos *= 1.0 + 0.012 * sin(uTime * 0.7 + n1 * 3.0);
+  float ridge = 1.0 - abs(n1);
+  ridge = ridge * ridge;
 
-  // rotation (X tilt, then Y spin)
-  float cx = cos(uRot.x);
-  float sx = sin(uRot.x);
-  float cy = cos(uRot.y);
-  float sy = sin(uRot.y);
-  pos = vec3(cy * pos.x + sy * pos.z, pos.y, -sy * pos.x + cy * pos.z);
+  float shellScale = 1.0 - aShell * 0.10;
+  float amp = uAmp * shellScale;
+
+  // Belirgin, yumuşak 3B dalga yüksekliği ve teğetsel kıvrılma
+  float radialWave = (n1 * 0.72 + (ridge - 0.48) * 0.65 + macroWave * 0.42 + n2 * 0.24) * amp;
+  vec3 tangentWarp = warp - n0 * dot(warp, n0);
+
+  vec3 displaced = n0 * (baseRadius * (1.0 + radialWave * 0.78)) + tangentWarp * (amp * 0.42);
+
+  // Organik nefes alma
+  displaced *= 1.0 + 0.016 * sin(uTime * 0.65 + n1 * 2.2);
+
+  float cx = cos(uRot.x), sx = sin(uRot.x);
+  float cy = cos(uRot.y), sy = sin(uRot.y);
+
+  vec3 pos = vec3(cy * displaced.x + sy * displaced.z, displaced.y, -sy * displaced.x + cy * displaced.z);
   pos = vec3(pos.x, cx * pos.y - sx * pos.z, sx * pos.y + cx * pos.z);
 
-  vec3 n = normalize(pos);
-  float facing = n.z;
-  float k = 1.0 / (1.0 - pos.z * 0.18);
+  vec3 warpedNormal = normalize(n0 - tangentWarp * (amp * 1.55) + warp * (amp * 0.60));
+  vec3 rotN = vec3(cy * warpedNormal.x + sy * warpedNormal.z, warpedNormal.y, -sy * warpedNormal.x + cy * warpedNormal.z);
+  rotN = normalize(vec3(rotN.x, cx * rotN.y - sx * rotN.z, sx * rotN.y + cx * rotN.z));
 
-  vec2 ndc = pos.xy * k * uScale * vec2(1.0 / uAspect, 1.0);
+  vec3 geomN = normalize(pos);
+  float facing = geomN.z;
+  float k = 1.0 / (1.0 - pos.z * 0.22);
 
-  // Pointer: gravity vortex — dots SWIRL around the cursor, not pushed away.
+  // Küreyi ekranın %43 yüksekliğine (metinlerin üstüne) hizala
+  vec2 centerOffsetNDC = vec2(0.0, 0.14);
+  vec2 ndc = pos.xy * k * uScale * vec2(1.0 / uAspect, 1.0) + centerOffsetNDC;
+
+  // Mouse yaklaştığında doğal dalga kabarması
   vec2 dd = (ndc - uPointer) * vec2(uAspect, 1.0);
-  float f = exp(-dot(dd, dd) * 9.0) * uPointerOn;
+  float f = exp(-dot(dd, dd) * 8.0) * uPointerOn;
   vec2 dir = normalize(dd + vec2(0.0001));
   vec2 perp = vec2(-dir.y, dir.x);
-  ndc += (perp * 0.10 - dir * 0.025) * f * vec2(1.0 / uAspect, 1.0);
+  ndc += (perp * 0.032 + dir * 0.014) * f * vec2(1.0 / uAspect, 1.0);
 
-  float rim = pow(1.0 - clamp(facing, 0.0, 1.0), 2.0);
-  // Fixed light direction → real "ball" shading with a soft terminator.
-  vec3 lightDir = normalize(vec3(-0.45, 0.65, 0.62));
-  float diff = clamp(dot(n, lightDir) * 0.5 + 0.5, 0.0, 1.0);
-  vLight = clamp(0.18 + diff * 0.72 + d * 1.4 + rim * 0.35 + f * 0.4, 0.0, 1.0);
-  vAlpha = mix(0.30, 1.0, smoothstep(-0.70, 0.40, facing));
+  vec3 lightDir = normalize(vec3(-0.38, 0.68, 0.62));
+  vec3 fillDir = normalize(vec3(0.45, -0.55, 0.70));
+  float diff = clamp(dot(rotN, lightDir) * 0.5 + 0.5, 0.0, 1.0);
+  float fill = clamp(dot(rotN, fillDir) * 0.5 + 0.5, 0.0, 1.0);
+  float rim = pow(1.0 - clamp(facing, 0.0, 1.0), 2.2);
+
+  float heightNorm = clamp(radialWave / max(0.001, amp) * 0.5 + 0.5, 0.0, 1.0);
+  vCrest = clamp(pow(ridge, 1.4) * 0.78 + pow(heightNorm, 1.5) * 0.60 + rim * 0.35 + f * 0.32, 0.0, 1.0);
+  vLight = clamp(diff * 0.56 + heightNorm * 0.46 + fill * 0.14 + f * 0.20, 0.0, 1.0);
+
+  float frontMask = smoothstep(-0.65, 0.28, facing);
+  vAlpha = mix(0.20, 0.96, frontMask) * (1.0 - aShell * 0.12);
   vHeat = f;
 
-  float size = uPx * (0.82 + aShell * 0.16) * (1.0 + f * 1.3) * (0.55 + 0.75 * (facing * 0.5 + 0.5)) * k;
-  gl_PointSize = clamp(size, uPx * 0.5, uPx * 3.0);
-  gl_Position = vec4(ndc, -pos.z * 0.1, 1.0);
+  float size = uPx * (0.92 - aShell * 0.10) * (1.0 + f * 0.95 + vCrest * 0.28) * (0.62 + 0.65 * frontMask) * k;
+  gl_PointSize = clamp(size, uPx * 0.45, uPx * 3.1);
+  gl_Position = vec4(ndc, -pos.z * 0.15, 1.0);
 }
 `;
 
-// ── Fragment shader ───────────────────────────────────────────────────────
-const FRAGMENT = /* glsl */ `
+const ORB_FRAG = /* glsl */ `
 precision mediump float;
 
-uniform float uDark;
-
 varying float vLight;
+varying float vCrest;
 varying float vAlpha;
 varying float vHeat;
 
@@ -176,20 +466,22 @@ void main() {
   float r = length(c);
   if (r > 0.5) discard;
 
-  float edge = smoothstep(0.5, 0.18, r);
+  float edge = smoothstep(0.5, 0.12, r);
 
-  vec3 deep = mix(vec3(0.015, 0.06, 0.30), vec3(0.04, 0.13, 0.45), uDark);
-  vec3 mid = vec3(0.08, 0.32, 0.92);
-  vec3 hi = vec3(0.93, 0.97, 1.0);
+  // Dalga derinliğini öne çıkaran yüksek kontrastlı #f43f5e paleti
+  vec3 deepRose = vec3(0.20, 0.015, 0.065);  // #330410 - Derin dalga çukuru
+  vec3 coreRose = vec3(0.957, 0.247, 0.369); // #f43f5e - Ana sabit renk
+  vec3 softRose = vec3(0.988, 0.451, 0.533); // #fb7185 - Dalga gövdesi
+  vec3 crestHi  = vec3(1.00, 0.91, 0.94);    // #ffe8ef - Parlak dalga sırtı
 
-  vec3 col = mix(deep, mid, smoothstep(0.0, 0.55, vLight));
-  col = mix(col, hi, smoothstep(0.55, 1.0, vLight));
+  vec3 col = mix(deepRose, coreRose, smoothstep(0.10, 0.48, vLight));
+  col = mix(col, softRose, smoothstep(0.46, 0.82, vLight));
+  col = mix(col, crestHi, smoothstep(0.50, 0.95, vCrest));
 
-  // Near the vortex the surface "heats up" → cyan-white glow.
-  col = mix(col, vec3(0.55, 0.95, 1.0), clamp(vHeat * 0.6, 0.0, 1.0));
+  col = mix(col, vec3(1.0, 0.95, 0.96), clamp(vHeat * 0.42, 0.0, 1.0));
 
-  float a = edge * vAlpha;
-  gl_FragColor = vec4(col * a, a); // premultiplied alpha
+  float a = clamp(edge * vAlpha, 0.0, 1.0);
+  gl_FragColor = vec4(col * a, a);
 }
 `;
 
@@ -206,15 +498,39 @@ function compile(gl: WebGLRenderingContext, type: number, source: string) {
   return shader;
 }
 
+function createProgram(
+  gl: WebGLRenderingContext,
+  vsSource: string,
+  fsSource: string,
+) {
+  const vs = compile(gl, gl.VERTEX_SHADER, vsSource);
+  const fs = compile(gl, gl.FRAGMENT_SHADER, fsSource);
+  const program = gl.createProgram();
+  if (!vs || !fs || !program) return null;
+  gl.attachShader(program, vs);
+  gl.attachShader(program, fs);
+  gl.linkProgram(program);
+  gl.deleteShader(vs);
+  gl.deleteShader(fs);
+  if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    console.error("[VoiceOrb] link error:", gl.getProgramInfoLog(program));
+    gl.deleteProgram(program);
+    return null;
+  }
+  return program;
+}
+
 export function VoiceOrb({
-  tone = "dark",
+  tone,
   mode = DEFAULT_MODE,
+  color = "#f43f5e",
+  fog = 0.9,
+  dust = 1.45,
   className,
 }: VoiceOrbProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const shadowRef = useRef<HTMLDivElement>(null);
   const modeRef = useRef<OrbMode>(mode);
-  const toneRef = useRef(tone);
+  const toneRef = useRef<"light" | "dark" | undefined>(tone);
   const [fallback, setFallback] = useState(false);
 
   useEffect(() => {
@@ -231,7 +547,7 @@ export function VoiceOrb({
 
     const gl = canvas.getContext("webgl", {
       alpha: true,
-      antialias: false,
+      antialias: true,
       premultipliedAlpha: true,
       powerPreference: "high-performance",
     });
@@ -240,93 +556,119 @@ export function VoiceOrb({
       return;
     }
 
-    const vs = compile(gl, gl.VERTEX_SHADER, VERTEX);
-    const fs = compile(gl, gl.FRAGMENT_SHADER, FRAGMENT);
-    const program = gl.createProgram();
-    if (!vs || !fs || !program) {
+    const atmosProg = createProgram(gl, ATMOS_VERT, ATMOS_FRAG);
+    const orbProg = createProgram(gl, ORB_VERT, ORB_FRAG);
+    if (!atmosProg || !orbProg) {
       setFallback(true);
       return;
     }
-    gl.attachShader(program, vs);
-    gl.attachShader(program, fs);
-    gl.linkProgram(program);
-    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.error("[VoiceOrb] link error:", gl.getProgramInfoLog(program));
-      setFallback(true);
-      return;
-    }
-    gl.useProgram(program);
 
-    // ── geometry: Fibonacci sphere ────────────────────────────────────────
+    const quadBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 3, -1, -1, 3]),
+      gl.STATIC_DRAW,
+    );
+    const aQuadPos = gl.getAttribLocation(atmosProg, "aPosition");
+
     const small = window.matchMedia("(max-width: 767px)").matches;
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    const count = small ? 11000 : 24000;
-    const baseSize = small ? 2.2 : 2.0;
+    const baseSize = small ? 2.05 : 1.95;
 
-    // Three concentric shells → the dense, layered "rose" depth from the ref.
-    const positions = new Float32Array(count * 3);
-    const shells = new Float32Array(count);
-    const golden = Math.PI * (3 - Math.sqrt(5));
-    const SHELLS = [
-      { r: 0.74, share: 0.28 },
-      { r: 0.88, share: 0.33 },
-      { r: 1.0, share: 0.39 },
-    ];
-    let ptr = 0;
-    SHELLS.forEach((shell, s) => {
-      const n = Math.round(count * shell.share);
-      for (let i = 0; i < n && ptr < count; i++, ptr++) {
-        const y = 1 - (2 * (i + 0.5)) / n;
-        const r = Math.sqrt(Math.max(0, 1 - y * y)) * shell.r;
-        const theta = golden * (i + s * 137.5);
-        positions[ptr * 3] = Math.cos(theta) * r;
-        positions[ptr * 3 + 1] = y * shell.r;
-        positions[ptr * 3 + 2] = Math.sin(theta) * r;
-        shells[ptr] = s;
+    const SHELLS = small
+      ? [
+          { r: 0.78, rings: 38, eqDots: 76, s: 2 },
+          { r: 0.89, rings: 52, eqDots: 104, s: 1 },
+          { r: 1.00, rings: 72, eqDots: 144, s: 0 },
+        ]
+      : [
+          { r: 0.78, rings: 52, eqDots: 104, s: 2 },
+          { r: 0.89, rings: 76, eqDots: 152, s: 1 },
+          { r: 1.00, rings: 112, eqDots: 224, s: 0 },
+        ];
+
+    const tempPos: number[] = [];
+    const tempShell: number[] = [];
+
+    SHELLS.forEach((shell) => {
+      for (let lat = 1; lat < shell.rings; lat++) {
+        const phi = (Math.PI * lat) / shell.rings;
+        const y = Math.cos(phi);
+        const sinPhi = Math.sin(phi);
+        const dotsInRing = Math.max(8, Math.round(shell.eqDots * sinPhi));
+        const ringTwist = lat * 0.13 + shell.s * 0.7;
+
+        for (let lon = 0; lon < dotsInRing; lon++) {
+          const theta = (2 * Math.PI * lon) / dotsInRing + ringTwist;
+          const x = Math.cos(theta) * sinPhi;
+          const z = Math.sin(theta) * sinPhi;
+
+          tempPos.push(x * shell.r, y * shell.r, z * shell.r);
+          tempShell.push(shell.s);
+        }
       }
     });
 
-    const buffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(gl.ARRAY_BUFFER, positions, gl.STATIC_DRAW);
-    const aPos = gl.getAttribLocation(program, "aPos");
-    gl.enableVertexAttribArray(aPos);
-    gl.vertexAttribPointer(aPos, 3, gl.FLOAT, false, 0, 0);
+    const orbCount = tempShell.length;
+    const orbPosBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, orbPosBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tempPos), gl.STATIC_DRAW);
+    const aOrbPos = gl.getAttribLocation(orbProg, "aPos");
 
-    const shellBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, shellBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, shells, gl.STATIC_DRAW);
-    const aShell = gl.getAttribLocation(program, "aShell");
-    if (aShell >= 0) {
-      gl.enableVertexAttribArray(aShell);
-      gl.vertexAttribPointer(aShell, 1, gl.FLOAT, false, 0, 0);
-    }
+    const orbShellBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, orbShellBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tempShell), gl.STATIC_DRAW);
+    const aOrbShell = gl.getAttribLocation(orbProg, "aShell");
+
+    const uAtmos = {
+      res: gl.getUniformLocation(atmosProg, "uResolution"),
+      dpr: gl.getUniformLocation(atmosProg, "uDpr"),
+      scale: gl.getUniformLocation(atmosProg, "uScale"),
+      time: gl.getUniformLocation(atmosProg, "uTime"),
+      spin: gl.getUniformLocation(atmosProg, "uSpin"),
+      amp: gl.getUniformLocation(atmosProg, "uAmp"),
+      lens: gl.getUniformLocation(atmosProg, "uLens"),
+      amount: gl.getUniformLocation(atmosProg, "uAmount"),
+      theme: gl.getUniformLocation(atmosProg, "uTheme"),
+      tint: gl.getUniformLocation(atmosProg, "uTint"),
+    };
+
+    const uOrb = {
+      time: gl.getUniformLocation(orbProg, "uTime"),
+      amp: gl.getUniformLocation(orbProg, "uAmp"),
+      freq: gl.getUniformLocation(orbProg, "uFreq"),
+      rot: gl.getUniformLocation(orbProg, "uRot"),
+      aspect: gl.getUniformLocation(orbProg, "uAspect"),
+      scale: gl.getUniformLocation(orbProg, "uScale"),
+      px: gl.getUniformLocation(orbProg, "uPx"),
+      pointer: gl.getUniformLocation(orbProg, "uPointer"),
+      pointerOn: gl.getUniformLocation(orbProg, "uPointerOn"),
+    };
+
+    const tints = buildTints([0.957, 0.247, 0.369]);
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
 
-    const uni = (name: string) => gl.getUniformLocation(program, name);
-    const u = {
-      time: uni("uTime"),
-      amp: uni("uAmp"),
-      freq: uni("uFreq"),
-      rot: uni("uRot"),
-      aspect: uni("uAspect"),
-      scale: uni("uScale"),
-      px: uni("uPx"),
-      pointer: uni("uPointer"),
-      pointerOn: uni("uPointerOn"),
-      dark: uni("uDark"),
-    };
-
-    // ── state ─────────────────────────────────────────────────────────────
     const cur = { ...modeRef.current };
-    const pointer = { x: 0, y: 0, tx: 0, ty: 0, on: 0, tOn: 0 };
+    const pointer = {
+      x: 0,
+      y: 0,
+      nx: 0,
+      ny: 0,
+      tx: 0,
+      ty: 0,
+      inside: false,
+      on: 0,
+    };
+    const lens = { x: 0, y: 0, vx: 0, vy: 0, strength: 0, placed: false };
+
+    let cssW = 1;
+    let cssH = 1;
+    let dpr = 1;
     let time = 0;
     let spin = 0;
-    let rotX = 0.25;
+    let rotX = 0.22;
     let rotY = 0;
     let raf = 0;
     let last = performance.now();
@@ -334,47 +676,100 @@ export function VoiceOrb({
 
     const update = (dt: number) => {
       const m = modeRef.current;
-      const ease = 1 - Math.exp(-dt * 3);
-      // Organic idle pulse: the orb breathes on its own, even with no input.
-      const pulse = 1 + 0.16 * Math.sin(time * 0.55) + 0.07 * Math.sin(time * 0.21 + 1.7);
+      const ease = 1 - Math.exp(-dt * 2.2);
+      const pulse =
+        1 + 0.08 * Math.sin(time * 0.55) + 0.04 * Math.cos(time * 0.28 + 1.1);
+
       cur.amp += (m.amp * pulse - cur.amp) * ease;
       cur.freq += (m.freq - cur.freq) * ease;
       cur.speed += (m.speed - cur.speed) * ease;
 
       time += dt * cur.speed;
-      spin += dt * 0.06 * cur.speed;
+      spin += dt * 0.055 * cur.speed;
 
-      const follow = 1 - Math.exp(-dt * 5);
-      pointer.x += (pointer.tx - pointer.x) * follow;
-      pointer.y += (pointer.ty - pointer.y) * follow;
-      pointer.on += (pointer.tOn - pointer.on) * (1 - Math.exp(-dt * 4));
+      if (pointer.inside && !lens.placed) {
+        lens.x = pointer.x;
+        lens.y = pointer.y;
+        lens.vx = 0;
+        lens.vy = 0;
+        lens.placed = true;
+      }
+      const ax = 120 * (pointer.x - lens.x) - 19 * lens.vx;
+      const ay = 120 * (pointer.y - lens.y) - 19 * lens.vy;
+      lens.vx += ax * dt;
+      lens.vy += ay * dt;
+      lens.x += lens.vx * dt;
+      lens.y += lens.vy * dt;
+      const goal = pointer.inside ? 1 : 0;
+      lens.strength +=
+        (goal - lens.strength) *
+        (1 - Math.exp(-dt / (goal > lens.strength ? 0.35 : 0.6)));
+      if (lens.strength < 0.001 && !pointer.inside) lens.placed = false;
 
-      // Slow autonomous wander + pointer tilt.
-      const wanderX = Math.sin(time * 0.11) * 0.10;
-      const wanderY = Math.sin(time * 0.07 + 2.0) * 0.15;
-      rotX = 0.25 - pointer.y * 0.22 + wanderX;
-      rotY = spin + pointer.x * 0.4 + wanderY;
+      const follow = 1 - Math.exp(-dt * 3.5);
+      pointer.nx += (pointer.tx - pointer.nx) * follow;
+      pointer.ny += (pointer.ty - pointer.ny) * follow;
+      pointer.on += (goal - pointer.on) * (1 - Math.exp(-dt * 3.0));
+
+      const wanderX = Math.sin(time * 0.14) * 0.05;
+      const wanderY = Math.cos(time * 0.10 + 1.5) * 0.065;
+      rotX = 0.22 - pointer.ny * 0.10 + wanderX;
+      rotY = spin + pointer.nx * 0.16 + wanderY;
     };
 
     const render = () => {
-      // Contact shadow breathes with the orb → it feels grounded, not pasted.
-      const sh = shadowRef.current;
-      if (sh) {
-        const s = 1 + cur.amp * 0.55 + Math.sin(time * 0.55) * 0.06;
-        sh.style.transform = `translateX(-50%) scale(${s.toFixed(3)})`;
-        sh.style.opacity = (0.55 + cur.amp * 0.5).toFixed(3);
-      }
+      const scale = Math.max(0.25, Math.min(cssW / 585, cssH / 507));
+      const isLight = toneRef.current === "light" ? 1 : 0;
 
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform1f(u.time, time);
-      gl.uniform1f(u.amp, cur.amp);
-      gl.uniform1f(u.freq, cur.freq);
-      gl.uniform2f(u.rot, rotX, rotY);
-      gl.uniform2f(u.pointer, pointer.x, pointer.y);
-      gl.uniform1f(u.pointerOn, pointer.on);
-      gl.uniform1f(u.dark, toneRef.current === "dark" ? 1 : 0);
-      gl.drawArrays(gl.POINTS, 0, count);
+
+      // Pass 1: Küre Çeperinde Yoğun, Metin ve Köşelerde Azalan Duman & Toz
+      gl.useProgram(atmosProg);
+      gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
+      gl.enableVertexAttribArray(aQuadPos);
+      gl.vertexAttribPointer(aQuadPos, 2, gl.FLOAT, false, 0, 0);
+
+      gl.uniform2f(uAtmos.res, cssW, cssH);
+      gl.uniform1f(uAtmos.dpr, dpr);
+      gl.uniform1f(uAtmos.scale, scale);
+      gl.uniform1f(uAtmos.time, time);
+      gl.uniform1f(uAtmos.spin, rotY);
+      gl.uniform1f(uAtmos.amp, cur.amp);
+      gl.uniform4f(uAtmos.lens, lens.x, lens.y, 110 * scale, lens.strength);
+      gl.uniform3f(uAtmos.amount, fog, dust, 1.0);
+      gl.uniform1f(uAtmos.theme, isLight);
+      gl.uniform3fv(uAtmos.tint, tints);
+
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      gl.disableVertexAttribArray(aQuadPos);
+
+      // Pass 2: Doğal 3B Dalgalı Nokta Küre
+      gl.useProgram(orbProg);
+      gl.bindBuffer(gl.ARRAY_BUFFER, orbPosBuffer);
+      gl.enableVertexAttribArray(aOrbPos);
+      gl.vertexAttribPointer(aOrbPos, 3, gl.FLOAT, false, 0, 0);
+
+      if (aOrbShell >= 0) {
+        gl.bindBuffer(gl.ARRAY_BUFFER, orbShellBuffer);
+        gl.enableVertexAttribArray(aOrbShell);
+        gl.vertexAttribPointer(aOrbShell, 1, gl.FLOAT, false, 0, 0);
+      }
+
+      gl.uniform1f(uOrb.time, time);
+      gl.uniform1f(uOrb.amp, cur.amp);
+      gl.uniform1f(uOrb.freq, cur.freq);
+      gl.uniform2f(uOrb.rot, rotX, rotY);
+      gl.uniform1f(uOrb.aspect, cssW / cssH);
+      // Küre yarıçapı metinlerin üstüne binmemesi için dengelendi
+      gl.uniform1f(uOrb.scale, small ? 0.56 : 0.51);
+      gl.uniform1f(uOrb.px, baseSize * dpr);
+      gl.uniform2f(uOrb.pointer, pointer.nx, pointer.ny);
+      gl.uniform1f(uOrb.pointerOn, pointer.on);
+
+      gl.drawArrays(gl.POINTS, 0, orbCount);
+      gl.disableVertexAttribArray(aOrbPos);
+      if (aOrbShell >= 0) gl.disableVertexAttribArray(aOrbShell);
     };
 
     const frame = (now: number) => {
@@ -386,7 +781,7 @@ export function VoiceOrb({
     };
 
     const start = () => {
-      if (reduceMotion || raf) return;
+      if (raf) return;
       last = performance.now();
       raf = requestAnimationFrame(frame);
     };
@@ -398,30 +793,35 @@ export function VoiceOrb({
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      const w = Math.max(1, Math.round(rect.width * dpr));
-      const h = Math.max(1, Math.round(rect.height * dpr));
-      canvas.width = w;
-      canvas.height = h;
+      cssW = Math.max(1, rect.width);
+      cssH = Math.max(1, rect.height);
+      dpr = Math.min(window.devicePixelRatio || 1, small ? 1.5 : 2);
+      const w = Math.max(1, Math.round(cssW * dpr));
+      const h = Math.max(1, Math.round(cssH * dpr));
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w;
+        canvas.height = h;
+      }
       gl.viewport(0, 0, w, h);
-      gl.uniform1f(u.aspect, w / h);
-      gl.uniform1f(u.scale, 0.56);
-      gl.uniform1f(u.px, baseSize * dpr);
       render();
     };
 
-    // ── events ────────────────────────────────────────────────────────────
     const onPointerMove = (e: PointerEvent) => {
       const r = canvas.getBoundingClientRect();
-      const nx = ((e.clientX - r.left) / r.width) * 2 - 1;
-      const ny = -(((e.clientY - r.top) / r.height) * 2 - 1);
-      pointer.tx = Math.max(-1, Math.min(1, nx));
-      pointer.ty = Math.max(-1, Math.min(1, ny));
-      pointer.tOn = Math.abs(nx) < 1.1 && Math.abs(ny) < 1.1 ? 1 : 0;
+      if (r.width === 0 || r.height === 0) return;
+      const x = e.clientX - r.left;
+      const y = e.clientY - r.top;
+      pointer.x = x;
+      pointer.y = y;
+      const nx = (x / r.width) * 2 - 1;
+      const ny = -((y / r.height) * 2 - 1);
+      pointer.inside = x >= 0 && y >= 0 && x <= r.width && y <= r.height;
+      pointer.tx = clamp(nx, -1, 1);
+      pointer.ty = clamp(ny, -1, 1);
     };
 
     const onLeave = () => {
-      pointer.tOn = 0;
+      pointer.inside = false;
       pointer.tx = 0;
       pointer.ty = 0;
     };
@@ -444,10 +844,8 @@ export function VoiceOrb({
     );
     intersection.observe(canvas);
 
-    if (!reduceMotion) {
-      window.addEventListener("pointermove", onPointerMove, { passive: true });
-      document.addEventListener("mouseleave", onLeave);
-    }
+    window.addEventListener("pointermove", onPointerMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onLeave);
     document.addEventListener("visibilitychange", onVisibility);
 
     resize();
@@ -458,16 +856,15 @@ export function VoiceOrb({
       resizeObserver.disconnect();
       intersection.disconnect();
       window.removeEventListener("pointermove", onPointerMove);
-      document.removeEventListener("mouseleave", onLeave);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
       document.removeEventListener("visibilitychange", onVisibility);
-      gl.deleteBuffer(buffer);
-      gl.deleteBuffer(shellBuffer);
-      gl.deleteProgram(program);
-      gl.deleteShader(vs);
-      gl.deleteShader(fs);
-   
+      gl.deleteBuffer(quadBuffer);
+      gl.deleteBuffer(orbPosBuffer);
+      gl.deleteBuffer(orbShellBuffer);
+      gl.deleteProgram(atmosProg);
+      gl.deleteProgram(orbProg);
     };
-  }, []);
+  }, [color, fog, dust, tone]);
 
   if (fallback) {
     return (
@@ -476,7 +873,7 @@ export function VoiceOrb({
         className={className}
         style={{
           background:
-            "radial-gradient(closest-side, rgba(56,140,255,0.55), rgba(56,140,255,0.12) 60%, transparent 72%)",
+            "radial-gradient(closest-side, rgba(244,63,94,0.38), rgba(190,18,60,0.12) 60%, transparent 75%)",
         }}
       />
     );
@@ -485,31 +882,12 @@ export function VoiceOrb({
   return (
     <span
       className={className}
-      style={{ position: "relative", display: "inline-block" }}
+      style={{ position: "relative", display: "block" }}
     >
       <canvas
         ref={canvasRef}
         aria-hidden
         style={{ display: "block", width: "100%", height: "100%" }}
-      />
-      <div
-        ref={shadowRef}
-        aria-hidden
-        style={{
-          position: "absolute",
-          left: "50%",
-          bottom: "-4%",
-          width: "72%",
-          height: "12%",
-          transform: "translateX(-50%)",
-          borderRadius: "50%",
-          background:
-            tone === "dark"
-              ? "radial-gradient(ellipse at center, rgba(8, 25, 70, 0.55) 0%, rgba(8, 25, 70, 0.28) 45%, transparent 72%)"
-              : "radial-gradient(ellipse at center, rgba(37, 78, 160, 0.30) 0%, rgba(37, 78, 160, 0.13) 45%, transparent 72%)",
-          filter: "blur(6px)",
-          pointerEvents: "none",
-        }}
       />
     </span>
   );

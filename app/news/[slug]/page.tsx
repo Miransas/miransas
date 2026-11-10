@@ -39,7 +39,8 @@ export async function generateMetadata({
   const item = getNews(slug);
   if (!item) return {};
   return {
-    title: `${item.title} | Miransas News`,
+    title: item.title,
+    alternates: { canonical: `/news/${item.slug}` },
     description: item.summary,
     openGraph: {
       title: item.title,

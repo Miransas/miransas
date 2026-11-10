@@ -1,0 +1,157 @@
+"use client";
+
+import Link from "next/link";
+import { useState, type KeyboardEvent } from "react";
+import { useTheme } from "next-themes";
+import { useHydrated } from "@/lib/use-hydrated";
+import { ArrowUpRight, Bot, Languages, Mic, Waves, type LucideIcon } from "lucide-react";
+import { VoiceOrb, type OrbMode } from "./voice-orb";
+
+const ITEMS: {
+  label: string;
+  kicker: string;
+  description: string;
+  href: string;
+  icon: LucideIcon;
+  mode: OrbMode;
+}[] = [
+    {
+      label: "Voice Cloning",
+      kicker: "01 / VOICE IDENTITY",
+      description: "A familiar voice, with a distinct identity. Explore the possibilities of consent-based voice cloning.",
+      href: "/projects#miralas",
+      icon: Mic,
+      mode: { amp: 0.25, freq: 1.15, speed: 0.8 },
+    },
+    {
+      label: "Text to Speech",
+      kicker: "02 / SPEECH GENERATION",
+      description: "Turn written language into expressive speech, shaped for the voices and products we build.",
+      href: "/projects",
+      icon: Waves,
+      mode: { amp: 0.18, freq: 0.9, speed: 0.64 },
+    },
+    {
+      label: "Speech to Speech",
+      kicker: "03 / VOICE TRANSFORMATION",
+      description: "Explore new ways for speech to move between voices without losing the flow of a conversation.",
+      href: "/projects",
+      icon: Languages,
+      mode: { amp: 0.32, freq: 1.38, speed: 1.05 },
+    },
+    {
+      label: "Voice Agent",
+      kicker: "04 / CONVERSATIONAL AI",
+      description: "From listening to understanding to replying. A direction we're exploring for interactive voice systems.",
+      href: "/agent",
+      icon: Bot,
+      mode: { amp: 0.2, freq: 0.8, speed: 0.55 },
+    },
+  ];
+
+const COPY = {
+  eyebrow: "INDEPENDENT VOICE AI LAB",
+  title: "Your Voice.\nYour Language.\nBuilt to Last.",
+  text: "Native Uzbek voice AI and the infrastructure behind it. Built with care by an independent engineering studio.",
+};
+
+export function NewHero({ tone }: { tone?: "light" | "dark" }) {
+  const [active, setActive] = useState(0);
+  const { resolvedTheme } = useTheme();
+  const hydrated = useHydrated();
+  const orbTone = tone ?? (hydrated && resolvedTheme === "light" ? "light" : "dark");
+  const current = ITEMS[active];
+
+  const onTabKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+    let next: number | null = null;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") next = (index + 1) % ITEMS.length;
+    if (event.key === "ArrowLeft" || event.key === "ArrowUp") next = (index - 1 + ITEMS.length) % ITEMS.length;
+    if (event.key === "Home") next = 0;
+    if (event.key === "End") next = ITEMS.length - 1;
+    if (next === null) return;
+    event.preventDefault();
+    setActive(next);
+    document.getElementById(`hero-technology-tab-${next}`)?.focus();
+  };
+
+  return (
+    <section
+      data-tone={tone}
+      className="relative isolate -mt-[var(--header-h)] flex min-h-[760px] flex-col overflow-hidden bg-background text-foreground sm:min-h-[820px] lg:min-h-[max(800px,100svh)]"
+    >
+      {/* Restrained ambient light; orb remains the focal point. */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_40%_38%_at_51%_40%,rgba(85,125,210,0.07),transparent_75%)] dark:bg-[radial-gradient(ellipse_43%_42%_at_51%_40%,rgba(58,100,205,0.10),transparent_76%)]" />
+
+      {/* Fixed camera framing plus a responsive footprint; lighting stays inside WebGL. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute left-1/2 top-[calc(var(--header-h)+8rem)] z-0 aspect-square max-[360px]:top-[calc(var(--header-h)+9rem)] w-[min(90vw,400px)] -translate-x-1/2 sm:top-[calc(var(--header-h)+6rem)] sm:w-[min(68vw,540px)] lg:top-[calc(var(--header-h)+.5rem)] lg:w-[min(51vw,56svh,650px)]"
+      >
+        {hydrated && <VoiceOrb tone={orbTone} mode={current.mode} className="h-full w-full" />}
+      </div>
+
+      <div className="relative z-20 mx-auto flex w-full max-w-[1440px] items-center gap-3 px-6 pt-[calc(var(--header-h)+24px)] md:px-12 lg:px-20">
+        <span aria-hidden className="size-1.5 rounded-full bg-[#7197D0]" />
+        <span className="text-[10px] font-medium tracking-[0.22em] text-muted-foreground">{COPY.eyebrow}</span>
+      </div>
+
+      {/* Four actual selectable tabs. Mobile = 2x2, no sideways scroll. */}
+      <nav aria-label="Voice technologies" className="relative z-20 mx-auto mt-6 w-full max-w-[1440px] px-6 md:px-12 lg:pointer-events-none lg:absolute lg:inset-x-0 lg:top-[28%] lg:mt-0 lg:px-20">
+        <div className="lg:pointer-events-auto lg:w-fit">
+          <p className="mb-3 hidden text-[10px] tracking-[0.2em] text-muted-foreground lg:block">OUR TECHNOLOGY</p>
+          <div role="tablist" aria-label="Voice technologies" className="grid grid-cols-2 gap-2 sm:grid-cols-4 lg:flex lg:flex-col lg:gap-2">
+            {ITEMS.map((item, i) => {
+              const Icon = item.icon;
+              const selected = i === active;
+              return (
+                <button
+                  id={`hero-technology-tab-${i}`}
+                  key={item.label}
+                  type="button"
+                  role="tab"
+                  aria-selected={selected}
+                  aria-controls="hero-technology-panel"
+                  tabIndex={selected ? 0 : -1}
+                  onClick={() => setActive(i)}
+                  onKeyDown={(event) => onTabKeyDown(event, i)}
+                  className={`group relative flex min-h-11 items-center gap-2 rounded-xl border px-3 py-2.5 text-left text-[11px] leading-snug transition-[background-color,border-color,color] duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:text-xs lg:min-w-[190px] lg:border-transparent lg:bg-transparent lg:px-0 ${selected ? "border-foreground/15 bg-foreground/[0.055] text-foreground lg:border-transparent lg:bg-transparent" : "border-border/60 bg-card/35 text-muted-foreground hover:text-foreground lg:border-transparent lg:bg-transparent"}`}
+                >
+                  <span className={`hidden h-px transition-[width,background-color] lg:block ${selected ? "w-8 bg-foreground" : "w-4 bg-foreground/25 group-hover:w-6"}`} />
+                  <Icon className="size-3.5 shrink-0 lg:hidden" strokeWidth={1.6} aria-hidden />
+                  <span>{item.label}</span>
+                  <span aria-hidden className={`ml-auto size-1 rounded-full bg-current transition-opacity lg:hidden ${selected ? "opacity-80" : "opacity-0"}`} />
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      </nav>
+
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[22%] bg-gradient-to-t from-background via-background/90 to-transparent" />
+
+      <div className="relative z-10 mx-auto mt-auto grid w-full max-w-[1440px] gap-7 px-6 pb-10 pt-[clamp(290px,44vw,440px)] sm:pb-14 sm:pt-[460px] lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16 lg:px-20 lg:pt-24 lg:pb-20 md:px-12">
+        <div>
+          <h1 className="max-w-[780px] whitespace-pre-line text-[clamp(2.7rem,5.25vw,5.2rem)] font-medium leading-[1.045] tracking-[-0.055em]">{COPY.title}</h1>
+        </div>
+        <div className="max-w-[420px] lg:pb-1">
+          <p className="text-sm leading-7 text-muted-foreground">{COPY.text}</p>
+          <div id="hero-technology-panel" role="tabpanel" aria-labelledby={`hero-technology-tab-${active}`} tabIndex={0} className="mt-5 border-l border-foreground/20 pl-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            <p className="font-mono text-[10px] tracking-[0.16em] text-muted-foreground">{current.kicker}</p>
+            <p className="mt-2 text-sm leading-6 text-foreground/85">{current.description}</p>
+            <Link href={current.href} className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-foreground underline-offset-4 hover:underline">
+              Learn more <ArrowUpRight className="size-3.5" aria-hidden />
+            </Link>
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
+            <Link href="/news" className="inline-flex min-h-11 items-center gap-3 rounded-xl bg-foreground px-4 py-3 text-xs font-medium text-background transition-opacity hover:opacity-80">
+              Follow our progress <ArrowUpRight className="size-4" aria-hidden />
+            </Link>
+            <Link href="/projects" className="inline-flex min-h-11 items-center rounded-xl border border-border bg-card/50 px-4 py-3 text-xs font-medium text-foreground transition-colors hover:bg-secondary">
+              Explore projects
+            </Link>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

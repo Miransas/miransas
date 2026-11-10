@@ -34,7 +34,7 @@ export const AvatarGroupDemo = () => {
     <AvatarGroup className="flex mt-4">
       {AVATARS.map((avatar, index) => (
         <Avatar key={index} className="size-12 border-3 border-background">
-          <AvatarImage src={avatar.src} />
+          <AvatarImage src={avatar.src} alt={avatar.tooltip} />
           <AvatarFallback>{avatar.fallback}</AvatarFallback>
           <AvatarGroupTooltip>{avatar.tooltip}</AvatarGroupTooltip>
         </Avatar>
