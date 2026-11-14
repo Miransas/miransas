@@ -84,13 +84,13 @@ export function SiteFooter() {
             </div>
 
             {/* Topluluk Rozeti */}
-            <div className="border-border bg-card/70 flex w-fit items-center gap-3 rounded-2xl border p-3 backdrop-blur-sm">
+            {/* <div className="border-border bg-card/70 flex w-fit items-center gap-3 rounded-2xl border p-3 backdrop-blur-sm">
               <AvatarGroupDemo />
               <div className="text-xs">
                 <p className="text-foreground font-medium">Engineering & voice</p>
                 <p className="text-muted-foreground">Building with Miransas</p>
               </div>
-            </div>
+            </div> */}
           </div>
 
           {/* ───────────────────────────────────────────────────

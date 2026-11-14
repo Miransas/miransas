@@ -16,7 +16,6 @@ type VoiceOrbProps = {
 
 const DEFAULT_MODE: OrbMode = { amp: 0.40, freq: 1.04, speed: 0.72 };
 
-// ── LaserFlow Renk & Tint Sistemi (#f43f5e tabanlı) ───────────────────────
 const TINTS: [number, number][] = [
   [0, 1],
   [-11.5, 0.77],
@@ -38,12 +37,13 @@ const TINTS: [number, number][] = [
 
 const BASE_SATURATION = 0.78;
 
-// The tint palette now follows the `color` prop instead of always using rose.
-// A safe rose fallback is used for unsupported CSS color formats.
 const hexToRgb = (value: string): [number, number, number] => {
   const raw = value.trim().replace(/^#/, "");
   const hex = /^[0-9a-f]{3}$/i.test(raw)
-    ? raw.split("").map((ch) => ch + ch).join("")
+    ? raw
+        .split("")
+        .map((ch) => ch + ch)
+        .join("")
     : raw;
   if (!/^[0-9a-f]{6}$/i.test(hex)) return [0.957, 0.247, 0.369];
   return [
@@ -52,6 +52,7 @@ const hexToRgb = (value: string): [number, number, number] => {
     parseInt(hex.slice(4, 6), 16) / 255,
   ];
 };
+
 const clamp = (v: number, min: number, max: number) =>
   Math.min(max, Math.max(min, v));
 
@@ -102,7 +103,7 @@ const buildTints = (rgb: number[]) => {
 };
 
 // ══════════════════════════════════════════════════════════════════════════
-// PASS 1: LASERFLOW YOĞUN DUMAN, DOT-GRID, SPOTLIGHT HOVER VE TAB TOZLARI
+// PASS 1: DAĞINIK (SCATTERED) DOĞAL DUMAN BULUTLARI, TOZLAR & HAFİF SPOTLIGHT
 // ══════════════════════════════════════════════════════════════════════════
 const ATMOS_VERT = /* glsl */ `
 attribute vec2 aPosition;
@@ -120,8 +121,8 @@ uniform float uScale;
 uniform float uTime;
 uniform float uSpin;
 uniform float uAmp;
-uniform float uBurst; // Tab değiştiğinde oluşan canlanma dalgası
-uniform vec4 uLens;   // LaserFlow Spotlight (x, y, radius, strength)
+uniform float uBurst;
+uniform vec4 uLens;   // x, y, radius, strength
 uniform vec3 uAmount; // x: fog, y: dust, z: dots
 uniform float uTheme; // 0: dark, 1: light
 uniform vec3 uTint[16];
@@ -141,6 +142,10 @@ float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
   p += dot(p, p + 45.32);
   return fract(p.x * p.y);
+}
+
+vec2 hash2(vec2 p) {
+  return vec2(hash(p + vec2(1.7, 9.2)), hash(p + vec2(8.3, 2.8)));
 }
 
 float noise(vec2 p) {
@@ -166,6 +171,30 @@ float fbm(vec2 p) {
   return v;
 }
 
+// Tam yuvarlak, farklı derinliklerde serbestçe süzülen doğal toz zerrecikleri
+float naturalDustLayer(vec2 px, float cellSize, float threshold, float dotRadius, float t, float seed) {
+  vec2 grid = px / cellSize;
+  vec2 id = floor(grid);
+  vec2 f = fract(grid);
+
+  vec2 rnd = hash2(id + seed);
+  float activeMask = step(threshold, hash(id + seed * 3.17));
+
+  float phase = rnd.x * 6.2831853 + t * (0.55 + rnd.y * 0.50);
+  vec2 center = 0.22 + 0.56 * rnd + 0.12 * vec2(cos(phase), sin(phase * 1.17));
+
+  vec2 diff = (f - center) * cellSize;
+  float dist = length(diff);
+
+  float sizeVar = mix(0.68, 1.32, rnd.y);
+  float r = dotRadius * sizeVar;
+  float core = smoothstep(r, r * 0.10, dist);
+  float halo = exp(-sq(dist / (r * 1.75))) * 0.32;
+
+  float twinkle = 0.50 + 0.50 * sin(t * (1.1 + rnd.x * 1.5) + rnd.y * 6.2831853);
+  return (core + halo) * activeMask * twinkle;
+}
+
 void main() {
   vec2 frag = vec2(gl_FragCoord.x, uResolution.y * uDpr - gl_FragCoord.y) / uDpr;
   vec2 uv = frag / uResolution;
@@ -175,151 +204,140 @@ void main() {
   float orbRadius = min(uResolution.x, uResolution.y) * (isMobile ? 0.36 : 0.265);
 
   vec2 dVec = frag - center;
-  vec2 p = dVec / orbRadius; // r = 1.0 küre çeperi, r = 1.6..2.2 sol tabların olduğu alan
+  vec2 p = dVec / orbRadius;
   float r = length(p);
-  float angle = atan(p.y, p.x);
 
   float t = uTime;
 
-  // Kürenin dalgalı sınırı
-  float waveRim = 0.09 * sin(angle * 3.0 - uSpin * 1.4 + t * 0.55)
-                + 0.06 * cos(angle * 5.0 + uSpin * 0.9 - t * 0.45);
-  float surfaceR = 0.92 + waveRim * (0.75 + uAmp + uBurst * 0.35);
-  float distFromRim = r - surfaceR;
+  // ── EKRAN KENARLARI VE METİN KORUMA MASKELERİ ────────────────────────────
+  vec2 cUv = (uv - 0.5) * 2.0;
+  float cornerDist = length(cUv * vec2(0.86, 0.92));
+  float cornerMask = 1.0 - smoothstep(0.88, 1.42, cornerDist);
+  float topEdgeMask = smoothstep(0.0, 0.09, uv.y);
 
-  // ── KÖŞE MASKESİ: Tablara kadar uzanır, sadece en dış 4 köşede azalır ───
-  vec2 cUv = (uv - 0.5) * 2.0; // -1..1
-  float cornerDist = length(cUv * vec2(0.92, 0.96));
-  float cornerMask = 1.0 - smoothstep(0.88, 1.36, cornerDist);
-  float topEdgeMask = smoothstep(0.0, 0.07, uv.y);
-  // Alt metinlerin okunaklı kalması için hafif yumuşatma (tamamen yok etmez)
-  float bottomTextMask = 1.0 - 0.42 * smoothstep(0.68, 0.94, uv.y);
+  // Sağ alt açıklama metni ve sol alt büyük başlık üzerinde okunabilirliği koru
+  vec2 rightTextZone = (uv - vec2(0.73, 0.77)) / vec2(0.26, 0.21);
+  float rightTextMask = 1.0 - 0.62 * exp(-dot(rightTextZone, rightTextZone) * 1.7);
 
-  float zoneMask = cornerMask * topEdgeMask * bottomTextMask;
+  vec2 leftTitleZone = (uv - vec2(0.22, 0.82)) / vec2(0.26, 0.18);
+  float leftTitleMask = 1.0 - 0.45 * exp(-dot(leftTitleZone, leftTitleZone) * 1.8);
 
-  // ── LASERFLOW SPOTLIGHT HOVER MERCEĞİ ───────────────────────────────────
+  float zoneMask = cornerMask * topEdgeMask * rightTextMask * leftTitleMask;
+
+  // ── HAFİF VE DOĞAL HOVER SPOTLIGHT MERCEĞİ ──────────────────────────────
   vec2 toLens = frag - uLens.xy;
   float lensCore = exp(-dot(toLens, toLens) / sq(uLens.z * 0.95)) * uLens.w;
-  float lensWide = exp(-dot(toLens, toLens) / sq(uLens.z * 1.95)) * uLens.w;
+  float lensWide = exp(-dot(toLens, toLens) / sq(uLens.z * 2.25)) * uLens.w;
 
-  // Tab değiştiğinde merkezden dışarı (sekmelere doğru) yayılan enerji halkası
-  float burstRadius = 0.85 + (1.0 - uBurst) * 1.45;
-  float burstWave = exp(-sq((r - burstRadius) / 0.34)) * uBurst;
+  // Sekme değiştiğinde merkezden dışa yayılan yumuşak dalga
+  float burstRadius = 0.75 + (1.0 - uBurst) * 1.55;
+  float burstWave = exp(-sq((r - burstRadius) / 0.42)) * uBurst;
 
   vec3 col = vec3(0.0);
 
-  // ── 1. YOĞUN FBM DUMAN / SMOKE (Tablara Kadar Süzülür) ──────────────────
+  // ── 1. DAĞINIK, PARÇALI VE DOĞAL DUMAN BULUTLARI (Multi-Plume Smoke) ────
   float fogAmount = uAmount.x;
-  float innerClear = smoothstep(0.22, 0.82, r);
-  // 0.78 çarpanı sayesinde duman r = 2.2 (sol tablar) mesafesine kadar ulaşır
-  float outerFalloff = exp(-pow(max(r - 0.82, 0.0) * 1.25, 1.45));
-  float rimBoost = exp(-sq(distFromRim / 0.34));
+  float smokeField = 0.0;
 
-  // Spotlight tutulan yerde duman ekstra görünür olur
-  float envelope = clamp(innerClear * outerFalloff + lensWide * 0.18 + burstWave * 0.14, 0.0, 1.0) * zoneMask;
+  if (fogAmount > 0.001 && zoneMask > 0.002) {
+    // Dumanı tek bir simit gibi küreye yapıştırmak yerine 4 farklı asimetrik
+    // atmosfer lobuna (sol-üst, sağ-üst, sol-alt, merkez-çevre) yayıyoruz:
+    vec2 p1 = (p - vec2(-0.95, -0.35)) / vec2(1.45, 1.05); // Sol üst / tabların arkası
+    vec2 p2 = (p - vec2(0.88, -0.42)) / vec2(1.35, 1.05);  // Sağ üst açılım
+    vec2 p3 = (p - vec2(-0.72, 0.58)) / vec2(1.30, 0.95);  // Sol orta-alt
+    vec2 p4 = (p - vec2(0.55, 0.35)) / vec2(1.15, 0.85);   // Sağ orta
 
-  if (fogAmount > 0.001 && envelope > 0.002) {
-    float cs = cos(-uSpin * 0.30);
-    float sn = sin(-uSpin * 0.30);
-    vec2 rotP = vec2(cs * p.x - sn * p.y, sn * p.x + cs * p.y);
+    float lobes = 0.52 * exp(-dot(p1, p1))
+                + 0.46 * exp(-dot(p2, p2))
+                + 0.42 * exp(-dot(p3, p3))
+                + 0.36 * exp(-dot(p4, p4));
 
-    vec2 fq = rotP * 1.12 - normalize(p + vec2(0.0001)) * (t * 0.030) + vec2(t * 0.009, -t * 0.015);
-    vec2 fw = vec2(
-      fbm(fq * 1.35 + vec2(1.7, 9.2) + t * 0.015),
-      fbm(fq * 1.35 + vec2(8.3, 2.8) - t * 0.013)
+    // Küre çevresindeki yumuşak geçiş (küre merkezini boğmaz, dışarı doğru yayılır)
+    float coreHalo = smoothstep(0.15, 0.85, r) * exp(-pow(max(r - 0.70, 0.0) / 1.45, 1.40));
+    float spatialEnvelope = clamp((lobes * 0.72 + coreHalo * 0.58) + lensWide * 0.28 + burstWave * 0.18, 0.0, 1.0) * zoneMask;
+
+    // Farklı yönlere yavaşça süzülen 2 bağımsız FBM duman katmanı
+    vec2 qA = p * 0.68 + vec2(-t * 0.024, -t * 0.018);
+    vec2 warpA = vec2(
+      fbm(qA * 1.20 + vec2(1.7, 9.2) + t * 0.016),
+      fbm(qA * 1.20 + vec2(8.3, 2.8) - t * 0.014)
     );
-    float cloud = fbm(fq + 1.45 * fw);
+    float cloudA = fbm(qA + 1.30 * warpA);
 
-    float density = smoothstep(0.30, 0.76, cloud);
-    float smoke = smoothstep(0.20, 0.72, cloud);
+    vec2 qB = p * 0.52 + vec2(t * 0.019, -t * 0.026);
+    vec2 warpB = vec2(
+      fbm(qB * 1.35 + vec2(4.4, 2.1) - t * 0.015),
+      fbm(qB * 1.35 + vec2(6.1, 7.4) + t * 0.013)
+    );
+    float cloudB = fbm(qB + 1.20 * warpB);
 
-    vec3 sideK = mix(LEFT, RIGHT, smoothstep(-1.2, 1.2, p.x));
-    vec3 fog = (HAZE * 0.32 + BEAM * (1.10 * rimBoost + 0.60 + burstWave * 0.40)) * density * envelope;
-    fog += sideK * 0.70 * (rimBoost + 0.35 * outerFalloff) * smoke * envelope;
-    fog += EMBER * 0.14 * smoke * (rimBoost + burstWave) * envelope;
+    // Dumanın aynı yerde toplanmasını engelleyen boşluklu parçalama maskesi (carve/pockets)
+    float pockets = smoothstep(0.38, 0.76, cloudA) * (0.35 + 0.65 * smoothstep(0.32, 0.74, cloudB));
+    float wisps = smoothstep(0.46, 0.84, (cloudA + cloudB) * 0.5 + 0.12 * warpA.x);
 
-    // Spotlight Hover vurgu ışığı: Mouse'un gezdiği yerde duman fener tutulmuş gibi parlar
-    fog += mix(BEAM, WHITE, 0.25) * (0.20 + 0.45 * smoke) * lensWide * 0.75;
+    smokeField = clamp(pockets * 1.15 + wisps * 0.45, 0.0, 1.0);
 
-    col += fog * fogAmount * (1.0 + 0.15 * lensCore + 0.08 * uBurst);
+    vec3 sideTint = mix(LEFT, RIGHT, smoothstep(-1.6, 1.6, p.x));
+    vec3 fog = (HAZE * 0.26 + BEAM * 0.68) * pockets * spatialEnvelope;
+    fog += sideTint * 0.52 * wisps * spatialEnvelope;
+    fog += EMBER * 0.12 * wisps * (burstWave + 0.35 * coreHalo) * zoneMask;
+
+    // Hover Spotlight: İmlecin gezdiği yerdeki dağınık duman bulutlarını yumuşakça aydınlatır
+    vec3 spotColor = mix(BEAM, WHITE, 0.35);
+    fog += spotColor * (0.14 + 0.45 * smokeField) * lensWide * zoneMask;
+    fog += WHITE * 0.12 * wisps * lensCore * zoneMask;
+
+    col += fog * fogAmount * (1.0 + 0.08 * uBurst);
   }
 
-  // ── 2. LASERFLOW DOT-GRID (Nokta Matrisi Dokusu + Spotlight Vurgusu) ────
-  float haze = max(col.r, max(col.g, col.b));
-  float dotGrid = 1.0 - smoothstep(0.15, 0.33, length(fract(frag / 3.0) - 0.5));
-  col += mix(BEAM, WHITE, 0.25 * lensCore)
-       * dotGrid
-       * clamp(haze * 1.45 + lensWide * 0.65, 0.0, 1.8)
-       * (0.32 + 0.95 * lensCore + 0.35 * burstWave)
-       * uAmount.z
-       * zoneMask;
-
-  // ── 3. YOĞUN TOZ VE KIVILCIMLAR (Sekmelere Kadar Uzanır + Hover Spark) ──
+  // ── 2. DAĞINIK DOĞAL TOZ ZERRECİKLERİ (Geniş Alana Yayılan Noktalar) ────
   float dustAmount = uAmount.y;
   if (dustAmount > 0.001 && zoneMask > 0.01) {
-    // A) Küreden dışarı ve sol tablara doğru savrulan ana toz akışı (flowCell)
-    float normAngle = (angle + 3.14159265) / 6.2831853;
-    float radialStream = log(max(r, 0.30) / 0.75) * 2.20;
-    vec2 flowCell = vec2(radialStream - t * 0.09, (normAngle - uSpin * 0.05) * 34.0);
-    vec2 cellId = floor(flowCell);
-    vec2 cellJitter = vec2(hash(cellId + 1.7), hash(cellId + 8.3));
-    vec2 cellLocal = fract(flowCell) - (0.15 + cellJitter * 0.7);
-    float particleDist = length(cellLocal * vec2(13.5, 9.0));
-    float particleOn = step(0.56, hash(cellId + 3.1));
-    float particleTwinkle = 0.5 + 0.5 * sin(t * 1.7 + hash(cellId + 9.2) * 6.283);
+    vec2 localPx = dVec / max(uScale, 0.35);
 
-    // r = 0.75'ten r = 2.35'e (sol tabların üstüne kadar) yayılan geniş toz kuşağı
-    float dustRingZone = exp(-pow(max(r - 0.92, 0.0) * 1.45, 1.5)) * smoothstep(0.48, 0.85, r) * zoneMask;
-    dustRingZone = clamp(dustRingZone + burstWave * 0.12 + lensWide * 0.18, 0.0, 1.0);
+    // Tozlar sadece küre dibinde değil, geniş ekranda ve duman bulutlarının olduğu her yerde gezer
+    float wideSpread = exp(-pow(max(r - 0.55, 0.0) / 1.85, 1.35)) * smoothstep(0.18, 0.65, r);
+    float dustZone = clamp(
+      wideSpread * (0.38 + 0.85 * smokeField) + lensWide * 0.50 + burstWave * 0.22,
+      0.0,
+      1.0
+    ) * zoneMask;
 
-    col += mix(WHITE, WARM, 0.25)
-         * exp(-particleDist * particleDist / 0.44)
-         * particleOn * particleTwinkle * dustRingZone * 1.15 * dustAmount;
+    // Katman 1: Geniş alana dağılmış ince mikro tozlar
+    vec2 pxFine = localPx + vec2(sin(t * 0.22) * 12.0 - t * 3.2, t * 5.0);
+    float fineDust = naturalDustLayer(pxFine, 21.0, 0.62, 1.10, t, 1.3);
 
-    // B) Geniş alanda yukarı süzülen parlak toz zerrecikleri (glitterCell - Tabları da kapsar)
-    vec2 localPx = dVec / uScale;
-    vec2 glitterCoord = vec2(localPx.x / 3.8, (localPx.y + t * 6.5) / 9.0);
-    vec2 glitterId = floor(glitterCoord);
-    vec2 glitterJitter = vec2(hash(glitterId + 4.4), hash(glitterId + 2.9));
-    vec2 glitterPos = (glitterId + 0.15 + glitterJitter * 0.7) * vec2(3.8, 9.0);
-    float glitterDist = length(vec2(localPx.x, localPx.y + t * 6.5) - glitterPos);
-    float glitterOn = step(0.66, hash(glitterId + 6.6));
-    float glitterTwinkle = 0.5 + 0.5 * sin(t * 1.8 + hash(glitterId + 1.1) * 6.283);
+    // Katman 2: Duman kümeleriyle birlikte süzülen orta boy parlak noktalar
+    vec2 pxMid = localPx + vec2(-cos(t * 0.18) * 16.0 + t * 2.4, t * 7.8);
+    float midDust = naturalDustLayer(pxMid, 34.0, 0.67, 1.50, t * 0.9, 4.7);
 
-    float glitterZone = exp(-pow(max(r - 0.80, 0.0) * 1.40, 1.45)) * smoothstep(0.35, 0.80, r) * zoneMask;
-    col += WHITE * exp(-glitterDist * glitterDist / 0.38) * glitterOn * glitterTwinkle * (glitterZone + lensWide * 0.15) * 0.85 * dustAmount;
+    // Katman 3: Seyrek, yumuşak bokeh tozları (Spotlight ile ekstra belirginleşir)
+    vec2 pxNear = localPx + vec2(sin(t * 0.15 + 1.4) * 20.0, t * 10.5);
+    float nearDust = naturalDustLayer(pxNear, 50.0, 0.75, 2.10, t * 0.8, 8.9);
 
-    // C) LaserFlow Spotlight Kıvılcımları (Mouse ile nereye gidilirse orada parlayan tozlar)
-    if (lensWide > 0.002) {
-      vec2 drift = frag + vec2(0.0, t * 5.0);
-      vec2 sparkCell = floor(drift / 6.5);
-      vec2 sparkPos = (sparkCell + 0.2 + 0.6 * vec2(hash(sparkCell + 5.1), hash(sparkCell + 2.3))) * 6.5;
-      float sparkDist = length(drift - sparkPos);
-      float sparkOn = step(0.70, hash(sparkCell + 8.8));
-      float sparkTwinkle = 0.5 + 0.5 * sin(t * 2.0 + hash(sparkCell + 3.7) * 6.283);
-      col += mix(WHITE, PINK, 0.25)
-           * exp(-sparkDist * sparkDist / 0.42)
-           * sparkOn * sparkTwinkle * lensWide * 0.65 * dustAmount * cornerMask;
-    }
+    vec3 dustCol = mix(WHITE, PINK, 0.38) * fineDust * 0.50;
+    dustCol += mix(WHITE, WARM, 0.24) * midDust * 0.76;
+    dustCol += mix(WHITE, BEAM, 0.30) * nearDust * (0.42 + 0.85 * lensWide + 0.55 * lensCore);
+
+    col += dustCol * dustZone * dustAmount;
   }
 
-  vec3 emit = 1.0 - exp(-col * mix(1.02, 0.70, uTheme));
+  // ── TONLAMA (Dark & Light Mode) ─────────────────────────────────────────
+  vec3 emit = 1.0 - exp(-col * mix(0.95, 0.60, uTheme));
   float peak = max(emit.r, max(emit.g, emit.b));
 
   if (uTheme > 0.5) {
-    float low = min(emit.r, min(emit.g, emit.b));
-    float chroma = peak - low;
-    vec3 hue = (emit - low) / max(chroma, 0.0001);
-    float alpha = clamp(pow(chroma, 1.18) * 1.35, 0.0, 1.0) * 0.88;
-    gl_FragColor = vec4((hue * 0.84 + 0.05) * alpha, alpha);
+    float alpha = clamp(pow(peak, 1.12) * 0.80, 0.0, 0.68);
+    vec3 lightTint = mix(vec3(0.98, 0.38, 0.49), vec3(0.96, 0.24, 0.37), clamp(peak * 1.4, 0.0, 1.0));
+    gl_FragColor = vec4(lightTint * alpha, alpha);
   } else {
-    gl_FragColor = vec4(emit, peak);
+    gl_FragColor = vec4(emit, clamp(peak, 0.0, 1.0));
   }
 }
 `;
 
 // ══════════════════════════════════════════════════════════════════════════
-// PASS 2: 3B DALGALI NOKTA KÜRE (SPOTLIGHT HOVER VE TAB CANLANMA DESTEKLİ)
+// PASS 2: 3B DALGALI NOKTA KÜRE (HAFİF SPOTLIGHT HOVER & TEMA UYUMLU)
 // ══════════════════════════════════════════════════════════════════════════
 const ORB_VERT = /* glsl */ `
 precision highp float;
@@ -438,14 +456,13 @@ void main() {
   ridge = ridge * ridge;
 
   float shellScale = 1.0 - aShell * 0.10;
-  // Tab değiştiğinde (uBurst) dalgalar ekstra kabarır ve canlanır
-  float amp = (uAmp + uBurst * 0.07) * shellScale;
+  float amp = (uAmp + uBurst * 0.06) * shellScale;
 
   float radialWave = (n1 * 0.74 + (ridge - 0.48) * 0.68 + macroWave * 0.45 + n2 * 0.25) * amp;
   vec3 tangentWarp = warp - n0 * dot(warp, n0);
 
   vec3 displaced = n0 * (baseRadius * (1.0 + radialWave * 0.80)) + tangentWarp * (amp * 0.44);
-  displaced *= 1.0 + (0.014 + uBurst * 0.008) * sin(uTime * 0.55 + n1 * 2.4);
+  displaced *= 1.0 + (0.014 + uBurst * 0.007) * sin(uTime * 0.55 + n1 * 2.4);
 
   float cx = cos(uRot.x), sx = sin(uRot.x);
   float cy = cos(uRot.y), sy = sin(uRot.y);
@@ -464,12 +481,11 @@ void main() {
   vec2 centerOffsetNDC = vec2(0.0, uCenterY);
   vec2 ndc = pos.xy * k * uScale * vec2(1.0 / uAspect, 1.0) + centerOffsetNDC;
 
-  // Spotlight Hover etkileşimi: Küre üzerindeki noktalar mercek altında aydınlanır ve dalgalanır
+  // Hafif Spotlight Hover etkileşimi
   vec2 dd = (ndc - uPointer) * vec2(uAspect, 1.0);
-  float f = exp(-dot(dd, dd) * 5.8) * uPointerOn;
+  float spot = exp(-dot(dd, dd) * 6.5) * uPointerOn;
   vec2 dir = normalize(dd + vec2(0.0001));
-  vec2 perp = vec2(-dir.y, dir.x);
-  ndc += (perp * 0.018 + dir * 0.009) * f * vec2(1.0 / uAspect, 1.0);
+  ndc += dir * (0.005 * spot) * vec2(1.0 / uAspect, 1.0);
 
   vec3 lightDir = normalize(vec3(-0.38, 0.68, 0.62));
   vec3 fillDir = normalize(vec3(0.45, -0.55, 0.70));
@@ -478,21 +494,23 @@ void main() {
   float rim = pow(1.0 - clamp(facing, 0.0, 1.0), 2.2);
 
   float heightNorm = clamp(radialWave / max(0.001, amp) * 0.5 + 0.5, 0.0, 1.0);
-  vCrest = clamp(pow(ridge, 1.4) * 0.72 + pow(heightNorm, 1.5) * 0.55 + rim * 0.30 + f * 0.22 + uBurst * 0.08, 0.0, 1.0);
-  vLight = clamp(diff * 0.56 + heightNorm * 0.46 + fill * 0.14 + f * 0.16 + uBurst * 0.06, 0.0, 1.0);
+  vCrest = clamp(pow(ridge, 1.4) * 0.68 + pow(heightNorm, 1.5) * 0.50 + rim * 0.26 + spot * 0.25 + uBurst * 0.08, 0.0, 1.0);
+  vLight = clamp(diff * 0.55 + heightNorm * 0.44 + fill * 0.14 + spot * 0.20 + uBurst * 0.06, 0.0, 1.0);
 
   float frontMask = smoothstep(-0.65, 0.28, facing);
-  vAlpha = mix(0.22, 0.98, frontMask) * (1.0 - aShell * 0.12);
-  vHeat = clamp(f * 0.50 + uBurst * 0.10, 0.0, 1.0);
+  vAlpha = mix(0.18, 0.94, frontMask) * (1.0 - aShell * 0.14);
+  vHeat = clamp(spot * 0.65 + uBurst * 0.12, 0.0, 1.0);
 
-  float size = uPx * (0.94 - aShell * 0.10) * (1.0 + f * 1.15 + vCrest * 0.30 + uBurst * 0.22) * (0.62 + 0.65 * frontMask) * k;
-  gl_PointSize = clamp(size, uPx * 0.45, uPx * 3.3);
+  float size = uPx * (0.92 - aShell * 0.10) * (1.0 + spot * 0.38 + vCrest * 0.24 + uBurst * 0.16) * (0.64 + 0.60 * frontMask) * k;
+  gl_PointSize = clamp(size, uPx * 0.45, uPx * 2.65);
   gl_Position = vec4(ndc, -pos.z * 0.15, 1.0);
 }
 `;
 
 const ORB_FRAG = /* glsl */ `
 precision mediump float;
+
+uniform float uTheme;
 
 varying float vLight;
 varying float vCrest;
@@ -504,21 +522,25 @@ void main() {
   float r = length(c);
   if (r > 0.5) discard;
 
-  float edge = smoothstep(0.5, 0.12, r);
+  float edge = smoothstep(0.5, 0.08, r);
 
-  vec3 deepRose = vec3(0.20, 0.015, 0.065);  // #330410 - Derin dalga çukuru
-  vec3 coreRose = vec3(0.957, 0.247, 0.369); // #f43f5e - Ana sabit renk
-  vec3 softRose = vec3(0.988, 0.451, 0.533); // #fb7185 - Dalga gövdesi
-  vec3 crestHi  = vec3(1.00, 0.92, 0.95);    // #ffebf2 - Parlak dalga sırtı
+  vec3 deepDark  = vec3(0.22, 0.02, 0.07);
+  vec3 deepLight = vec3(0.92, 0.42, 0.52);
+  vec3 deepRose  = mix(deepDark, deepLight, uTheme);
 
-  vec3 col = mix(deepRose, coreRose, smoothstep(0.10, 0.48, vLight));
-  col = mix(col, softRose, smoothstep(0.46, 0.82, vLight));
-  col = mix(col, crestHi, smoothstep(0.50, 0.95, vCrest));
+  vec3 coreRose  = vec3(0.957, 0.247, 0.369);
+  vec3 softRose  = vec3(0.988, 0.451, 0.533);
+  vec3 crestHi   = mix(vec3(1.00, 0.90, 0.94), vec3(0.96, 0.18, 0.34), uTheme * 0.65);
 
-  // Spotlight Hover ve Tab geçişinde sıcak gül-beyaz parlama
-  col = mix(col, vec3(1.0, 0.96, 0.97), clamp(vHeat * 0.55, 0.0, 1.0));
+  vec3 col = mix(deepRose, coreRose, smoothstep(0.10, 0.50, vLight));
+  col = mix(col, softRose, smoothstep(0.48, 0.84, vLight));
+  col = mix(col, crestHi, smoothstep(0.52, 0.96, vCrest));
 
-  float a = clamp(edge * vAlpha, 0.0, 1.0);
+  vec3 spotGlow = mix(vec3(1.0, 0.95, 0.97), vec3(1.0, 0.32, 0.46), uTheme * 0.5);
+  col = mix(col, spotGlow, clamp(vHeat * 0.55, 0.0, 1.0));
+
+  float themeAlpha = mix(1.0, 0.82, uTheme);
+  float a = clamp(edge * vAlpha * themeAlpha, 0.0, 1.0);
   gl_FragColor = vec4(col * a, a);
 }
 `;
@@ -562,8 +584,8 @@ export function VoiceOrb({
   tone,
   mode = DEFAULT_MODE,
   color = "#f43f5e",
-  fog = 0.46,
-  dust = 0.25,
+  fog = 0.85,
+  dust = 1.2,
   dots = 0,
   className,
 }: VoiceOrbProps) {
@@ -575,7 +597,6 @@ export function VoiceOrb({
   const amountsRef = useRef({ fog, dust, dots });
   const [fallback, setFallback] = useState(false);
 
-  // Sekme (tab) tıklandığında ve mode değiştiğinde küreyi canlandır (burst)
   useEffect(() => {
     modeRef.current = mode;
     if (isFirstRender.current) {
@@ -589,7 +610,6 @@ export function VoiceOrb({
     toneRef.current = tone;
   }, [tone]);
 
-  // Updating atmosphere intensity must not recreate GPU buffers or programs.
   useEffect(() => {
     amountsRef.current = { fog, dust, dots };
   }, [fog, dust, dots]);
@@ -626,18 +646,18 @@ export function VoiceOrb({
     const aQuadPos = gl.getAttribLocation(atmosProg, "aPosition");
 
     const small = window.matchMedia("(max-width: 767px)").matches;
-    const baseSize = small ? 2.15 : 2.0;
+    const baseSize = small ? 2.1 : 1.95;
 
     const SHELLS = small
       ? [
           { r: 0.78, rings: 40, eqDots: 80, s: 2 },
           { r: 0.89, rings: 54, eqDots: 108, s: 1 },
-          { r: 1.00, rings: 74, eqDots: 148, s: 0 },
+          { r: 1.0, rings: 74, eqDots: 148, s: 0 },
         ]
       : [
           { r: 0.78, rings: 52, eqDots: 104, s: 2 },
           { r: 0.89, rings: 76, eqDots: 152, s: 1 },
-          { r: 1.00, rings: 112, eqDots: 224, s: 0 },
+          { r: 1.0, rings: 112, eqDots: 224, s: 0 },
         ];
 
     const tempPos: number[] = [];
@@ -699,6 +719,7 @@ export function VoiceOrb({
       pointer: gl.getUniformLocation(orbProg, "uPointer"),
       pointerOn: gl.getUniformLocation(orbProg, "uPointerOn"),
       centerY: gl.getUniformLocation(orbProg, "uCenterY"),
+      theme: gl.getUniformLocation(orbProg, "uTheme"),
     };
 
     const tints = buildTints(hexToRgb(color));
@@ -717,7 +738,7 @@ export function VoiceOrb({
       inside: false,
       on: 0,
     };
-    const lens = { x: 0, y: 0, vx: 0, vy: 0, strength: 0, placed: false };
+    const lens = { x: 0, y: 0, strength: 0, placed: false };
 
     let cssW = 1;
     let cssH = 1;
@@ -729,7 +750,9 @@ export function VoiceOrb({
     let raf = 0;
     let last = performance.now();
     let inView = true;
-    const reducedMotionMedia = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const reducedMotionMedia = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    );
     let reduceMotion = reducedMotionMedia.matches;
 
     const update = (dt: number) => {
@@ -742,44 +765,38 @@ export function VoiceOrb({
       cur.freq += (m.freq - cur.freq) * ease;
       cur.speed += (m.speed - cur.speed) * ease;
 
-      // Tab değiştiğinde tetiklenen canlanma (burst) sönümlenmesi
       const burst = burstRef.current;
       burstRef.current *= Math.exp(-dt * 2.1);
       if (burstRef.current < 0.001) burstRef.current = 0;
 
-      // Burst anında zaman ve dönüş hızı tatlı bir ivme kazanır
       time += dt * (cur.speed + burst * 0.12);
       spin += dt * (0.058 * cur.speed + burst * 0.045);
 
-      // LaserFlow Spotlight yay fiziği (Spring Lens)
       if (pointer.inside && !lens.placed) {
         lens.x = pointer.x;
         lens.y = pointer.y;
-        lens.vx = 0;
-        lens.vy = 0;
         lens.placed = true;
       }
-      const ax = 120 * (pointer.x - lens.x) - 19 * lens.vx;
-      const ay = 120 * (pointer.y - lens.y) - 19 * lens.vy;
-      lens.vx += ax * dt;
-      lens.vy += ay * dt;
-      lens.x += lens.vx * dt;
-      lens.y += lens.vy * dt;
-      const goal = pointer.inside ? 0.40 : 0;
+      const lensFollow = 1 - Math.exp(-dt * 7.5);
+      lens.x += (pointer.x - lens.x) * lensFollow;
+      lens.y += (pointer.y - lens.y) * lensFollow;
+
+      const goal = pointer.inside ? 0.34 : 0;
       lens.strength +=
         (goal - lens.strength) *
-        (1 - Math.exp(-dt / (goal > lens.strength ? 0.25 : 0.55)));
+        (1 - Math.exp(-dt / (goal > lens.strength ? 0.22 : 0.48)));
       if (lens.strength < 0.001 && !pointer.inside) lens.placed = false;
 
-      const follow = 1 - Math.exp(-dt * 4.2);
+      const follow = 1 - Math.exp(-dt * 4.5);
       pointer.nx += (pointer.tx - pointer.nx) * follow;
       pointer.ny += (pointer.ty - pointer.ny) * follow;
-      pointer.on += (goal - pointer.on) * (1 - Math.exp(-dt * 3.5));
+      pointer.on +=
+        ((pointer.inside ? 1 : 0) - pointer.on) * (1 - Math.exp(-dt * 3.8));
 
       const wanderX = Math.sin(time * 0.14) * 0.05;
-      const wanderY = Math.cos(time * 0.10 + 1.5) * 0.065;
-      rotX = 0.22 - pointer.ny * 0.12 + wanderX;
-      rotY = spin + pointer.nx * 0.18 + wanderY;
+      const wanderY = Math.cos(time * 0.1 + 1.5) * 0.065;
+      rotX = 0.22 - pointer.ny * 0.10 + wanderX;
+      rotY = spin + pointer.nx * 0.15 + wanderY;
     };
 
     const render = () => {
@@ -790,7 +807,6 @@ export function VoiceOrb({
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
 
-      // Pass 1: Yoğun Duman, Dot-Grid, Spotlight Hover ve Tab Tozları
       gl.useProgram(atmosProg);
       gl.bindBuffer(gl.ARRAY_BUFFER, quadBuffer);
       gl.enableVertexAttribArray(aQuadPos);
@@ -807,7 +823,7 @@ export function VoiceOrb({
         uAtmos.lens,
         lens.x,
         lens.y,
-        100 * scale,
+        125 * scale,
         lens.strength,
       );
       const amounts = amountsRef.current;
@@ -818,7 +834,6 @@ export function VoiceOrb({
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       gl.disableVertexAttribArray(aQuadPos);
 
-      // Pass 2: 3B Dalgalı Nokta Küre
       gl.useProgram(orbProg);
       gl.bindBuffer(gl.ARRAY_BUFFER, orbPosBuffer);
       gl.enableVertexAttribArray(aOrbPos);
@@ -836,12 +851,12 @@ export function VoiceOrb({
       gl.uniform1f(uOrb.burst, burstRef.current);
       gl.uniform2f(uOrb.rot, rotX, rotY);
       gl.uniform1f(uOrb.aspect, cssW / cssH);
-      // Mobilde tam ekran arkasında dolgun görünmesi için ölçek büyütüldü
       gl.uniform1f(uOrb.scale, isMobile ? 0.72 : 0.53);
       gl.uniform1f(uOrb.px, baseSize * dpr);
       gl.uniform2f(uOrb.pointer, pointer.nx, pointer.ny);
       gl.uniform1f(uOrb.pointerOn, pointer.on);
       gl.uniform1f(uOrb.centerY, isMobile ? 0.14 : 0.12);
+      gl.uniform1f(uOrb.theme, isLight);
 
       gl.drawArrays(gl.POINTS, 0, orbCount);
       gl.disableVertexAttribArray(aOrbPos);
@@ -891,13 +906,14 @@ export function VoiceOrb({
       pointer.y = y;
       const nx = (x / r.width) * 2 - 1;
       const ny = -((y / r.height) * 2 - 1);
-      // Interaction is focused around the Orb, not the entire fullscreen Hero.
+
       const mobile = r.width < 768;
       const orbRadius = Math.min(r.width, r.height) * (mobile ? 0.36 : 0.265);
       const dx = x - r.width * 0.5;
       const dy = y - r.height * (mobile ? 0.43 : 0.44);
-      pointer.inside = e.pointerType !== "touch" &&
-        Math.hypot(dx, dy) <= orbRadius * 1.35;
+
+      pointer.inside =
+        e.pointerType !== "touch" && Math.hypot(dx, dy) <= orbRadius * 2.45;
       pointer.tx = clamp(nx, -1, 1);
       pointer.ty = clamp(ny, -1, 1);
     };
@@ -915,8 +931,10 @@ export function VoiceOrb({
 
     const onReducedMotionChange = () => {
       reduceMotion = reducedMotionMedia.matches;
-      if (reduceMotion) { stop(); render(); }
-      else if (inView && !document.hidden) start();
+      if (reduceMotion) {
+        stop();
+        render();
+      } else if (inView && !document.hidden) start();
     };
 
     const resizeObserver = new ResizeObserver(resize);
