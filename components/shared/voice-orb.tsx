@@ -103,7 +103,7 @@ const buildTints = (rgb: number[]) => {
 };
 
 // ══════════════════════════════════════════════════════════════════════════
-// PASS 1: DAĞINIK (SCATTERED) DOĞAL DUMAN BULUTLARI, TOZLAR & HAFİF SPOTLIGHT
+// PASS 1: NÖTR, DÜŞÜK KONTRASTLI DUMAN + SEYREK TOZ + SPOTLIGHT
 // ══════════════════════════════════════════════════════════════════════════
 const ATMOS_VERT = /* glsl */ `
 attribute vec2 aPosition;
@@ -119,24 +119,10 @@ uniform vec2 uResolution;
 uniform float uDpr;
 uniform float uScale;
 uniform float uTime;
-uniform float uSpin;
-uniform float uAmp;
 uniform float uBurst;
-uniform vec4 uLens;   // x, y, radius, strength
-uniform vec3 uAmount; // x: fog, y: dust, z: dots
-uniform float uTheme; // 0: dark, 1: light
-uniform vec3 uTint[16];
-
-#define BEAM uTint[0]
-#define LEFT uTint[1]
-#define RIGHT uTint[2]
-#define PINK uTint[4]
-#define WARM uTint[11]
-#define EMBER uTint[12]
-#define WHITE uTint[13]
-#define HAZE uTint[14]
-
-float sq(float x) { return x * x; }
+uniform vec4 uLens;    // x, y, radius, strength
+uniform vec3 uAmount;  // fog, dust, optional extra glints
+uniform float uTheme;  // 0: dark; 1: light
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -163,176 +149,99 @@ float fbm(vec2 p) {
   float v = 0.0;
   float a = 0.5;
   mat2 m = mat2(1.6, 1.2, -1.2, 1.6);
-  for (int i = 0; i < 5; i++) {
+  for (int i = 0; i < 4; i++) {
     v += a * noise(p);
     p = m * p;
     a *= 0.5;
   }
-  return v;
+  return v / 0.9375;
 }
 
-// Tam yuvarlak, farklı derinliklerde serbestçe süzülen doğal toz zerrecikleri
-float naturalDustLayer(vec2 px, float cellSize, float threshold, float dotRadius, float t, float seed) {
-  vec2 grid = px / cellSize;
-  vec2 id = floor(grid);
-  vec2 f = fract(grid);
-
-  vec2 rnd = hash2(id + seed);
-  float activeMask = step(threshold, hash(id + seed * 3.17));
-
-  float phase = rnd.x * 6.2831853 + t * (0.55 + rnd.y * 0.50);
-  vec2 center = 0.22 + 0.56 * rnd + 0.12 * vec2(cos(phase), sin(phase * 1.17));
-
-  vec2 diff = (f - center) * cellSize;
-  float dist = length(diff);
-
-  float sizeVar = mix(0.68, 1.32, rnd.y);
-  float r = dotRadius * sizeVar;
-  float core = smoothstep(r, r * 0.10, dist);
-  float halo = exp(-sq(dist / (r * 1.75))) * 0.32;
-
-  float twinkle = 0.50 + 0.50 * sin(t * (1.1 + rnd.x * 1.5) + rnd.y * 6.2831853);
-  return (core + halo) * activeMask * twinkle;
+// Dim, stable, round specks; no bright halo or full on/off twinkle.
+float subtleDust(vec2 pixel, float cellSize, float threshold, float radius, float t, float seed) {
+  vec2 grid = pixel / cellSize;
+  vec2 cell = floor(grid);
+  vec2 rnd = hash2(cell + seed);
+  float active = step(threshold, hash(cell + seed * 3.17));
+  vec2 pos = 0.16 + 0.68 * rnd;
+  pos += 0.035 * vec2(sin(t * 0.23 + rnd.x * 6.28), cos(t * 0.19 + rnd.y * 6.28));
+  float d = length((fract(grid) - pos) * cellSize);
+  float rr = radius * mix(0.75, 1.15, rnd.y);
+  float disk = 1.0 - smoothstep(rr * 0.45, rr * 1.5, d);
+  float shimmer = 0.85 + 0.15 * sin(t * 0.57 + rnd.y * 6.28);
+  return active * disk * shimmer;
 }
 
 void main() {
   vec2 frag = vec2(gl_FragCoord.x, uResolution.y * uDpr - gl_FragCoord.y) / uDpr;
   vec2 uv = frag / uResolution;
-
-  bool isMobile = uResolution.x < 768.0;
-  vec2 center = vec2(uResolution.x * 0.5, uResolution.y * (isMobile ? 0.43 : 0.44));
-  float orbRadius = min(uResolution.x, uResolution.y) * (isMobile ? 0.36 : 0.265);
-
-  vec2 dVec = frag - center;
-  vec2 p = dVec / orbRadius;
+  bool mobile = uResolution.x < 768.0;
+  vec2 origin = vec2(uResolution.x * 0.5, uResolution.y * (mobile ? 0.43 : 0.44));
+  float orbRadius = min(uResolution.x, uResolution.y) * (mobile ? 0.36 : 0.265);
+  vec2 p = (frag - origin) / max(orbRadius, 1.0);
   float r = length(p);
-
   float t = uTime;
 
-  // ── EKRAN KENARLARI VE METİN KORUMA MASKELERİ ────────────────────────────
-  vec2 cUv = (uv - 0.5) * 2.0;
-  float cornerDist = length(cUv * vec2(0.86, 0.92));
-  float cornerMask = 1.0 - smoothstep(0.88, 1.42, cornerDist);
-  float topEdgeMask = smoothstep(0.0, 0.09, uv.y);
+  // The smoke is born around the orb, spreads broadly, and fades at hero edges.
+  float outward = smoothstep(0.20, 0.83, r);
+  float reach = 1.0 - smoothstep(2.7, 4.8, r);
+  float plume = outward * reach;
+  float edge = smoothstep(0.0, 0.07, uv.x)
+             * smoothstep(0.0, 0.07, 1.0 - uv.x)
+             * smoothstep(0.0, 0.08, uv.y)
+             * smoothstep(0.0, 0.08, 1.0 - uv.y);
 
-  // Sağ alt açıklama metni ve sol alt büyük başlık üzerinde okunabilirliği koru
-  vec2 rightTextZone = (uv - vec2(0.73, 0.77)) / vec2(0.26, 0.21);
-  float rightTextMask = 1.0 - 0.62 * exp(-dot(rightTextZone, rightTextZone) * 1.7);
+  // Readability envelopes: never a hard square-shaped cutout.
+  vec2 titleZone = (uv - vec2(0.22, 0.81)) / vec2(0.27, 0.21);
+  vec2 copyZone  = (uv - vec2(0.76, 0.75)) / vec2(0.28, 0.22);
+  float protectTitle = 1.0 - 0.64 * exp(-dot(titleZone, titleZone) * 1.6);
+  float protectCopy  = 1.0 - 0.64 * exp(-dot(copyZone, copyZone) * 1.6);
+  float mask = edge * protectTitle * protectCopy;
 
-  vec2 leftTitleZone = (uv - vec2(0.22, 0.82)) / vec2(0.26, 0.18);
-  float leftTitleMask = 1.0 - 0.45 * exp(-dot(leftTitleZone, leftTitleZone) * 1.8);
+  // Continuous outward advection with slow domain warp: no frame-to-frame randomness.
+  vec2 radialDir = normalize(p + vec2(0.001, 0.001));
+  vec2 advected = p - radialDir * t * 0.020 + vec2(-t * 0.010, t * 0.006);
+  vec2 warp = vec2(
+    fbm(advected * 0.82 + vec2(2.7, 9.1) + t * 0.009),
+    fbm(advected * 0.82 + vec2(8.2, 3.4) - t * 0.007)
+  ) - 0.5;
+  vec2 cloudUv = advected * 0.76 + warp * 0.82;
+  float broad = fbm(cloudUv * 1.12);
+  float wisps = fbm(cloudUv * 2.12 + vec2(7.1, -3.4));
+  float textureField = 0.74 * broad + 0.26 * wisps;
+  float cloud = smoothstep(0.28, 0.73, textureField);
+  float density = (0.28 + 0.72 * cloud) * plume * mask;
 
-  float zoneMask = cornerMask * topEdgeMask * rightTextMask * leftTitleMask;
+  // Theme-independent intensity. No pink hues in the atmosphere.
+  float fogAmount = clamp(uAmount.x, 0.0, 1.0);
+  float fogAlpha = fogAmount * density * (0.06 + 0.12 * cloud);
 
-  // ── HAFİF VE DOĞAL HOVER SPOTLIGHT MERCEĞİ ──────────────────────────────
-  vec2 toLens = frag - uLens.xy;
-  float lensCore = exp(-dot(toLens, toLens) / sq(uLens.z * 0.95)) * uLens.w;
-  float lensWide = exp(-dot(toLens, toLens) / sq(uLens.z * 2.25)) * uLens.w;
+  vec2 lensDelta = frag - uLens.xy;
+  float lensR = max(uLens.z, 1.0);
+  float focus = exp(-dot(lensDelta, lensDelta) / (lensR * lensR * 1.7)) * uLens.w;
+  float ambientSpot = exp(-dot(lensDelta, lensDelta) / (lensR * lensR * 4.0)) * uLens.w;
+  // Spotlight adds at most a few percent opacity, not additive HDR color.
+  fogAlpha *= 1.0 + 0.30 * focus;
+  fogAlpha += plume * mask * ambientSpot * 0.025;
+  fogAlpha *= 1.0 + 0.04 * uBurst;
 
-  // Sekme değiştiğinde merkezden dışa yayılan yumuşak dalga
-  float burstRadius = 0.75 + (1.0 - uBurst) * 1.55;
-  float burstWave = exp(-sq((r - burstRadius) / 0.42)) * uBurst;
-
-  vec3 col = vec3(0.0);
-
-  // ── 1. DAĞINIK, PARÇALI VE DOĞAL DUMAN BULUTLARI (Multi-Plume Smoke) ────
-  float fogAmount = uAmount.x;
-  float smokeField = 0.0;
-
-  if (fogAmount > 0.001 && zoneMask > 0.002) {
-    // Dumanı tek bir simit gibi küreye yapıştırmak yerine 4 farklı asimetrik
-    // atmosfer lobuna (sol-üst, sağ-üst, sol-alt, merkez-çevre) yayıyoruz:
-    vec2 p1 = (p - vec2(-0.95, -0.35)) / vec2(1.45, 1.05); // Sol üst / tabların arkası
-    vec2 p2 = (p - vec2(0.88, -0.42)) / vec2(1.35, 1.05);  // Sağ üst açılım
-    vec2 p3 = (p - vec2(-0.72, 0.58)) / vec2(1.30, 0.95);  // Sol orta-alt
-    vec2 p4 = (p - vec2(0.55, 0.35)) / vec2(1.15, 0.85);   // Sağ orta
-
-    float lobes = 0.52 * exp(-dot(p1, p1))
-                + 0.46 * exp(-dot(p2, p2))
-                + 0.42 * exp(-dot(p3, p3))
-                + 0.36 * exp(-dot(p4, p4));
-
-    // Küre çevresindeki yumuşak geçiş (küre merkezini boğmaz, dışarı doğru yayılır)
-    float coreHalo = smoothstep(0.15, 0.85, r) * exp(-pow(max(r - 0.70, 0.0) / 1.45, 1.40));
-    float spatialEnvelope = clamp((lobes * 0.72 + coreHalo * 0.58) + lensWide * 0.28 + burstWave * 0.18, 0.0, 1.0) * zoneMask;
-
-    // Farklı yönlere yavaşça süzülen 2 bağımsız FBM duman katmanı
-    vec2 qA = p * 0.68 + vec2(-t * 0.024, -t * 0.018);
-    vec2 warpA = vec2(
-      fbm(qA * 1.20 + vec2(1.7, 9.2) + t * 0.016),
-      fbm(qA * 1.20 + vec2(8.3, 2.8) - t * 0.014)
-    );
-    float cloudA = fbm(qA + 1.30 * warpA);
-
-    vec2 qB = p * 0.52 + vec2(t * 0.019, -t * 0.026);
-    vec2 warpB = vec2(
-      fbm(qB * 1.35 + vec2(4.4, 2.1) - t * 0.015),
-      fbm(qB * 1.35 + vec2(6.1, 7.4) + t * 0.013)
-    );
-    float cloudB = fbm(qB + 1.20 * warpB);
-
-    // Dumanın aynı yerde toplanmasını engelleyen boşluklu parçalama maskesi (carve/pockets)
-    float pockets = smoothstep(0.38, 0.76, cloudA) * (0.35 + 0.65 * smoothstep(0.32, 0.74, cloudB));
-    float wisps = smoothstep(0.46, 0.84, (cloudA + cloudB) * 0.5 + 0.12 * warpA.x);
-
-    smokeField = clamp(pockets * 1.15 + wisps * 0.45, 0.0, 1.0);
-
-    vec3 sideTint = mix(LEFT, RIGHT, smoothstep(-1.6, 1.6, p.x));
-    vec3 fog = (HAZE * 0.26 + BEAM * 0.68) * pockets * spatialEnvelope;
-    fog += sideTint * 0.52 * wisps * spatialEnvelope;
-    fog += EMBER * 0.12 * wisps * (burstWave + 0.35 * coreHalo) * zoneMask;
-
-    // Hover Spotlight: İmlecin gezdiği yerdeki dağınık duman bulutlarını yumuşakça aydınlatır
-    vec3 spotColor = mix(BEAM, WHITE, 0.35);
-    fog += spotColor * (0.14 + 0.45 * smokeField) * lensWide * zoneMask;
-    fog += WHITE * 0.12 * wisps * lensCore * zoneMask;
-
-    col += fog * fogAmount * (1.0 + 0.08 * uBurst);
+  // Very sparse, subtle, monochrome particles (optional glints via .z).
+  float dustAmount = clamp(uAmount.y, 0.0, 1.0);
+  float dotAmount = clamp(uAmount.z, 0.0, 1.0);
+  float dustAlpha = 0.0;
+  if (dustAmount > 0.001 || dotAmount > 0.001) {
+    vec2 pixel = (frag - origin) / max(uScale, 0.35);
+    float fine = subtleDust(pixel + vec2(t * 2.1, -t * 2.6), 38.0, 0.84, 0.8, t, 1.3);
+    float medium = subtleDust(pixel + vec2(-t * 1.4, -t * 1.7), 65.0, 0.91, 1.10, t, 4.7);
+    float rare = subtleDust(pixel + vec2(t * 1.6, t * 1.0), 90.0, 0.95, 1.25, t, 8.9);
+    dustAlpha = (dustAmount * (fine * 0.15 + medium * 0.20)
+                + dotAmount * rare * 0.16) * plume * mask * (0.45 + 0.55 * cloud);
   }
 
-  // ── 2. DAĞINIK DOĞAL TOZ ZERRECİKLERİ (Geniş Alana Yayılan Noktalar) ────
-  float dustAmount = uAmount.y;
-  if (dustAmount > 0.001 && zoneMask > 0.01) {
-    vec2 localPx = dVec / max(uScale, 0.35);
-
-    // Tozlar sadece küre dibinde değil, geniş ekranda ve duman bulutlarının olduğu her yerde gezer
-    float wideSpread = exp(-pow(max(r - 0.55, 0.0) / 1.85, 1.35)) * smoothstep(0.18, 0.65, r);
-    float dustZone = clamp(
-      wideSpread * (0.38 + 0.85 * smokeField) + lensWide * 0.50 + burstWave * 0.22,
-      0.0,
-      1.0
-    ) * zoneMask;
-
-    // Katman 1: Geniş alana dağılmış ince mikro tozlar
-    vec2 pxFine = localPx + vec2(sin(t * 0.22) * 12.0 - t * 3.2, t * 5.0);
-    float fineDust = naturalDustLayer(pxFine, 21.0, 0.62, 1.10, t, 1.3);
-
-    // Katman 2: Duman kümeleriyle birlikte süzülen orta boy parlak noktalar
-    vec2 pxMid = localPx + vec2(-cos(t * 0.18) * 16.0 + t * 2.4, t * 7.8);
-    float midDust = naturalDustLayer(pxMid, 34.0, 0.67, 1.50, t * 0.9, 4.7);
-
-    // Katman 3: Seyrek, yumuşak bokeh tozları (Spotlight ile ekstra belirginleşir)
-    vec2 pxNear = localPx + vec2(sin(t * 0.15 + 1.4) * 20.0, t * 10.5);
-    float nearDust = naturalDustLayer(pxNear, 50.0, 0.75, 2.10, t * 0.8, 8.9);
-
-    vec3 dustCol = mix(WHITE, PINK, 0.38) * fineDust * 0.50;
-    dustCol += mix(WHITE, WARM, 0.24) * midDust * 0.76;
-    dustCol += mix(WHITE, BEAM, 0.30) * nearDust * (0.42 + 0.85 * lensWide + 0.55 * lensCore);
-
-    col += dustCol * dustZone * dustAmount;
-  }
-
-  // ── TONLAMA (Dark & Light Mode) ─────────────────────────────────────────
-  vec3 emit = 1.0 - exp(-col * mix(0.95, 0.60, uTheme));
-  float peak = max(emit.r, max(emit.g, emit.b));
-
-  if (uTheme > 0.5) {
-    float alpha = clamp(pow(peak, 1.12) * 0.80, 0.0, 0.68);
-    vec3 lightTint = mix(vec3(0.98, 0.38, 0.49), vec3(0.96, 0.24, 0.37), clamp(peak * 1.4, 0.0, 1.0));
-    gl_FragColor = vec4(lightTint * alpha, alpha);
-  } else {
-    gl_FragColor = vec4(emit, clamp(peak, 0.0, 1.0));
-  }
+  float alpha = clamp(fogAlpha + dustAlpha, 0.0, 0.21);
+  // Correct premultiplied alpha for gl.blendFunc(ONE, ONE_MINUS_SRC_ALPHA).
+  vec3 ink = mix(vec3(1.0), vec3(0.06), uTheme);
+  gl_FragColor = vec4(ink * alpha, alpha);
 }
 `;
 
@@ -584,8 +493,8 @@ export function VoiceOrb({
   tone,
   mode = DEFAULT_MODE,
   color = "#f43f5e",
-  fog = 0.85,
-  dust = 1.2,
+  fog = 0.60,
+  dust = 0.28,
   dots = 0,
   className,
 }: VoiceOrbProps) {
@@ -781,7 +690,7 @@ export function VoiceOrb({
       lens.x += (pointer.x - lens.x) * lensFollow;
       lens.y += (pointer.y - lens.y) * lensFollow;
 
-      const goal = pointer.inside ? 0.34 : 0;
+      const goal = pointer.inside ? 0.23 : 0;
       lens.strength +=
         (goal - lens.strength) *
         (1 - Math.exp(-dt / (goal > lens.strength ? 0.22 : 0.48)));
@@ -907,13 +816,9 @@ export function VoiceOrb({
       const nx = (x / r.width) * 2 - 1;
       const ny = -((y / r.height) * 2 - 1);
 
-      const mobile = r.width < 768;
-      const orbRadius = Math.min(r.width, r.height) * (mobile ? 0.36 : 0.265);
-      const dx = x - r.width * 0.5;
-      const dy = y - r.height * (mobile ? 0.43 : 0.44);
-
       pointer.inside =
-        e.pointerType !== "touch" && Math.hypot(dx, dy) <= orbRadius * 2.45;
+        e.pointerType !== "touch" &&
+        x >= 0 && x <= r.width && y >= 0 && y <= r.height;
       pointer.tx = clamp(nx, -1, 1);
       pointer.ty = clamp(ny, -1, 1);
     };

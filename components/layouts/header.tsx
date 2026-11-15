@@ -154,7 +154,7 @@ export function SiteHeader() {
       <div
         data-header-surface
         className={cn(
-          'pointer-events-auto w-full border-b transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
+          'pointer-events-auto w-full transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
           surfaced
             ? 'border-border/50 bg-background/82 shadow-[0_10px_36px_rgba(0,0,0,0.05)] backdrop-blur-2xl dark:border-white/[0.07] dark:bg-[#08080a]/82 dark:shadow-[0_12px_40px_rgba(0,0,0,0.38)]'
             : 'border-transparent bg-transparent shadow-none backdrop-blur-none',
@@ -162,7 +162,7 @@ export function SiteHeader() {
       >
         <div
           data-header-content
-          className="container-page flex h-[var(--header-h)] items-center justify-between gap-4"
+          className="container-page flex h-[var(--header-h)] mx-auto items-center justify-between gap-4"
         >
           <div className="flex min-w-0 items-center gap-6">
             <Link
@@ -279,11 +279,11 @@ export function SiteHeader() {
                             reduce
                               ? false
                               : {
-                                  opacity: 0,
-                                  y: 8,
-                                  scale: 0.97,
-                                  filter: 'blur(4px)',
-                                }
+                                opacity: 0,
+                                y: 8,
+                                scale: 0.97,
+                                filter: 'blur(4px)',
+                              }
                           }
                           animate={{
                             opacity: 1,
@@ -295,11 +295,11 @@ export function SiteHeader() {
                             reduce
                               ? { opacity: 0 }
                               : {
-                                  opacity: 0,
-                                  y: 4,
-                                  scale: 0.985,
-                                  filter: 'blur(2px)',
-                                }
+                                opacity: 0,
+                                y: 4,
+                                scale: 0.985,
+                                filter: 'blur(2px)',
+                              }
                           }
                           transition={{
                             duration: reduce ? 0 : 0.24,
