@@ -59,7 +59,7 @@
     "sonner": "^2.0.8",
     "swr": "^2.5.1",
     "tailwind-merge": "^3.7.0",
-    "three": "^0.186.1",
+    "three": "^0.187.0",
     "tw-animate-css": "^1.4.0"
   },
   "devDependencies": {
@@ -69,7 +69,7 @@
     "@types/node": "^26",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@types/three": "^0.186.0",
+    "@types/three": "^0.187.0",
     "drizzle-kit": "^0.31.11",
     "eslint": "^10",
     "eslint-config-next": "^16.4.5",
