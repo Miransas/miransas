@@ -41,3 +41,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Rust build output
+/target/
+
+# Python environments and build output
+.venv/
+__pycache__/
+*.py[cod]
+/python/dist/
