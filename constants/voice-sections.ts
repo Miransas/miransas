@@ -14,7 +14,7 @@ export const VOICE_STEPS = [
     icon: Mic2,
     eyebrow: 'Speech and identity',
     title: 'Give the voice a purpose.',
-    description: 'Miralas is developing voice cloning and multilingual speech, with native Uzbek at the center. The visual study beside this text illustrates that direction.',
+    description: 'Miralas is developing permission-based voice cloning and multilingual speech. Uzbek Speech Research — In Development. The visual study illustrates that direction.',
     highlights: ['Voice cloning requires permission from the voice owner.', 'Model notes explain the open-source tools behind the work.', 'Streaming audio is part of the integration direction.'],
   },
   {
@@ -23,6 +23,6 @@ export const VOICE_STEPS = [
     eyebrow: 'Recorded demonstration',
     title: 'Hear a voice. See the flow.',
     description: 'Play a recorded Miralas voice sample and explore an illustrative processing sequence. This demonstration does not call a live model or a production backend.',
-    highlights: ['A real audio file with playback, seeking and download controls.', 'The transcript and processing steps are a presentation of the workflow.', 'Product availability and engineering updates are published in News.'],
+    highlights: ['A recorded audio file with playback, seeking and download controls.', 'The workflow text and processing steps illustrate the experience.', 'Product availability and engineering updates are published in News.'],
   },
 ];

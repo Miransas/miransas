@@ -10,12 +10,16 @@ import StickySplitSection from '@/components/shared/StickySplitSection';
 import { HeroTransition } from '@/components/shared/hero-transition';
 import { NewHero } from '@/components/shared/new-hero';
 import { EngineeringVisualSection } from '@/components/shared/engineering-visual-section';
+import { EngineeringReality, ModelResearch, VoiceInfrastructure } from '@/components/shared/engineering-progress';
 
 export default function HomePage() {
   return (
     <>
       <HeroTransition><NewHero /></HeroTransition>
       <StickySplitSection />
+      <EngineeringReality />
+      <ModelResearch />
+      <VoiceInfrastructure />
       <Timeline />
       <ScrollText />
       <AiTeamSection />

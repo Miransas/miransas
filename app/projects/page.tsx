@@ -32,7 +32,7 @@ export default function ProjectsPage() {
             <h2 id="miralas-title" className="mt-5 text-5xl font-medium tracking-tight sm:text-6xl">
               Miralas
             </h2>
-            <p className="text-muted-foreground mt-6 max-w-xl text-base leading-8">Native Uzbek voice AI for streamers and content creators. Voice cloning, text-to-speech and speech-to-speech are the core areas of development.</p>
+            <p className="text-muted-foreground mt-6 max-w-xl text-base leading-8">Voice AI in development for streamers and content creators. Multilingual text-to-speech is the current baseline. Uzbek speech and speech-to-speech remain research directions.</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <PageAction href="/news/miralas-status">Read the development update</PageAction>
               <PageAction href="https://miralas.io">Visit Miralas</PageAction>

@@ -15,7 +15,7 @@ const tabs = [
   {
     id: 'cloning',
     label: 'Voice Cloning',
-    copy: 'Explore voice identity from an authorized reference recording.',
+    copy: 'Permission-based voice cloning architecture is in development.',
     videoUrl: 'https://res.cloudinary.com/dwdk20m6q/video/upload/v1788896592/6491689-uhd_4096_2160_25fps_neo9ck.mp4',
   },
   {
@@ -26,8 +26,8 @@ const tabs = [
   },
   {
     id: 'infrastructure',
-    label: 'Low Latency',
-    copy: 'Built around streaming audio and developer-focused infrastructure.',
+    label: 'Infrastructure',
+    copy: 'A Rust API connects to the Python voice engine over gRPC.',
     videoUrl: 'https://res.cloudinary.com/dwdk20m6q/video/upload/v1788895956/infra-demo_ftsho7.mov',
   },
 ] as const;

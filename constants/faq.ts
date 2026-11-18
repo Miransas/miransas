@@ -6,7 +6,7 @@ export const groups = {
     { q: 'Where can I follow the work?', a: 'Read Miransas News for engineering notes and product updates, or subscribe to its RSS feed. Existing published articles remain the record of earlier announcements.' },
   ],
   'Voice & Development': [
-    { q: 'Why focus on Uzbek?', a: 'Native Uzbek voice experiences are a central goal of Miralas. Language coverage depends on the model and release; the Models page distinguishes upstream model capabilities from Miransas product plans.' },
+    { q: 'Why focus on Uzbek?', a: 'Uzbek Speech Research — In Development. We are building toward native Uzbek speech support. The current Chatterbox baseline covers 23 languages and excludes Uzbek. See Models for the current engineering baseline.' },
     { q: 'Are the demonstrations connected to a live model?', a: 'The homepage includes a recorded audio sample, visual studies and illustrative interfaces. They are labeled as demonstrations and do not represent a live production backend.' },
     { q: 'Is there a public API or SDK?', a: 'A public Miralas API is planned but is not open for access. No released SDK or public endpoint is advertised here. The Developers page links to the resources available today.' },
   ],

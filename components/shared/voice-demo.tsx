@@ -7,7 +7,7 @@ import AILoader from '../smoothui/ai-loader';
 
 const THINKING_STEPS = ['Example step: inspect the audio input...', 'Example step: prepare voice features...', 'Example step: select a voice configuration...', 'Example step: present the recorded audio sample...'];
 
-const FULL_SPEECH = 'Assalomu alaykum! Miransas neural voice model is active. High-fidelity speech synthesis for Uzbek and multilingual evaluation is now streaming live.';
+const FULL_SPEECH = 'Recorded Miralas audio sample. This illustrative workflow accompanies a prerecorded file. Uzbek speech support is in research and development.';
 
 const AUDIO_SRC = '/tts-actor-miralas.mp3';
 
@@ -148,11 +148,11 @@ export default function LiveVoiceStream() {
             <button aria-expanded={isThoughtOpen} aria-label="Toggle demonstration steps" type="button" onClick={() => setIsThoughtOpen(!isThoughtOpen)} className="hover:bg-secondary flex w-full items-center justify-between px-3.5 py-2.5 transition-colors">
               <div className="flex items-center gap-2">
                 {isThinking ? (
-                  <AILoader variant="grid" label="Thinking" showElapsed={true} className="text-foreground font-mono text-[11px]" />
+                  <AILoader variant="grid" label="Demo sequence" showElapsed={true} className="text-foreground font-mono text-[11px]" />
                 ) : (
                   <div className="text-muted-foreground flex items-center gap-1.5 font-mono text-[11px]">
                     <Check className="text-foreground size-3.5" />
-                    <span>Thought for {finalThoughtTime}s</span>
+                    <span>Demo sequence · {finalThoughtTime}s</span>
                   </div>
                 )}
               </div>
@@ -163,12 +163,12 @@ export default function LiveVoiceStream() {
             {isThoughtOpen && <div className="border-border text-muted-foreground border-t px-3.5 pt-1 pb-3 font-mono text-[11px] leading-relaxed whitespace-pre-wrap">{thinkingText}</div>}
           </div>
 
-          {/* SES / TRANSCRIPT BLOĞU */}
+          {/* Illustrative workflow copy accompanying the recording. */}
           {speechText && (
             <div className="flex flex-col items-start space-y-2 pt-2">
               <div className="text-muted-foreground flex items-center gap-2 font-mono text-[10px]">
                 <AudioLines className="text-foreground animate-pulse" size={16} />
-                <span>MIRALAS AUDIO SAMPLE</span>
+                <span>RECORDED SAMPLE · ILLUSTRATIVE WORKFLOW</span>
               </div>
 
               <div className="bg-secondary border-border text-foreground relative w-full space-y-4 rounded-2xl rounded-tl-xs border p-4 text-[13px] leading-relaxed shadow-sm">

@@ -8,8 +8,8 @@ export const Bentoitems = [
   },
   {
     tag: 'Studio TTS',
-    title: 'Speech, with Uzbek at its center.',
-    body: 'Miralas brings together text-to-speech, voice research and the infrastructure around them. Native Uzbek speech is a central part of that work.',
+    title: 'Speech research, with Uzbek in view.',
+    body: 'Miralas brings together multilingual text-to-speech and voice infrastructure. Uzbek Speech Research — In Development.',
     aside: 'Models, interfaces and infrastructure, considered together.',
     visual: 'tts',
   },
@@ -17,7 +17,7 @@ export const Bentoitems = [
     tag: 'Voice Clone',
     title: 'A voice, with permission.',
     body: 'Explore how a reference recording can inform a distinct voice identity. Voice ownership and clear permission are part of the design from the start.',
-    aside: 'Authorized voices. Clear intent.',
+    aside: 'Permission-based architecture · in development.',
     visual: 'clone',
   },
 ];

@@ -68,7 +68,7 @@ export function SiteFooter() {
             </Link>
 
             {/* Açıklama (Çift yazım düzeltildi) */}
-            <p className="text-muted-foreground mb-6 text-sm leading-relaxed">Building next-generation voice AI and real-time audio intelligence infrastructure for modern applications.</p>
+            <p className="text-muted-foreground mb-6 text-sm leading-relaxed">Building voice AI, researching Uzbek speech and developing the infrastructure behind them.</p>
 
             {/* Sosyal İkonlar */}
             <div className="mb-8 flex items-center gap-2.5">

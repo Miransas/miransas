@@ -1,6 +1,6 @@
-Miralas is our native Uzbek-speaking AI voice platform for streamers and content creators. It focuses on three things: **voice cloning**, **text-to-speech (TTS)** and **speech-to-speech (STS)**.
+Miralas is our voice AI platform in development for streamers and content creators. Multilingual **text-to-speech (TTS)** is the current baseline. Permission-based **voice cloning** is in development, while **Uzbek speech** and **speech-to-speech (STS)** remain research directions.
 
-Here is where the project stands today.
+Engineering status updated on 18 November 2026.
 
 ## What exists
 
@@ -27,20 +27,20 @@ The Rust API handles auth, limits and routing. The Python worker handles the mod
 
 ## Choosing the model
 
-We tested several open-source models. Chatterbox Multilingual V2 produced Turkish with a heavy accent. Chatterbox Multilingual V3 fixed this, and Turkish pronunciation went from poor to very good. For English, Turkish and Russian, **Chatterbox V3 is now our production base**. You can read the full breakdown on the [models page](/models).
+The current engine is Chatterbox Multilingual TTS, with the approved `t3_mtl23ls_v2.safetensors` checkpoint and 23 model languages. Historical V3 branding does not prove use of a V3 checkpoint. The Rust API and Python gRPC integration has been verified with 24 kHz mono PCM16 output. Read the [model notes](/models) for the current baseline.
 
 ## The Uzbek problem
 
-Uzbek is not among the 23 official languages of Chatterbox, and most other tools do not support it well either. That is exactly why Miralas exists. We are training our own Uzbek model, and training on rented GPUs started in October 2026. Alongside it we work with other open-source models, such as Llasa-3B.
+Uzbek Speech Research — In Development. Building toward native Uzbek speech support remains a long-term priority. Uzbek is outside the current inference language set. Language-specific testing and evaluation will inform future work, including exploration of additional TTS engines.
 
 <Callout type="warning">
-  Uzbek quality depends on the voice recordings we collect. The model can only be as good as the
-  voices it learns from.
+  Real NVIDIA GPU performance remains unmeasured. Docker development and benchmark infrastructure
+  is implemented. Public curated voices remain at zero verified entries in the current baseline.
 </Callout>
 
 ## What comes next
 
-1. Finish the Uzbek model and the first licensed voice profiles.
+1. Continue Uzbek speech research, model evaluation and permission-based voice profile work.
 2. Open a free beta so early users can try it and give feedback.
 3. Launch paid plans once the engine and voices are ready.
 4. Build the voice agent on top of the Miralas core.

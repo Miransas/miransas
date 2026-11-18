@@ -2,6 +2,19 @@
   The [upstream repository](https://github.com/resemble-ai/chatterbox) now describes Chatterbox as retired research. Its code remains available under MIT. These notes describe the model family, not an upstream support commitment or a released Miransas API.
 </Callout>
 
+## Current Miralas engineering baseline
+
+Chatterbox Multilingual TTS is the current engine. The approved checkpoint is `t3_mtl23ls_v2.safetensors`. Historical V3 branding does not identify the checkpoint in use.
+
+- **23 model languages.** Uzbek Speech Research — In Development. Uzbek is outside the current inference language set.
+- **24 kHz mono PCM16.** The Rust API and Python gRPC worker integration has been verified in development.
+- **Model artifact validation.** Approved files are pinned and checked before loading.
+- **Docker development and benchmark infrastructure.** Implemented, with real NVIDIA GPU performance measurement still pending.
+- **Voice Catalog.** Architecture implemented, with zero verified public curated voices published in the current baseline.
+- **Voice cloning.** Permission-based architecture in development. Public availability depends on product readiness.
+
+Language-specific listening and model evaluation remain ongoing work. Additional speech engines are a future research direction. The model-family reference below describes upstream options.
+
 ## Chatterbox at a Glance
 
 | Feature | Value |
@@ -37,12 +50,12 @@ Chatterbox is not a single model. It is a **family**, split by use case.
 | --- | --- | --- | --- | --- |
 | **Chatterbox (English)** | ~500M | English | CFG and emotion (exaggeration) control | High-quality English narration |
 | **Chatterbox-Turbo** | ~350M | English | Low latency, lower VRAM, paralinguistic tags | Real-time voice agents |
-| **Chatterbox-Multilingual** | ~500M | 23+ | Multilingual zero-shot cloning | Localization, global products |
+| **Chatterbox-Multilingual** | ~500M | 23 | Multilingual zero-shot cloning | Localization, global products |
 | **Chatterbox-Nano** | ~110M | English | Same architecture as Turbo, built for on-device/CPU | Resource-constrained environments |
 
 <Callout type="info">
-  The latest release of Chatterbox Multilingual is listed as **V3** in the official repository. When
-  installing, check the package version and checkpoint selection in the upstream example.
+  Miralas uses the approved `t3_mtl23ls_v2.safetensors` checkpoint. Checkpoint identity is established
+  by the artifact manifest and validation, independently of historical V3 branding.
 </Callout>
 
 ### Which variant should we pick?

@@ -110,3 +110,34 @@ Final browser results are recorded in `/tmp/miransas-completion/final-browser-re
 One existing raw-image optimization warning remains for the robot artwork. The newly added, currently unreferenced `CrystalizedBall.tsx` was preserved for the ongoing workspace work. Tests use real Chrome with emulated viewport widths; physical devices and Safari/iOS were not tested. Public product/backend availability is unchanged, and no new functioning API, job application service or contact backend is claimed. External service availability is not a live assertion by this website.
 
 The pre-existing working-tree edits and newly supplied logo assets were retained. Earlier restoration results are historical; this completion report is the current handoff.
+
+
+## Content and motion refinement — 18 November 2026
+
+This entry supersedes earlier verification statements for the changes described here.
+
+### Engineering evidence
+
+Reviewed the local Miralas Console checkout at HEAD `a86738f`, including its current worker capability manifest, worker README and engineering documentation. The baseline is Chatterbox Multilingual TTS, 23 model languages, `t3_mtl23ls_v2.safetensors`, and 24 kHz mono PCM16. The documented Rust/Python gRPC integration and model artifact checks establish development progress. Historical V3 branding does not establish checkpoint identity.
+
+Evidence reviewed in that checkout includes `tts-worker/src/tts_worker/pb/chatterbox_languages.json`, `tts-worker/README.md`, `docs/model-artifact-integrity.md`, `docs/docker-development.md`, `docs/voice-catalog.md`, `docs/voice-assets-validation.md` and `docs/gpu-image.md`.
+
+### Delivered changes
+
+- Added Engineering Reality, Model Research and Infrastructure sections in `components/shared/engineering-progress.tsx`, composed through `app/page.tsx`.
+- Refined the existing `Reveal` and added `TextReveal` in `components/shared/reval.tsx`. Content is visible in server HTML. Viewport entry starts a one-time opacity/translation reveal, with adjustable duration and delay. Repeated items stagger through per-item delays. Mobile translation is smaller. Reduced motion stops playback and restores the final state.
+- Added a short scroll-driven pipeline trace in `app/globals.css`, enabled on desktop when supported and motion is permitted. Smaller screens use a vertical pipeline.
+- Corrected Uzbek availability and development wording in `components/shared/new-hero.tsx`, `components/shared/StickySplitSection.tsx`, `components/shared/feature.tsx`, `components/layouts/footer.tsx`, `constants/bento.ts`, `constants/voice-sections.ts`, `constants/faq.ts` and `constants/news.ts`.
+- Updated `app/models/models.mdx`, `app/developers/developers.mdx`, `app/projects/page.tsx` and `app/support/support.mdx` with the current baseline and research status.
+- Corrected historical product claims in `content/news/miralas-status.mdx`, `content/news/built-so-far.mdx` and `content/news/voice-agent.mdx`.
+- Replaced the live Uzbek synthesis claim in `components/shared/voice-demo.tsx` with clearly illustrative workflow copy accompanying the existing recording.
+
+### Verification and limits
+
+ESLint and TypeScript completed with exit 0. ESLint reports three existing warnings in the footer, RobotEyes and voice-orb. The production build passed on Next.js 16.4.6, including all 26 static-page generation tasks. Commands used the process-local `pnpm_config_verify_deps_before_run=false` setting after installing the unchanged lockfile dependencies. The initial sandboxed build stalled during compilation. A retry with compiler and network access completed successfully.
+
+The production HTML audit checks the three labeled sections, unique section heading IDs, baseline text, pipeline steps and visible server-rendered Reveal content. `git diff --check` is part of the final review. The repository has no component test suite or test script.
+
+Desktop, tablet, mobile, theme-switch and reduced-motion browser behavior remain visually unverified in this run. The browser access host was unavailable and native Chrome access reported that Computer Use permissions were not granted. The responsive and reduced-motion behavior above was reviewed in source. Earlier browser reports describe earlier revisions.
+
+Remaining engineering work includes real NVIDIA GPU measurement, language-specific listening and evaluation, Uzbek speech support and verification/publication of curated voices. Public curated voices remain at zero verified entries in the reviewed baseline. This website refinement does not establish production performance or public voice cloning availability.

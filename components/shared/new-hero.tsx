@@ -34,7 +34,7 @@ const ITEMS: {
     label: 'Voice Cloning',
     kicker: '01 / VOICE IDENTITY',
     description:
-      'A familiar voice, with a distinct identity. Explore the possibilities of consent-based voice cloning.',
+      'A familiar voice, with a distinct identity. Explore our permission-based voice cloning work in development.',
     href: '/projects#miralas',
     icon: Mic,
     mode: { amp: 0.42, freq: 1.08, speed: 0.75 },
@@ -72,7 +72,7 @@ const COPY = {
   eyebrow: 'INDEPENDENT VOICE AI LAB',
   gradientTitle: 'Your Voice.\nYour Language.',
   solidTitle: 'Built to Last.',
-  text: 'Native Uzbek voice AI and the infrastructure behind it. Built with care by an independent engineering studio.',
+  text: 'Voice AI research and the infrastructure behind it. Building toward native Uzbek speech support.',
 };
 
 export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {

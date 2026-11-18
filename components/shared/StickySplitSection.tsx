@@ -89,28 +89,28 @@ const capabilities = [
     category: 'SPEECH RECOGNITION',
     title: 'Speech to Text',
     description:
-      'Convert spoken audio into text for transcription, search, and voice-driven workflows.',
+      'Explore speech recognition for transcription, search, and voice-driven workflows as part of our research direction.',
   },
   {
     number: '03',
     category: 'VOICE IDENTITY',
     title: 'Voice Cloning',
     description:
-      'Build voice experiences around a consistent voice identity, with permission from the voice owner.',
+      'We are developing voice identity workflows that require permission from the voice owner.',
   },
   {
     number: '04',
-    category: 'LIVE AUDIO',
-    title: 'Real-time Voice',
+    category: 'CONVERSATIONAL RESEARCH',
+    title: 'Interactive Voice',
     description:
-      'Create interactive experiences where audio can move through your product in real time.',
+      'We are researching how speech and conversation can work together in interactive applications.',
   },
   {
     number: '05',
     category: 'DEVELOPER INFRASTRUCTURE',
     title: 'API & Infrastructure',
     description:
-      'Connect voice capabilities to your applications through a developer-focused integration layer.',
+      'A Rust API and Python voice worker are connected over gRPC. Public developer access remains in development.',
   },
 ];
 

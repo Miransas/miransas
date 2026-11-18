@@ -61,7 +61,7 @@ export const NEWS: NewsItem[] = [
     slug: "miralas-status",
     title: "Miralas: where we are",
     summary:
-      "Native Uzbek voice AI. What exists, how it works, and what comes next.",
+      "Multilingual voice infrastructure and Uzbek speech research. Current progress and next steps.",
     date: "2026-11-01T16:00:00+03:00",
     author: "sardor",
     tags: ["Miralas", "Voice"],

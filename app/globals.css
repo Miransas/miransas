@@ -256,6 +256,28 @@ html[data-magicui-theme-vt='active']::view-transition-group(root) {
   animation: waveform 1.4s ease-in-out infinite;
 }
 
+/* A short viewport-triggered trace illustrates the connection between layers. */
+@keyframes pipeline-trace {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(400%); }
+}
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .pipeline-line::after {
+      content: '';
+      position: absolute;
+      inset-block: 0;
+      left: 0;
+      width: 25%;
+      background: var(--foreground);
+      opacity: 0.45;
+      animation: pipeline-trace linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 50%;
+    }
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
