@@ -38,6 +38,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.85,
     },
     {
+      url: `${SITE_URL}/support`,
+      lastModified: newestNews,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
       url: `${SITE_URL}/developers`,
       lastModified: newestNews,
       changeFrequency: 'monthly',
@@ -56,22 +62,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.75,
     },
     {
-      url: `${SITE_URL}/lab/visuals`,
+      url: `${SITE_URL}/contact`,
       lastModified: newestNews,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
-      url: `${SITE_URL}/support`,
+      url: `${SITE_URL}/lab/visuals`,
       lastModified: newestNews,
       changeFrequency: 'monthly',
-      priority: 0.65,
-    },
-    {
-      url: `${SITE_URL}/contact`,
-      lastModified: newestNews,
-      changeFrequency: 'monthly',
-      priority: 0.65,
+      priority: 0.7,
     },
     {
       url: `${SITE_URL}/careers`,
