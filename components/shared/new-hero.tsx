@@ -181,14 +181,14 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
           <VoiceOrb
             tone={orbTone} // sabit istersen "dark" veya "light"
             mode={{
-              amp: 1.20,   // dalga yüksekliği / kürenin açılıp dağılması
+              amp: 0.70,   // dalga yüksekliği / kürenin açılıp dağılması
               freq: 1.44,  // dalga sıklığı / kırışıklık detay sayısı
               speed: 1.72, // dönüş + duman akış hızı
             }}
             color="#0d4bfa"
-            fog={0.85}     // mavi duman yoğunluğu (0.0 – 2.0)
-            dust={0.38}    // süzülen ince toz parçacıkları (0.0 – 2.0)
-            dots={0.12}    // seyrek parlak noktalar (0.0 – 2.0)
+            fog={1.25}     // mavi duman yoğunluğu (0.0 – 2.0)
+            dust={1.38}    // süzülen ince toz parçacıkları (0.0 – 2.0)
+            dots={1.12}    // seyrek parlak noktalar (0.0 – 2.0)
             className="absolute inset-0"
           />
         )}

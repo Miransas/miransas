@@ -50,7 +50,7 @@ const ITEMS: {
   ];
 
 const COPY = {
-  eyebrow: "INDEPENDENT VOICE AI LAB",
+  eyebrow: "",
   title: "Your Voice.\nYour Language.\nBuilt to Last.",
   text: "Native Uzbek voice AI and the infrastructure behind it. Built with care by an independent engineering studio.",
 };

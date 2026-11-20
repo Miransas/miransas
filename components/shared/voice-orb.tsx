@@ -16,94 +16,11 @@ type VoiceOrbProps = {
 
 const DEFAULT_MODE: OrbMode = { amp: 0.40, freq: 1.04, speed: 0.72 };
 
-const TINTS: [number, number][] = [
-  [0, 1],
-  [-11.5, 0.77],
-  [9.5, 0.95],
-  [-53.5, 0.79],
-  [39.5, 0.77],
-  [16, 0.81],
-  [-16.3, 0.92],
-  [13.3, 0.96],
-  [3, 1.01],
-  [1, 0.68],
-  [1, 1.15],
-  [142.5, 0.51],
-  [113.6, 0.28],
-  [-7.5, 0.13],
-  [-2.7, 0.32],
-  [7.5, 0.81],
-];
-
-const BASE_SATURATION = 0.78;
-
-const hexToRgb = (value: string): [number, number, number] => {
-  const raw = value.trim().replace(/^#/, "");
-  const hex = /^[0-9a-f]{3}$/i.test(raw)
-    ? raw
-        .split("")
-        .map((ch) => ch + ch)
-        .join("")
-    : raw;
-  if (!/^[0-9a-f]{6}$/i.test(hex)) return [0.957, 0.247, 0.369];
-  return [
-    parseInt(hex.slice(0, 2), 16) / 255,
-    parseInt(hex.slice(2, 4), 16) / 255,
-    parseInt(hex.slice(4, 6), 16) / 255,
-  ];
-};
-
 const clamp = (v: number, min: number, max: number) =>
   Math.min(max, Math.max(min, v));
 
-const toHsv = ([r, g, b]: number[]): [number, number] => {
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  const delta = max - min;
-  let hue = 0;
-  if (delta > 0) {
-    if (max === r) hue = ((g - b) / delta) % 6;
-    else if (max === g) hue = (b - r) / delta + 2;
-    else hue = (r - g) / delta + 4;
-  }
-  return [(hue * 60 + 360) % 360, max > 0 ? delta / max : 0];
-};
-
-const fromHsv = (hue: number, saturation: number): number[] => {
-  const h = (((hue % 360) + 360) % 360) / 60;
-  const c = saturation;
-  const x = c * (1 - Math.abs((h % 2) - 1));
-  const m = 1 - c;
-  const [r, g, b] =
-    h < 1
-      ? [c, x, 0]
-      : h < 2
-        ? [x, c, 0]
-        : h < 3
-          ? [0, c, x]
-          : h < 4
-            ? [0, x, c]
-            : h < 5
-              ? [x, 0, c]
-              : [c, 0, x];
-  return [r + m, g + m, b + m];
-};
-
-const buildTints = (rgb: number[]) => {
-  const [hue, saturation] = toHsv(rgb);
-  const strength = saturation / BASE_SATURATION;
-  const data = new Float32Array(TINTS.length * 3);
-  TINTS.forEach(([shift, scale], index) => {
-    data.set(
-      fromHsv(hue + shift, clamp(BASE_SATURATION * scale * strength, 0, 1)),
-      index * 3,
-    );
-  });
-  return data;
-};
-
 // ══════════════════════════════════════════════════════════════════════════
-// PASS 1: NÖTR, DÜŞÜK KONTRASTLI DUMAN + SEYREK TOZ + SPOTLIGHT
+// PASS 1: #0d4bfa BLUE SMOKE & LUMINOUS DUST AROUND THE SPHERE
 // ══════════════════════════════════════════════════════════════════════════
 const ATMOS_VERT = /* glsl */ `
 attribute vec2 aPosition;
@@ -120,9 +37,9 @@ uniform float uDpr;
 uniform float uScale;
 uniform float uTime;
 uniform float uBurst;
-uniform vec4 uLens;    // x, y, radius, strength
-uniform vec3 uAmount;  // fog, dust, optional extra glints
-uniform float uTheme;  // 0: dark; 1: light
+uniform vec4 uLens;   // pointer x, y, radius, strength (CSS px)
+uniform vec3 uAmount; // fog, dust, dots
+uniform float uTheme; // 0 dark, 1 light
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -130,123 +47,122 @@ float hash(vec2 p) {
   return fract(p.x * p.y);
 }
 
-vec2 hash2(vec2 p) {
-  return vec2(hash(p + vec2(1.7, 9.2)), hash(p + vec2(8.3, 2.8)));
-}
-
 float noise(vec2 p) {
   vec2 i = floor(p);
   vec2 f = fract(p);
   vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(
-    mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
-    mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
-    u.y
-  );
+  return mix(mix(hash(i), hash(i + vec2(1.0, 0.0)), u.x),
+             mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x), u.y);
 }
 
 float fbm(vec2 p) {
   float v = 0.0;
   float a = 0.5;
   mat2 m = mat2(1.6, 1.2, -1.2, 1.6);
-  for (int i = 0; i < 4; i++) {
+  for (int i = 0; i < 5; i++) {
     v += a * noise(p);
     p = m * p;
     a *= 0.5;
   }
-  return v / 0.9375;
+  return v;
 }
 
-// Dim, stable, round specks; no bright halo or full on/off twinkle.
-float subtleDust(vec2 pixel, float cellSize, float threshold, float radius, float t, float seed) {
-  vec2 grid = pixel / cellSize;
-  vec2 cell = floor(grid);
-  vec2 rnd = hash2(cell + seed);
-  float active = step(threshold, hash(cell + seed * 3.17));
-  vec2 pos = 0.16 + 0.68 * rnd;
-  pos += 0.035 * vec2(sin(t * 0.23 + rnd.x * 6.28), cos(t * 0.19 + rnd.y * 6.28));
-  float d = length((fract(grid) - pos) * cellSize);
-  float rr = radius * mix(0.75, 1.15, rnd.y);
-  float disk = 1.0 - smoothstep(rr * 0.45, rr * 1.5, d);
-  float shimmer = 0.85 + 0.15 * sin(t * 0.57 + rnd.y * 6.28);
-  return active * disk * shimmer;
+float particle(vec2 pixel, float spacing, float threshold, float radius, float t, float seed) {
+  vec2 cell = floor(pixel / spacing);
+  vec2 randomPos = vec2(hash(cell + seed), hash(cell + seed + 13.7));
+  vec2 local = fract(pixel / spacing);
+  vec2 pos = 0.18 + randomPos * 0.64;
+  float dist = length((local - pos) * spacing);
+  float on = step(threshold, hash(cell + seed * 3.7));
+  float softness = 1.0 - smoothstep(radius * 0.45, radius * 1.7, dist);
+  float breathe = 0.87 + 0.13 * sin(t * 0.7 + randomPos.x * 6.283);
+  return on * softness * breathe;
 }
 
 void main() {
   vec2 frag = vec2(gl_FragCoord.x, uResolution.y * uDpr - gl_FragCoord.y) / uDpr;
   vec2 uv = frag / uResolution;
   bool mobile = uResolution.x < 768.0;
+
+  // Aligned with ORB_VERT centerY and behind-orb MIRANSAS wordmark
   vec2 origin = vec2(uResolution.x * 0.5, uResolution.y * (mobile ? 0.43 : 0.44));
-  float orbRadius = min(uResolution.x, uResolution.y) * (mobile ? 0.36 : 0.265);
-  vec2 p = (frag - origin) / max(orbRadius, 1.0);
+  float radius = uResolution.y * (mobile ? 0.36 : 0.265);
+  vec2 p = (frag - origin) / max(radius, 1.0);
   float r = length(p);
   float t = uTime;
 
-  // The smoke is born around the orb, spreads broadly, and fades at hero edges.
-  float outward = smoothstep(0.20, 0.83, r);
-  float reach = 1.0 - smoothstep(2.7, 4.8, r);
-  float plume = outward * reach;
-  float edge = smoothstep(0.0, 0.07, uv.x)
-             * smoothstep(0.0, 0.07, 1.0 - uv.x)
-             * smoothstep(0.0, 0.08, uv.y)
-             * smoothstep(0.0, 0.08, 1.0 - uv.y);
+  // Plume wraps softly across the center wordmark and fans outward
+  float birth = smoothstep(0.28, 1.15, r);
+  float coreMist = 0.32 * exp(-r * r * 1.1);
+  float fade = 1.0 - smoothstep(2.1, 4.7, r);
+  float plume = (birth + coreMist) * fade;
 
-  // Readability envelopes: never a hard square-shaped cutout.
-  vec2 titleZone = (uv - vec2(0.22, 0.81)) / vec2(0.27, 0.21);
-  vec2 copyZone  = (uv - vec2(0.76, 0.75)) / vec2(0.28, 0.22);
-  float protectTitle = 1.0 - 0.64 * exp(-dot(titleZone, titleZone) * 1.6);
-  float protectCopy  = 1.0 - 0.64 * exp(-dot(copyZone, copyZone) * 1.6);
-  float mask = edge * protectTitle * protectCopy;
+  float edge = smoothstep(0.0, 0.075, uv.x) * smoothstep(0.0, 0.075, 1.0 - uv.x)
+             * smoothstep(0.0, 0.09, uv.y) * smoothstep(0.0, 0.09, 1.0 - uv.y);
 
-  // Continuous outward advection with slow domain warp: no frame-to-frame randomness.
-  vec2 radialDir = normalize(p + vec2(0.001, 0.001));
-  vec2 advected = p - radialDir * t * 0.020 + vec2(-t * 0.010, t * 0.006);
+  vec2 dir = p / max(r, 0.001);
+  vec2 advected = p - dir * (t * 0.024) + vec2(t * 0.009, -t * 0.011);
   vec2 warp = vec2(
-    fbm(advected * 0.82 + vec2(2.7, 9.1) + t * 0.009),
-    fbm(advected * 0.82 + vec2(8.2, 3.4) - t * 0.007)
+    fbm(advected * 1.15 + vec2(1.7, 9.2) + t * 0.021),
+    fbm(advected * 1.15 + vec2(8.3, 2.8) - t * 0.018)
   ) - 0.5;
-  vec2 cloudUv = advected * 0.76 + warp * 0.82;
-  float broad = fbm(cloudUv * 1.12);
-  float wisps = fbm(cloudUv * 2.12 + vec2(7.1, -3.4));
-  float textureField = 0.74 * broad + 0.26 * wisps;
-  float cloud = smoothstep(0.28, 0.73, textureField);
-  float density = (0.28 + 0.72 * cloud) * plume * mask;
+  vec2 fq = advected * 0.93 + 1.55 * warp;
+  float broad = fbm(fq);
+  float detail = fbm(fq * 2.2 + vec2(3.4, 6.1));
+  float cloud = smoothstep(0.36, 0.69, broad * 0.76 + detail * 0.24);
+  float wisps = smoothstep(0.40, 0.63, fbm(fq * 1.55 + vec2(5.2, 1.9)));
+  float density = (cloud * 0.78 + wisps * 0.22) * plume * edge;
 
-  // Theme-independent intensity. No pink hues in the atmosphere.
-  float fogAmount = clamp(uAmount.x, 0.0, 1.0);
-  float fogAlpha = fogAmount * density * (0.06 + 0.12 * cloud);
+  // Preserve readability of bottom-left headline & bottom-right card
+  vec2 title = (uv - vec2(0.20, 0.82)) / vec2(0.28, 0.22);
+  vec2 body = (uv - vec2(0.80, 0.80)) / vec2(0.28, 0.24);
+  float readability = (1.0 - 0.52 * exp(-dot(title, title) * 1.7))
+                    * (1.0 - 0.52 * exp(-dot(body, body) * 1.7));
+  density *= readability;
 
-  vec2 lensDelta = frag - uLens.xy;
-  float lensR = max(uLens.z, 1.0);
-  float focus = exp(-dot(lensDelta, lensDelta) / (lensR * lensR * 1.7)) * uLens.w;
-  float ambientSpot = exp(-dot(lensDelta, lensDelta) / (lensR * lensR * 4.0)) * uLens.w;
-  // Spotlight adds at most a few percent opacity, not additive HDR color.
-  fogAlpha *= 1.0 + 0.30 * focus;
-  fogAlpha += plume * mask * ambientSpot * 0.025;
-  fogAlpha *= 1.0 + 0.04 * uBurst;
+  vec2 mouseDelta = frag - uLens.xy;
+  float lensRadius = max(1.0, uLens.z);
+  float spotlight = exp(-dot(mouseDelta, mouseDelta) / (lensRadius * lensRadius * 1.9)) * uLens.w;
 
-  // Very sparse, subtle, monochrome particles (optional glints via .z).
-  float dustAmount = clamp(uAmount.y, 0.0, 1.0);
-  float dotAmount = clamp(uAmount.z, 0.0, 1.0);
+  float fogAlpha = clamp(uAmount.x, 0.0, 2.0) * density * (0.16 + 0.22 * cloud);
+  fogAlpha *= 1.0 + 0.75 * spotlight + 0.10 * uBurst;
+
+  // Blue-tinted drifting dust particles
   float dustAlpha = 0.0;
-  if (dustAmount > 0.001 || dotAmount > 0.001) {
+  if (uAmount.y > 0.001 || uAmount.z > 0.001) {
     vec2 pixel = (frag - origin) / max(uScale, 0.35);
-    float fine = subtleDust(pixel + vec2(t * 2.1, -t * 2.6), 38.0, 0.84, 0.8, t, 1.3);
-    float medium = subtleDust(pixel + vec2(-t * 1.4, -t * 1.7), 65.0, 0.91, 1.10, t, 4.7);
-    float rare = subtleDust(pixel + vec2(t * 1.6, t * 1.0), 90.0, 0.95, 1.25, t, 8.9);
-    dustAlpha = (dustAmount * (fine * 0.15 + medium * 0.20)
-                + dotAmount * rare * 0.16) * plume * mask * (0.45 + 0.55 * cloud);
+    float fine = particle(pixel + vec2(t * 1.9, -t * 3.2), 42.0, 0.87, 0.85, t, 1.3);
+    float medium = particle(pixel + vec2(-t * 1.1, -t * 1.7), 75.0, 0.92, 1.2, t, 4.7);
+    float rare = particle(pixel + vec2(t * 0.6, t * 1.4), 105.0, 0.96, 1.3, t, 8.9);
+    float dustZone = smoothstep(0.55, 1.05, r) * (1.0 - smoothstep(3.0, 4.7, r));
+    dustAlpha = (clamp(uAmount.y, 0.0, 2.0) * (fine * 0.24 + medium * 0.28)
+               + clamp(uAmount.z, 0.0, 2.0) * rare * 0.26)
+               * dustZone * edge * (0.55 + 0.45 * cloud) * (1.0 + spotlight * 0.45);
   }
 
-  float alpha = clamp(fogAlpha + dustAlpha, 0.0, 0.21);
-  // Correct premultiplied alpha for gl.blendFunc(ONE, ONE_MINUS_SRC_ALPHA).
-  vec3 ink = mix(vec3(1.0), vec3(0.06), uTheme);
-  gl_FragColor = vec4(ink * alpha, alpha);
+  // #0d4bfa (0.051, 0.294, 0.980) volumetric blue smoke & luminous dust palette
+  vec3 cobalt = vec3(0.051, 0.294, 0.980);
+  vec3 deepMistDark = vec3(0.04, 0.14, 0.48);
+  vec3 brightMistDark = vec3(0.36, 0.58, 1.00);
+  vec3 darkSmokeCol = mix(deepMistDark, cobalt, smoothstep(0.15, 0.75, cloud));
+  darkSmokeCol = mix(darkSmokeCol, brightMistDark, clamp(wisps * 0.35 + spotlight * 0.45, 0.0, 1.0));
+
+  vec3 lightSmokeCol = mix(vec3(0.03, 0.14, 0.45), cobalt, smoothstep(0.2, 0.8, cloud));
+  vec3 smokeCol = mix(darkSmokeCol, lightSmokeCol, uTheme);
+
+  vec3 dustCol = mix(vec3(0.62, 0.80, 1.00), cobalt, uTheme);
+
+  float totalAlpha = clamp(fogAlpha + dustAlpha, 0.0, 0.48);
+  float dustMix = dustAlpha / max(fogAlpha + dustAlpha, 0.0001);
+  vec3 finalCol = mix(smokeCol, dustCol, clamp(dustMix * 1.35, 0.0, 1.0));
+
+  // Premultiplied alpha
+  gl_FragColor = vec4(finalCol * totalAlpha, totalAlpha);
 }
 `;
 
 // ══════════════════════════════════════════════════════════════════════════
-// PASS 2: 3B DALGALI NOKTA KÜRE (HAFİF SPOTLIGHT HOVER & TEMA UYUMLU)
+// PASS 2: 3D WAVE DOT SPHERE (#0d4bfa COBALT PALETTE)
 // ══════════════════════════════════════════════════════════════════════════
 const ORB_VERT = /* glsl */ `
 precision highp float;
@@ -390,7 +306,6 @@ void main() {
   vec2 centerOffsetNDC = vec2(0.0, uCenterY);
   vec2 ndc = pos.xy * k * uScale * vec2(1.0 / uAspect, 1.0) + centerOffsetNDC;
 
-  // Hafif Spotlight Hover etkileşimi
   vec2 dd = (ndc - uPointer) * vec2(uAspect, 1.0);
   float spot = exp(-dot(dd, dd) * 6.5) * uPointerOn;
   vec2 dir = normalize(dd + vec2(0.0001));
@@ -433,22 +348,23 @@ void main() {
 
   float edge = smoothstep(0.5, 0.08, r);
 
-  vec3 deepDark  = vec3(0.22, 0.02, 0.07);
-  vec3 deepLight = vec3(0.92, 0.42, 0.52);
-  vec3 deepRose  = mix(deepDark, deepLight, uTheme);
+  // #0d4bfa cobalt spectrum
+  vec3 deepDark  = vec3(0.015, 0.055, 0.26);
+  vec3 deepLight = vec3(0.24, 0.45, 0.98);
+  vec3 deepBlue  = mix(deepDark, deepLight, uTheme);
 
-  vec3 coreRose  = vec3(0.957, 0.247, 0.369);
-  vec3 softRose  = vec3(0.988, 0.451, 0.533);
-  vec3 crestHi   = mix(vec3(1.00, 0.90, 0.94), vec3(0.96, 0.18, 0.34), uTheme * 0.65);
+  vec3 coreBlue  = vec3(0.051, 0.294, 0.980); // #0d4bfa
+  vec3 softBlue  = vec3(0.34, 0.58, 1.00);
+  vec3 crestHi   = mix(vec3(0.84, 0.92, 1.00), vec3(0.03, 0.22, 0.92), uTheme * 0.65);
 
-  vec3 col = mix(deepRose, coreRose, smoothstep(0.10, 0.50, vLight));
-  col = mix(col, softRose, smoothstep(0.48, 0.84, vLight));
+  vec3 col = mix(deepBlue, coreBlue, smoothstep(0.10, 0.50, vLight));
+  col = mix(col, softBlue, smoothstep(0.48, 0.84, vLight));
   col = mix(col, crestHi, smoothstep(0.52, 0.96, vCrest));
 
-  vec3 spotGlow = mix(vec3(1.0, 0.95, 0.97), vec3(1.0, 0.32, 0.46), uTheme * 0.5);
+  vec3 spotGlow = mix(vec3(0.92, 0.96, 1.0), vec3(0.12, 0.38, 1.0), uTheme * 0.5);
   col = mix(col, spotGlow, clamp(vHeat * 0.55, 0.0, 1.0));
 
-  float themeAlpha = mix(1.0, 0.82, uTheme);
+  float themeAlpha = mix(1.0, 0.84, uTheme);
   float a = clamp(edge * vAlpha * themeAlpha, 0.0, 1.0);
   gl_FragColor = vec4(col * a, a);
 }
@@ -492,10 +408,10 @@ function createProgram(
 export function VoiceOrb({
   tone,
   mode = DEFAULT_MODE,
-  color = "#f43f5e",
-  fog = 0.60,
-  dust = 0.28,
-  dots = 0,
+  color = "#0d4bfa",
+  fog = 0.85,
+  dust = 0.40,
+  dots = 0.14,
   className,
 }: VoiceOrbProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -607,13 +523,10 @@ export function VoiceOrb({
       dpr: gl.getUniformLocation(atmosProg, "uDpr"),
       scale: gl.getUniformLocation(atmosProg, "uScale"),
       time: gl.getUniformLocation(atmosProg, "uTime"),
-      spin: gl.getUniformLocation(atmosProg, "uSpin"),
-      amp: gl.getUniformLocation(atmosProg, "uAmp"),
       burst: gl.getUniformLocation(atmosProg, "uBurst"),
       lens: gl.getUniformLocation(atmosProg, "uLens"),
       amount: gl.getUniformLocation(atmosProg, "uAmount"),
       theme: gl.getUniformLocation(atmosProg, "uTheme"),
-      tint: gl.getUniformLocation(atmosProg, "uTint"),
     };
 
     const uOrb = {
@@ -630,8 +543,6 @@ export function VoiceOrb({
       centerY: gl.getUniformLocation(orbProg, "uCenterY"),
       theme: gl.getUniformLocation(orbProg, "uTheme"),
     };
-
-    const tints = buildTints(hexToRgb(color));
 
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
@@ -690,7 +601,7 @@ export function VoiceOrb({
       lens.x += (pointer.x - lens.x) * lensFollow;
       lens.y += (pointer.y - lens.y) * lensFollow;
 
-      const goal = pointer.inside ? 0.23 : 0;
+      const goal = pointer.inside ? 0.28 : 0;
       lens.strength +=
         (goal - lens.strength) *
         (1 - Math.exp(-dt / (goal > lens.strength ? 0.22 : 0.48)));
@@ -725,20 +636,11 @@ export function VoiceOrb({
       gl.uniform1f(uAtmos.dpr, dpr);
       gl.uniform1f(uAtmos.scale, scale);
       gl.uniform1f(uAtmos.time, time);
-      gl.uniform1f(uAtmos.spin, rotY);
-      gl.uniform1f(uAtmos.amp, cur.amp);
       gl.uniform1f(uAtmos.burst, burstRef.current);
-      gl.uniform4f(
-        uAtmos.lens,
-        lens.x,
-        lens.y,
-        125 * scale,
-        lens.strength,
-      );
+      gl.uniform4f(uAtmos.lens, lens.x, lens.y, 130 * scale, lens.strength);
       const amounts = amountsRef.current;
       gl.uniform3f(uAtmos.amount, amounts.fog, amounts.dust, amounts.dots);
       gl.uniform1f(uAtmos.theme, isLight);
-      gl.uniform3fv(uAtmos.tint, tints);
 
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       gl.disableVertexAttribArray(aQuadPos);
@@ -795,13 +697,14 @@ export function VoiceOrb({
       const rect = canvas.getBoundingClientRect();
       cssW = Math.max(1, rect.width);
       cssH = Math.max(1, rect.height);
-      dpr = Math.min(window.devicePixelRatio || 1, small ? 1.25 : 1.5);
+      dpr = Math.min(window.devicePixelRatio || 1, cssW < 768 ? 1.25 : 1.5);
       const w = Math.max(1, Math.round(cssW * dpr));
       const h = Math.max(1, Math.round(cssH * dpr));
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w;
         canvas.height = h;
       }
+      dpr = w / cssW;
       gl.viewport(0, 0, w, h);
       render();
     };
@@ -886,7 +789,7 @@ export function VoiceOrb({
         className={className}
         style={{
           background:
-            "radial-gradient(closest-side, rgba(244,63,94,0.38), rgba(190,18,60,0.12) 60%, transparent 75%)",
+            "radial-gradient(closest-side, rgba(13,75,250,0.42), rgba(13,75,250,0.12) 60%, transparent 75%)",
         }}
       />
     );

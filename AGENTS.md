@@ -1,26 +1,193 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# AGENTS.md — Miransas Website Engineering Rules
 
-## This is NOT the Next.js you know
+## Git Workflow — Task Completion
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+After completing an assigned task:
 
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+1. Run all relevant lint checks, type checks, and production build checks.
+2. Review `git status` and `git diff`.
+3. Verify that no secrets, credentials, `.env` files, or unrelated changes will be committed.
+4. If required checks pass, commit only the files belonging to the completed task.
+5. Push the commit to the existing current working branch, provided the remote and branch are verified.
+6. Report the commit hash, branch, push result, and verification status.
 
+If checks fail, the branch is ambiguous, the remote is unexpected, or unrelated changes cannot be safely separated, stop and report the blocker.
 
+Never force-push, deploy to production, or reset the working tree automatically.
 
-Miransas ecosystem instructions for coding agents
-Before editing UI in this repository, read DESIGN_SYSTEM.md at the repository root and follow its visual, accessibility, and responsive rules.
-Non-negotiable conventions
-- Keep the existing product architecture and preserve working functionality. Do not redesign unrelated components.
-- Use the project's Next.js, TypeScript, Tailwind and animation conventions; don't install packages unless strictly needed.
-- Prefer rounded-4xl for appropriately sized main containers; use proportionate smaller radii for compact controls.
-- Do not add borders by default. Favor clean surfaces, spacing, typography, and subtle tonal separation.
-- FAQs should use quiet, accessible, preferably borderless accordions; no repetitive boxed FAQ cards.
-- Support the project's actual theme requirements; Miransas and Miralas websites support light #EFEFEF and dark #050505.
-- Keep marketing copy in natural English, with exceptions for proper nouns and intentional multilingual content.
-- Use deliberate, restrained motion. Avoid bento-by-default, clutter, neon accents, excessive gradients and hover-only effects for essential information.
-- No invented prices, benchmarks, claims of availability, security guarantees, or working integrations.
-- Verify changes with the repo's actual lint, TypeScript and build scripts; report failures precisely.
-Scope
-This file should be copied to each repository separately, alongside DESIGN_SYSTEM.md. The three repositories share principles but must retain their own product-specific UX. For console screens, clarity of dense data and focus states overrides a desire to remove every line.
-<!-- END:nextjs-agent-rules -->
+Follow an explicit task-specific instruction if it overrides this workflow.
+
+---
+
+## 1. Project Identity
+
+- Brand: **Miransas** (`https://miransas.com`) — Independent Voice AI Lab & Infrastructure.
+- Flagship Platform: **Miralas** (`https://miralas.io`).
+- Scope: Public marketing website, engineering research showcase, interactive product demonstrations, and documentation/company pages.
+- Uzbek is a first-class language research priority.
+- Preserve the established Miransas brand identity and truthful, engineering-first voice.
+
+---
+
+## 2. Technology Stack
+
+- Framework: Next.js 16 (App Router, Turbopack, React Compiler).
+- Language: TypeScript (strict).
+- Styling: Tailwind CSS v4 (`app/globals.css` semantic tokens).
+- Animation: Framer Motion (`<MotionConfig reducedMotion="user">`).
+- Package Manager: `pnpm`.
+
+Inspect `package.json` and actual source files before assuming versions, scripts, or installed packages.
+
+---
+
+## 3. Engineering Principles & Truthfulness
+
+- Prefer small, focused, production-quality changes.
+- Understand existing code before modifying it.
+- Preserve working features, routes, and established behavior.
+- Avoid unnecessary abstractions, dependencies, and rewrites.
+- Do not silently expand task scope.
+- Never claim unreleased capabilities are live in production (e.g., native Uzbek production inference, public Voice Agents, or unmeasured NVIDIA GPU benchmarks).
+- Keep illustrative demos clearly positioned as visual/recorded studies rather than live backend endpoints.
+- Prefer correctness, maintainability, and measurable 60–120fps performance over visual clutter.
+
+---
+
+## 4. Work Discipline
+
+Before modifying code:
+
+1. Read relevant documentation, `app/globals.css`, and target source files.
+2. Run `git status --short`.
+3. Identify existing uncommitted changes.
+4. Determine the smallest safe implementation.
+5. Check whether the requested work overlaps with ongoing changes.
+
+During implementation:
+
+- Modify only files required by the task.
+- Preserve unrelated local changes.
+- Do not fabricate successful command outputs.
+- Do not hide lint, type, React Compiler, or build failures.
+- Do not automatically start the next numbered task.
+
+After implementation:
+
+- Verify affected pages in both Dark Mode and Light Mode.
+- Report changed files and exact checks performed.
+- Distinguish passed, failed, skipped, and blocked checks.
+- Document remaining risks and follow-up work.
+
+---
+
+## 5. Miransas Design System (Strict)
+
+Maintain complete visual consistency across every page and component via semantic CSS variables in `app/globals.css`.
+
+### Surfaces
+- **Dark Mode:**
+  - Page & section background: fixed `#050505` (`--surface-page`). Never use random dark grays (`#0a0a0a`, `#0b0b0d`, `#111111`, `#161617`, `bg-neutral-900`, `bg-zinc-950`) for page/section backgrounds.
+  - Standard cards, panels, FAQ items, modals: fixed `#000103` (`--surface-card`).
+  - Featured / active cards: subtle electric blue gradient (`#3847ff` → `#000103`).
+- **Light Mode:**
+  - Page & section background: fixed `#EFEFEF` (or consistent site light token).
+  - Standard cards: `#FFFFFF`.
+  - Featured / active cards: crisp `#FFFFFF` → soft `#3847ff` tint.
+
+### Zero-Border & 3-Tier Radius System
+- **No resting borders:** Do NOT use `border`, `border-t`, `border-b`, `border-white/...`, `border-black/...`, `ring-1`, or `divide-y` on cards, sections, tables, modals, or accordions. Separate depth purely via surface contrast, spacing, and subtle shadows.
+- **Accessibility focus only:** Keep `focus-visible:outline-2 focus-visible:outline-[#3847ff] focus-visible:outline-offset-2` for keyboard navigation.
+- **Strict Corner Radii:**
+  - `rounded-4xl`: Large showcase containers, hero preview frames, CTA banners, and modal shells.
+  - `rounded-3xl`: Main cards, capability items, FAQ items, and process steps.
+  - `rounded-xl`: Inner metric tiles, badges, buttons, chips, and media controls.
+
+### Typography
+- Use one cohesive primary sans font across all headings, `p`, and `span` elements (mono font strictly for technical specs like `24 kHz`, `01 / 05`, `gRPC`).
+- **Dark Mode Text Hierarchy:**
+  - Headings (`h1`–`h4`, primary KPIs): `#FFFFFF`
+  - Prominent copy (`span` labels, eyebrows, active tabs, FAQ questions, dense reading `p` blocks): `#D1D1D1`
+  - Secondary copy (subtitles `p`, card summaries, captions, muted metadata `span`): `#6E6E74`
+- Use `tabular-nums` for dynamic counters, metrics, and indices.
+
+### Avoid
+- Harsh white/black borders or divider lines.
+- Mixing random gray surface hex codes.
+- Neon-heavy clutter or random off-brand gradients (brand accent is strictly `#3847ff`).
+- Duplicate page headers or placeholder/fake metrics.
+
+---
+
+## 6. Performance, Motion & React Compiler
+
+- **React Compiler Compatibility:** Do not wrap ref reads in manual `useCallback` / `useMemo` hooks that cause `Compilation Skipped: Existing memoization could not be preserved` warnings. Let React Compiler handle memoization cleanly.
+- **Zero Scroll Jank:**
+  - Never call `setState` on every scroll pixel. Use `useMotionValue`, `useTransform`, or discrete threshold checks via `useMotionValueEvent`.
+  - Always use `overflow-x: clip` (never `overflow-hidden`) on ancestors of `position: sticky` elements.
+  - Isolate horizontal scroll containers (tables, card strips) with `overscroll-x-contain`.
+  - Pause off-screen continuous animations (canvas, WebGL, waveforms, CSS marquees) via `useInView` / `IntersectionObserver`.
+- **GPU-Only Animations:** Animate only `transform` (`translate3d`, `scale`) and `opacity`. Use CSS Grid (`grid-template-rows: 0fr` → `1fr`) for accordions instead of animating `height`.
+- **Reveals:** Use `viewport={{ once: true }}` so elements never re-hide on scroll up. Do not use `whileInView` on above-the-fold Hero content (protects LCP).
+- **Modals:** Render modals via `createPortal(..., document.body)` with proper `html`/`body` scroll lock and inner `min-h-0 flex-1 overflow-y-auto overscroll-y-contain`.
+
+---
+
+## 7. SEO, GEO & Semantic HTML
+
+- **Server Component Pages:** Keep every `app/**/page.tsx` as a Server Component so `export const metadata` works natively. Move interactive UI into child `"use client"` components.
+- **Root Metadata (`app/layout.tsx`):** Maintain `metadataBase: new URL("https://miransas.com")`, title template (`%s | Miransas`), OpenGraph, Twitter (`summary_large_image`), and robots defaults.
+- **Per-Page Metadata:** Every public route must define unique `title` (< 60 chars), `description` (140–160 chars), and `alternates.canonical` via `src/lib/seo.ts`.
+- **Crawl & AI Search (GEO):** Maintain `app/sitemap.ts`, `app/robots.ts`, `app/opengraph-image.tsx`, `public/llms.txt`, and Schema.org JSON-LD (`Organization`, `WebSite`, `FAQPage` synced with rendered FAQ items).
+- **Semantic HTML:** Exactly one `<h1>` per page, logical `<h2>` → `<h3>` hierarchy, real `<Link>`/`<a>` navigation, and descriptive `alt`/`aria-label` attributes.
+
+---
+
+## 8. Security & Hygiene
+
+- Never expose API keys, secrets, or tokens in client bundles, logs, or committed files.
+- Never commit `.env` files.
+- Keep third-party scripts minimal and privacy-respecting.
+
+---
+
+## 9. Verification
+
+Inspect `package.json` scripts and run all applicable checks from the repo root before finishing:
+
+- `pnpm lint`
+- `pnpm exec tsc --noEmit`
+- `pnpm build`
+
+Confirm zero TypeScript errors, zero React Compiler skip warnings, zero hydration mismatches, and zero broken metadata/routes. Never claim success for checks that were not actually run.
+
+---
+
+## 10. Git and Deployment
+
+- Standing user preference: after completing a task, run relevant checks, inspect YAML/workflow configuration and `git status`, then commit and push the completed task changes. A task-specific instruction prohibiting commit or push overrides this default. Never stage secrets or unrelated work.
+- Never force-push or deploy without separate explicit authorization.
+- Never delete unrelated user changes or reset the working tree without explicit authorization.
+
+---
+
+## 11. Working Relationship
+
+The developer prefers focused, step-by-step tasks.
+
+- Complete only the requested task.
+- Keep changes reviewable.
+- Explain important decisions clearly.
+- Prefer concrete results over long speculative plans.
+- When blocked, explain the precise blocker.
+- Never pretend a partial implementation is complete.
+
+End each completed task with:
+
+1. Summary
+2. Files changed
+3. Tests and verification
+4. Remaining risks or blockers
+5. Suggested next task
+
+Do not start the suggested next task without authorization.
