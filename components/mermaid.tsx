@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useId, useState } from 'react';
-
 import { useTheme } from 'next-themes';
 
 export function Mermaid({ chart }: { chart: string }) {
@@ -33,8 +32,17 @@ export function Mermaid({ chart }: { chart: string }) {
   }, [chart, id, resolvedTheme]);
 
   if (failed) {
-    return <pre className="border-border my-6 overflow-x-auto rounded-lg border p-4 text-sm">{chart}</pre>;
+    return (
+      <pre className="surface-card my-6 overflow-x-auto rounded-3xl p-5 text-sm">
+        {chart}
+      </pre>
+    );
   }
 
-  return <div className="border-border bg-card/40 my-8 flex justify-center overflow-x-auto rounded-xl border p-6" dangerouslySetInnerHTML={{ __html: svg }} />;
+  return (
+    <div
+      className="surface-card my-8 flex justify-center overflow-x-auto rounded-3xl p-6"
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  );
 }

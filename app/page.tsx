@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { VoiceSection } from '@/components/shared/voice-section';
 import { Features } from '@/components/shared/feature';
 import { Faq } from '@/components/shared/faq';
@@ -10,12 +11,32 @@ import StickySplitSection from '@/components/shared/StickySplitSection';
 import { HeroTransition } from '@/components/shared/hero-transition';
 import { NewHero } from '@/components/shared/new-hero';
 import { EngineeringVisualSection } from '@/components/shared/engineering-visual-section';
-import { EngineeringReality, ModelResearch, VoiceInfrastructure } from '@/components/shared/engineering-progress';
+import {
+  EngineeringReality,
+  ModelResearch,
+  VoiceInfrastructure,
+} from '@/components/shared/engineering-progress';
+import { JsonLd } from '@/src/components/seo/JsonLd';
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+  createPageMetadata,
+  getHomeJsonLd,
+} from '@/src/lib/seo';
+
+export const metadata: Metadata = createPageMetadata({
+  title: DEFAULT_TITLE,
+  description: DEFAULT_DESCRIPTION,
+  path: '/',
+});
 
 export default function HomePage() {
   return (
     <>
-      <HeroTransition><NewHero /></HeroTransition>
+      <JsonLd data={getHomeJsonLd()} />
+      <HeroTransition>
+        <NewHero />
+      </HeroTransition>
       <StickySplitSection />
       <EngineeringReality />
       <ModelResearch />

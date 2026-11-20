@@ -5,13 +5,24 @@ import { ChevronDown, Check, Play, Pause, Download, AudioLines } from 'lucide-re
 import AIConversation from '../smoothui/ai-conversation';
 import AILoader from '../smoothui/ai-loader';
 
-const THINKING_STEPS = ['Example step: inspect the audio input...', 'Example step: prepare voice features...', 'Example step: select a voice configuration...', 'Example step: present the recorded audio sample...'];
+const THINKING_STEPS = [
+  'Example step: inspect the audio input...',
+  'Example step: prepare voice features...',
+  'Example step: select a voice configuration...',
+  'Example step: present the recorded audio sample...',
+];
 
-const FULL_SPEECH = 'Recorded Miralas audio sample. This illustrative workflow accompanies a prerecorded file. Uzbek speech support is in research and development.';
+const FULL_SPEECH =
+  'Recorded Miralas audio sample. This illustrative workflow accompanies a prerecorded file. Uzbek speech support is in research and development.';
 
 const AUDIO_SRC = '/tts-actor-miralas.mp3';
 
-const WAVEFORM_BARS = [10, 20, 15, 30, 20, 10, 10, 25, 10, 10, 80, 10, 20, 15, 10, 10, 10, 25, 80, 10, 20, 100, 10, 15, 10, 20, 10, 10, 45, 60, 50, 40, 10, 10, 10, 10, 20, 10, 10, 30, 10, 10, 10, 10, 10, 10, 10, 50, 80, 10, 20, 100, 10, 10, 20, 10, 10, 10, 10, 10, 10, 40, 60, 10, 10, 20, 10, 10, 10];
+const WAVEFORM_BARS = [
+  10, 20, 15, 30, 20, 10, 10, 25, 10, 10, 80, 10, 20, 15, 10, 10, 10, 25, 80, 10,
+  20, 100, 10, 15, 10, 20, 10, 10, 45, 60, 50, 40, 10, 10, 10, 10, 20, 10, 10, 30,
+  10, 10, 10, 10, 10, 10, 10, 50, 80, 10, 20, 100, 10, 10, 20, 10, 10, 10, 10, 10,
+  10, 40, 60, 10, 10, 20, 10, 10, 10,
+];
 
 export default function LiveVoiceStream() {
   const [thinkingText, setThinkingText] = useState('');
@@ -35,7 +46,6 @@ export default function LiveVoiceStream() {
     const syncDuration = () => {
       setDuration(Number.isFinite(audio.duration) ? audio.duration : 0);
     };
-    // Cached audio may load its metadata before React attaches event handlers.
     const frame = requestAnimationFrame(syncDuration);
     audio.addEventListener('durationchange', syncDuration);
     return () => {
@@ -105,7 +115,6 @@ export default function LiveVoiceStream() {
     }
   };
 
-  // Waveform üzerinden tıklanan yere sarma (Seek)
   const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!waveformRef.current || !audioRef.current || !duration) return;
     const rect = waveformRef.current.getBoundingClientRect();
@@ -127,60 +136,85 @@ export default function LiveVoiceStream() {
   const contentKey = thinkingText.length + speechText.length + (isStreamComplete ? 1 : 0);
 
   return (
-    <div className="border-border bg-card text-foreground flex h-full min-h-[400px] w-full max-w-xl flex-col rounded-2xl border p-4 font-sans">
-      <audio ref={audioRef} src={AUDIO_SRC} onTimeUpdate={handleTimeUpdate} onLoadedMetadata={handleLoadedMetadata} onEnded={() => setIsPlaying(false)} preload="auto" />
+    <div className="surface-card text-foreground flex h-full min-h-[400px] w-full max-w-xl flex-col rounded-3xl p-5 font-sans">
+      <audio
+        ref={audioRef}
+        src={AUDIO_SRC}
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMetadata}
+        onEnded={() => setIsPlaying(false)}
+        preload="auto"
+      />
 
-      {/* Header */}
-      <div className="border-border mb-4 flex items-center justify-between border-b pb-3">
-        <div className="flex items-center gap-2">
+      <div className="mb-4 flex items-center justify-between pb-2">
+        <div className="flex items-center gap-2.5">
           <span className="relative flex h-2 w-2">
-            <span className="bg-foreground/50 absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" />
-            <span className="bg-foreground/60 relative inline-flex h-2 w-2 rounded-full" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-xl bg-[#3847ff] opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-xl bg-[#3847ff]" />
           </span>
-          <span className="text-foreground font-mono text-xs font-medium tracking-wider uppercase">Recorded audio · workflow demo</span>
+          <span className="text-prominent font-mono text-xs leading-[1.45] font-medium tracking-[0.12em] uppercase sm:text-[13px]">
+            Recorded audio · workflow demo
+          </span>
         </div>
       </div>
 
       <AIConversation className="flex-1" contentKey={contentKey}>
         <div className="space-y-4 pr-1">
-          {/* THINKING BLOĞU */}
-          <div className="border-border bg-elevated overflow-hidden rounded-xl border transition-all duration-300">
-            <button aria-expanded={isThoughtOpen} aria-label="Toggle demonstration steps" type="button" onClick={() => setIsThoughtOpen(!isThoughtOpen)} className="hover:bg-secondary flex w-full items-center justify-between px-3.5 py-2.5 transition-colors">
+          <div className="surface-card-elevated overflow-hidden rounded-xl transition-all duration-300">
+            <button
+              aria-expanded={isThoughtOpen}
+              aria-label="Toggle demonstration steps"
+              type="button"
+              onClick={() => setIsThoughtOpen(!isThoughtOpen)}
+              className="flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+            >
               <div className="flex items-center gap-2">
                 {isThinking ? (
-                  <AILoader variant="grid" label="Demo sequence" showElapsed={true} className="text-foreground font-mono text-[11px]" />
+                  <AILoader
+                    variant="grid"
+                    label="Demo sequence"
+                    showElapsed={true}
+                    className="text-prominent font-mono text-xs"
+                  />
                 ) : (
-                  <div className="text-muted-foreground flex items-center gap-1.5 font-mono text-[11px]">
-                    <Check className="text-foreground size-3.5" />
+                  <div className="text-prominent flex items-center gap-1.5 font-mono text-xs leading-[1.45]">
+                    <Check className="size-3.5 text-[#3847ff]" />
                     <span>Demo sequence · {finalThoughtTime}s</span>
                   </div>
                 )}
               </div>
 
-              <ChevronDown className={`text-muted-foreground size-3.5 transition-transform duration-300 ${isThoughtOpen ? 'rotate-180' : ''}`} />
+              <ChevronDown
+                className={`text-secondary-copy size-3.5 transition-transform duration-300 ${
+                  isThoughtOpen ? 'rotate-180' : ''
+                }`}
+              />
             </button>
 
-            {isThoughtOpen && <div className="border-border text-muted-foreground border-t px-3.5 pt-1 pb-3 font-mono text-[11px] leading-relaxed whitespace-pre-wrap">{thinkingText}</div>}
+            {isThoughtOpen && (
+              <div className="text-secondary-copy px-3.5 pt-1 pb-3 font-mono text-xs leading-[1.45] whitespace-pre-wrap">
+                {thinkingText}
+              </div>
+            )}
           </div>
 
-          {/* Illustrative workflow copy accompanying the recording. */}
           {speechText && (
             <div className="flex flex-col items-start space-y-2 pt-2">
-              <div className="text-muted-foreground flex items-center gap-2 font-mono text-[10px]">
-                <AudioLines className="text-foreground animate-pulse" size={16} />
+              <div className="text-prominent flex items-center gap-2 font-mono text-xs leading-[1.45]">
+                <AudioLines className="animate-pulse text-[#3847ff]" size={16} />
                 <span>RECORDED SAMPLE · ILLUSTRATIVE WORKFLOW</span>
               </div>
 
-              <div className="bg-secondary border-border text-foreground relative w-full space-y-4 rounded-2xl rounded-tl-xs border p-4 text-[13px] leading-relaxed shadow-sm">
-                <p className="font-sans">
+              <div className="surface-blue-gradient text-foreground relative w-full space-y-4 rounded-xl p-4 text-[15px] leading-[1.6] sm:text-base">
+                <p className="text-prominent font-sans">
                   {speechText}
-                  {!isThinking && speechText.length < FULL_SPEECH.length && <span className="bg-foreground/50 ml-1 inline-block h-3.5 w-1.5 animate-pulse align-middle" />}
+                  {!isThinking && speechText.length < FULL_SPEECH.length && (
+                    <span className="ml-1 inline-block h-3.5 w-1.5 animate-pulse bg-[#3847ff] align-middle" />
+                  )}
                 </p>
 
-                {/* AUDIO PLAYER */}
                 {isStreamComplete && (
-                  <div className="border-border flex items-center gap-3 border-t pt-3 select-none">
-                    {/* Tıklanabilir Waveform Alanı */}
+                  <div className="surface-card flex items-center gap-3 rounded-xl p-3 select-none">
                     <div
                       ref={waveformRef}
                       onClick={handleSeek}
@@ -192,40 +226,74 @@ export default function LiveVoiceStream() {
                       aria-valuenow={currentTime}
                       onKeyDown={(event) => {
                         if (!audioRef.current || !duration) return;
-                        const next = event.key === 'Home' ? 0 : event.key === 'End' ? duration : event.key === 'ArrowRight' ? Math.min(duration, currentTime + 5) : event.key === 'ArrowLeft' ? Math.max(0, currentTime - 5) : null;
+                        const next =
+                          event.key === 'Home'
+                            ? 0
+                            : event.key === 'End'
+                              ? duration
+                              : event.key === 'ArrowRight'
+                                ? Math.min(duration, currentTime + 5)
+                                : event.key === 'ArrowLeft'
+                                  ? Math.max(0, currentTime - 5)
+                                  : null;
                         if (next === null) return;
                         event.preventDefault();
                         audioRef.current.currentTime = next;
                         setCurrentTime(next);
                       }}
-                      className="group relative flex h-7 min-w-0 flex-1 cursor-pointer items-center gap-px"
+                      className="group relative flex h-7 min-w-0 flex-1 cursor-pointer items-center gap-px rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
                     >
                       {WAVEFORM_BARS.map((heightPercent, index) => {
                         const barPosition = (index / WAVEFORM_BARS.length) * 100;
                         const isPlayed = barPosition <= progressPercent;
 
-                        return <span key={index} className={`w-[2px] rounded-full transition-colors duration-150 ${index % 2 ? 'hidden sm:block' : ''} ${isPlayed ? 'bg-foreground' : 'bg-stone-700/60 group-hover:bg-stone-600'}`} style={{ height: `${Math.max(15, heightPercent)}%` }} />;
+                        return (
+                          <span
+                            key={index}
+                            className={`w-[2px] rounded-xl transition-colors duration-150 ${
+                              index % 2 ? 'hidden sm:block' : ''
+                            } ${
+                              isPlayed
+                                ? 'bg-[#3847ff]'
+                                : 'bg-secondary-copy/40 group-hover:bg-secondary-copy/70'
+                            }`}
+                            style={{ height: `${Math.max(15, heightPercent)}%` }}
+                          />
+                        );
                       })}
 
-                      {/* Scrubber Yuvarlağı */}
-                      <div className="pointer-events-none absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center transition-all duration-75" style={{ left: `${progressPercent}%` }}>
-                        <div className="bg-foreground h-6 w-[2px]" />
-                        <div className="border-border -mt-4 size-2.5 rounded-full border bg-white shadow-md" />
+                      <div
+                        className="pointer-events-none absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center transition-all duration-75"
+                        style={{ left: `${progressPercent}%` }}
+                      >
+                        <div className="h-6 w-[2px] bg-[#3847ff]" />
+                        <div className="-mt-4 size-2.5 rounded-xl bg-white shadow-md" />
                       </div>
                     </div>
 
-                    {/* Süre Bilgisi */}
-                    <span className="text-muted-foreground shrink-0 font-mono text-[11px]">
+                    <span className="text-secondary-copy shrink-0 font-mono text-xs leading-[1.45]">
                       {formatTime(currentTime)} / {formatTime(duration)}
                     </span>
 
-                    {/* Play/Pause */}
-                    <button type="button" aria-label={isPlaying ? 'Pause audio sample' : 'Play audio sample'} onClick={togglePlay} className="text-foreground hover:text-foreground hover:bg-secondary rounded-lg p-1 transition">
-                      {isPlaying ? <Pause className="text-foreground size-4 fill-current" /> : <Play className="size-4 fill-current" />}
+                    <button
+                      type="button"
+                      aria-label={isPlaying ? 'Pause audio sample' : 'Play audio sample'}
+                      onClick={togglePlay}
+                      className="surface-card-elevated text-heading rounded-xl p-1.5 transition hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                    >
+                      {isPlaying ? (
+                        <Pause className="size-4 fill-current text-[#3847ff]" />
+                      ) : (
+                        <Play className="size-4 fill-current text-[#3847ff]" />
+                      )}
                     </button>
 
-                    {/* İndirme (Download) */}
-                    <a href={AUDIO_SRC} download="miralas-voice.mp3" aria-label="Download audio sample" className="text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg p-1 transition">
+                    <a
+                      href={AUDIO_SRC}
+                      download="miralas-voice.mp3"
+                      aria-label="Download audio sample"
+                      className="surface-card-elevated text-prominent hover:text-heading rounded-xl p-1.5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                    >
                       <Download className="size-4" />
                     </a>
                   </div>

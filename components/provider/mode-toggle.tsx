@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { flushSync } from 'react-dom';
 import { useTheme } from 'next-themes';
@@ -28,15 +28,10 @@ function polygonCollapsed(point: string, vertexCount: number): string {
   return `polygon(${pairs})`;
 }
 
-// All coordinates are percentages of the snapshot reference box: Chrome 150
-// renders absolute px clip-path coordinates on ::view-transition-new(root)
-// unscaled on fractional display scales (e.g. Windows 150%) for the first
-// transition after load, so px values land at the wrong position (#989).
 function getThemeTransitionClipPaths(variant: TransitionVariant, cx: number, cy: number, maxRadius: number, viewportWidth: number, viewportHeight: number): [string, string] {
   const toX = (x: number) => `${(x / viewportWidth) * 100}%`;
   const toY = (y: number) => `${(y / viewportHeight) * 100}%`;
   const point = (x: number, y: number) => `${toX(x)} ${toY(y)}`;
-  // circle() percentage radii resolve against hypot(w, h) / sqrt(2) of the reference box.
   const toRadius = (r: number) => `${(r / (Math.hypot(viewportWidth, viewportHeight) / Math.SQRT2)) * 100}%`;
 
   switch (variant) {
@@ -56,7 +51,6 @@ function getThemeTransitionClipPaths(variant: TransitionVariant, cx: number, cy:
       return [polygonCollapsed(point(cx, cy), 3), `polygon(${verts})`];
     }
     case 'diamond': {
-      // Slightly larger than the view-transition circle radius so axis-aligned coverage matches the circle reveal.
       const R = maxRadius * Math.SQRT2;
       const end = [point(cx, cy - R), point(cx + R, cy), point(cx, cy + R), point(cx - R, cy)].join(', ');
       return [polygonCollapsed(point(cx, cy), 4), `polygon(${end})`];
@@ -77,7 +71,6 @@ function getThemeTransitionClipPaths(variant: TransitionVariant, cx: number, cy:
       return [polygonCollapsed(point(cx, cy), 4), `polygon(${end})`];
     }
     case 'star': {
-      // Small overscan so the last frames never leave a 1px seam before the transition group ends.
       const R = maxRadius * Math.SQRT2 * 1.03;
       const innerRatio = 0.42;
       const starPolygon = (radius: number) => {
@@ -107,28 +100,22 @@ export const ModeToggle = ({ className, duration = 400, variant, fromCenter = fa
   const isTransitioningRef = useRef(false);
   const activeAnimRef = useRef<Animation | null>(null);
 
-  const cancelAnim = useCallback(() => {
-    activeAnimRef.current?.cancel();
-    activeAnimRef.current = null;
-  }, []);
-
   useEffect(() => {
     return () => {
-      cancelAnim();
+      activeAnimRef.current?.cancel();
+      activeAnimRef.current = null;
       const root = document.documentElement;
       if (root.dataset.magicuiThemeVt !== 'active') return;
       delete root.dataset.magicuiThemeVt;
       root.style.removeProperty('--magicui-theme-toggle-vt-duration');
       root.style.removeProperty('--magicui-theme-vt-clip-from');
     };
-  }, [cancelAnim]);
+  }, []);
 
-  const toggleTheme = useCallback(() => {
+  const toggleTheme = () => {
     const button = buttonRef.current;
     if (!button || isTransitioningRef.current || document.documentElement.dataset.magicuiThemeVt === 'active') return;
 
-    // innerWidth/innerHeight (not visualViewport): percentages must resolve
-    // against the snapshot reference box, which includes classic scrollbars.
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 
@@ -149,7 +136,6 @@ export const ModeToggle = ({ className, duration = 400, variant, fromCenter = fa
       const nextTheme = isDark ? 'light' : 'dark';
       setTheme(nextTheme);
       onThemeChange?.(nextTheme);
-      // Explicit classes keep the snapshot synchronous; next-themes owns storage.
       document.documentElement.classList.remove('light', 'dark');
       document.documentElement.classList.add(nextTheme);
       document.documentElement.style.colorScheme = nextTheme;
@@ -165,15 +151,14 @@ export const ModeToggle = ({ className, duration = 400, variant, fromCenter = fa
     const root = document.documentElement;
     root.dataset.magicuiThemeVt = 'active';
     root.style.setProperty('--magicui-theme-toggle-vt-duration', `${duration}ms`);
-    // Pin the collapsed clip-path via CSS so Firefox does not paint the new
-    // theme unclipped between snapshot and the ready.then() JS animation.
     root.style.setProperty('--magicui-theme-vt-clip-from', clipPath[0]);
     const cleanup = () => {
       isTransitioningRef.current = false;
       delete root.dataset.magicuiThemeVt;
       root.style.removeProperty('--magicui-theme-toggle-vt-duration');
       root.style.removeProperty('--magicui-theme-vt-clip-from');
-      cancelAnim();
+      activeAnimRef.current?.cancel();
+      activeAnimRef.current = null;
     };
 
     isTransitioningRef.current = true;
@@ -203,7 +188,6 @@ export const ModeToggle = ({ className, duration = 400, variant, fromCenter = fa
             },
             {
               duration,
-              // Star: linear avoids easing overshoot that fights polygon interpolation at t→1; VT group duration is synced above.
               easing: shape === 'star' ? 'linear' : 'ease-in-out',
               fill: 'forwards',
               pseudoElement: '::view-transition-new(root)',
@@ -213,10 +197,21 @@ export const ModeToggle = ({ className, duration = 400, variant, fromCenter = fa
         })
         .catch(() => {});
     }
-  }, [shape, fromCenter, duration, isDark, setTheme, onThemeChange, cancelAnim]);
+  };
 
   return (
-    <button type="button" ref={buttonRef} onClick={toggleTheme} aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'} title={isDark ? 'Switch to light theme' : 'Switch to dark theme'} className={cn('border-border bg-card/60 text-foreground hover:bg-secondary inline-flex size-11 shrink-0 items-center justify-center rounded-xl border transition-colors [&_svg]:size-[18px]', className)} {...props}>
+    <button
+      type="button"
+      ref={buttonRef}
+      onClick={toggleTheme}
+      aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+      title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+      className={cn(
+        'surface-card hover:surface-card-elevated text-heading inline-flex size-10 shrink-0 items-center justify-center rounded-xl transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] [&_svg]:size-[18px]',
+        className
+      )}
+      {...props}
+    >
       <Sun aria-hidden className="hidden dark:block" />
       <Moon aria-hidden className="dark:hidden" />
     </button>

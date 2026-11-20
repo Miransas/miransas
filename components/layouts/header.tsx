@@ -150,25 +150,24 @@ export function SiteHeader() {
       ref={headerRef}
       className="pointer-events-none fixed inset-x-0 top-0 z-50 w-full"
     >
-      {/* Küçülme/daralma olmadan tam genişlikte kalan, sadece yüzey dokusu değişen bar */}
       <div
         data-header-surface
         className={cn(
-          'pointer-events-auto w-full transition-[background-color,border-color,box-shadow,backdrop-filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
+          'pointer-events-auto w-full transition-[background-color,box-shadow,backdrop-filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
           surfaced
-            ? 'border-border/50 bg-background/82 shadow-[0_10px_36px_rgba(0,0,0,0.05)] backdrop-blur-2xl dark:border-white/[0.07] dark:bg-[#08080a]/82 dark:shadow-[0_12px_40px_rgba(0,0,0,0.38)]'
-            : 'border-transparent bg-transparent shadow-none backdrop-blur-none',
+            ? 'bg-background/85 shadow-[0_10px_36px_rgba(0,0,0,0.05)] backdrop-blur-2xl dark:shadow-[0_12px_40px_rgba(0,0,0,0.42)]'
+            : 'bg-transparent shadow-none backdrop-blur-none',
         )}
       >
         <div
           data-header-content
-          className="container-page flex h-[var(--header-h)] mx-auto items-center justify-between gap-4"
+          className="container-page mx-auto flex h-[var(--header-h)] items-center justify-between gap-4"
         >
           <div className="flex min-w-0 items-center gap-6">
             <Link
               href="/"
               aria-label="Miransas home"
-              className="transition-opacity duration-300 hover:opacity-85"
+              className="rounded-xl transition-opacity duration-300 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
             >
               <img
                 src="/icons/logo-dark.png"
@@ -233,10 +232,10 @@ export function SiteHeader() {
                       type="button"
                       data-nav-trigger
                       className={cn(
-                        'relative inline-flex min-h-10 items-center gap-1.5 rounded-full px-3.5 text-sm font-medium transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60',
+                        'relative inline-flex min-h-10 items-center gap-1.5 rounded-xl px-3.5 text-sm font-medium transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]',
                         isOpen || isActive || hoveredMenu === menu.label
-                          ? 'text-foreground'
-                          : 'text-muted-foreground hover:text-foreground',
+                          ? 'text-prominent'
+                          : 'text-secondary-copy hover:text-prominent',
                       )}
                       aria-expanded={isOpen}
                       aria-controls={id}
@@ -258,7 +257,7 @@ export function SiteHeader() {
                         <motion.span
                           layoutId="header-nav-pill"
                           transition={reduce ? { duration: 0 } : PILL_SPRING}
-                          className="absolute inset-0 -z-10 rounded-full bg-secondary/75 dark:bg-white/[0.07]"
+                          className="surface-card-elevated absolute inset-0 -z-10 rounded-xl"
                         />
                       )}
                       <span className="relative z-10">{menu.label}</span>
@@ -279,27 +278,24 @@ export function SiteHeader() {
                             reduce
                               ? false
                               : {
-                                opacity: 0,
-                                y: 8,
-                                scale: 0.97,
-                                filter: 'blur(4px)',
-                              }
+                                  opacity: 0,
+                                  y: 8,
+                                  scale: 0.97,
+                                }
                           }
                           animate={{
                             opacity: 1,
                             y: 0,
                             scale: 1,
-                            filter: 'blur(0px)',
                           }}
                           exit={
                             reduce
                               ? { opacity: 0 }
                               : {
-                                opacity: 0,
-                                y: 4,
-                                scale: 0.985,
-                                filter: 'blur(2px)',
-                              }
+                                  opacity: 0,
+                                  y: 4,
+                                  scale: 0.985,
+                                }
                           }
                           transition={{
                             duration: reduce ? 0 : 0.24,
@@ -307,7 +303,7 @@ export function SiteHeader() {
                           }}
                           className="absolute top-full left-0 z-50 w-76 origin-top-left pt-2.5"
                         >
-                          <div className="rounded-3xl border border-border/60 bg-popover/95 p-2 text-popover-foreground shadow-[0_24px_64px_rgba(0,0,0,0.14)] backdrop-blur-2xl dark:border-white/[0.08] dark:bg-[#0d0d10]/95 dark:shadow-[0_24px_64px_rgba(0,0,0,0.5)]">
+                          <div className="surface-blue-gradient text-popover-foreground rounded-3xl p-2 shadow-[0_24px_64px_rgba(0,0,0,0.14)] backdrop-blur-2xl dark:shadow-[0_24px_64px_rgba(0,0,0,0.5)]">
                             {menu.items.map((item, idx) => (
                               <motion.div
                                 key={item.label}
@@ -327,9 +323,9 @@ export function SiteHeader() {
                                   aria-current={
                                     pathname === item.href ? 'page' : undefined
                                   }
-                                  className="group/item block rounded-2xl px-3.5 py-3 transition-colors duration-200 hover:bg-secondary/80 aria-[current=page]:bg-secondary dark:hover:bg-white/[0.06]"
+                                  className="group/item hover:bg-secondary/80 aria-[current=page]:bg-secondary block rounded-xl px-3.5 py-3 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
                                 >
-                                  <span className="flex items-center justify-between text-sm font-medium text-foreground">
+                                  <span className="text-heading flex items-center justify-between text-sm font-medium">
                                     {item.label}
                                     <ArrowRight
                                       aria-hidden
@@ -337,7 +333,7 @@ export function SiteHeader() {
                                     />
                                   </span>
                                   {'hint' in item && (
-                                    <span className="mt-1 block text-xs leading-relaxed text-muted-foreground">
+                                    <span className="text-secondary-copy mt-1 block text-xs leading-[1.45]">
                                       {item.hint}
                                     </span>
                                   )}
@@ -358,13 +354,13 @@ export function SiteHeader() {
             <ModeToggle />
             <Link
               href="/contact"
-              className="hidden min-h-10 items-center rounded-full px-3.5 text-sm text-muted-foreground transition-colors duration-200 hover:bg-secondary/60 hover:text-foreground sm:inline-flex dark:hover:bg-white/[0.06]"
+              className="text-prominent hover:bg-secondary/60 hidden min-h-10 items-center rounded-xl px-3.5 text-sm transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] sm:inline-flex"
             >
               Get in touch
             </Link>
             <Link
               href="/about"
-              className="group inline-flex min-h-10 items-center gap-2 rounded-full bg-primary px-4 text-xs font-medium text-primary-foreground transition-[transform,opacity,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-92 hover:shadow-[0_8px_24px_rgba(0,0,0,0.16)] active:scale-[0.98]"
+              className="group inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#3847ff] px-4 text-xs font-medium text-white transition-[transform,opacity,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-92 hover:shadow-[0_8px_24px_rgba(56,71,255,0.32)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] active:scale-[0.98]"
             >
               Get Started
               <ArrowRight
@@ -375,7 +371,7 @@ export function SiteHeader() {
             <button
               ref={menuButtonRef}
               type="button"
-              className="inline-flex size-10 items-center justify-center rounded-2xl bg-secondary/55 text-foreground transition-colors duration-200 hover:bg-secondary xl:hidden"
+              className="surface-card text-heading hover:bg-secondary inline-flex size-10 items-center justify-center rounded-xl transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] xl:hidden"
               aria-label={open ? 'Close menu' : 'Open menu'}
               aria-expanded={open}
               aria-controls="mobile-navigation"
@@ -418,28 +414,28 @@ export function SiteHeader() {
             aria-modal="true"
             aria-label="Navigation"
             data-lenis-prevent
-            className="pointer-events-auto fixed inset-x-0 top-[var(--header-h)] h-[calc(100dvh-var(--header-h))] overflow-y-auto overscroll-contain border-t border-border/50 bg-background/96 px-6 py-6 shadow-[0_24px_75px_rgba(0,0,0,0.2)] backdrop-blur-2xl xl:hidden dark:border-white/[0.07] dark:bg-[#08080a]/96"
+            className="bg-background/96 pointer-events-auto fixed inset-x-0 top-[var(--header-h)] h-[calc(100dvh-var(--header-h))] overflow-y-auto overscroll-contain px-6 py-6 shadow-[0_24px_75px_rgba(0,0,0,0.2)] backdrop-blur-2xl xl:hidden"
             initial={
-              reduce ? false : { opacity: 0, y: -12, filter: 'blur(6px)' }
+              reduce ? false : { opacity: 0, y: -12 }
             }
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            animate={{ opacity: 1, y: 0 }}
             exit={
               reduce
                 ? { opacity: 0 }
-                : { opacity: 0, y: -8, filter: 'blur(4px)' }
+                : { opacity: 0, y: -8 }
             }
             transition={{ duration: reduce ? 0 : 0.28, ease: EASE_OUT_EXPO }}
           >
             <div className="mx-auto max-w-[1440px]">
-              <div className="mb-8 flex items-center justify-between border-b border-border/50 pb-5 dark:border-white/[0.07]">
-                <span className="text-sm font-medium">Navigation</span>
+              <div className="mb-8 flex items-center justify-between pb-5">
+                <span className="text-prominent text-sm font-medium">Navigation</span>
                 <button
                   type="button"
                   onClick={() => {
                     setMobilePath(null);
                     menuButtonRef.current?.focus();
                   }}
-                  className="inline-flex min-h-10 items-center gap-2 rounded-xl px-3 text-sm transition-colors hover:bg-secondary"
+                  className="hover:bg-secondary inline-flex min-h-10 items-center gap-2 rounded-xl px-3 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
                 >
                   Close
                   <X aria-hidden className="size-4" />
@@ -457,10 +453,10 @@ export function SiteHeader() {
                       ease: EASE_OUT_EXPO,
                     }}
                   >
-                    <p className="mb-2 font-mono text-xs tracking-wider text-muted-foreground uppercase">
+                    <p className="text-prominent mb-2 font-mono text-xs tracking-[0.12em] uppercase">
                       {menu.label}
                     </p>
-                    <div className="flex flex-col">
+                    <div className="flex flex-col gap-1">
                       {menu.items.map((item) => (
                         <Link
                           key={item.label}
@@ -468,14 +464,14 @@ export function SiteHeader() {
                           aria-current={
                             pathname === item.href ? 'page' : undefined
                           }
-                          className="rounded-xl px-3 py-3 transition-colors hover:bg-secondary aria-[current=page]:bg-secondary"
+                          className="hover:bg-secondary aria-[current=page]:bg-secondary rounded-xl px-3 py-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
                           onClick={() => setMobilePath(null)}
                         >
-                          <span className="block text-base font-medium">
+                          <span className="text-heading block text-base font-medium">
                             {item.label}
                           </span>
                           {'hint' in item && (
-                            <span className="mt-1 block text-xs text-muted-foreground">
+                            <span className="text-secondary-copy mt-1 block text-xs leading-[1.45]">
                               {item.hint}
                             </span>
                           )}
@@ -485,8 +481,8 @@ export function SiteHeader() {
                   </motion.div>
                 ))}
               </nav>
-              <div className="mt-8 flex items-center justify-between border-t border-border/50 py-5 dark:border-white/[0.07]">
-                <span className="text-sm text-muted-foreground">
+              <div className="mt-8 flex items-center justify-between py-5">
+                <span className="text-secondary-copy text-sm">
                   Appearance
                 </span>
                 <ModeToggle />

@@ -21,12 +21,17 @@ export async function CodeBlock({ children, language }: Props) {
   }
 
   return (
-    <div className="dark-visual border-border my-6 w-full max-w-full min-w-0 overflow-hidden rounded-xl border bg-[#0d1117]">
-      <div className="border-border flex items-center justify-between border-b px-4 py-2">
-        <span className="text-muted-foreground font-mono text-xs tracking-wider uppercase">{lang}</span>
+    <div className="dark-visual surface-card my-6 w-full max-w-full min-w-0 overflow-hidden rounded-3xl">
+      <div className="surface-card-elevated flex items-center justify-between px-5 py-2.5">
+        <span className="text-prominent font-mono text-xs leading-[1.45] tracking-[0.12em] uppercase">
+          {lang}
+        </span>
         <CopyButton text={children} />
       </div>
-      <div className="overflow-x-auto p-4 text-sm leading-6 [&_code]:font-mono [&_pre]:m-0 [&_pre]:!bg-transparent [&_pre]:p-0" dangerouslySetInnerHTML={{ __html: html }} />
+      <div
+        className="overflow-x-auto p-5 text-sm leading-6 [&_code]:font-mono [&_pre]:m-0 [&_pre]:!bg-transparent [&_pre]:p-0"
+        dangerouslySetInnerHTML={{ __html: html }}
+      />
     </div>
   );
 }

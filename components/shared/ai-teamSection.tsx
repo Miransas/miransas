@@ -67,29 +67,52 @@ export function AiTeamSection() {
   const inView = useInView(ref, { once: true, amount: 0.2 });
 
   return (
-    <section ref={ref} className="bg-background border-border/40 relative flex min-h-[80vh] flex-col items-center justify-between overflow-hidden border-t py-16 md:py-24">
+    <section
+      ref={ref}
+      className="surface-page relative flex min-h-[80vh] flex-col items-center justify-between overflow-hidden py-16 md:py-24"
+    >
       <div className="relative z-30 mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={inView ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.5 }} className="bg-card/70 border-border text-muted-foreground inline-flex items-center gap-2 rounded-full border px-3.5 py-1.5 font-mono text-xs shadow-sm backdrop-blur-md">
-          <Sparkles className="text-primary size-3.5 animate-pulse" />
-          <span>AI & engineering</span>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={inView ? { opacity: 1, y: 0 } : undefined}
+          transition={{ duration: 0.5 }}
+          className="surface-blue-gradient text-prominent inline-flex items-center gap-2 rounded-xl px-3.5 py-1.5 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]"
+        >
+          <Sparkles className="size-3.5 text-[#3847ff]" />
+          <span>AI &amp; engineering</span>
         </motion.div>
-        <motion.h2 initial={{ opacity: 0, y: 15 }} animate={inView ? { opacity: 1, y: 0 } : undefined} transition={{ delay: 0.15, duration: 0.65, ease: 'easeOut' }} className="text-foreground mt-4 text-3xl leading-[1.1] font-bold tracking-tight sm:text-5xl md:text-6xl">
+        <motion.h2
+          initial={{ opacity: 0, y: 15 }}
+          animate={inView ? { opacity: 1, y: 0 } : undefined}
+          transition={{ delay: 0.15, duration: 0.65, ease: 'easeOut' }}
+          className="text-heading mt-5 text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]"
+        >
           Intelligence, built to <br className="hidden sm:block" /> work together.
         </motion.h2>
-        <motion.p initial={{ opacity: 0, y: 15 }} animate={inView ? { opacity: 1, y: 0 } : undefined} transition={{ delay: 0.25, duration: 0.65, ease: 'easeOut' }} className="text-muted-foreground mt-4 max-w-xl text-sm leading-relaxed sm:text-base">
+        <motion.p
+          initial={{ opacity: 0, y: 15 }}
+          animate={inView ? { opacity: 1, y: 0 } : undefined}
+          transition={{ delay: 0.25, duration: 0.65, ease: 'easeOut' }}
+          className="text-secondary-copy mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]"
+        >
           We are exploring how voice, language and software can work as one system. The direction is collaborative intelligence, built with the same care as the infrastructure beneath it.
         </motion.p>
-        <motion.div initial={{ opacity: 0, y: 15 }} animate={inView ? { opacity: 1, y: 0 } : undefined} transition={{ duration: 0.6, delay: 0.35 }} className="text-muted-foreground mt-6 flex flex-wrap items-center justify-center gap-2.5 text-xs font-medium sm:gap-4">
-          <div className="bg-card/60 border-border flex items-center gap-2 rounded-lg border px-3 py-1.5 backdrop-blur-sm">
-            <Users className="text-primary size-3.5" />
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={inView ? { opacity: 1, y: 0 } : undefined}
+          transition={{ duration: 0.6, delay: 0.35 }}
+          className="text-prominent mt-7 flex flex-wrap items-center justify-center gap-3 text-xs font-medium sm:text-[13px]"
+        >
+          <div className="surface-card flex items-center gap-2 rounded-xl px-3.5 py-2">
+            <Users className="size-3.5 text-[#3847ff]" />
             <span>Connected systems</span>
           </div>
-          <div className="bg-card/60 border-border flex items-center gap-2 rounded-lg border px-3 py-1.5 backdrop-blur-sm">
-            <Cpu className="text-muted-foreground size-3.5" />
+          <div className="surface-card flex items-center gap-2 rounded-xl px-3.5 py-2">
+            <Cpu className="size-3.5 text-[#3847ff]" />
             <span>Voice interaction</span>
           </div>
-          <div className="bg-card/60 border-border flex items-center gap-2 rounded-lg border px-3 py-1.5 backdrop-blur-sm">
-            <ShieldCheck className="text-muted-foreground size-3.5" />
+          <div className="surface-card flex items-center gap-2 rounded-xl px-3.5 py-2">
+            <ShieldCheck className="size-3.5 text-[#3847ff]" />
             <span>Developer control</span>
           </div>
         </motion.div>

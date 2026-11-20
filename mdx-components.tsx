@@ -1,58 +1,100 @@
-import React from "react";
-import type { MDXComponents } from "mdx/types";
-import { CodeBlock } from "@/components/code-block/code-block";
-import { Callout } from "@/components/provider/Callout";
-import { Mermaid } from "@/components/mermaid";
+import React from 'react';
+import type { MDXComponents } from 'mdx/types';
+import { CodeBlock } from '@/components/code-block/code-block';
+import { Callout } from '@/components/provider/Callout';
+import { Mermaid } from '@/components/mermaid';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
-    h1: (p) => <h1 className="mb-6 text-4xl font-semibold tracking-tight" {...p} />,
+    h1: (p) => (
+      <h1
+        className="text-heading mb-6 text-[2.75rem] leading-[1.03] font-semibold tracking-[-0.03em] sm:text-6xl lg:text-[4.5rem]"
+        {...p}
+      />
+    ),
     h2: (p) => (
-      <h2 className="scroll-mt-24 mb-3 mt-14 border-b border-border pb-2 text-2xl font-semibold tracking-tight" {...p} />
+      <h2
+        className="text-heading mt-14 mb-4 scroll-mt-24 text-2xl leading-[1.1] font-semibold tracking-[-0.025em] sm:text-3xl"
+        {...p}
+      />
     ),
     h3: (p) => (
-      <h3 className="scroll-mt-24 mb-2 mt-8 text-lg font-semibold text-foreground" {...p} />
+      <h3
+        className="text-heading mt-8 mb-2 scroll-mt-24 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]"
+        {...p}
+      />
     ),
-    p: (p) => <p className="my-4 leading-7 text-muted-foreground" {...p} />,
+    p: (p) => (
+      <p
+        className="text-prominent my-4 text-[15px] leading-[1.6] sm:text-base"
+        {...p}
+      />
+    ),
     a: (p) => (
-      <a className="underline underline-offset-4 hover:text-foreground" {...p} />
+      <a
+        className="text-heading underline decoration-[#3847ff] underline-offset-4 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+        {...p}
+      />
     ),
-    ul: (p) => <ul className="my-4 list-disc space-y-1.5 pl-6 text-muted-foreground" {...p} />,
-    ol: (p) => <ol className="my-4 list-decimal space-y-1.5 pl-6 text-muted-foreground" {...p} />,
-    li: (p) => <li className="leading-7" {...p} />,
-    strong: (p) => <strong className="font-semibold text-foreground" {...p} />,
+    ul: (p) => (
+      <ul
+        className="text-prominent my-4 list-disc space-y-1.5 pl-6 text-[15px] leading-[1.6] sm:text-base"
+        {...p}
+      />
+    ),
+    ol: (p) => (
+      <ol
+        className="text-prominent my-4 list-decimal space-y-1.5 pl-6 text-[15px] leading-[1.6] sm:text-base"
+        {...p}
+      />
+    ),
+    li: (p) => <li className="leading-[1.6]" {...p} />,
+    strong: (p) => <strong className="text-heading font-semibold" {...p} />,
     blockquote: (p) => (
       <blockquote
-        className="my-6 border-l-2 border-border pl-4 text-muted-foreground"
+        className="surface-blue-gradient text-prominent my-6 rounded-3xl p-5"
         {...p}
       />
     ),
 
-    // Tablolar
     table: (p) => (
-      <div className="my-6 overflow-x-auto rounded-xl border border-border">
-        <table className="w-full border-collapse text-sm" {...p} />
+      <div className="surface-card my-6 overflow-x-auto rounded-3xl p-2">
+        <table className="w-full text-sm" {...p} />
       </div>
     ),
-    thead: (p) => <thead className="bg-muted/50" {...p} />,
+    thead: (p) => <thead className="surface-card-elevated rounded-xl" {...p} />,
     th: (p) => (
-      <th className="whitespace-nowrap px-4 py-3 text-left font-medium text-foreground" {...p} />
+      <th
+        className="text-heading px-4 py-3 text-left font-medium whitespace-nowrap"
+        {...p}
+      />
     ),
     td: (p) => (
-      <td className="border-t border-border px-4 py-3 align-top text-muted-foreground" {...p} />
+      <td
+        className="text-secondary-copy px-4 py-3 align-top"
+        {...p}
+      />
     ),
 
-    // SSS (<details>)
     details: (p) => (
-      <details className="my-3 rounded-lg border border-border px-4 py-3" {...p} />
+      <details
+        className="surface-card open:surface-blue-gradient my-3 rounded-3xl px-5 py-4 transition-all"
+        {...p}
+      />
     ),
     summary: (p) => (
-      <summary className="cursor-pointer font-medium text-foreground" {...p} />
+      <summary
+        className="text-prominent cursor-pointer font-medium focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+        {...p}
+      />
     ),
 
-    hr: () => <hr className="my-10 border-border" />,
+    hr: () => <div className="my-10 h-4" aria-hidden="true" />,
     code: (p) => (
-      <code className="rounded bg-muted px-1.5 py-0.5 text-sm" {...p} />
+      <code
+        className="surface-card-elevated text-prominent rounded-xl px-1.5 py-0.5 font-mono text-xs sm:text-[13px]"
+        {...p}
+      />
     ),
     pre: (props) => {
       const { children, className } = props as {
@@ -61,7 +103,7 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       };
 
       const child = React.Children.toArray(children).find(
-        (item) => typeof item === "object",
+        (item) => typeof item === 'object'
       );
       const childProps =
         (
@@ -71,15 +113,15 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
           }>
         )?.props ?? {};
 
-      const rawCode = childProps.children ?? "";
+      const rawCode = childProps.children ?? '';
       const codeString = (
-        typeof rawCode === "string" ? rawCode : String(rawCode ?? "")
-      ).replace(/\n$/, "");
-      const classValue = childProps.className ?? className ?? "";
+        typeof rawCode === 'string' ? rawCode : String(rawCode ?? '')
+      ).replace(/\n$/, '');
+      const classValue = childProps.className ?? className ?? '';
       const language =
-        String(classValue).replace(/^language-/, "").trim() || undefined;
+        String(classValue).replace(/^language-/, '').trim() || undefined;
 
-      if (language === "mermaid") {
+      if (language === 'mermaid') {
         return <Mermaid chart={codeString} />;
       }
 

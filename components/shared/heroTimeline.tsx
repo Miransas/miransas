@@ -53,33 +53,63 @@ export default function Timeline() {
   });
 
   return (
-    <section aria-label="How we build" className="bg-background text-foreground px-6 py-20 md:py-28">
+    <section aria-label="How we build" className="surface-page text-foreground px-6 py-24 md:py-32">
       <Reveal className="mx-auto mb-14 max-w-4xl">
-        <p className="text-muted-foreground font-mono text-xs tracking-[0.18em] uppercase">The engineering process</p>
-        <h2 className="mt-4 max-w-2xl text-3xl font-medium tracking-tight sm:text-4xl">From a question to a working system.</h2>
-        <p className="text-muted-foreground mt-5 max-w-xl text-sm leading-7">A sequence of decisions, built around the problem. From discovery to refinement, each step makes the next decision clearer.</p>
+        <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
+          The engineering process
+        </span>
+        <h2 className="text-heading mt-4 max-w-2xl text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]">
+          From a question to a working system.
+        </h2>
+        <p className="text-secondary-copy mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
+          A sequence of decisions, built around the problem. From discovery to refinement, each step makes the next decision clearer.
+        </p>
       </Reveal>
       <div className="relative mx-auto max-w-4xl" ref={containerRef}>
-        <div aria-hidden className="bg-border absolute top-0 bottom-0 left-4 w-px md:left-1/2" />
-        <motion.div aria-hidden className="bg-foreground/60 absolute top-0 bottom-0 left-4 w-px origin-top md:left-1/2" style={{ scaleY: reduce ? 1 : scrollYProgress }} />
-        <div className="flex flex-col gap-6 md:gap-10">
+        <div aria-hidden className="surface-card-elevated absolute top-0 bottom-0 left-4 w-0.5 rounded-xl md:left-1/2" />
+        <motion.div
+          aria-hidden
+          className=" absolute top-0 bottom-0 left-4 w-0.5 origin-top rounded-xl bg-[#3847ff] md:left-1/2"
+          style={{ scaleY: reduce ? 1 : scrollYProgress }}
+        />
+        <div className="flex flex-col gap-6 md:gap-8">
           {timelineData.map((item, index) => {
             const isEven = index % 2 === 0;
+            const isActive = index === active;
             const Icon = item.icon;
             return (
-              <motion.article key={item.id} initial={false} animate={index === active ? 'active' : 'inactive'} data-active={index === active} aria-current={index === active ? 'step' : undefined} className="relative grid grid-cols-[2rem_minmax(0,1fr)] gap-5 py-6 md:grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] md:gap-8 md:py-8">
-                <motion.div aria-hidden variants={{ inactive: { opacity: 0 }, active: { opacity: 1 } }} transition={{ duration: reduce ? 0 : 0.35 }} className="bg-card absolute -inset-x-3 inset-y-0 rounded-2xl" />
+              <motion.article
+                key={item.id}
+                initial={false}
+                animate={isActive ? 'active' : 'inactive'}
+                data-active={isActive}
+                aria-current={isActive ? 'step' : undefined}
+                className={`relative grid grid-cols-[2rem_minmax(0,1fr)] gap-5 rounded-3xl p-6 transition-all duration-300 sm:p-8 md:grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] md:gap-8 ${
+                  isActive ? 'surface-blue-gradient' : 'surface-card hover-surface-blue-gradient'
+                }`}
+              >
                 <div className={`relative z-10 col-start-2 row-start-1 min-w-0 ${isEven ? 'md:col-start-3' : 'md:col-start-1 md:text-right'}`}>
-                  <p className="text-muted-foreground mb-3 font-mono text-xs tracking-wider">{item.id}</p>
-                  <h3 className={`text-xl font-medium tracking-tight transition-colors ${index === active ? 'text-foreground' : 'text-muted-foreground'}`}>{item.title}</h3>
-                  <p className="text-muted-foreground mt-3 max-w-sm text-sm leading-7">{item.description}</p>
+                  <span className="text-prominent mb-3 block font-mono text-xs leading-[1.45] sm:text-[13px]">
+                    {item.id} / 05
+                  </span>
+                  <h3 className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
+                    {item.title}
+                  </h3>
+                  <p className={`text-secondary-copy mt-3 max-w-sm text-[15px] leading-[1.6] sm:text-base ${!isEven ? 'md:ml-auto' : ''}`}>
+                    {item.description}
+                  </p>
                 </div>
                 <div aria-hidden className="relative z-10 col-start-1 row-start-1 flex justify-center md:col-start-2">
-                  <motion.span variants={{ inactive: { scale: 0.8 }, active: { scale: 1 } }} className="border-background bg-foreground ring-border mt-1 size-4 rounded-full border-[3px] ring-1" />
+                  <motion.span
+                    variants={{ inactive: { scale: 0.8 }, active: { scale: 1.05 } }}
+                    className={`mt-1 size-3.5 rounded-xl transition-colors ${
+                      isActive ? 'bg-[#3847ff]' : 'surface-card-elevated'
+                    }`}
+                  />
                 </div>
                 <div aria-hidden className={`relative z-10 hidden items-center md:flex ${isEven ? 'md:col-start-1 md:row-start-1 md:justify-end' : 'md:col-start-3'}`}>
-                  <div className="border-border bg-elevated text-muted-foreground flex size-16 items-center justify-center rounded-2xl border">
-                    <Icon size={28} strokeWidth={1.4} />
+                  <div className="surface-card-elevated flex size-14 items-center justify-center rounded-xl text-[#3847ff]">
+                    <Icon size={24} strokeWidth={1.6} />
                   </div>
                 </div>
               </motion.article>

@@ -1,0 +1,38 @@
+# Miransas
+
+> Miransas (`https://miransas.com`) is an independent voice AI research lab and software engineering studio founded by Sardor Azimov. Miransas builds Miralas (`https://miralas.io`), researches native Uzbek and multilingual speech synthesis, designs permission-based voice cloning workflows, and engineers low-latency Rust and Python voice infrastructure over gRPC.
+
+## Core Platform & Research
+
+- **Miralas (`https://miralas.io`)**: Flagship voice AI platform in development for creators, streamers, and developers. Combines multilingual text-to-speech, permission-based voice cloning, and conversational voice infrastructure.
+- **Multilingual Speech Baseline**: Built on the approved `t3_mtl23ls_v2.safetensors` Chatterbox Multilingual checkpoint covering 23 languages with pinned artifact verification before loading.
+- **Uzbek Speech Research (In Development)**: Dedicated speech research initiative building toward native Uzbek text-to-speech and speech-to-speech capabilities outside the 23-language upstream baseline.
+- **Permission-Based Voice Cloning**: Voice identity architecture designed with explicit voice owner consent and responsible use from the ground up.
+- **Voice Agent (In Development)**: Self-hosted conversational voice infrastructure connecting spoken requests, session state, and structured workflows (such as orders and appointments).
+- **Voice Infrastructure Architecture**: Rust API gateway handling authorization and routing connected over gRPC to a Python voice worker producing 24 kHz mono PCM16 audio output.
+
+## Additional Engineering Projects
+
+- **Binboi (`https://binboi.com`)**: Live in production. Self-hosted ngrok alternative built with a Go backend and Next.js frontend.
+- **VS Code Uzbek Language Pack**: Published on the Visual Studio Code Marketplace. Native Uzbek localization of the VS Code interface.
+- **Miransas Pulse**: Native macOS system monitor built in C, Objective-C, and Cocoa.
+- **Miransas Chess**: Chess engine written in Rust (in development).
+- **CourierX**: Self-hosted email API written in Rust (paused to focus on Miralas).
+
+## Official Links & Documentation
+
+- [Homepage](https://miransas.com): Overview of Miransas voice AI research, capabilities, architecture pipeline, and FAQs.
+- [Projects](https://miransas.com/projects): Complete project map including Miralas, Voice Agent, Binboi, VS Code Uzbek Language Pack, Miransas Pulse, Miransas Chess, and CourierX.
+- [Models](https://miransas.com/models): Technical notes on Chatterbox Multilingual, pinned checkpoints, and Uzbek speech research.
+- [Voice Agent](https://miransas.com/agent): Conversational voice infrastructure direction and session architecture.
+- [Developers](https://miransas.com/developers): Developer documentation, architecture notes, and planned Miralas API status.
+- [Lab](https://miransas.com/lab): Real-time visual systems, procedural shader studies, and interaction experiments.
+- [Visual Playground](https://miransas.com/lab/visuals): Interactive Crystal Field study exploring real-time particle motion and light.
+- [News & Engineering Notes](https://miransas.com/news): Official engineering updates, release status reports, and architecture articles.
+- [RSS Feed](https://miransas.com/news/rss.xml): Syndicated feed of Miransas engineering notes.
+- [About](https://miransas.com/about): Studio philosophy, engineering principles, and long-term direction.
+- [Careers](https://miransas.com/careers): Engineering culture and how to introduce yourself to the team.
+- [Support](https://miransas.com/support): Product availability, troubleshooting, and support resources.
+- [Contact](https://miransas.com/contact): Direct contact via `contact@miransas.com` and official community channels.
+- [Miralas Platform](https://miralas.io): Official website for the Miralas voice AI platform.
+- [GitHub](https://github.com/Miransas): Open-source repositories and issue tracker.

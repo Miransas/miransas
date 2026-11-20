@@ -3,51 +3,132 @@ import Link from 'next/link';
 import { ArrowUpRight } from 'lucide-react';
 import { HeroEnter, Reveal } from '@/components/shared/reval';
 import CrystalizedBall from '@/components/visuals/crystalized-ball';
+import { JsonLd } from '@/src/components/seo/JsonLd';
+import { createPageMetadata, getBreadcrumbJsonLd } from '@/src/lib/seo';
 
-export const metadata: Metadata = {
-  title: 'Lab',
-  description: 'An evolving collection of engineering experiments, visual systems, and ideas Miransas is exploring.',
-  alternates: { canonical: '/lab' },
-  openGraph: { title: 'Lab | Miransas', description: 'A space for what comes next. Explore visual systems, interaction and voice interfaces.', url: '/lab' },
-};
+export const metadata: Metadata = createPageMetadata({
+  title: 'Lab — Visual Systems, Shaders & Voice Interaction',
+  description:
+    'An evolving collection of Miransas engineering experiments, real-time WebGL visual systems, procedural particle shaders, and voice interaction studies.',
+  path: '/lab',
+});
 
 const themes = [
-  { number: '01', title: 'Real-time visual systems', text: 'We explore how light, particles and procedural forms can become expressive digital materials. The focus is on systems that respond continuously while staying considerate of the devices people use.' },
-  { number: '02', title: 'Interaction and motion', text: 'Timing changes how an interface feels. We explore transitions, feedback and movement that help people understand a system, with room for quieter experiences and reduced motion.' },
-  { number: '03', title: 'Voice and intelligent interfaces', text: 'We are interested in the space between listening, understanding and responding. That means exploring how voice and language can fit naturally into useful software, without adding unnecessary complexity.' },
+  {
+    number: '01',
+    title: 'Real-time visual systems',
+    text: 'We explore how light, particles and procedural forms can become expressive digital materials. The focus is on systems that respond continuously while staying considerate of the devices people use.',
+    featured: true,
+  },
+  {
+    number: '02',
+    title: 'Interaction and motion',
+    text: 'Timing changes how an interface feels. We explore transitions, feedback and movement that help people understand a system, with room for quieter experiences and reduced motion.',
+    featured: false,
+  },
+  {
+    number: '03',
+    title: 'Voice and intelligent interfaces',
+    text: 'We are interested in the space between listening, understanding and responding. That means exploring how voice and language can fit naturally into useful software, without adding unnecessary complexity.',
+    featured: false,
+  },
 ];
 
 export default function LabPage() {
   return (
-    <div className="bg-background px-6 pb-24 pt-20 text-foreground md:px-12 md:pb-32 lg:pt-28">
+    <div className="surface-page text-foreground px-6 pt-20 pb-24 md:px-12 md:pb-32 lg:pt-28">
+      <JsonLd
+        data={getBreadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Lab', path: '/lab' },
+        ])}
+      />
       <div className="mx-auto max-w-7xl">
         <HeroEnter>
-          <p className="font-mono text-[11px] tracking-[.2em] text-muted-foreground">MIRANSAS / LAB</p>
-          <h1 className="mt-7 max-w-4xl text-[clamp(3rem,7vw,6.25rem)] leading-[1.04] tracking-[-.055em]">A space for<br className="hidden sm:block" /> what comes next.</h1>
-          <p className="mt-7 max-w-xl text-base leading-8 text-muted-foreground">An evolving collection of engineering experiments, visual systems, and ideas we&apos;re exploring.</p>
+          <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
+            MIRANSAS / LAB
+          </span>
+          <h1 className="text-heading mt-6 max-w-4xl text-[2.75rem] leading-[1.03] font-semibold tracking-[-0.03em] sm:text-6xl lg:text-[4.5rem]">
+            A space for
+            <br className="hidden sm:block" /> what comes next.
+          </h1>
+          <p className="text-secondary-copy mt-6 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
+            An evolving collection of engineering experiments, visual systems, and ideas we&apos;re exploring.
+          </p>
         </HeroEnter>
 
-        <section aria-labelledby="featured-study" className="grid items-center gap-2 py-14 sm:py-20 lg:grid-cols-[.7fr_1.3fr] lg:gap-16">
+        <section
+          aria-labelledby="featured-study"
+          className="grid items-center gap-8 py-14 sm:py-20 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16"
+        >
           <Reveal className="max-w-md">
-            <p className="font-mono text-[10px] tracking-[.18em] text-muted-foreground">FEATURED STUDY / 001</p>
-            <h2 id="featured-study" className="mt-5 text-3xl tracking-[-.04em] sm:text-4xl">A field of possibilities.</h2>
-            <p className="mt-5 text-sm leading-7 text-muted-foreground">A continuous study of light and particle motion. Different appearances reveal how a few changes in rhythm, color and interaction can shift the character of the same system.</p>
-            <Link href="/lab/visuals" className="mt-7 inline-flex min-h-11 items-center gap-4 rounded-lg py-2 text-sm font-medium underline-offset-8 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring">Enter the visual playground <ArrowUpRight className="size-4" aria-hidden /></Link>
+            <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
+              FEATURED STUDY / 001
+            </span>
+            <h2
+              id="featured-study"
+              className="text-heading mt-4 text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]"
+            >
+              A field of possibilities.
+            </h2>
+            <p className="text-secondary-copy mt-5 text-[15px] leading-[1.6] sm:text-base">
+              A continuous study of light and particle motion. Different appearances reveal how a few changes in rhythm, color and interaction can shift the character of the same system.
+            </p>
+            <Link
+              href="/lab/visuals"
+              className="mt-7 inline-flex min-h-11 items-center gap-3 rounded-xl bg-[#3847ff] px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+            >
+              Enter the visual playground{' '}
+              <ArrowUpRight className="size-4" aria-hidden />
+            </Link>
           </Reveal>
-          <figure>
-            <div className="mx-auto aspect-square w-full max-w-[640px]"><CrystalizedBall preset="abyss" color="#6B9EEA" speed={.5} glow={.34} sparks={.12} /></div>
-            <figcaption className="text-center font-mono text-[10px] tracking-[.12em] text-muted-foreground">CRYSTAL FIELD — A REAL-TIME VISUAL STUDY</figcaption>
+          <figure className="surface-blue-gradient rounded-4xl p-6">
+            <div className="mx-auto aspect-square w-full max-w-[600px]">
+              <CrystalizedBall
+                preset="abyss"
+                color="#3847ff"
+                speed={0.5}
+                glow={0.34}
+                sparks={0.12}
+              />
+            </div>
+            <figcaption className="text-secondary-copy mt-2 text-center font-mono text-xs leading-[1.45] tracking-[0.12em] uppercase">
+              CRYSTAL FIELD — A REAL-TIME VISUAL STUDY
+            </figcaption>
           </figure>
         </section>
 
         <section aria-labelledby="explorations-title" className="pt-8 md:pt-16">
-          <Reveal><p className="font-mono text-[11px] tracking-[.2em] text-muted-foreground">AREAS OF EXPLORATION</p><h2 id="explorations-title" className="mt-5 max-w-lg text-3xl tracking-[-.04em] sm:text-4xl">Questions worth spending time with.</h2></Reveal>
-          <div className="mt-14 space-y-14 md:space-y-20">
-            {themes.map(theme => (
-              <Reveal key={theme.number} className="grid gap-5 md:grid-cols-[64px_1fr_1fr] md:gap-10">
-                <span className="pt-1 font-mono text-xs text-muted-foreground">{theme.number}</span>
-                <h3 className="max-w-xs text-2xl leading-tight tracking-[-.035em] md:text-3xl">{theme.title}</h3>
-                <p className="max-w-lg text-sm leading-8 text-muted-foreground">{theme.text}</p>
+          <Reveal>
+            <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
+              AREAS OF EXPLORATION
+            </span>
+            <h2
+              id="explorations-title"
+              className="text-heading mt-4 max-w-2xl text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]"
+            >
+              Questions worth spending time with.
+            </h2>
+          </Reveal>
+          <div className="mt-12 grid gap-5">
+            {themes.map((theme) => (
+              <Reveal
+                key={theme.number}
+                className={`grid items-start gap-5 rounded-3xl p-6 sm:p-8 md:grid-cols-[72px_1fr_1.2fr] md:gap-10 ${
+                  theme.featured
+                    ? 'surface-blue-gradient'
+                    : 'surface-card hover-surface-blue-gradient'
+                }`}
+              >
+                <span className="text-prominent pt-1 font-mono text-xs leading-[1.45] sm:text-[13px]">
+                  {theme.number} / 03
+                </span>
+                <h3 className="text-heading max-w-xs text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
+                  {theme.title}
+                </h3>
+                <p className="text-secondary-copy max-w-lg text-[15px] leading-[1.6] sm:text-base">
+                  {theme.text}
+                </p>
               </Reveal>
             ))}
           </div>

@@ -26,14 +26,13 @@ const AVATARS = [
     fallback: 'GM',
     tooltip: 'Guliruhsar M',
   },
- 
 ];
 
 export const AvatarGroupDemo = () => {
   return (
-    <AvatarGroup className="flex mt-4">
+    <AvatarGroup className="mt-4 flex">
       {AVATARS.map((avatar, index) => (
-        <Avatar key={index} className="size-12 border-3 border-background">
+        <Avatar key={index} className="size-12">
           <AvatarImage src={avatar.src} alt={avatar.tooltip} />
           <AvatarFallback>{avatar.fallback}</AvatarFallback>
           <AvatarGroupTooltip>{avatar.tooltip}</AvatarGroupTooltip>

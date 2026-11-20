@@ -6,7 +6,14 @@ type CalloutProps = {
 };
 
 export function Callout({ type = 'info', children }: CalloutProps) {
-  const styles = type === 'warning' ? 'border-amber-500/40 bg-amber-500/10' : 'border-border bg-card';
+  const styles =
+    type === 'warning'
+      ? 'surface-blue-gradient text-prominent'
+      : 'surface-card text-prominent';
 
-  return <div className={`my-6 rounded-lg border-l-4 p-4 text-sm ${styles}`}>{children}</div>;
+  return (
+    <div className={`my-6 rounded-3xl p-5 text-[15px] leading-[1.6] sm:text-base ${styles}`}>
+      {children}
+    </div>
+  );
 }

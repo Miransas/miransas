@@ -33,14 +33,12 @@ const leftItemVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 18,
-    filter: 'blur(6px)',
   },
   visible: {
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: {
-      duration: 0.75,
+      duration: 0.72,
       ease: EASE_OUT_EXPO,
     },
   },
@@ -50,27 +48,13 @@ const cardRevealVariants: Variants = {
   hidden: {
     opacity: 0,
     y: 22,
-    filter: 'blur(6px)',
   },
   visible: (index: number) => ({
     opacity: 1,
     y: 0,
-    filter: 'blur(0px)',
     transition: {
-      duration: 0.72,
+      duration: 0.68,
       delay: index * 0.06,
-      ease: EASE_OUT_EXPO,
-    },
-  }),
-};
-
-const lineDrawVariants: Variants = {
-  hidden: { scaleX: 0 },
-  visible: (index: number) => ({
-    scaleX: 1,
-    transition: {
-      duration: 0.85,
-      delay: index * 0.06 + 0.08,
       ease: EASE_OUT_EXPO,
     },
   }),
@@ -122,9 +106,8 @@ export default function StickySplitSection() {
   const currentFocus = hoveredIndex ?? activeIndex;
 
   return (
-    <section className="text-foreground relative isolate w-full px-5 py-24 sm:px-8 md:py-32 lg:px-12">
-      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-start gap-14 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-24">
-        {/* SOL SÜTUN — Sticky & Sağ Liste ile Senkronize */}
+    <section className="surface-page text-foreground relative isolate w-full px-5 py-24 sm:px-8 md:py-32 lg:px-12">
+      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-start gap-14 lg:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] lg:gap-20">
         <motion.div
           initial={reduce ? 'visible' : 'hidden'}
           whileInView="visible"
@@ -134,40 +117,39 @@ export default function StickySplitSection() {
         >
           <motion.div
             variants={leftItemVariants}
-            className="mb-7 inline-flex items-center gap-3"
+            className="mb-6 inline-flex items-center gap-3"
           >
-            <span className="relative flex size-1.5">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#f43f5e] opacity-60" />
-              <span className="relative inline-flex size-1.5 rounded-full bg-[#f43f5e]" />
+            <span className="relative flex size-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-xl bg-[#3847ff] opacity-60" />
+              <span className="relative inline-flex size-2 rounded-xl bg-[#3847ff]" />
             </span>
 
-            <span className="text-muted-foreground text-[11px] font-medium tracking-[0.22em] uppercase">
+            <span className="text-prominent text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
               Voice AI Infrastructure
             </span>
           </motion.div>
 
           <motion.h2
             variants={leftItemVariants}
-            className="text-foreground max-w-[15ch] text-[2.65rem] leading-[1.06] font-medium tracking-[-0.045em] sm:text-5xl lg:text-[3.65rem]"
+            className="text-heading max-w-[15ch] text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]"
           >
             Give your product a voice.
           </motion.h2>
 
           <motion.p
             variants={leftItemVariants}
-            className="text-muted-foreground mt-7 max-w-md text-base leading-8 sm:text-lg"
+            className="text-secondary-copy mt-6 max-w-md text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]"
           >
             Miransas brings speech generation, transcription, and voice
             experiences together in a developer-focused platform.
           </motion.p>
 
-          {/* Senkronize Aktif Adım Göstergesi (Sadece Masaüstünde Sticky Akışı Destekler) */}
           <motion.div
             variants={leftItemVariants}
             className="mt-8 hidden items-center gap-3 lg:flex"
             aria-hidden="true"
           >
-            <span className="font-mono text-[11px] tracking-[0.16em] text-foreground">
+            <span className="text-prominent font-mono text-xs leading-[1.45] sm:text-[13px]">
               {capabilities[currentFocus]?.number}
             </span>
             <div className="flex items-center gap-1.5">
@@ -183,22 +165,22 @@ export default function StickySplitSection() {
                         .getElementById(`capability-${cap.number}`)
                         ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }}
-                    className="relative h-1 rounded-full transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="relative h-1.5 rounded-xl transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                     style={{ width: isCurrent ? 28 : 10 }}
                   >
-                    <span className="bg-border/80 absolute inset-0 rounded-full" />
+                    <span className="surface-card-elevated absolute inset-0 rounded-xl" />
                     {isCurrent && (
                       <motion.span
                         layoutId="sticky-capability-progress"
                         transition={reduce ? { duration: 0 } : SPRING_INDICATOR}
-                        className="absolute inset-0 rounded-full bg-[#f43f5e]"
+                        className="absolute inset-0 rounded-xl bg-[#3847ff]"
                       />
                     )}
                   </button>
                 );
               })}
             </div>
-            <span className="text-muted-foreground font-mono text-[11px] tracking-[0.16em]">
+            <span className="text-secondary-copy font-mono text-xs leading-[1.45] sm:text-[13px]">
               05
             </span>
           </motion.div>
@@ -206,7 +188,7 @@ export default function StickySplitSection() {
           <motion.div variants={leftItemVariants} className="mt-9">
             <a
               href="#voice-capabilities"
-              className="group border-border/60 bg-primary text-primary-foreground inline-flex items-center gap-3 rounded-full border px-6 py-3.5 text-sm font-medium transition-[transform,opacity,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:opacity-92 hover:shadow-[0_12px_30px_rgba(0,0,0,0.14)] active:scale-[0.98]"
+              className="group inline-flex items-center gap-3 rounded-xl bg-[#3847ff] px-6 py-3.5 text-sm font-medium text-white transition-[transform,opacity,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:opacity-92 hover:shadow-[0_12px_30px_rgba(56,71,255,0.28)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] active:scale-[0.98]"
             >
               Explore capabilities
               <ArrowRight
@@ -217,10 +199,9 @@ export default function StickySplitSection() {
           </motion.div>
         </motion.div>
 
-        {/* SAĞ SÜTUN — Capabilities Listesi */}
         <div
           id="voice-capabilities"
-          className="flex scroll-mt-28 flex-col"
+          className="flex scroll-mt-28 flex-col gap-4"
           onMouseLeave={() => setHoveredIndex(null)}
         >
           {capabilities.map((item, index) => {
@@ -237,69 +218,49 @@ export default function StickySplitSection() {
                 onViewportEnter={() => setActiveIndex(index)}
                 onMouseEnter={() => setHoveredIndex(index)}
                 variants={cardRevealVariants}
-                className="group relative py-8 sm:py-10"
+                className={`group relative rounded-3xl p-6 transition-all duration-300 sm:p-8 ${
+                  isHighlighted
+                    ? 'surface-blue-gradient'
+                    : 'surface-card hover-surface-blue-gradient'
+                }`}
               >
-                {/* Soldan sağa çizilerek açılan üst ayırıcı çizgi */}
-                <motion.span
-                  aria-hidden="true"
-                  custom={index}
-                  variants={lineDrawVariants}
-                  className="bg-border absolute inset-x-0 top-0 h-px origin-left"
-                />
-
-                {/* Hover veya aktif durumda parlayan #f43f5e lazer çizgisi */}
-                <span
-                  aria-hidden="true"
-                  className={` absolute top-0 left-0 h-px origin-left bg-gradient-to-r from-[#f43f5e] via-[#fb7185] to-transparent transition-[width,opacity] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
-                    isHighlighted
-                      ? 'w-full opacity-100'
-                      : 'w-0 opacity-0 group-hover:w-full group-hover:opacity-100'
-                  }`}
-                />
-
-                {/* Hover arka plan dokusu */}
-                <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -inset-x-4 inset-y-1 -z-10 rounded-2xl bg-foreground/[0.022] opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:-inset-x-6 dark:bg-white/[0.025]"
-                />
-
-                <div className="mb-5 flex items-center justify-between gap-4">
+                <div className="mb-4 flex items-center justify-between gap-4">
                   <div className="inline-flex items-center gap-2.5">
                     <span
                       aria-hidden="true"
-                      className={`size-1.5 rounded-full transition-[transform,background-color,opacity] duration-300 ${
+                      className={`size-2 rounded-xl transition-[transform,background-color,opacity] duration-300 ${
                         isHighlighted
-                          ? 'scale-100 bg-[#f43f5e] opacity-100'
-                          : 'bg-muted-foreground/40 scale-75 opacity-60 group-hover:scale-100 group-hover:bg-[#f43f5e] group-hover:opacity-100'
+                          ? 'scale-100 bg-[#3847ff] opacity-100'
+                          : 'bg-secondary-copy/40 scale-75 opacity-60 group-hover:scale-100 group-hover:bg-[#3847ff] group-hover:opacity-100'
                       }`}
                     />
-                    <span className="text-muted-foreground group-hover:text-foreground/80 text-xs font-medium tracking-[0.16em] transition-colors duration-300">
+                    <span className="text-prominent text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
                       {item.category}
                     </span>
                   </div>
 
                   <div className="flex items-center gap-1.5">
                     <span
-                      className={`font-mono text-xs transition-colors duration-300 ${
+                      className={`font-mono text-xs leading-[1.45] transition-colors duration-300 sm:text-[13px] ${
                         isHighlighted
-                          ? 'text-[#f43f5e]'
-                          : 'text-muted-foreground group-hover:text-foreground'
+                          ? 'text-prominent'
+                          : 'text-secondary-copy group-hover:text-prominent'
                       }`}
                     >
-                      {item.number}
+                      {item.number} / 05
                     </span>
                     <ArrowUpRight
                       aria-hidden="true"
-                      className="size-3.5 -translate-x-1 translate-y-1 text-[#f43f5e] opacity-0 transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100"
+                      className="size-3.5 -translate-x-1 translate-y-1 text-[#3847ff] opacity-0 transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100"
                     />
                   </div>
                 </div>
 
-                <h3 className="text-foreground text-2xl font-medium tracking-tight transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1.5 sm:text-[1.75rem]">
+                <h3 className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 sm:text-2xl lg:text-[1.65rem]">
                   {item.title}
                 </h3>
 
-                <p className="text-muted-foreground group-hover:text-foreground/75 mt-3 max-w-xl text-sm leading-7 transition-colors duration-300 sm:text-base">
+                <p className="text-secondary-copy mt-3 max-w-xl text-[15px] leading-[1.6] sm:text-base">
                   {item.description}
                 </p>
               </motion.article>

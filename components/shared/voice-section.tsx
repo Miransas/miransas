@@ -11,11 +11,19 @@ import Shdr02 from '../ui/shdr-02';
 import RobotEyes from './RobotEyes';
 import { VOICE_STEPS } from '../../constants/voice-sections';
 
-// Sol taraftaki metin bloğu
-function StepTextItem({ step, index, setActiveIndex, children }: { step: (typeof VOICE_STEPS)[0]; index: number; setActiveIndex: (i: number) => void; children?: React.ReactNode }) {
+function StepTextItem({
+  step,
+  index,
+  setActiveIndex,
+  children,
+}: {
+  step: (typeof VOICE_STEPS)[0];
+  index: number;
+  setActiveIndex: (i: number) => void;
+  children?: React.ReactNode;
+}) {
   const ref = useRef<HTMLDivElement>(null);
 
-  // Metin ekran ortasına yaklaştığında aktifleşir
   const isInView = useInView(ref, {
     amount: 0.5,
     margin: '-20% 0px -20% 0px',
@@ -30,20 +38,34 @@ function StepTextItem({ step, index, setActiveIndex, children }: { step: (typeof
   const Icon = step.icon;
 
   return (
-    <div ref={ref} className="flex min-h-[60vh] flex-col justify-center py-8 lg:min-h-[75vh]">
+    <div
+      ref={ref}
+      className="flex min-h-[60vh] flex-col justify-center py-8 lg:min-h-[75vh]"
+    >
       <Reveal className="max-w-lg space-y-4">
-        <p className="text-muted-foreground font-mono text-xs tracking-wider uppercase">{step.eyebrow}</p>
+        <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
+          {step.eyebrow}
+        </span>
         <div className="flex items-center gap-3">
-          <Icon className="text-foreground h-5 w-5" />
-          <h3 className="text-foreground text-2xl font-semibold tracking-tight md:text-3xl">{step.title}</h3>
+          <div className="surface-card flex size-10 shrink-0 items-center justify-center rounded-xl text-[#3847ff]">
+            <Icon className="h-5 w-5" />
+          </div>
+          <h3 className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
+            {step.title}
+          </h3>
         </div>
 
-        <p className="text-muted-foreground text-base leading-relaxed font-normal md:text-lg">{step.description}</p>
+        <p className="text-secondary-copy text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
+          {step.description}
+        </p>
 
         <ul className="space-y-3 pt-2">
           {step.highlights.map((item, i) => (
-            <li key={i} className="text-muted-foreground flex items-start gap-3 text-sm">
-              <Check className="text-foreground mt-0.5 h-4 w-4 shrink-0" />
+            <li
+              key={i}
+              className="text-prominent flex items-start gap-3 text-[15px] leading-[1.6] sm:text-base"
+            >
+              <Check className="mt-1 h-4 w-4 shrink-0 text-[#3847ff]" />
               <span>{item}</span>
             </li>
           ))}
@@ -54,7 +76,6 @@ function StepTextItem({ step, index, setActiveIndex, children }: { step: (typeof
   );
 }
 
-// Sağ taraftaki container içeriği
 function DynamicComponentSlot({ activeIndex }: { activeIndex: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const visible = useInView(ref, { once: true, margin: '160px' });
@@ -62,13 +83,24 @@ function DynamicComponentSlot({ activeIndex }: { activeIndex: number }) {
     <div ref={ref} className="h-full w-full">
       {visible && (
         <AnimatePresence mode="wait">
-          <motion.div key={activeIndex} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.2, ease: 'easeOut' }} className="voice-visual flex h-full w-full min-w-0 flex-col items-center justify-center space-y-4 p-2 sm:p-4">
+          <motion.div
+            key={activeIndex}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className="voice-visual flex h-full w-full min-w-0 flex-col items-center justify-center space-y-4 p-2 sm:p-4"
+          >
             {activeIndex === 0 && <RobotEyes />}
 
             {activeIndex === 1 && (
               <Shdr02
                 size={400}
-                style={{ width: 'min(100%, 400px)', height: 'auto', aspectRatio: '1' }}
+                style={{
+                  width: 'min(100%, 400px)',
+                  height: 'auto',
+                  aspectRatio: '1',
+                }}
                 state="speaking"
                 params={{ speed: 0.7 }}
                 statePresets={{
@@ -88,7 +120,6 @@ function DynamicComponentSlot({ activeIndex }: { activeIndex: number }) {
                 pauseOffscreen
                 maxDpr={1.5}
                 ariaLabel="Assistant status"
-                className="border-none"
               />
             )}
 
@@ -105,18 +136,30 @@ export function VoiceSection() {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
-    <section id="voice-agents" className="bg-background text-foreground relative py-16">
+    <section
+      id="voice-agents"
+      className="surface-page text-foreground relative py-16"
+    >
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16">
         <div className="relative flex flex-col items-start gap-12 lg:flex-row lg:gap-16">
           <div className="w-full lg:w-1/2">
             {VOICE_STEPS.map((step, index) => (
-              <StepTextItem key={step.id} step={step} index={index} setActiveIndex={setActiveIndex}>
-                <div className="h-[460px] w-full overflow-hidden">{!desktop && <DynamicComponentSlot activeIndex={index} />}</div>
+              <StepTextItem
+                key={step.id}
+                step={step}
+                index={index}
+                setActiveIndex={setActiveIndex}
+              >
+                <div className="surface-blue-gradient h-[460px] w-full overflow-hidden rounded-4xl p-3">
+                  {!desktop && <DynamicComponentSlot activeIndex={index} />}
+                </div>
               </StepTextItem>
             ))}
           </div>
-          <div className="sticky top-[calc(50vh-240px)] hidden h-[480px] w-1/2 lg:block">
-            <div className="relative flex h-full w-full flex-col items-center justify-center overflow-hidden backdrop-blur-md">{desktop && <DynamicComponentSlot activeIndex={activeIndex} />}</div>
+          <div className="sticky top-[calc(50vh-240px)] hidden h-[500px] w-1/2 lg:block">
+            <div className="surface-blue-gradient relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-4xl p-6 shadow-[0_24px_80px_rgba(56,71,255,0.12)]">
+              {desktop && <DynamicComponentSlot activeIndex={activeIndex} />}
+            </div>
           </div>
         </div>
       </div>

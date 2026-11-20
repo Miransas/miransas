@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import {
-  useCallback,
   useEffect,
   useRef,
   useState,
@@ -10,63 +9,32 @@ import {
 } from 'react';
 import { useTheme } from 'next-themes';
 import { useHydrated } from '@/lib/use-hydrated';
-import {
-  ArrowUpRight,
-  Bot,
-  Languages,
-  Mic,
-  Waves,
-  type LucideIcon,
-} from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { VoiceOrb, type OrbMode } from './voice-orb';
 
 const TAB_SWITCH_SOUND_PATH = '/sounds/tab-switch.mp3';
 
 const ITEMS: {
   label: string;
-  kicker: string;
-  description: string;
-  href: string;
-  icon: LucideIcon;
   mode: OrbMode;
 }[] = [
-  {
-    label: 'Voice Cloning',
-    kicker: '01 / VOICE IDENTITY',
-    description:
-      'A familiar voice, with a distinct identity. Explore our permission-based voice cloning work in development.',
-    href: '/projects#miralas',
-    icon: Mic,
-    mode: { amp: 0.42, freq: 1.08, speed: 0.75 },
-  },
-  {
-    label: 'Text to Speech',
-    kicker: '02 / SPEECH GENERATION',
-    description:
-      'Turn written language into expressive speech, shaped for the voices and products we build.',
-    href: '/projects',
-    icon: Waves,
-    mode: { amp: 0.35, freq: 0.94, speed: 0.65 },
-  },
-  {
-    label: 'Speech to Speech',
-    kicker: '03 / VOICE TRANSFORMATION',
-    description:
-      'Explore new ways for speech to move between voices without losing the flow of a conversation.',
-    href: '/projects',
-    icon: Languages,
-    mode: { amp: 0.48, freq: 1.24, speed: 0.9 },
-  },
-  {
-    label: 'Voice Agent',
-    kicker: '04 / CONVERSATIONAL AI',
-    description:
-      "From listening to understanding to replying. A direction we're exploring for interactive voice systems.",
-    href: '/agent',
-    icon: Bot,
-    mode: { amp: 0.38, freq: 1.02, speed: 0.7 },
-  },
-];
+    {
+      label: 'Voice Cloning',
+      mode: { amp: 0.42, freq: 1.08, speed: 0.82 },
+    },
+    {
+      label: 'Text to Speech',
+      mode: { amp: 0.36, freq: 0.96, speed: 0.68 },
+    },
+    {
+      label: 'Speech to Speech',
+      mode: { amp: 0.48, freq: 1.24, speed: 1.05 },
+    },
+    {
+      label: 'Voice Agent',
+      mode: { amp: 0.39, freq: 1.04, speed: 0.76 },
+    },
+  ];
 
 const COPY = {
   eyebrow: 'INDEPENDENT VOICE AI LAB',
@@ -85,7 +53,6 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
     tone ?? (hydrated && resolvedTheme === 'light' ? 'light' : 'dark');
   const current = ITEMS[active];
 
-  // Masaüstü sekme geçiş sesi (public/sounds/tab-switch.mp3)
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const audio = new Audio(TAB_SWITCH_SOUND_PATH);
@@ -99,26 +66,23 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
     };
   }, []);
 
-  const handleSelectTab = useCallback(
-    (nextIndex: number) => {
-      if (nextIndex === active) return;
-      setActive(nextIndex);
+  const handleSelectMode = (nextIndex: number) => {
+    if (nextIndex === active) return;
+    setActive(nextIndex);
 
-      if (
-        typeof window !== 'undefined' &&
-        window.matchMedia('(min-width: 1024px)').matches &&
-        tabAudioRef.current
-      ) {
-        try {
-          tabAudioRef.current.currentTime = 0;
-          void tabAudioRef.current.play().catch(() => {});
-        } catch {
-          // Ses dosyası henüz yokken veya autoplay engellendiğinde yoksay
-        }
+    if (
+      typeof window !== 'undefined' &&
+      window.matchMedia('(min-width: 1024px)').matches &&
+      tabAudioRef.current
+    ) {
+      try {
+        tabAudioRef.current.currentTime = 0;
+        void tabAudioRef.current.play().catch(() => { });
+      } catch {
+        // Ignore when autoplay is blocked
       }
-    },
-    [active]
-  );
+    }
+  };
 
   useEffect(() => {
     const header = document.querySelector('header') as HTMLElement | null;
@@ -126,7 +90,7 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
 
     const prevTransition = header.style.transition;
     header.style.transition =
-      'background-color 250ms ease, border-color 250ms ease, backdrop-filter 250ms ease';
+      'background-color 250ms ease, backdrop-filter 250ms ease';
 
     const syncHeaderBg = () => {
       const rect = sectionRef.current?.getBoundingClientRect();
@@ -136,12 +100,10 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
       if (inHeroTop) {
         header.style.backgroundColor = 'transparent';
         header.style.backdropFilter = 'none';
-        header.style.borderColor = 'transparent';
         header.setAttribute('data-hero-transparent', 'true');
       } else {
         header.style.removeProperty('background-color');
         header.style.removeProperty('backdrop-filter');
-        header.style.removeProperty('border-color');
         header.removeAttribute('data-hero-transparent');
       }
     };
@@ -156,12 +118,11 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
       header.style.transition = prevTransition;
       header.style.removeProperty('background-color');
       header.style.removeProperty('backdrop-filter');
-      header.style.removeProperty('border-color');
       header.removeAttribute('data-hero-transparent');
     };
   }, []);
 
-  const onTabKeyDown = (
+  const onModeKeyDown = (
     event: KeyboardEvent<HTMLButtonElement>,
     index: number
   ) => {
@@ -174,75 +135,108 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
     if (event.key === 'End') next = ITEMS.length - 1;
     if (next === null) return;
     event.preventDefault();
-    handleSelectTab(next);
-    document.getElementById(`hero-technology-tab-${next}`)?.focus();
+    handleSelectMode(next);
+    document.getElementById(`hero-technology-mode-${next}`)?.focus();
   };
+
   return (
     <section
       ref={sectionRef}
       data-tone={orbTone}
       data-site-hero="true"
-      className="text-foreground relative isolate -mt-[var(--header-h)] flex min-h-[760px] flex-col overflow-hidden bg-transparent sm:min-h-[820px] lg:min-h-[max(800px,100svh)]"
+      className="surface-page text-foreground relative isolate -mt-[var(--header-h)] flex min-h-[760px] flex-col overflow-hidden sm:min-h-[820px] lg:min-h-[max(800px,100svh)]"
     >
-      {/* Tam ekran küre + nötr, seyrek ve yumuşak atmosfer */}
+      {/* Layer 0: Giant MIRANSAS wordmark behind the sphere, veiled by live blue smoke */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0 h-full w-full overflow-hidden"
+        className="pointer-events-none absolute inset-x-0 top-[44%] z-0 flex -translate-y-1/2 select-none items-center justify-center overflow-hidden px-4 md:top-[46%]"
+        style={{
+          maskImage:
+            'radial-gradient(ellipse 72% 64% at 50% 50%, rgba(0,0,0,0.95) 28%, rgba(0,0,0,0.28) 72%, transparent 100%)',
+          WebkitMaskImage:
+            'radial-gradient(ellipse 72% 64% at 50% 50%, rgba(0,0,0,0.95) 28%, rgba(0,0,0,0.28) 72%, transparent 100%)',
+        }}
+      >
+        <span
+          className="bg-clip-text text-center font-semibold uppercase leading-none tracking-[-0.045em] text-transparent"
+          style={{
+            fontSize: 'clamp(4.25rem, 16.5vw, 15.5rem)',
+            backgroundImage:
+              orbTone === 'light'
+                ? 'linear-gradient(180deg, rgba(13,75,250,0.16) 0%, rgba(5,5,5,0.08) 55%, rgba(13,75,250,0.05) 100%)'
+                : 'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(13,75,250,0.22) 55%, rgba(13,75,250,0.05) 100%)',
+            filter: 'blur(0.4px)',
+          }}
+        >
+          MIRANSAS
+        </span>
+      </div>
+
+      {/* Layer 1: Live WebGL Blue Smoke, Dust & #0d4bfa Orb */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[1] h-full w-full overflow-hidden"
       >
         {hydrated && (
           <VoiceOrb
-            tone={orbTone}
-            mode={current.mode}
-            color="#f43f5e"
-            fog={0.6}
-            dust={0.28}
-            dots={0}
-            className="absolute inset-0 h-full w-full"
+            tone={orbTone} // sabit istersen "dark" veya "light"
+            mode={{
+              amp: 1.20,   // dalga yüksekliği / kürenin açılıp dağılması
+              freq: 1.44,  // dalga sıklığı / kırışıklık detay sayısı
+              speed: 1.72, // dönüş + duman akış hızı
+            }}
+            color="#0d4bfa"
+            fog={0.85}     // mavi duman yoğunluğu (0.0 – 2.0)
+            dust={0.38}    // süzülen ince toz parçacıkları (0.0 – 2.0)
+            dots={0.12}    // seyrek parlak noktalar (0.0 – 2.0)
+            className="absolute inset-0"
           />
         )}
       </div>
+
+      {/* Top Eyebrow */}
       <div className="relative z-20 mx-auto flex w-full max-w-[1440px] items-center gap-3 px-6 pt-[calc(var(--header-h)+24px)] md:px-12 lg:px-20">
-        <span aria-hidden className="size-1.5 rounded-full bg-[#f43f5e]" />{' '}
-        <span className="text-muted-foreground text-[10px] font-medium tracking-[0.22em]">
+        <span aria-hidden className="size-1.5 rounded-xl bg-[#0d4bfa]" />
+        <span className="text-prominent text-xs font-medium uppercase tracking-[0.12em] sm:text-[13px]">
           {COPY.eyebrow}
         </span>
       </div>
-      {/* Mobilde tamamen gizli (hidden lg:block), masaüstünde tam 36\% dikey konumda sabit */}
+
+      {/* Left Technology Orb Mode Controls */}
       <nav
         aria-label="Voice technologies"
-        style={{ top: '36\%' }}
-        className="z-20 mx-auto hidden w-full max-w-[1440px] px-6 md:px-12 lg:pointer-events-none lg:absolute lg:inset-x-0 lg:top-[36\%] lg:mt-0 lg:block lg:px-20"
+        style={{ top: '36%' }}
+        className="z-20 mx-auto hidden w-full max-w-[1440px] px-6 md:px-12 lg:pointer-events-none lg:absolute lg:inset-x-0 lg:top-[36%] lg:mt-0 lg:block lg:px-20"
       >
         <div className="lg:pointer-events-auto lg:w-fit">
-          <p className="mb-3 text-[10px] tracking-[0.2em] text-[#727175]">
+          <span className="text-secondary-copy mb-3 block text-xs font-medium uppercase tracking-[0.12em] sm:text-[13px]">
             OUR TECHNOLOGY
-          </p>
+          </span>
           <div
-            role="tablist"
-            aria-label="Voice technologies"
-            className="flex flex-col gap-2"
+            role="group"
+            aria-label="Voice technology modes"
+            className="flex flex-col gap-1.5"
           >
             {ITEMS.map((item, i) => {
               const selected = i === active;
               return (
                 <button
-                  id={`hero-technology-tab-${i}`}
+                  id={`hero-technology-mode-${i}`}
                   key={item.label}
                   type="button"
-                  role="tab"
-                  aria-selected={selected}
-                  aria-controls="hero-technology-panel"
-                  tabIndex={selected ? 0 : -1}
-                  onClick={() => handleSelectTab(i)}
-                  onKeyDown={(event) => onTabKeyDown(event, i)}
-                  className={`group focus-visible:ring-ring relative flex min-h-9 min-w-[190px] items-center gap-2.5 rounded-lg py-1.5 text-left text-xs leading-snug transition-colors duration-200 focus-visible:ring-2 focus-visible:outline-none ${
-                    selected
-                      ? 'text-foreground font-medium'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
+                  aria-pressed={selected}
+                  onClick={() => handleSelectMode(i)}
+                  onKeyDown={(event) => onModeKeyDown(event, i)}
+                  className={`group relative flex min-h-9 min-w-[200px] items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-left text-xs leading-[1.45] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px] ${selected
+                      ? 'text-prominent font-medium'
+                      : 'text-secondary-copy hover:text-prominent'
+                    }`}
                 >
                   <span
-                    className={`h-px transition-[width,background-color] duration-300 ${selected ? 'w-8 bg-[#f43f5e]' : 'bg-foreground/25 w-4 group-hover:w-6'}`}
+                    className={`h-0.5 rounded-xl transition-[width,background-color] duration-300 ${selected
+                        ? 'w-7 bg-[#0d4bfa]'
+                        : 'bg-foreground/25 w-3.5 group-hover:w-5'
+                      }`}
                   />
                   <span>{item.label}</span>
                 </button>
@@ -251,57 +245,42 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
           </div>
         </div>
       </nav>
-      <div className="relative z-10 mx-auto mt-auto grid w-full max-w-[1440px] gap-7 px-6 pt-[clamp(260px,45vw,420px)] pb-10 sm:pb-14 md:px-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16 lg:px-20 lg:pt-24 lg:pb-20">
+
+      {/* Bottom Copy & CTAs */}
+      <div className="relative z-10 mx-auto mt-auto grid w-full max-w-[1440px] gap-8 px-6 pt-[clamp(260px,45vw,420px)] pb-10 sm:pb-14 md:px-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16 lg:px-20 lg:pt-24 lg:pb-20">
         <div>
-          <h1 className="max-w-[780px] text-[clamp(2.7rem,5.25vw,5.2rem)] leading-[1.045] font-medium tracking-[-0.055em] whitespace-pre-line">
+          <h1 className="text-heading max-w-[780px] whitespace-pre-line text-[2.75rem] font-semibold leading-[1.03] tracking-[-0.03em] sm:text-6xl lg:text-[4.5rem]">
             <span
               className="bg-clip-text text-transparent"
               style={{
                 backgroundImage:
                   orbTone === 'light'
-                    ? 'linear-gradient(92deg, #e15b64 0\%, #d4883a 34\%, #4f9e76 66\%, #4a7fd9 100\%)'
-                    : 'linear-gradient(92deg, #f3b2a6 0\%, #e9c993 34\%, #b5d9be 66\%, #9dc1f5 100\%)',
+                    ? 'linear-gradient(92deg, #0d4bfa 0%, #1d5cff 42%, #050505 100%)'
+                    : 'linear-gradient(92deg, #FFFFFF 0%, #D1D1D1 48%, #5b86ff 100%)',
               }}
             >
               {COPY.gradientTitle}
             </span>
             {'\n'}
-            <span className="text-foreground">{COPY.solidTitle}</span>
+            <span className="text-heading">{COPY.solidTitle}</span>
           </h1>
         </div>
-        <div className="max-w-[420px] lg:pb-1">
-          <p className="text-sm leading-7 text-[#727175]">{COPY.text}</p>
-          <div
-            id="hero-technology-panel"
-            role="tabpanel"
-            aria-labelledby={`hero-technology-tab-${active}`}
-            tabIndex={0}
-            className="focus-visible:ring-ring mt-5 border-l border-[#f43f5e]/45 pl-4 focus-visible:ring-2 focus-visible:outline-none"
-          >
-            <p className="font-mono text-[10px] tracking-[0.16em] text-[#727175]">
-              {current.kicker}
-            </p>
-            <p className="mt-2 text-sm leading-6 text-[#727175]">
-              {current.description}
-            </p>
-            <Link
-              href={current.href}
-              className="text-foreground mt-2 inline-flex items-center gap-1.5 text-xs font-medium underline-offset-4 hover:underline"
-            >
-              Learn more <ArrowUpRight className="size-3.5" aria-hidden />
-            </Link>
-          </div>
+
+        <div className="max-w-[440px] lg:pb-1">
+          <p className="text-prominent text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
+            {COPY.text}
+          </p>
           <div className="mt-6 flex flex-wrap items-center gap-3">
             <Link
               href="/news"
-              className="bg-foreground text-background inline-flex min-h-11 items-center gap-3 rounded-xl px-4 py-3 text-xs font-medium transition-opacity hover:opacity-80"
+              className="inline-flex min-h-11 items-center gap-3 rounded-xl bg-[#0d4bfa] px-5 py-3 text-xs font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px]"
             >
               Follow our progress{' '}
               <ArrowUpRight className="size-4" aria-hidden />
             </Link>
             <Link
               href="/projects"
-              className="border-border bg-card/50 text-foreground hover:bg-secondary inline-flex min-h-11 items-center rounded-xl border px-4 py-3 text-xs font-medium transition-colors"
+              className="surface-card hover:surface-card-elevated text-prominent inline-flex min-h-11 items-center rounded-xl px-5 py-3 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px]"
             >
               Explore projects
             </Link>

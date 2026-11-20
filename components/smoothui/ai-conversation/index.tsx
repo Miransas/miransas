@@ -5,7 +5,6 @@ import { ArrowDown } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import {
   type ReactNode,
-  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -17,32 +16,15 @@ const SPRING_DEFAULT = {
   duration: 0.25,
   type: "spring" as const,
 };
-/**
- * How close to the bottom still counts as "at the bottom".
- *
- * Zero would break on fractional scroll heights, and anything large would keep
- * yanking the view down while someone is reading a few lines up.
- */
+
 const BOTTOM_THRESHOLD_PX = 48;
 
 export type AIConversationProps = {
   children: ReactNode;
   className?: string;
-  /**
-   * Changes whenever content grows — message count, or streamed text length.
-   * Used to decide when to follow the bottom.
-   */
   contentKey?: string | number;
 };
 
-/**
- * Scroll container for a thread.
- *
- * It follows the bottom **only while the reader is already there**. Scrolling up
- * during a stream is an explicit act — the user wants to read something — and
- * dragging them back down is the single most common way chat UIs become
- * unusable. When it stops following, a pill appears to offer the trip back.
- */
 const AIConversation = ({
   children,
   className,
@@ -52,7 +34,7 @@ const AIConversation = ({
   const viewportRef = useRef<HTMLDivElement | null>(null);
   const [isPinned, setIsPinned] = useState(true);
 
-  const measure = useCallback(() => {
+  const measure = () => {
     const viewport = viewportRef.current;
     if (!viewport) {
       return;
@@ -60,45 +42,48 @@ const AIConversation = ({
     const distance =
       viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight;
     setIsPinned(distance <= BOTTOM_THRESHOLD_PX);
-  }, []);
+  };
 
-  const scrollToBottom = useCallback((behavior: ScrollBehavior) => {
+  const scrollToBottom = (behavior: ScrollBehavior) => {
     const viewport = viewportRef.current;
     if (!viewport) {
       return;
     }
-    // Element.scrollTo is missing in jsdom and in a few older engines, and it is
-    // not worth throwing over — assigning scrollTop lands in the same place,
-    // just without the smoothing.
     if (typeof viewport.scrollTo === "function") {
       viewport.scrollTo({ behavior, top: viewport.scrollHeight });
     } else {
       viewport.scrollTop = viewport.scrollHeight;
     }
     setIsPinned(true);
-  }, []);
+  };
 
-  // Layout effect, so the jump happens in the same frame the content grew and
-  // the reader never sees a flash of the pre-scroll position.
   useLayoutEffect(() => {
-    if (isPinned) {
-      scrollToBottom(shouldReduceMotion ? "auto" : "smooth");
+    if (!isPinned) return;
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    const behavior = shouldReduceMotion ? "auto" : "smooth";
+    if (typeof viewport.scrollTo === "function") {
+      viewport.scrollTo({ behavior, top: viewport.scrollHeight });
+    } else {
+      viewport.scrollTop = viewport.scrollHeight;
     }
-  }, [contentKey, isPinned, scrollToBottom, shouldReduceMotion]);
+  }, [contentKey, isPinned, shouldReduceMotion]);
 
   useEffect(() => {
     const viewport = viewportRef.current;
     if (!viewport) {
       return;
     }
-    // A resize observer catches content that grows without contentKey changing —
-    // an image finishing loading, a details element opening.
-    const observer = new ResizeObserver(measure);
+    const observer = new ResizeObserver(() => {
+      const distance =
+        viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight;
+      setIsPinned(distance <= BOTTOM_THRESHOLD_PX);
+    });
     for (const child of Array.from(viewport.children)) {
       observer.observe(child);
     }
     return () => observer.disconnect();
-  }, [measure]);
+  }, []);
 
   return (
     <div className={cn("relative min-h-0 w-full", className)}>
@@ -115,7 +100,7 @@ const AIConversation = ({
           <motion.button
             animate={{ opacity: 1, scale: 1, y: 0 }}
             aria-label="Jump to latest"
-            className="absolute inset-x-0 bottom-3 mx-auto flex w-fit cursor-pointer items-center gap-1.5 rounded-full border border-border bg-background/90 py-1.5 pr-3 pl-2.5 text-foreground text-xs shadow-sm backdrop-blur"
+            className="surface-card-elevated text-prominent absolute inset-x-0 bottom-3 mx-auto flex w-fit cursor-pointer items-center gap-1.5 rounded-xl py-1.5 pr-3 pl-2.5 text-xs shadow-sm backdrop-blur focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
             exit={
               shouldReduceMotion
                 ? { opacity: 0, transition: { duration: 0 } }

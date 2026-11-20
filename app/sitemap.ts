@@ -1,37 +1,91 @@
 import type { MetadataRoute } from 'next';
 import { getAllNews } from '@/lib/news';
-
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://miransas.com';
+import { SITE_URL } from '@/src/lib/seo';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const news = getAllNews();
-  const newestNews = news[0] ? new Date(news[0].date) : undefined;
+  const newestNews = news[0] ? new Date(news[0].date) : new Date('2026-11-01');
 
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: baseUrl, changeFrequency: 'weekly', priority: 1 },
-    { url: `${baseUrl}/projects`, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${baseUrl}/lab`, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${baseUrl}/lab/visuals`, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${baseUrl}/careers`, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${baseUrl}/about`, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${baseUrl}/models`, changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${baseUrl}/agent`, changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${baseUrl}/developers`, changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${baseUrl}/support`, changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${baseUrl}/contact`, changeFrequency: 'monthly', priority: 0.5 },
     {
-      url: `${baseUrl}/news`,
+      url: SITE_URL,
       lastModified: newestNews,
       changeFrequency: 'weekly',
+      priority: 1.0,
+    },
+    {
+      url: `${SITE_URL}/projects`,
+      lastModified: newestNews,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/models`,
+      lastModified: newestNews,
+      changeFrequency: 'monthly',
+      priority: 0.9,
+    },
+    {
+      url: `${SITE_URL}/agent`,
+      lastModified: newestNews,
+      changeFrequency: 'monthly',
+      priority: 0.85,
+    },
+    {
+      url: `${SITE_URL}/news`,
+      lastModified: newestNews,
+      changeFrequency: 'weekly',
+      priority: 0.85,
+    },
+    {
+      url: `${SITE_URL}/developers`,
+      lastModified: newestNews,
+      changeFrequency: 'monthly',
       priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/about`,
+      lastModified: newestNews,
+      changeFrequency: 'monthly',
+      priority: 0.8,
+    },
+    {
+      url: `${SITE_URL}/lab`,
+      lastModified: newestNews,
+      changeFrequency: 'monthly',
+      priority: 0.75,
+    },
+    {
+      url: `${SITE_URL}/lab/visuals`,
+      lastModified: newestNews,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
+    {
+      url: `${SITE_URL}/support`,
+      lastModified: newestNews,
+      changeFrequency: 'monthly',
+      priority: 0.65,
+    },
+    {
+      url: `${SITE_URL}/contact`,
+      lastModified: newestNews,
+      changeFrequency: 'monthly',
+      priority: 0.65,
+    },
+    {
+      url: `${SITE_URL}/careers`,
+      lastModified: newestNews,
+      changeFrequency: 'monthly',
+      priority: 0.6,
     },
   ];
 
   const newsRoutes: MetadataRoute.Sitemap = news.map((n) => ({
-    url: `${baseUrl}/news/${n.slug}`,
+    url: `${SITE_URL}/news/${n.slug}`,
     lastModified: new Date(n.date),
     changeFrequency: 'monthly',
-    priority: 0.6,
+    priority: 0.7,
   }));
 
   return [...staticRoutes, ...newsRoutes];

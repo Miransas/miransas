@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export function CopyMdxButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -19,9 +19,9 @@ export function CopyMdxButton({ text }: { text: string }) {
     <button
       type="button"
       onClick={copy}
-      className="rounded-lg border border-border px-3 py-1.5 text-sm text-muted-foreground transition hover:bg-muted hover:text-foreground"
+      className="surface-card hover-surface-blue-gradient text-prominent rounded-xl px-3.5 py-2 text-xs font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] sm:text-[13px]"
     >
-      {copied ? "Copied" : "Copy MDX"}
+      {copied ? 'Copied' : 'Copy MDX'}
     </button>
   );
 }

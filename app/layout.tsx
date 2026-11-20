@@ -7,8 +7,6 @@
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- *
- *
  */
 
 import type { Metadata, Viewport } from 'next';
@@ -22,6 +20,14 @@ import NoticeModal from '../components/provider/site-modal';
 import { GoogleAnalytics } from '../components/provider/google-analytics';
 import { PageTransition } from '../components/provider/page-transition';
 import { ThemeProvider } from '../components/provider/theme-provider';
+import { JsonLd } from '@/src/components/seo/JsonLd';
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+  SITE_NAME,
+  SITE_URL,
+  getOrganizationJsonLd,
+} from '@/src/lib/seo';
 
 // ── Fonts ─────────────────────────────────────────────────────────────────
 const jakarta = Plus_Jakarta_Sans({
@@ -39,47 +45,46 @@ const plexMono = IBM_Plex_Mono({
   weight: ['400', '500', '600', '700'],
 });
 
-// ── Site Constants ────────────────────────────────────────────────────────
-const SITE_URL = 'https://miransas.com';
-const SITE_NAME = 'Miransas';
-const SITE_TITLE = 'Miransas — Secure • Connect • Evolve';
-const SITE_DESCRIPTION = 'Miransas is an independent engineering studio building voice AI, developer tools and the infrastructure behind them.';
 // ── Metadata ──────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: SITE_TITLE,
+    default: DEFAULT_TITLE,
     template: '%s | Miransas',
   },
-  description: SITE_DESCRIPTION,
-  keywords: ['miransas', 'software engineering', 'rust', 'go', 'next.js', 'infrastructure', 'binboi', 'chess engine', 'developer tools'],
+  description: DEFAULT_DESCRIPTION,
+  keywords: [
+    'Miransas',
+    'Miralas',
+    'voice AI lab',
+    'Uzbek speech synthesis',
+    'Uzbek text to speech',
+    'multilingual TTS',
+    'permission-based voice cloning',
+    'conversational voice agents',
+    'Rust gRPC voice infrastructure',
+    'Chatterbox Multilingual',
+    'Binboi',
+  ],
   authors: [{ name: 'Sardor Azimov', url: SITE_URL }],
   creator: 'Sardor Azimov',
-  publisher: 'Miransas',
+  publisher: SITE_NAME,
   applicationName: SITE_NAME,
+  category: 'technology',
 
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-    images: [
-      {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'Miransas — Secure • Connect • Evolve',
-      },
-    ],
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
   },
 
   twitter: {
     card: 'summary_large_image',
-    title: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-    images: ['/og-image.png'],
+    title: DEFAULT_TITLE,
+    description: DEFAULT_DESCRIPTION,
     creator: '@miransaas',
   },
 
@@ -110,6 +115,9 @@ export const metadata: Metadata = {
 
   alternates: {
     canonical: SITE_URL,
+    types: {
+      'application/rss+xml': `${SITE_URL}/news/rss.xml`,
+    },
   },
 
   appleWebApp: {
@@ -122,7 +130,7 @@ export const metadata: Metadata = {
 // ── Viewport ──────────────────────────────────────────────────────────────
 export const viewport: Viewport = {
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#efefef' },
+    { media: '(prefers-color-scheme: light)', color: '#EFEFEF' },
     { media: '(prefers-color-scheme: dark)', color: '#050505' },
   ],
   width: 'device-width',
@@ -137,41 +145,40 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationJsonLd = getOrganizationJsonLd();
+
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <noscript dangerouslySetInnerHTML={{ __html: "<style>.scroll-reveal { opacity: 1 !important; transform: none !important; filter: none !important; }</style>" }} />
-        <script
-          type="application/ld+json"
+        <noscript
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'Organization',
-              name: 'Miransas',
-              url: SITE_URL,
-              logo: `${SITE_URL}/icons/logo.png`,
-              description: SITE_DESCRIPTION,
-              founder: {
-                '@type': 'Person',
-                name: 'Sardor Azimov',
-              },
-              sameAs: ['https://github.com/miransas', 'https://twitter.com/miransaas', 'https://www.instagram.com/miransaas', 'https://www.youtube.com/@miransaas'],
-            }),
+            __html:
+              '<style>.scroll-reveal { opacity: 1 !important; transform: none !important; filter: none !important; }</style>',
           }}
         />
+        <JsonLd data={organizationJsonLd} />
       </head>
-      <body className={`${jakarta.variable} ${plexMono.variable} bg-background text-foreground font-sans antialiased`}>
+      <body
+        className={`${jakarta.variable} ${plexMono.variable} surface-page text-foreground font-sans antialiased`}
+      >
         <GoogleAnalytics />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <SmoothScroll>
             <NoticeModal />
-            <a href="#main-content" className="bg-primary text-primary-foreground fixed top-4 left-4 z-[100] -translate-y-24 rounded-lg px-4 py-3 text-sm focus:translate-y-0">
+            <a
+              href="#main-content"
+              className="fixed top-4 left-4 z-[100] -translate-y-24 rounded-xl bg-[#3847ff] px-4 py-3 text-sm font-medium text-white focus:translate-y-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+            >
               Skip to content
             </a>
             <div className="relative flex min-h-screen flex-col">
               <SiteHeader />
               <PageTransition>
-                <main id="main-content" tabIndex={-1} className="flex-1 pt-[var(--header-h)]">
+                <main
+                  id="main-content"
+                  tabIndex={-1}
+                  className="flex-1 pt-[var(--header-h)]"
+                >
                   {children}
                 </main>
               </PageTransition>

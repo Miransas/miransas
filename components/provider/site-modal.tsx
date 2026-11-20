@@ -23,15 +23,24 @@ export default function NoticeModal() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-[60] bg-black/40 backdrop-blur-md" />
+        <Dialog.Overlay className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-md" />
         <Dialog.Content asChild>
-          <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }} className="border-border bg-popover text-popover-foreground fixed top-1/2 left-1/2 z-[61] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-3xl border p-6 text-center shadow-xl sm:p-8">
-            <div className="border-border bg-secondary mx-auto mb-5 flex size-12 items-center justify-center rounded-2xl border">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+            className="surface-blue-gradient text-popover-foreground fixed top-1/2 left-1/2 z-[61] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-4xl p-6 text-center shadow-2xl sm:p-8"
+          >
+            <div className="surface-card-elevated mx-auto mb-5 flex size-12 items-center justify-center rounded-xl text-[#3847ff]">
               <Sparkles aria-hidden size={20} />
             </div>
-            <Dialog.Title className="mb-3 text-xl font-semibold tracking-tight">Active Development</Dialog.Title>
-            <Dialog.Description className="text-muted-foreground mb-6 text-sm leading-7">We are constantly updating and refining our platform to provide a better experience. Features and visual elements may evolve as development continues.</Dialog.Description>
-            <Dialog.Close className="bg-primary text-primary-foreground inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-medium transition-opacity hover:opacity-85">
+            <Dialog.Title className="text-heading mb-3 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl">
+              Active Development
+            </Dialog.Title>
+            <Dialog.Description className="text-secondary-copy mb-6 text-[15px] leading-[1.6] sm:text-base">
+              We are constantly updating and refining our platform to provide a better experience. Features and visual elements may evolve as development continues.
+            </Dialog.Description>
+            <Dialog.Close className="inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl bg-[#3847ff] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]">
               Understand &amp; Proceed
               <ArrowRight aria-hidden size={16} />
             </Dialog.Close>

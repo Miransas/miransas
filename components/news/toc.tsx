@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import type { TocItem } from "@/lib/toc";
+import { useEffect, useState } from 'react';
+import type { TocItem } from '@/lib/toc';
 
 export function Toc({ items }: { items: TocItem[] }) {
-  const [active, setActive] = useState(items[0]?.id ?? "");
+  const [active, setActive] = useState(items[0]?.id ?? '');
 
   useEffect(() => {
     const els = items
@@ -19,7 +19,7 @@ export function Toc({ items }: { items: TocItem[] }) {
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
         if (visible[0]) setActive(visible[0].target.id);
       },
-      { rootMargin: "-96px 0px -70% 0px" },
+      { rootMargin: '-96px 0px -70% 0px' }
     );
 
     els.forEach((el) => observer.observe(el));
@@ -29,21 +29,21 @@ export function Toc({ items }: { items: TocItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <nav aria-label="On this page">
-      <div className="mb-3 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+    <nav aria-label="On this page" className="surface-card rounded-3xl p-5">
+      <span className="text-prominent mb-3 block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
         On this page
-      </div>
-      <ul className="space-y-1.5 border-l border-border text-sm">
+      </span>
+      <ul className="space-y-1.5 text-sm">
         {items.map((item) => (
           <li key={item.id}>
             <a
               href={`#${item.id}`}
-              className={`-ml-px block border-l py-0.5 transition ${
-                item.level === 3 ? "pl-7" : "pl-4"
+              className={`block rounded-xl py-1.5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] ${
+                item.level === 3 ? 'pl-5' : 'pl-2.5'
               } ${
                 active === item.id
-                  ? "border-foreground font-medium text-foreground"
-                  : "border-transparent text-muted-foreground hover:text-foreground"
+                  ? 'surface-blue-gradient text-heading font-medium'
+                  : 'text-secondary-copy hover:text-prominent'
               }`}
             >
               {item.text}
