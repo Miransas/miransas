@@ -64,7 +64,7 @@ export function Features() {
               className={`rounded-xl px-4 py-2 text-xs font-medium transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px] ${
                 active === tab.id
                   ? 'bg-[#0d4bfa] text-white'
-                  : 'text-prominent border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
+                  : 'text-prominent border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
               }`}
             >
               {tab.label}

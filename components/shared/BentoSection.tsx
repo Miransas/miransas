@@ -256,8 +256,8 @@ export function Bento() {
                 viewport={{ once: true, amount: 0.2 }}
                 className={`group relative flex min-h-[290px] flex-col justify-between overflow-hidden rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 lg:p-8 ${
                   isFeatured
-                    ? 'border border-[#0d4bfa]/20 bg-white hover:border-[#0d4bfa]/35 dark:border-[#0d4bfa]/30 dark:bg-[#070912] dark:hover:border-[#0d4bfa]/45'
-                    : 'border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
+                    ? 'border border-[#0d4bfa]/20 bg-white hover:border-[#0d4bfa]/35 dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a] dark:hover:border-[#0d4bfa]/45'
+                    : 'border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
                 }`}
               >
                 {isFeatured && (
@@ -274,7 +274,7 @@ export function Bento() {
                 <motion.div variants={textStagger} className="relative z-10">
                   <motion.span
                     variants={inner}
-                    className="text-prominent inline-flex items-center gap-2 rounded-xl bg-black/[0.04] px-3 py-1 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px] dark:bg-white/[0.04]"
+                    className="text-prominent inline-flex items-center gap-2 rounded-xl bg-[#F7F8FC] px-3 py-1 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px] dark:bg-[#121214]"
                   >
                     <span aria-hidden="true" className="size-1.5 rounded-xl bg-[#0d4bfa]" />
                     {item.tag}
@@ -292,7 +292,7 @@ export function Bento() {
                     {item.body}
                   </motion.p>
                   <motion.div variants={inner} className="mt-5">
-                    <span className="text-secondary-copy inline-flex items-center rounded-xl bg-black/[0.04] px-3 py-1 font-mono text-xs leading-[1.45] dark:bg-white/[0.04]">
+                    <span className="text-secondary-copy inline-flex items-center rounded-xl bg-[#F7F8FC] px-3 py-1 font-mono text-xs leading-[1.45] dark:bg-[#121214]">
                       {item.aside}
                     </span>
                   </motion.div>

@@ -207,7 +207,7 @@ export const ModeToggle = ({ className, duration = 400, variant, fromCenter = fa
       aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
       title={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
       className={cn(
-        'surface-card hover:surface-card-elevated text-heading inline-flex size-10 shrink-0 items-center justify-center rounded-xl transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] [&_svg]:size-[18px]',
+        'text-prominent hover:text-heading inline-flex size-10 shrink-0 items-center justify-center rounded-xl border-0 bg-transparent shadow-none ring-0 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] [&_svg]:size-[18px]',
         className
       )}
       {...props}

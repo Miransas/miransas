@@ -220,8 +220,8 @@ export default function StickySplitSection() {
                 variants={cardRevealVariants}
                 className={`group relative overflow-hidden rounded-3xl p-6 transition-all duration-300 sm:p-8 ${
                   isHighlighted
-                    ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#070912]'
-                    : 'border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
+                    ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]'
+                    : 'border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
                 }`}
               >
                 {isHighlighted && (

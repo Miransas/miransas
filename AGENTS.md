@@ -86,21 +86,25 @@ After implementation:
 Maintain complete visual consistency across every page and component via semantic CSS variables in `app/globals.css`.
 
 ### Contextual Card & Surface Architecture (3 Tiers)
-- **Page & Section Background (Borderless):**
-  - Dark Mode: fixed `#050505` (`--surface-page`). Never use random dark grays (`#0a0a0a`, `#111111`, `#161617`, `bg-neutral-900`, `bg-zinc-950`) or full-width `border-t`/`border-b` section dividers.
-  - Light Mode: fixed `#EFEFEF` (`--surface-page`).
+- **Light Mode Surfaces (Unchanged):**
+  - `--surface-page: #EFEFEF` (page & section background)
+  - `--surface-card: #FFFFFF` (cards)
+  - `--surface-card-elevated: #F7F8FC` (hover & nested tonal surface)
+- **Dark Mode 3-Layer Sandwich Hierarchy:**
+  - `--surface-page: #050505` → Page background (`html`, `body`, all borderless sections) AND recessed form inputs (`input`, `textarea`, `select`) / code blocks inside cards.
+  - `--surface-card: #0a0a0a` → All primary standalone cards, 3-column grid cards, Contact form outer container, closed FAQ items, modals, and scrolled sticky navbar.
+  - `--surface-card-elevated: #121214` → Hover state for interactive cards, plus borderless nested elements inside cards (icon containers, status chips, checklist rows `01–04`).
 - **Tier 1 — Structural Cards & Form Controls (Crisp Hairline Border):**
-  - Use for primary standalone cards, 3-column feature/research grids, directory cards, modals, and form containers.
-  - Surface: `bg-white dark:bg-background` (`#FFFFFF` light / `#050505` or `#07080c` dark).
+  - Surface: `bg-white dark:bg-[#0a0a0a]` (interactive hover: `hover:bg-[#F7F8FC] dark:hover:bg-[#121214]`).
   - Border: `border border-black/[0.08] dark:border-white/10` (interactive hover: `hover:border-black/[0.16] dark:hover:border-white/20`).
-  - Form inputs (`input`, `textarea`, `select`) inside a Tier 1 card: `bg-[#EFEFEF]/60 dark:bg-white/[0.03]` with `border border-black/[0.08] dark:border-white/10` and `focus:border-[#0d4bfa] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d4bfa]/30`.
+  - Recessed form inputs (`input`, `textarea`, `select`) inside a `#0a0a0a` card: `bg-[#EFEFEF]/60 dark:bg-[#050505]` with `border border-black/[0.08] dark:border-white/10` and `focus:border-[#0d4bfa] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d4bfa]/30`.
 - **Tier 2 — Featured / Gradient & Active Cards (Cobalt `#0d4bfa` Accent):**
   - Use selectively (at most 1 card per grid, active FAQ item, or hero/CTA showcase).
-  - Surface: Soft, feathered internal `#0d4bfa` radial glow (never a hard clipped top bar) over `bg-white dark:bg-[#070912]`.
+  - Surface: Soft, feathered internal `#0d4bfa` radial glow (never a hard clipped top bar) over `bg-white dark:bg-[#0a0a0a]`.
   - Border: Subtle cobalt-tinted hairline (`border border-[#0d4bfa]/20 dark:border-[#0d4bfa]/30`) or borderless when melting into `<AmbientSmoke />`.
 - **Tier 3 — Nested Elements, Chips & Inner Rows (Strictly Borderless):**
   - Never create noisy box-in-a-box double borders.
-  - Elements *inside* a Tier 1 or Tier 2 card (checklist rows `01–04`, icon badges, status pills, eyebrow kickers, secondary metric tiles, inner mocks, and accordion `+` buttons) must stay borderless (`border-0`), separated purely via soft tonal fills (`bg-black/[0.04] dark:bg-white/[0.04]` or `bg-[#0d4bfa]/10`).
+  - Elements *inside* a Tier 1 or Tier 2 card (checklist rows `01–04`, icon badges, status pills, eyebrow kickers, secondary metric tiles, inner mocks, and accordion `+` buttons) must stay borderless (`border-0`), separated purely via `bg-[#F7F8FC] dark:bg-[#121214]` or `bg-black/[0.04] dark:bg-white/[0.05]` / `bg-[#0d4bfa]/10`.
 
 ### 3-Tier Corner Radius System & Focus
 - **Accessibility focus:** Keep `focus-visible:outline-2 focus-visible:outline-[#0d4bfa] focus-visible:outline-offset-2` for keyboard navigation.

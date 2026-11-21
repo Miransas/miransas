@@ -44,7 +44,7 @@
   --surface-page: #EFEFEF;
   --surface-card: #FFFFFF;
   --surface-card-featured: #FFFFFF;
-  --surface-card-elevated: rgba(0, 0, 0, 0.04);
+  --surface-card-elevated: #F7F8FC;
   --surface-border-tier1: rgba(0, 0, 0, 0.08);
   --surface-border-tier1-hover: rgba(0, 0, 0, 0.16);
   --surface-border-tier2: rgba(13, 75, 250, 0.2);
@@ -83,13 +83,13 @@
 [data-tone='dark'] {
   color-scheme: dark;
   --surface-page: #050505;
-  --surface-card: #07080c;
-  --surface-card-featured: #070912;
-  --surface-card-elevated: rgba(255, 255, 255, 0.04);
+  --surface-card: #0a0a0a;
+  --surface-card-featured: #0a0a0a;
+  --surface-card-elevated: #121214;
   --surface-border-tier1: rgba(255, 255, 255, 0.1);
   --surface-border-tier1-hover: rgba(255, 255, 255, 0.2);
   --surface-border-tier2: rgba(13, 75, 250, 0.3);
-  --surface-blue-gradient: radial-gradient(75% 75% at 50% 50%, rgba(13, 75, 250, 0.16) 0%, rgba(13, 75, 250, 0.045) 48%, rgba(7, 9, 18, 0) 76%);
+  --surface-blue-gradient: radial-gradient(75% 75% at 50% 50%, rgba(13, 75, 250, 0.16) 0%, rgba(13, 75, 250, 0.045) 48%, rgba(10, 10, 10, 0) 76%);
   --text-heading: #FFFFFF;
   --text-prominent: #D1D1D1;
   --text-secondary: #6E6E74;

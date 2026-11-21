@@ -20,7 +20,7 @@ export default function OpenGraphImage() {
           padding: '72px',
           backgroundColor: '#050505',
           backgroundImage:
-            'radial-gradient(125% 115% at 0% 0%, rgba(56, 71, 255, 0.42) 0%, #000103 68%)',
+            'radial-gradient(125% 115% at 0% 0%, rgba(13, 75, 250, 0.42) 0%, #0a0a0a 68%)',
           color: '#FFFFFF',
           fontFamily: 'sans-serif',
         }}
@@ -39,7 +39,7 @@ export default function OpenGraphImage() {
               gap: '14px',
               padding: '10px 20px',
               borderRadius: '12px',
-              backgroundColor: '#03050d',
+              backgroundColor: '#121214',
             }}
           >
             <div

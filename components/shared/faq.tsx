@@ -44,7 +44,7 @@ export function Faq() {
                       className={`rounded-xl px-4 py-2 text-xs font-medium transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px] ${
                         isActive
                           ? 'bg-[#0d4bfa] text-white'
-                          : 'text-prominent border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
+                          : 'text-prominent border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
                       }`}
                     >
                       {key}
@@ -53,7 +53,7 @@ export function Faq() {
                 })}
               </div>
             </div>
-            <div className="relative mt-10 overflow-hidden rounded-3xl border border-[#0d4bfa]/20 bg-white p-6 sm:p-8 dark:border-[#0d4bfa]/30 dark:bg-[#070912]">
+            <div className="relative mt-10 overflow-hidden rounded-3xl border border-[#0d4bfa]/20 bg-white p-6 sm:p-8 dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]">
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
@@ -85,8 +85,8 @@ export function Faq() {
                   key={item.q}
                   className={`relative overflow-hidden rounded-3xl transition-colors duration-300 ${
                     isOpen
-                      ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#070912]'
-                      : 'border border-black/[0.07] bg-white hover:border-black/[0.15] dark:border-white/[0.09] dark:bg-background dark:hover:border-white/[0.18]'
+                      ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]'
+                      : 'border border-black/[0.07] bg-white hover:border-black/[0.15] hover:bg-[#F7F8FC] dark:border-white/[0.09] dark:bg-[#0a0a0a] dark:hover:border-white/[0.18] dark:hover:bg-[#121214]'
                   }`}
                 >
                   {isOpen && (
@@ -114,7 +114,7 @@ export function Faq() {
                       className={`flex size-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 ${
                         isOpen
                           ? 'rotate-180 bg-[#0d4bfa]/15 text-[#0d4bfa] dark:bg-[#0d4bfa]/25'
-                          : 'text-secondary-copy bg-black/[0.04] dark:bg-white/[0.04]'
+                          : 'text-secondary-copy bg-[#F7F8FC] dark:bg-[#121214]'
                       }`}
                     >
                       <ChevronDown className="size-4" />

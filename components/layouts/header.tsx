@@ -6,7 +6,6 @@ import {
   AnimatePresence,
   motion,
   useReducedMotion,
-  type Transition,
 } from 'framer-motion';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -16,13 +15,6 @@ import { cn } from '@/lib/utils';
 import { ModeToggle } from '../provider/mode-toggle';
 
 const EASE_OUT_EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
-const PILL_SPRING: Transition = {
-  type: 'spring',
-  stiffness: 420,
-  damping: 34,
-  mass: 0.7,
-};
 
 export function SiteHeader() {
   const pathname = usePathname();
@@ -153,21 +145,21 @@ export function SiteHeader() {
       <div
         data-header-surface
         className={cn(
-          'pointer-events-auto w-full transition-[background-color,box-shadow,backdrop-filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
+          'pointer-events-auto w-full transition-[background-color,backdrop-filter] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none',
           surfaced
-            ? 'bg-background/85 shadow-[0_10px_36px_rgba(0,0,0,0.05)] backdrop-blur-2xl dark:shadow-[0_12px_40px_rgba(0,0,0,0.42)]'
-            : 'bg-transparent shadow-none backdrop-blur-none',
+            ? 'bg-[#EFEFEF]/85 backdrop-blur-2xl dark:bg-[#0a0a0a]/85'
+            : 'bg-transparent backdrop-blur-none',
         )}
       >
         <div
           data-header-content
-          className="container-page mx-auto flex h-[var(--header-h)] items-center justify-between gap-4"
+          className="mx-auto flex h-[var(--header-h)] w-full max-w-[1440px] items-center justify-between gap-4 px-6 md:px-12 lg:px-20"
         >
           <div className="flex min-w-0 items-center gap-6">
             <Link
               href="/"
               aria-label="Miransas home"
-              className="rounded-xl transition-opacity duration-300 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+              className="rounded-xl transition-opacity duration-300 hover:opacity-85 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
             >
               <img
                 src="/icons/logo-dark.png"
@@ -198,9 +190,6 @@ export function SiteHeader() {
                     item.href.startsWith('/') &&
                     pathname === item.href.replace(/\/$/, ''),
                 );
-                const showPill =
-                  hoveredMenu === menu.label ||
-                  (hoveredMenu === null && (isOpen || isActive));
                 const id = `nav-${menu.label.toLowerCase()}`;
 
                 return (
@@ -232,10 +221,10 @@ export function SiteHeader() {
                       type="button"
                       data-nav-trigger
                       className={cn(
-                        'relative inline-flex min-h-10 items-center gap-1.5 rounded-xl px-3.5 text-sm font-medium transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]',
+                        'relative inline-flex min-h-10 items-center gap-1.5 rounded-xl border-0 bg-transparent px-3.5 text-sm font-medium shadow-none ring-0 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]',
                         isOpen || isActive || hoveredMenu === menu.label
-                          ? 'text-prominent'
-                          : 'text-secondary-copy hover:text-prominent',
+                          ? 'text-[#050505] dark:text-white'
+                          : 'text-secondary-copy hover:text-[#050505] dark:hover:text-white',
                       )}
                       aria-expanded={isOpen}
                       aria-controls={id}
@@ -253,19 +242,12 @@ export function SiteHeader() {
                         }
                       }}
                     >
-                      {showPill && (
-                        <motion.span
-                          layoutId="header-nav-pill"
-                          transition={reduce ? { duration: 0 } : PILL_SPRING}
-                          className="surface-card-elevated absolute inset-0 -z-10 rounded-xl"
-                        />
-                      )}
                       <span className="relative z-10">{menu.label}</span>
                       <ChevronDown
                         aria-hidden
                         className={cn(
                           'relative z-10 size-3.5 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]',
-                          isOpen && 'rotate-180',
+                          isOpen && 'rotate-180 text-[#0d4bfa]',
                         )}
                       />
                     </button>
@@ -303,7 +285,7 @@ export function SiteHeader() {
                           }}
                           className="absolute top-full left-0 z-50 w-76 origin-top-left pt-2.5"
                         >
-                          <div className="surface-blue-gradient text-popover-foreground rounded-3xl p-2 shadow-[0_24px_64px_rgba(0,0,0,0.14)] backdrop-blur-2xl dark:shadow-[0_24px_64px_rgba(0,0,0,0.5)]">
+                          <div className="rounded-3xl border-0 bg-transparent p-2 shadow-none ring-0 backdrop-blur-md">
                             {menu.items.map((item, idx) => (
                               <motion.div
                                 key={item.label}
@@ -323,17 +305,17 @@ export function SiteHeader() {
                                   aria-current={
                                     pathname === item.href ? 'page' : undefined
                                   }
-                                  className="group/item hover:bg-secondary/80 aria-[current=page]:bg-secondary block rounded-xl px-3.5 py-3 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                                  className="group/item block rounded-xl border-0 bg-transparent px-3.5 py-2.5 shadow-none ring-0 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
                                 >
-                                  <span className="text-heading flex items-center justify-between text-sm font-medium">
+                                  <span className="flex items-center justify-between text-sm font-medium text-[#1d1d1f] transition-colors duration-200 group-hover/item:text-[#0d4bfa] group-aria-[current=page]/item:text-[#0d4bfa] dark:text-[#D1D1D1] dark:group-hover/item:text-white dark:group-aria-[current=page]/item:text-white">
                                     {item.label}
                                     <ArrowRight
                                       aria-hidden
-                                      className="size-3.5 -translate-x-1 opacity-0 transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/item:translate-x-0 group-hover/item:opacity-60"
+                                      className="size-3.5 -translate-x-1 text-[#0d4bfa] opacity-0 transition-[transform,opacity] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/item:translate-x-0 group-hover/item:opacity-100"
                                     />
                                   </span>
                                   {'hint' in item && (
-                                    <span className="text-secondary-copy mt-1 block text-xs leading-[1.45]">
+                                    <span className="text-secondary-copy mt-1 block text-xs leading-[1.45] transition-colors duration-200 group-hover/item:text-[#1d1d1f] dark:group-hover/item:text-[#D1D1D1]">
                                       {item.hint}
                                     </span>
                                   )}
@@ -354,24 +336,25 @@ export function SiteHeader() {
             <ModeToggle />
             <Link
               href="/contact"
-              className="text-prominent hover:bg-secondary/60 hidden min-h-10 items-center rounded-xl px-3.5 text-sm transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] sm:inline-flex"
+              className="text-prominent hidden min-h-10 items-center rounded-xl border-0 bg-transparent px-3.5 text-sm transition-colors duration-200 hover:text-[#0d4bfa] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:inline-flex dark:hover:text-white"
             >
               Get in touch
             </Link>
             <Link
               href="/about"
-              className="group inline-flex min-h-10 items-center gap-2 rounded-xl bg-[#3847ff] px-4 text-xs font-medium text-white transition-[transform,opacity,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-92 hover:shadow-[0_8px_24px_rgba(56,71,255,0.32)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] active:scale-[0.98]"
+              aria-label="Get Started"
+              className="group inline-flex size-10 shrink-0 items-center justify-center gap-2 rounded-xl bg-[#0d4bfa] text-xs font-medium text-white transition-[transform,opacity,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-92 hover:shadow-[0_8px_24px_rgba(13,75,250,0.32)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] active:scale-[0.98] sm:w-auto sm:px-4"
             >
-              Get Started
+              <span className="hidden sm:inline">Get Started</span>
               <ArrowRight
                 aria-hidden
-                className="size-3.5 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0.5"
+                className="size-4 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] sm:group-hover:translate-x-0.5"
               />
             </Link>
             <button
               ref={menuButtonRef}
               type="button"
-              className="surface-card text-heading hover:bg-secondary inline-flex size-10 items-center justify-center rounded-xl transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] xl:hidden"
+              className="text-heading inline-flex size-10 items-center justify-center rounded-xl border-0 bg-transparent transition-colors duration-200 hover:text-[#0d4bfa] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] xl:hidden dark:hover:text-white"
               aria-label={open ? 'Close menu' : 'Open menu'}
               aria-expanded={open}
               aria-controls="mobile-navigation"
@@ -414,7 +397,7 @@ export function SiteHeader() {
             aria-modal="true"
             aria-label="Navigation"
             data-lenis-prevent
-            className="bg-background/96 pointer-events-auto fixed inset-x-0 top-[var(--header-h)] h-[calc(100dvh-var(--header-h))] overflow-y-auto overscroll-contain px-6 py-6 shadow-[0_24px_75px_rgba(0,0,0,0.2)] backdrop-blur-2xl xl:hidden"
+            className="bg-background/96 pointer-events-auto fixed inset-x-0 top-[var(--header-h)] h-[calc(100dvh-var(--header-h))] overflow-y-auto overscroll-contain px-6 py-6 backdrop-blur-2xl xl:hidden"
             initial={
               reduce ? false : { opacity: 0, y: -12 }
             }
@@ -435,7 +418,7 @@ export function SiteHeader() {
                     setMobilePath(null);
                     menuButtonRef.current?.focus();
                   }}
-                  className="hover:bg-secondary inline-flex min-h-10 items-center gap-2 rounded-xl px-3 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                  className="hover:text-[#0d4bfa] dark:hover:text-white inline-flex min-h-10 items-center gap-2 rounded-xl border-0 bg-transparent px-3 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
                 >
                   Close
                   <X aria-hidden className="size-4" />
@@ -464,10 +447,10 @@ export function SiteHeader() {
                           aria-current={
                             pathname === item.href ? 'page' : undefined
                           }
-                          className="hover:bg-secondary aria-[current=page]:bg-secondary rounded-xl px-3 py-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                          className="group/mobile rounded-xl border-0 bg-transparent px-3 py-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
                           onClick={() => setMobilePath(null)}
                         >
-                          <span className="text-heading block text-base font-medium">
+                          <span className="text-heading block text-base font-medium transition-colors group-hover/mobile:text-[#0d4bfa] dark:group-hover/mobile:text-white">
                             {item.label}
                           </span>
                           {'hint' in item && (

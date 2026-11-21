@@ -91,8 +91,8 @@ export default function Timeline() {
                 aria-current={isActive ? 'step' : undefined}
                 className={`relative grid grid-cols-[2rem_minmax(0,1fr)] gap-5 overflow-hidden rounded-3xl p-6 transition-all duration-300 sm:p-8 md:grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] md:gap-8 ${
                   isActive
-                    ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#070912]'
-                    : 'border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
+                    ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]'
+                    : 'border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
                 }`}
               >
                 {isActive && (
@@ -121,7 +121,7 @@ export default function Timeline() {
                   />
                 </div>
                 <div aria-hidden className={`relative z-10 hidden items-center md:flex ${isEven ? 'md:col-start-1 md:row-start-1 md:justify-end' : 'md:col-start-3'}`}>
-                  <div className="flex size-14 items-center justify-center rounded-xl bg-black/[0.04] text-[#0d4bfa] dark:bg-white/[0.04]">
+                  <div className="flex size-14 items-center justify-center rounded-xl bg-[#F7F8FC] text-[#0d4bfa] dark:bg-[#121214]">
                     <Icon size={24} strokeWidth={1.6} />
                   </div>
                 </div>

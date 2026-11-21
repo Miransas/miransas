@@ -96,8 +96,8 @@ export function EngineeringReality() {
               delay={index * 0.06}
               className={`group relative overflow-hidden rounded-3xl p-6 transition-all duration-300 hover:-translate-y-1 sm:p-7 ${
                 fact.featured
-                  ? 'border border-[#0d4bfa]/20 bg-white hover:border-[#0d4bfa]/35 dark:border-[#0d4bfa]/30 dark:bg-[#070912] dark:hover:border-[#0d4bfa]/45'
-                  : 'border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
+                  ? 'border border-[#0d4bfa]/20 bg-white hover:border-[#0d4bfa]/35 dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a] dark:hover:border-[#0d4bfa]/45'
+                  : 'border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
               }`}
             >
               {fact.featured && (
@@ -163,8 +163,8 @@ export function ModelResearch() {
               delay={index * 0.06}
               className={`group relative flex min-h-[260px] flex-col justify-between overflow-hidden rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 lg:min-h-[290px] lg:p-8 ${
                 item.featured
-                  ? 'border border-[#0d4bfa]/20 bg-white hover:border-[#0d4bfa]/35 dark:border-[#0d4bfa]/30 dark:bg-[#070912] dark:hover:border-[#0d4bfa]/45'
-                  : 'border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
+                  ? 'border border-[#0d4bfa]/20 bg-white hover:border-[#0d4bfa]/35 dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a] dark:hover:border-[#0d4bfa]/45'
+                  : 'border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
               }`}
             >
               {item.featured && (
@@ -179,7 +179,7 @@ export function ModelResearch() {
               />
 
               <div className="relative z-10">
-                <span className="text-prominent inline-flex items-center gap-2 rounded-xl bg-black/[0.04] px-3 py-1 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px] dark:bg-white/[0.04]">
+                <span className="text-prominent inline-flex items-center gap-2 rounded-xl bg-[#F7F8FC] px-3 py-1 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px] dark:bg-[#121214]">
                   <span aria-hidden="true" className="size-1.5 rounded-xl bg-[#0d4bfa]" />
                   {item.status}
                 </span>
@@ -193,7 +193,7 @@ export function ModelResearch() {
                   {item.description}
                 </p>
                 <div>
-                  <span className="text-prominent inline-flex items-center rounded-xl bg-black/[0.04] px-3 py-1 font-mono text-xs leading-[1.45] dark:bg-white/[0.04]">
+                  <span className="text-prominent inline-flex items-center rounded-xl bg-[#F7F8FC] px-3 py-1 font-mono text-xs leading-[1.45] dark:bg-[#121214]">
                     {item.meta}
                   </span>
                 </div>
@@ -204,7 +204,7 @@ export function ModelResearch() {
         <Reveal className="mt-10">
           <Link
             href="/models"
-            className="text-prominent inline-flex min-h-11 items-center gap-2.5 rounded-xl border border-black/[0.08] bg-white px-5 py-3 text-sm font-medium transition-colors duration-200 hover:border-black/[0.16] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:border-white/10 dark:bg-background dark:hover:border-white/20"
+            className="text-prominent inline-flex min-h-11 items-center gap-2.5 rounded-xl border border-black/[0.08] bg-white px-5 py-3 text-sm font-medium transition-colors duration-200 hover:border-black/[0.16] hover:bg-[#F7F8FC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]"
           >
             Read the model notes{' '}
             <ArrowUpRight aria-hidden className="size-4 text-[#0d4bfa]" />
@@ -221,7 +221,7 @@ export function VoiceInfrastructure() {
       aria-labelledby="infrastructure-title"
       className="surface-page px-6 pb-24 sm:pb-32"
     >
-      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-4xl border border-[#0d4bfa]/20 bg-white px-6 py-12 sm:p-12 lg:p-16 dark:border-[#0d4bfa]/30 dark:bg-[#070912]">
+      <div className="relative mx-auto max-w-6xl overflow-hidden rounded-4xl border border-[#0d4bfa]/20 bg-white px-6 py-12 sm:p-12 lg:p-16 dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute top-1/2 left-1/2 h-[130%] w-[130%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.08)_0%,rgba(13,75,250,0.025)_45%,transparent_72%)] blur-3xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.14)_0%,rgba(13,75,250,0.04)_45%,transparent_72%)]"
@@ -249,7 +249,7 @@ export function VoiceInfrastructure() {
               <li key={step.title} className="min-w-0">
                 <Reveal
                   delay={index * 0.08}
-                  className="flex h-full flex-col justify-between rounded-3xl bg-black/[0.04] p-6 transition-transform duration-300 hover:-translate-y-1 dark:bg-white/[0.04]"
+                  className="flex h-full flex-col justify-between rounded-3xl bg-[#F7F8FC] p-6 transition-transform duration-300 hover:-translate-y-1 dark:bg-[#121214]"
                 >
                   <div>
                     <div className="mb-4 flex items-center justify-between">

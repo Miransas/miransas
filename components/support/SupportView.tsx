@@ -109,12 +109,12 @@ export function SupportView() {
             {QUICK_LINKS.map((item) => {
               const Icon = item.icon;
               const classes =
-                'group flex flex-col justify-between rounded-3xl border border-black/[0.08] bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-black/[0.16] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:border-white/10 dark:bg-background dark:hover:border-white/20';
+                'group flex flex-col justify-between rounded-3xl border border-black/[0.08] bg-white p-6 transition-colors duration-200 hover:-translate-y-0.5 hover:border-black/[0.16] hover:bg-[#F7F8FC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]';
 
               const inner = (
                 <>
                   <div className="flex items-center justify-between gap-2">
-                    <span className="flex size-9 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-[#0d4bfa]/15 dark:text-[#6b93ff]">
+                    <span className="flex size-9 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-[#121214] dark:text-[#6b93ff]">
                       <Icon className="size-4" aria-hidden />
                     </span>
                     <ArrowUpRight
@@ -182,8 +182,8 @@ export function SupportView() {
                   key={item.id}
                   className={`relative overflow-hidden rounded-3xl transition-colors duration-300 ${
                     isOpen
-                      ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#070912]'
-                      : 'border border-black/[0.07] bg-white hover:border-black/[0.15] dark:border-white/[0.09] dark:bg-background dark:hover:border-white/[0.18]'
+                      ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]'
+                      : 'border border-black/[0.07] bg-white hover:border-black/[0.15] hover:bg-[#F7F8FC] dark:border-white/[0.09] dark:bg-[#0a0a0a] dark:hover:border-white/[0.18] dark:hover:bg-[#121214]'
                   }`}
                 >
                   {isOpen && (
@@ -215,7 +215,7 @@ export function SupportView() {
                       className={`flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors duration-200 ${
                         isOpen
                           ? 'bg-[#0d4bfa]/15 text-[#0d4bfa] dark:bg-[#0d4bfa]/25 dark:text-[#89abff]'
-                          : 'bg-black/[0.04] text-neutral-600 dark:bg-white/[0.04] dark:text-[#D1D1D1]'
+                          : 'bg-[#F7F8FC] text-neutral-600 dark:bg-[#121214] dark:text-[#D1D1D1]'
                       }`}
                     >
                       <Plus
@@ -278,7 +278,7 @@ export function SupportView() {
         {/* Contacting Support (Tier 1 Container + Tier 3 Borderless 01-04 Rows) */}
         <section className="mt-16 grid grid-cols-1 gap-5 md:mt-24 lg:grid-cols-12">
           {/* Left: Checklist */}
-          <article className="rounded-4xl border border-black/[0.08] bg-white p-8 md:p-10 lg:col-span-7 dark:border-white/10 dark:bg-background">
+          <article className="rounded-4xl border border-black/[0.08] bg-white p-8 md:p-10 lg:col-span-7 dark:border-white/10 dark:bg-[#0a0a0a]">
             <span className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
               Checklist
             </span>
@@ -293,7 +293,7 @@ export function SupportView() {
               {SUPPORT_CHECKLIST.map((step, i) => (
                 <li
                   key={step}
-                  className="flex items-start gap-4 rounded-xl bg-black/[0.04] p-4 dark:bg-white/[0.04]"
+                  className="flex items-start gap-4 rounded-xl bg-[#F7F8FC] p-4 dark:bg-[#121214]"
                 >
                   <span className="flex size-7 shrink-0 items-center justify-center rounded-xl bg-[#0d4bfa]/12 font-mono text-xs font-semibold text-[#0d4bfa] dark:bg-[#0d4bfa]/20 dark:text-[#89abff]">
                     0{i + 1}
@@ -318,13 +318,13 @@ export function SupportView() {
 
           {/* Right: Security Callout (Tier 1) + Response Times (Tier 2) */}
           <div className="flex flex-col gap-5 lg:col-span-5">
-            <article className="relative overflow-hidden rounded-4xl border border-black/[0.08] bg-white p-8 dark:border-white/10 dark:bg-background">
+            <article className="relative overflow-hidden rounded-4xl border border-black/[0.08] bg-white p-8 dark:border-white/10 dark:bg-[#0a0a0a]">
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.08)_0%,transparent_68%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.1)_0%,transparent_68%)]"
               />
               <div className="relative z-10">
-                <span className="flex size-10 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:bg-[#121214] dark:text-amber-400">
                   <AlertTriangle className="size-5" aria-hidden />
                 </span>
                 <h3 className="mt-5 text-xl font-semibold tracking-[-0.02em] text-[#1d1d1f] dark:text-white">
@@ -337,13 +337,13 @@ export function SupportView() {
               </div>
             </article>
 
-            <article className="relative flex flex-1 flex-col justify-between overflow-hidden rounded-4xl border border-[#0d4bfa]/20 bg-white p-8 dark:border-[#0d4bfa]/30 dark:bg-[#070912]">
+            <article className="relative flex flex-1 flex-col justify-between overflow-hidden rounded-4xl border border-[#0d4bfa]/20 bg-white p-8 dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]">
               <div
                 aria-hidden="true"
                 className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
               />
               <div className="relative z-10">
-                <span className="flex size-10 items-center justify-center rounded-xl bg-[#0d4bfa]/12 text-[#0d4bfa] dark:bg-[#0d4bfa]/20 dark:text-[#89abff]">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-[#0d4bfa]/12 text-[#0d4bfa] dark:bg-[#121214] dark:text-[#89abff]">
                   <Clock className="size-5" aria-hidden />
                 </span>
                 <h3 className="mt-5 text-xl font-semibold tracking-[-0.02em] text-[#1d1d1f] dark:text-white">

@@ -12,7 +12,7 @@ export function ShaderCTA() {
     >
       <AmbientSmoke anchor="center" seed={11.4} intensity={0.62} />
       <Reveal className="relative z-10 mx-auto max-w-6xl px-6">
-        <div className="dark-visual relative min-h-[420px] w-full overflow-hidden rounded-4xl bg-[#070912] md:aspect-[16/7]">
+        <div className="dark-visual relative min-h-[420px] w-full overflow-hidden rounded-4xl bg-[#0a0a0a] md:aspect-[16/7]">
           <div className="absolute inset-0">
             {/* Existing cinematic artwork remains a fixed dark visual. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -27,7 +27,7 @@ export function ShaderCTA() {
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                'radial-gradient(80% 80% at 50% 50%, rgba(13, 75, 250, 0.24) 0%, rgba(0, 1, 3, 0.76) 72%)',
+                'radial-gradient(80% 80% at 50% 50%, rgba(13, 75, 250, 0.24) 0%, rgba(10, 10, 10, 0.76) 72%)',
             }}
             aria-hidden
           />
