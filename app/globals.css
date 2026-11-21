@@ -43,7 +43,11 @@
   color-scheme: light;
   --surface-page: #EFEFEF;
   --surface-card: #FFFFFF;
-  --surface-card-elevated: #F7F8FC;
+  --surface-card-featured: #FFFFFF;
+  --surface-card-elevated: rgba(0, 0, 0, 0.04);
+  --surface-border-tier1: rgba(0, 0, 0, 0.08);
+  --surface-border-tier1-hover: rgba(0, 0, 0, 0.16);
+  --surface-border-tier2: rgba(13, 75, 250, 0.2);
   --surface-blue-gradient: radial-gradient(75% 75% at 50% 50%, rgba(13, 75, 250, 0.09) 0%, rgba(13, 75, 250, 0.025) 48%, rgba(255, 255, 255, 0) 76%);
   --text-heading: #050505;
   --text-prominent: #242428;
@@ -62,16 +66,16 @@
   --secondary-foreground: var(--text-heading);
   --muted: var(--surface-card-elevated);
   --muted-foreground: var(--text-secondary);
-  --accent: #3847ff;
+  --accent: #0d4bfa;
   --accent-foreground: #FFFFFF;
   --destructive: #b42318;
   --destructive-foreground: #FFFFFF;
   --input: transparent;
-  --ring: #3847ff;
+  --ring: #0d4bfa;
   --radius: 0.75rem;
   --header-h: 4.5rem;
-  --hero-glow: rgba(56, 71, 255, 0.12);
-  --orb-glow: drop-shadow(0 0 24px rgba(56, 71, 255, 0.25));
+  --hero-glow: rgba(13, 75, 250, 0.12);
+  --orb-glow: drop-shadow(0 0 24px rgba(13, 75, 250, 0.25));
 }
 
 .dark,
@@ -79,9 +83,13 @@
 [data-tone='dark'] {
   color-scheme: dark;
   --surface-page: #050505;
-  --surface-card: #000103;
-  --surface-card-elevated: #03050d;
-  --surface-blue-gradient: radial-gradient(75% 75% at 50% 50%, rgba(13, 75, 250, 0.16) 0%, rgba(13, 75, 250, 0.045) 48%, rgba(0, 1, 3, 0) 76%);
+  --surface-card: #07080c;
+  --surface-card-featured: #070912;
+  --surface-card-elevated: rgba(255, 255, 255, 0.04);
+  --surface-border-tier1: rgba(255, 255, 255, 0.1);
+  --surface-border-tier1-hover: rgba(255, 255, 255, 0.2);
+  --surface-border-tier2: rgba(13, 75, 250, 0.3);
+  --surface-blue-gradient: radial-gradient(75% 75% at 50% 50%, rgba(13, 75, 250, 0.16) 0%, rgba(13, 75, 250, 0.045) 48%, rgba(7, 9, 18, 0) 76%);
   --text-heading: #FFFFFF;
   --text-prominent: #D1D1D1;
   --text-secondary: #6E6E74;
@@ -99,14 +107,14 @@
   --secondary-foreground: var(--text-heading);
   --muted: var(--surface-card-elevated);
   --muted-foreground: var(--text-secondary);
-  --accent: #3847ff;
+  --accent: #0d4bfa;
   --accent-foreground: #FFFFFF;
   --destructive: #f97066;
   --destructive-foreground: #050505;
   --input: transparent;
-  --ring: #3847ff;
-  --hero-glow: rgba(56, 71, 255, 0.16);
-  --orb-glow: drop-shadow(0 0 20px rgba(56, 71, 255, 0.48)) drop-shadow(0 0 60px rgba(56, 71, 255, 0.24));
+  --ring: #0d4bfa;
+  --hero-glow: rgba(13, 75, 250, 0.16);
+  --orb-glow: drop-shadow(0 0 20px rgba(13, 75, 250, 0.48)) drop-shadow(0 0 60px rgba(13, 75, 250, 0.24));
 }
 
 @layer base {
@@ -149,11 +157,11 @@
     cursor: pointer;
   }
   ::selection {
-    background: rgba(56, 71, 255, 0.28);
+    background: rgba(13, 75, 250, 0.28);
     color: var(--text-heading);
   }
   :focus-visible {
-    outline: 2px solid #3847ff;
+    outline: 2px solid #0d4bfa;
     outline-offset: 2px;
   }
   ::-webkit-scrollbar {
@@ -175,17 +183,26 @@
   }
   .surface-card {
     background-color: var(--surface-card);
+    border: 1px solid var(--surface-border-tier1);
+  }
+  .surface-card-interactive {
+    background-color: var(--surface-card);
+    border: 1px solid var(--surface-border-tier1);
+    transition: border-color 200ms ease, transform 200ms ease;
+  }
+  .surface-card-interactive:hover {
+    border-color: var(--surface-border-tier1-hover);
   }
   .surface-card-elevated {
     background-color: var(--surface-card-elevated);
   }
   .surface-blue-gradient {
-    background-color: var(--surface-card);
+    background-color: var(--surface-card-featured);
     background-image: var(--surface-blue-gradient);
+    border: 1px solid var(--surface-border-tier2);
   }
   .hover-surface-blue-gradient:hover {
-    background-color: var(--surface-card);
-    background-image: var(--surface-blue-gradient);
+    border-color: var(--surface-border-tier1-hover);
   }
   .text-gradient {
     @apply text-foreground;
@@ -194,7 +211,7 @@
     @apply bg-card/80 backdrop-blur-xl;
   }
   .glow-amber {
-    box-shadow: 0 0 24px rgba(56, 71, 255, 0.14);
+    box-shadow: 0 0 24px rgba(13, 75, 250, 0.14);
   }
 }
 

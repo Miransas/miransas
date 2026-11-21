@@ -76,9 +76,9 @@ export function AiTeamSection() {
           initial={{ opacity: 0, y: -10 }}
           animate={inView ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.5 }}
-          className="surface-blue-gradient text-prominent inline-flex items-center gap-2 rounded-xl px-3.5 py-1.5 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]"
+          className="text-prominent inline-flex items-center gap-2 rounded-xl bg-[#0d4bfa]/10 px-3.5 py-1.5 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px] dark:bg-[#0d4bfa]/15"
         >
-          <Sparkles className="size-3.5 text-[#3847ff]" />
+          <Sparkles className="size-3.5 text-[#0d4bfa]" />
           <span>AI &amp; engineering</span>
         </motion.div>
         <motion.h2

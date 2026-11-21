@@ -120,8 +120,8 @@ export default function StickySplitSection() {
             className="mb-6 inline-flex items-center gap-3"
           >
             <span className="relative flex size-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-xl bg-[#3847ff] opacity-60" />
-              <span className="relative inline-flex size-2 rounded-xl bg-[#3847ff]" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-xl bg-[#0d4bfa] opacity-60" />
+              <span className="relative inline-flex size-2 rounded-xl bg-[#0d4bfa]" />
             </span>
 
             <span className="text-prominent text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
@@ -168,12 +168,12 @@ export default function StickySplitSection() {
                     className="relative h-1.5 rounded-xl transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
                     style={{ width: isCurrent ? 28 : 10 }}
                   >
-                    <span className="surface-card-elevated absolute inset-0 rounded-xl" />
+                    <span className="absolute inset-0 rounded-xl bg-black/[0.06] dark:bg-white/[0.08]" />
                     {isCurrent && (
                       <motion.span
                         layoutId="sticky-capability-progress"
                         transition={reduce ? { duration: 0 } : SPRING_INDICATOR}
-                        className="absolute inset-0 rounded-xl bg-[#3847ff]"
+                        className="absolute inset-0 rounded-xl bg-[#0d4bfa]"
                       />
                     )}
                   </button>
@@ -188,7 +188,7 @@ export default function StickySplitSection() {
           <motion.div variants={leftItemVariants} className="mt-9">
             <a
               href="#voice-capabilities"
-              className="group inline-flex items-center gap-3 rounded-xl bg-[#3847ff] px-6 py-3.5 text-sm font-medium text-white transition-[transform,opacity,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:opacity-92 hover:shadow-[0_12px_30px_rgba(56,71,255,0.28)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] active:scale-[0.98]"
+              className="group inline-flex items-center gap-3 rounded-xl bg-[#0d4bfa] px-6 py-3.5 text-sm font-medium text-white transition-[transform,opacity,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:opacity-92 hover:shadow-[0_12px_30px_rgba(13,75,250,0.28)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] active:scale-[0.98]"
             >
               Explore capabilities
               <ArrowRight
@@ -218,20 +218,26 @@ export default function StickySplitSection() {
                 onViewportEnter={() => setActiveIndex(index)}
                 onMouseEnter={() => setHoveredIndex(index)}
                 variants={cardRevealVariants}
-                className={`group relative rounded-3xl p-6 transition-all duration-300 sm:p-8 ${
+                className={`group relative overflow-hidden rounded-3xl p-6 transition-all duration-300 sm:p-8 ${
                   isHighlighted
-                    ? 'surface-blue-gradient'
-                    : 'surface-card hover-surface-blue-gradient'
+                    ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#070912]'
+                    : 'border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
                 }`}
               >
-                <div className="mb-4 flex items-center justify-between gap-4">
+                {isHighlighted && (
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
+                  />
+                )}
+                <div className="relative z-10 mb-4 flex items-center justify-between gap-4">
                   <div className="inline-flex items-center gap-2.5">
                     <span
                       aria-hidden="true"
                       className={`size-2 rounded-xl transition-[transform,background-color,opacity] duration-300 ${
                         isHighlighted
-                          ? 'scale-100 bg-[#3847ff] opacity-100'
-                          : 'bg-secondary-copy/40 scale-75 opacity-60 group-hover:scale-100 group-hover:bg-[#3847ff] group-hover:opacity-100'
+                          ? 'scale-100 bg-[#0d4bfa] opacity-100'
+                          : 'bg-secondary-copy/40 scale-75 opacity-60 group-hover:scale-100 group-hover:bg-[#0d4bfa] group-hover:opacity-100'
                       }`}
                     />
                     <span className="text-prominent text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
@@ -251,16 +257,16 @@ export default function StickySplitSection() {
                     </span>
                     <ArrowUpRight
                       aria-hidden="true"
-                      className="size-3.5 -translate-x-1 translate-y-1 text-[#3847ff] opacity-0 transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100"
+                      className="size-3.5 -translate-x-1 translate-y-1 text-[#0d4bfa] opacity-0 transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100"
                     />
                   </div>
                 </div>
 
-                <h3 className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 sm:text-2xl lg:text-[1.65rem]">
+                <h3 className="text-heading relative z-10 text-xl leading-[1.15] font-semibold tracking-[-0.02em] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 sm:text-2xl lg:text-[1.65rem]">
                   {item.title}
                 </h3>
 
-                <p className="text-secondary-copy mt-3 max-w-xl text-[15px] leading-[1.6] sm:text-base">
+                <p className="text-secondary-copy relative z-10 mt-3 max-w-xl text-[15px] leading-[1.6] sm:text-base">
                   {item.description}
                 </p>
               </motion.article>

@@ -91,7 +91,7 @@ export function SupportView() {
           </p>
         </header>
 
-        {/* Quick Links */}
+        {/* Quick Links (Tier 1 Cards + Tier 3 Inner Icon Badges) */}
         <section aria-labelledby="quick-links" className="mt-14 md:mt-18">
           <div className="mb-7">
             <span className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
@@ -109,7 +109,7 @@ export function SupportView() {
             {QUICK_LINKS.map((item) => {
               const Icon = item.icon;
               const classes =
-                'group flex flex-col justify-between rounded-3xl bg-white p-6 transition-transform duration-200 hover:-translate-y-0.5 hover:bg-[#F7F8FC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-[#000103] dark:hover:bg-[#03050d]';
+                'group flex flex-col justify-between rounded-3xl border border-black/[0.08] bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-black/[0.16] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:border-white/10 dark:bg-background dark:hover:border-white/20';
 
               const inner = (
                 <>
@@ -157,7 +157,7 @@ export function SupportView() {
           </div>
         </section>
 
-        {/* Borderless FAQ Accordion */}
+        {/* FAQ Accordion (Tier 1 Closed -> Tier 2 Open + Tier 3 Inner Plus Button) */}
         <section aria-labelledby="support-faq" className="mt-16 md:mt-24">
           <div className="mb-8 max-w-2xl">
             <span className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
@@ -180,19 +180,25 @@ export function SupportView() {
               return (
                 <div
                   key={item.id}
-                  className={`rounded-3xl transition-colors duration-300 ${
+                  className={`relative overflow-hidden rounded-3xl transition-colors duration-300 ${
                     isOpen
-                      ? 'bg-[radial-gradient(125%_115%_at_100%_0%,rgba(13,75,250,0.12)_0%,#FFFFFF_68%)] dark:bg-[radial-gradient(125%_115%_at_0%_0%,rgba(13,75,250,0.26)_0%,#000103_68%)]'
-                      : 'bg-white hover:bg-[#F7F8FC] dark:bg-[#000103] dark:hover:bg-[#03050d]'
+                      ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#070912]'
+                      : 'border border-black/[0.07] bg-white hover:border-black/[0.15] dark:border-white/[0.09] dark:bg-background dark:hover:border-white/[0.18]'
                   }`}
                 >
+                  {isOpen && (
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.08)_0%,rgba(13,75,250,0.025)_45%,transparent_72%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_45%,transparent_72%)]"
+                    />
+                  )}
                   <button
                     id={triggerId}
                     type="button"
                     aria-expanded={isOpen}
                     aria-controls={panelId}
                     onClick={() => setOpenIndex(isOpen ? null : idx)}
-                    className="flex w-full items-center justify-between gap-4 rounded-3xl px-6 py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] md:px-8 md:py-6"
+                    className="relative z-10 flex w-full items-center justify-between gap-4 rounded-3xl px-6 py-5 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] md:px-8 md:py-6"
                   >
                     <span
                       className={`text-base font-medium tracking-[-0.01em] transition-colors sm:text-lg ${
@@ -209,7 +215,7 @@ export function SupportView() {
                       className={`flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors duration-200 ${
                         isOpen
                           ? 'bg-[#0d4bfa]/15 text-[#0d4bfa] dark:bg-[#0d4bfa]/25 dark:text-[#89abff]'
-                          : 'bg-black/[0.05] text-neutral-600 dark:bg-white/[0.06] dark:text-[#D1D1D1]'
+                          : 'bg-black/[0.04] text-neutral-600 dark:bg-white/[0.04] dark:text-[#D1D1D1]'
                       }`}
                     >
                       <Plus
@@ -225,7 +231,7 @@ export function SupportView() {
                     role="region"
                     aria-labelledby={triggerId}
                     aria-hidden={!isOpen}
-                    className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    className={`relative z-10 grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                       isOpen
                         ? 'grid-rows-[1fr] opacity-100'
                         : 'grid-rows-[0fr] opacity-0'
@@ -269,10 +275,10 @@ export function SupportView() {
           </div>
         </section>
 
-        {/* Contacting Support + Warning & Response Times */}
+        {/* Contacting Support (Tier 1 Container + Tier 3 Borderless 01-04 Rows) */}
         <section className="mt-16 grid grid-cols-1 gap-5 md:mt-24 lg:grid-cols-12">
           {/* Left: Checklist */}
-          <article className="rounded-4xl bg-white p-8 md:p-10 lg:col-span-7 dark:bg-[#000103]">
+          <article className="rounded-4xl border border-black/[0.08] bg-white p-8 md:p-10 lg:col-span-7 dark:border-white/10 dark:bg-background">
             <span className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
               Checklist
             </span>
@@ -287,7 +293,7 @@ export function SupportView() {
               {SUPPORT_CHECKLIST.map((step, i) => (
                 <li
                   key={step}
-                  className="flex items-start gap-4 rounded-xl bg-[#EFEFEF]/70 p-4 dark:bg-[#050505]"
+                  className="flex items-start gap-4 rounded-xl bg-black/[0.04] p-4 dark:bg-white/[0.04]"
                 >
                   <span className="flex size-7 shrink-0 items-center justify-center rounded-xl bg-[#0d4bfa]/12 font-mono text-xs font-semibold text-[#0d4bfa] dark:bg-[#0d4bfa]/20 dark:text-[#89abff]">
                     0{i + 1}
@@ -310,23 +316,33 @@ export function SupportView() {
             </div>
           </article>
 
-          {/* Right: Security Callout + Response Times */}
+          {/* Right: Security Callout (Tier 1) + Response Times (Tier 2) */}
           <div className="flex flex-col gap-5 lg:col-span-5">
-            <article className="rounded-4xl bg-[radial-gradient(120%_110%_at_100%_0%,rgba(245,158,11,0.14)_0%,#FFFFFF_70%)] p-8 dark:bg-[radial-gradient(120%_110%_at_0%_0%,rgba(245,158,11,0.16)_0%,#000103_70%)]">
-              <span className="flex size-10 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400">
-                <AlertTriangle className="size-5" aria-hidden />
-              </span>
-              <h3 className="mt-5 text-xl font-semibold tracking-[-0.02em] text-[#1d1d1f] dark:text-white">
-                Protect your credentials
-              </h3>
-              <p className="mt-2.5 text-[15px] leading-[1.65] text-neutral-700 dark:text-[#D1D1D1]">
-                Never send passwords, API keys, or tokens in a message. If you
-                shared one by mistake, tell us and rotate it right away.
-              </p>
+            <article className="relative overflow-hidden rounded-4xl border border-black/[0.08] bg-white p-8 dark:border-white/10 dark:bg-background">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.08)_0%,transparent_68%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.1)_0%,transparent_68%)]"
+              />
+              <div className="relative z-10">
+                <span className="flex size-10 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:text-amber-400">
+                  <AlertTriangle className="size-5" aria-hidden />
+                </span>
+                <h3 className="mt-5 text-xl font-semibold tracking-[-0.02em] text-[#1d1d1f] dark:text-white">
+                  Protect your credentials
+                </h3>
+                <p className="mt-2.5 text-[15px] leading-[1.65] text-neutral-700 dark:text-[#D1D1D1]">
+                  Never send passwords, API keys, or tokens in a message. If you
+                  shared one by mistake, tell us and rotate it right away.
+                </p>
+              </div>
             </article>
 
-            <article className="flex flex-1 flex-col justify-between rounded-4xl bg-[radial-gradient(125%_115%_at_100%_0%,rgba(13,75,250,0.12)_0%,#FFFFFF_68%)] p-8 dark:bg-[radial-gradient(125%_115%_at_0%_0%,rgba(13,75,250,0.26)_0%,#000103_68%)]">
-              <div>
+            <article className="relative flex flex-1 flex-col justify-between overflow-hidden rounded-4xl border border-[#0d4bfa]/20 bg-white p-8 dark:border-[#0d4bfa]/30 dark:bg-[#070912]">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
+              />
+              <div className="relative z-10">
                 <span className="flex size-10 items-center justify-center rounded-xl bg-[#0d4bfa]/12 text-[#0d4bfa] dark:bg-[#0d4bfa]/20 dark:text-[#89abff]">
                   <Clock className="size-5" aria-hidden />
                 </span>

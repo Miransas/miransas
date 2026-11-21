@@ -71,10 +71,10 @@ export default function Timeline() {
         </p>
       </Reveal>
       <div className="relative z-10 mx-auto max-w-4xl" ref={containerRef}>
-        <div aria-hidden className="surface-card-elevated absolute top-0 bottom-0 left-4 w-0.5 rounded-xl md:left-1/2" />
+        <div aria-hidden className="absolute top-0 bottom-0 left-4 w-0.5 rounded-xl bg-black/[0.06] md:left-1/2 dark:bg-white/[0.08]" />
         <motion.div
           aria-hidden
-          className=" absolute top-0 bottom-0 left-4 w-0.5 origin-top rounded-xl bg-[#3847ff] md:left-1/2"
+          className="absolute top-0 bottom-0 left-4 w-0.5 origin-top rounded-xl bg-[#0d4bfa] md:left-1/2"
           style={{ scaleY: reduce ? 1 : scrollYProgress }}
         />
         <div className="flex flex-col gap-6 md:gap-8">
@@ -89,10 +89,18 @@ export default function Timeline() {
                 animate={isActive ? 'active' : 'inactive'}
                 data-active={isActive}
                 aria-current={isActive ? 'step' : undefined}
-                className={`relative grid grid-cols-[2rem_minmax(0,1fr)] gap-5 rounded-3xl p-6 transition-all duration-300 sm:p-8 md:grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] md:gap-8 ${
-                  isActive ? 'surface-blue-gradient' : 'surface-card hover-surface-blue-gradient'
+                className={`relative grid grid-cols-[2rem_minmax(0,1fr)] gap-5 overflow-hidden rounded-3xl p-6 transition-all duration-300 sm:p-8 md:grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] md:gap-8 ${
+                  isActive
+                    ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#070912]'
+                    : 'border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
                 }`}
               >
+                {isActive && (
+                  <div
+                    aria-hidden="true"
+                    className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
+                  />
+                )}
                 <div className={`relative z-10 col-start-2 row-start-1 min-w-0 ${isEven ? 'md:col-start-3' : 'md:col-start-1 md:text-right'}`}>
                   <span className="text-prominent mb-3 block font-mono text-xs leading-[1.45] sm:text-[13px]">
                     {item.id} / 05
@@ -108,12 +116,12 @@ export default function Timeline() {
                   <motion.span
                     variants={{ inactive: { scale: 0.8 }, active: { scale: 1.05 } }}
                     className={`mt-1 size-3.5 rounded-xl transition-colors ${
-                      isActive ? 'bg-[#3847ff]' : 'surface-card-elevated'
+                      isActive ? 'bg-[#0d4bfa]' : 'bg-black/[0.08] dark:bg-white/[0.12]'
                     }`}
                   />
                 </div>
                 <div aria-hidden className={`relative z-10 hidden items-center md:flex ${isEven ? 'md:col-start-1 md:row-start-1 md:justify-end' : 'md:col-start-3'}`}>
-                  <div className="surface-card-elevated flex size-14 items-center justify-center rounded-xl text-[#3847ff]">
+                  <div className="flex size-14 items-center justify-center rounded-xl bg-black/[0.04] text-[#0d4bfa] dark:bg-white/[0.04]">
                     <Icon size={24} strokeWidth={1.6} />
                   </div>
                 </div>

@@ -12,7 +12,7 @@ export function ShaderCTA() {
     >
       <AmbientSmoke anchor="center" seed={11.4} intensity={0.62} />
       <Reveal className="relative z-10 mx-auto max-w-6xl px-6">
-        <div className="dark-visual surface-card relative min-h-[420px] w-full overflow-hidden rounded-4xl md:aspect-[16/7]">
+        <div className="dark-visual relative min-h-[420px] w-full overflow-hidden rounded-4xl bg-[#070912] md:aspect-[16/7]">
           <div className="absolute inset-0">
             {/* Existing cinematic artwork remains a fixed dark visual. */}
             {/* eslint-disable-next-line @next/next/no-img-element */}

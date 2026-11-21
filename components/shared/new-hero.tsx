@@ -280,7 +280,7 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
             </Link>
             <Link
               href="/projects"
-              className="surface-card hover:surface-card-elevated text-prominent inline-flex min-h-11 items-center rounded-xl px-5 py-3 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px]"
+              className="text-prominent inline-flex min-h-11 items-center rounded-xl bg-black/[0.05] px-5 py-3 text-xs font-medium transition-colors hover:bg-black/[0.09] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px] dark:bg-white/[0.07] dark:hover:bg-white/[0.12]"
             >
               Explore projects
             </Link>

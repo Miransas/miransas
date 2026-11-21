@@ -136,6 +136,9 @@ type FormFeedback =
       mailtoUrl?: string;
     };
 
+const INPUT_CLASSES =
+  'w-full rounded-xl border border-black/[0.08] bg-[#EFEFEF]/60 px-4 py-3.5 text-sm text-[#1d1d1f] placeholder:text-[#6E6E74] transition-colors focus:border-[#0d4bfa] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d4bfa]/30 dark:border-white/10 dark:bg-white/[0.03] dark:text-white';
+
 export function ContactView() {
   const [copied, setCopied] = useState(false);
   const [name, setName] = useState('');
@@ -297,7 +300,7 @@ export function ContactView() {
             <button
               type="button"
               onClick={copyEmail}
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-neutral-800 transition-colors hover:bg-[#F7F8FC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-[#000103] dark:text-[#D1D1D1] dark:hover:bg-[#03050d]"
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 py-2.5 text-sm font-medium text-neutral-800 transition-colors duration-200 hover:border-black/[0.16] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:border-white/10 dark:bg-background dark:text-[#D1D1D1] dark:hover:border-white/20"
             >
               {copied ? (
                 <>
@@ -317,7 +320,7 @@ export function ContactView() {
 
             <Link
               href="/news/rss.xml"
-              className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-medium text-neutral-700 transition-colors hover:bg-[#F7F8FC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-[#000103] dark:text-[#D1D1D1] dark:hover:bg-[#03050d]"
+              className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-black/[0.08] bg-white px-4 py-2.5 text-sm font-medium text-neutral-700 transition-colors duration-200 hover:border-black/[0.16] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:border-white/10 dark:bg-background dark:text-[#D1D1D1] dark:hover:border-white/20"
             >
               <Rss className="size-4 text-[#0d4bfa]" aria-hidden />
               <span>RSS Feed</span>
@@ -325,12 +328,12 @@ export function ContactView() {
           </div>
         </header>
 
-        {/* Interactive Contact Form */}
+        {/* Interactive Contact Form (Tier 1 Container) */}
         <section
           aria-labelledby="direct-message-heading"
           className="mt-14 md:mt-20"
         >
-          <div className="rounded-4xl bg-white p-7 sm:p-10 md:p-12 dark:bg-[#000103]">
+          <div className="rounded-4xl border border-black/[0.08] bg-white p-7 sm:p-10 md:p-12 dark:border-white/10 dark:bg-background">
             <div className="max-w-2xl">
               <span className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
                 Direct message
@@ -350,7 +353,7 @@ export function ContactView() {
             <form
               onSubmit={handleSubmit}
               noValidate
-              className="mt-8 space-y-6"
+              className="mt-8 space-y-6 sm:mt-10"
             >
               {/* Hidden honeypot field */}
               <div className="sr-only" aria-hidden="true">
@@ -385,7 +388,7 @@ export function ContactView() {
                     placeholder="Your name"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full rounded-xl bg-[#EFEFEF] px-4 py-3.5 text-sm text-[#1d1d1f] placeholder:text-[#6E6E74] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-[#050505] dark:text-white"
+                    className={INPUT_CLASSES}
                   />
                 </div>
 
@@ -406,7 +409,7 @@ export function ContactView() {
                     placeholder="you@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full rounded-xl bg-[#EFEFEF] px-4 py-3.5 text-sm text-[#1d1d1f] placeholder:text-[#6E6E74] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-[#050505] dark:text-white"
+                    className={INPUT_CLASSES}
                   />
                 </div>
 
@@ -422,10 +425,14 @@ export function ContactView() {
                     name="topic"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value as TopicOption)}
-                    className="w-full rounded-xl bg-[#EFEFEF] px-4 py-3.5 text-sm text-[#1d1d1f] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-[#050505] dark:text-white"
+                    className={INPUT_CLASSES}
                   >
                     {TOPIC_OPTIONS.map((opt) => (
-                      <option key={opt} value={opt}>
+                      <option
+                        key={opt}
+                        value={opt}
+                        className="bg-white text-[#1d1d1f] dark:bg-[#07080c] dark:text-white"
+                      >
                         {opt}
                       </option>
                     ))}
@@ -450,7 +457,7 @@ export function ContactView() {
                   placeholder="Tell us which product or topic, what you expected, and any relevant details..."
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="w-full resize-y rounded-xl bg-[#EFEFEF] px-4 py-3.5 text-sm leading-relaxed text-[#1d1d1f] placeholder:text-[#6E6E74] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-[#050505] dark:text-white"
+                  className={`${INPUT_CLASSES} resize-y leading-relaxed`}
                 />
                 <p className="mt-2.5 text-xs leading-[1.45] text-neutral-500 sm:text-[13px] dark:text-[#6E6E74]">
                   Never send passwords, API keys, or tokens in a message.
@@ -481,7 +488,7 @@ export function ContactView() {
                 <div
                   role="status"
                   aria-live="polite"
-                  className="flex items-start gap-3 rounded-3xl bg-[radial-gradient(125%_115%_at_100%_0%,rgba(13,75,250,0.12)_0%,#EFEFEF_68%)] p-5 dark:bg-[radial-gradient(125%_115%_at_0%_0%,rgba(13,75,250,0.26)_0%,#050505_68%)]"
+                  className="flex items-start gap-3 rounded-3xl bg-[#0d4bfa]/[0.08] p-5 dark:bg-[#0d4bfa]/[0.14]"
                 >
                   <CheckCircle2
                     className="mt-0.5 size-5 shrink-0 text-[#0d4bfa]"
@@ -497,7 +504,7 @@ export function ContactView() {
                 <div
                   role="status"
                   aria-live="polite"
-                  className="flex flex-col justify-between gap-4 rounded-3xl bg-[radial-gradient(125%_115%_at_100%_0%,rgba(13,75,250,0.12)_0%,#EFEFEF_68%)] p-6 sm:flex-row sm:items-center dark:bg-[radial-gradient(125%_115%_at_0%_0%,rgba(13,75,250,0.26)_0%,#050505_68%)]"
+                  className="flex flex-col justify-between gap-4 rounded-3xl bg-[#0d4bfa]/[0.08] p-6 sm:flex-row sm:items-center dark:bg-[#0d4bfa]/[0.14]"
                 >
                   <div className="flex items-start gap-3">
                     <Mail
@@ -521,7 +528,7 @@ export function ContactView() {
               {feedback.type === 'error' && (
                 <div
                   role="alert"
-                  className="flex flex-col justify-between gap-4 rounded-3xl bg-[#EFEFEF] p-5 sm:flex-row sm:items-center dark:bg-[#050505]"
+                  className="flex flex-col justify-between gap-4 rounded-3xl bg-black/[0.04] p-5 sm:flex-row sm:items-center dark:bg-white/[0.04]"
                 >
                   <div className="flex items-start gap-3">
                     <AlertCircle
@@ -547,7 +554,7 @@ export function ContactView() {
           </div>
         </section>
 
-        {/* Who to write to */}
+        {/* Who to write to (Tier 1 standard cards + Tier 2 General & Partnerships) */}
         <section aria-labelledby="who-to-write" className="mt-16 md:mt-24">
           <div className="mb-8">
             <span className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
@@ -564,16 +571,24 @@ export function ContactView() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {CHANNELS.map((item) => {
               const Icon = item.icon;
-              const cardClasses = `group relative flex flex-col justify-between rounded-3xl p-7 transition-transform duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] ${
+              const cardClasses = `group relative flex flex-col justify-between overflow-hidden rounded-3xl p-7 transition-all duration-200 hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] ${
                 item.featured
-                  ? 'bg-[radial-gradient(125%_115%_at_100%_0%,rgba(13,75,250,0.12)_0%,#FFFFFF_68%)] dark:bg-[radial-gradient(125%_115%_at_0%_0%,rgba(13,75,250,0.26)_0%,#000103_68%)]'
-                  : 'bg-white hover:bg-[#F7F8FC] dark:bg-[#000103] dark:hover:bg-[#03050d]'
+                  ? 'border border-[#0d4bfa]/20 bg-white hover:border-[#0d4bfa]/35 dark:border-[#0d4bfa]/30 dark:bg-[#070912] dark:hover:border-[#0d4bfa]/45'
+                  : 'border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
               }`;
+
+              const glowOverlay = item.featured ? (
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
+                />
+              ) : null;
 
               if (item.secondaryHref) {
                 return (
                   <article key={item.topic} className={cardClasses}>
-                    <div>
+                    {glowOverlay}
+                    <div className="relative z-10">
                       <div className="flex items-center justify-between gap-3">
                         <span className="flex size-10 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-[#0d4bfa]/15 dark:text-[#6b93ff]">
                           <Icon className="size-5" aria-hidden />
@@ -592,7 +607,7 @@ export function ContactView() {
                       </p>
                     </div>
 
-                    <div className="mt-6 flex flex-wrap items-center gap-3 text-sm font-medium">
+                    <div className="relative z-10 mt-6 flex flex-wrap items-center gap-3 text-sm font-medium">
                       <Link
                         href={item.href}
                         className="rounded-xl text-[#0d4bfa] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-[#D1D1D1]"
@@ -615,7 +630,8 @@ export function ContactView() {
 
               const content = (
                 <>
-                  <div>
+                  {glowOverlay}
+                  <div className="relative z-10">
                     <div className="flex items-center justify-between gap-3">
                       <span className="flex size-10 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-[#0d4bfa]/15 dark:text-[#6b93ff]">
                         <Icon className="size-5" aria-hidden />
@@ -634,7 +650,7 @@ export function ContactView() {
                     </p>
                   </div>
 
-                  <span className="mt-6 inline-block text-sm font-medium text-[#0d4bfa] dark:text-[#D1D1D1]">
+                  <span className="relative z-10 mt-6 inline-block text-sm font-medium text-[#0d4bfa] dark:text-[#D1D1D1]">
                     {item.label}
                   </span>
                 </>
@@ -663,7 +679,7 @@ export function ContactView() {
           </div>
         </section>
 
-        {/* Before you write */}
+        {/* Before you write (Tier 1 Cards + Tier 3 Nested Badges) */}
         <section aria-labelledby="before-you-write" className="mt-16 md:mt-24">
           <div className="mb-8">
             <span className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
@@ -681,7 +697,7 @@ export function ContactView() {
             {BEFORE_YOU_WRITE.map((item) => (
               <article
                 key={item.step}
-                className="rounded-3xl bg-white p-7 dark:bg-[#000103]"
+                className="rounded-3xl border border-black/[0.08] bg-white p-7 dark:border-white/10 dark:bg-background"
               >
                 <span className="inline-flex rounded-xl bg-[#0d4bfa]/10 px-3 py-1 font-mono text-xs font-medium text-[#0d4bfa] dark:bg-[#0d4bfa]/15 dark:text-[#6b93ff]">
                   {item.step}
@@ -697,9 +713,9 @@ export function ContactView() {
           </div>
         </section>
 
-        {/* Security Reports & Voice Talent */}
+        {/* Security Reports (Tier 1) & Voice Talent (Tier 2) */}
         <section className="mt-16 grid grid-cols-1 gap-5 md:mt-24 md:grid-cols-2">
-          <article className="flex flex-col justify-between rounded-4xl bg-white p-8 md:p-10 dark:bg-[#000103]">
+          <article className="flex flex-col justify-between rounded-4xl border border-black/[0.08] bg-white p-8 md:p-10 dark:border-white/10 dark:bg-background">
             <div>
               <span className="inline-flex items-center gap-2 rounded-xl bg-[#0d4bfa]/10 px-3 py-1.5 text-xs font-medium tracking-[0.1em] text-[#0d4bfa] uppercase dark:bg-[#0d4bfa]/15 dark:text-[#6b93ff]">
                 <ShieldAlert className="size-3.5" aria-hidden />
@@ -730,8 +746,12 @@ export function ContactView() {
             </div>
           </article>
 
-          <article className="flex flex-col justify-between rounded-4xl bg-[radial-gradient(125%_115%_at_100%_0%,rgba(13,75,250,0.12)_0%,#FFFFFF_68%)] p-8 md:p-10 dark:bg-[radial-gradient(125%_115%_at_0%_0%,rgba(13,75,250,0.26)_0%,#000103_68%)]">
-            <div>
+          <article className="relative flex flex-col justify-between overflow-hidden rounded-4xl border border-[#0d4bfa]/20 bg-white p-8 md:p-10 dark:border-[#0d4bfa]/30 dark:bg-[#070912]">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
+            />
+            <div className="relative z-10">
               <span className="inline-flex items-center gap-2 rounded-xl bg-[#0d4bfa]/12 px-3 py-1.5 text-xs font-medium tracking-[0.1em] text-[#0d4bfa] uppercase dark:bg-[#0d4bfa]/20 dark:text-[#89abff]">
                 <Mic className="size-3.5" aria-hidden />
                 Miralas · Uzbek Speech
@@ -757,7 +777,7 @@ export function ContactView() {
               </p>
             </div>
 
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+            <div className="relative z-10 mt-8 flex flex-wrap items-center gap-3">
               <a
                 href="mailto:contact@miransas.com?subject=Voice"
                 className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#1d1d1f] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-white dark:text-[#050505]"
@@ -767,7 +787,7 @@ export function ContactView() {
               </a>
               <Link
                 href="/careers"
-                className="inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-black/[0.05] px-5 py-2.5 text-sm font-medium text-[#1d1d1f] transition-colors hover:bg-black/[0.09] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-white/[0.08] dark:text-[#D1D1D1] dark:hover:bg-white/[0.12]"
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-black/[0.04] px-5 py-2.5 text-sm font-medium text-[#1d1d1f] transition-colors hover:bg-black/[0.08] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-white/[0.06] dark:text-[#D1D1D1] dark:hover:bg-white/[0.1]"
               >
                 <span>View Careers</span>
                 <ArrowUpRight className="size-4" aria-hidden />
@@ -776,9 +796,9 @@ export function ContactView() {
           </article>
         </section>
 
-        {/* What to expect */}
+        {/* What to expect (Subtle Tier 1 Strip + Tier 3 Inner Badge) */}
         <section aria-labelledby="what-to-expect" className="mt-12 md:mt-16">
-          <div className="flex flex-col gap-4 rounded-3xl bg-white p-7 sm:flex-row sm:items-start sm:gap-5 md:p-8 dark:bg-[#000103]">
+          <div className="flex flex-col gap-4 rounded-3xl border border-black/[0.08] bg-white p-7 sm:flex-row sm:items-start sm:gap-5 md:p-8 dark:border-white/10 dark:bg-background">
             <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-[#0d4bfa]/15 dark:text-[#6b93ff]">
               <Info className="size-5" aria-hidden />
             </span>

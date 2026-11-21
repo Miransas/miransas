@@ -136,7 +136,7 @@ export default function LiveVoiceStream() {
   const contentKey = thinkingText.length + speechText.length + (isStreamComplete ? 1 : 0);
 
   return (
-    <div className="surface-card text-foreground flex h-full min-h-[400px] w-full max-w-xl flex-col rounded-3xl p-5 font-sans">
+    <div className="text-foreground flex h-full min-h-[400px] w-full max-w-xl flex-col rounded-3xl bg-black/[0.04] p-5 font-sans dark:bg-white/[0.04]">
       <audio
         ref={audioRef}
         src={AUDIO_SRC}
@@ -205,16 +205,16 @@ export default function LiveVoiceStream() {
                 <span>RECORDED SAMPLE · ILLUSTRATIVE WORKFLOW</span>
               </div>
 
-              <div className="surface-blue-gradient text-foreground relative w-full space-y-4 rounded-xl p-4 text-[15px] leading-[1.6] sm:text-base">
+              <div className="text-foreground relative w-full space-y-4 rounded-xl bg-[#0d4bfa]/10 p-4 text-[15px] leading-[1.6] sm:text-base dark:bg-[#0d4bfa]/15">
                 <p className="text-prominent font-sans">
                   {speechText}
                   {!isThinking && speechText.length < FULL_SPEECH.length && (
-                    <span className="ml-1 inline-block h-3.5 w-1.5 animate-pulse bg-[#3847ff] align-middle" />
+                    <span className="ml-1 inline-block h-3.5 w-1.5 animate-pulse bg-[#0d4bfa] align-middle" />
                   )}
                 </p>
 
                 {isStreamComplete && (
-                  <div className="surface-card flex items-center gap-3 rounded-xl p-3 select-none">
+                  <div className="flex items-center gap-3 rounded-xl bg-black/[0.05] p-3 select-none dark:bg-white/[0.06]">
                     <div
                       ref={waveformRef}
                       onClick={handleSeek}

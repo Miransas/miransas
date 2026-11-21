@@ -61,10 +61,10 @@ export function Features() {
               aria-pressed={active === tab.id}
               aria-controls="capability-preview"
               onClick={() => setActive(tab.id)}
-              className={`rounded-xl px-4 py-2 text-xs font-medium transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] sm:text-[13px] ${
+              className={`rounded-xl px-4 py-2 text-xs font-medium transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px] ${
                 active === tab.id
-                  ? 'bg-[#3847ff] text-white'
-                  : 'surface-card hover:surface-card-elevated text-prominent'
+                  ? 'bg-[#0d4bfa] text-white'
+                  : 'text-prominent border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
               }`}
             >
               {tab.label}

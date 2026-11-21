@@ -85,23 +85,29 @@ After implementation:
 
 Maintain complete visual consistency across every page and component via semantic CSS variables in `app/globals.css`.
 
-### Surfaces
-- **Dark Mode:**
-  - Page & section background: fixed `#050505` (`--surface-page`). Never use random dark grays (`#0a0a0a`, `#0b0b0d`, `#111111`, `#161617`, `bg-neutral-900`, `bg-zinc-950`) for page/section backgrounds.
-  - Standard cards, panels, FAQ items, modals: fixed `#000103` (`--surface-card`).
-  - Featured / active cards: subtle electric blue gradient (`#3847ff` → `#000103`).
-- **Light Mode:**
-  - Page & section background: fixed `#EFEFEF` (or consistent site light token).
-  - Standard cards: `#FFFFFF`.
-  - Featured / active cards: crisp `#FFFFFF` → soft `#3847ff` tint.
+### Contextual Card & Surface Architecture (3 Tiers)
+- **Page & Section Background (Borderless):**
+  - Dark Mode: fixed `#050505` (`--surface-page`). Never use random dark grays (`#0a0a0a`, `#111111`, `#161617`, `bg-neutral-900`, `bg-zinc-950`) or full-width `border-t`/`border-b` section dividers.
+  - Light Mode: fixed `#EFEFEF` (`--surface-page`).
+- **Tier 1 — Structural Cards & Form Controls (Crisp Hairline Border):**
+  - Use for primary standalone cards, 3-column feature/research grids, directory cards, modals, and form containers.
+  - Surface: `bg-white dark:bg-background` (`#FFFFFF` light / `#050505` or `#07080c` dark).
+  - Border: `border border-black/[0.08] dark:border-white/10` (interactive hover: `hover:border-black/[0.16] dark:hover:border-white/20`).
+  - Form inputs (`input`, `textarea`, `select`) inside a Tier 1 card: `bg-[#EFEFEF]/60 dark:bg-white/[0.03]` with `border border-black/[0.08] dark:border-white/10` and `focus:border-[#0d4bfa] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d4bfa]/30`.
+- **Tier 2 — Featured / Gradient & Active Cards (Cobalt `#0d4bfa` Accent):**
+  - Use selectively (at most 1 card per grid, active FAQ item, or hero/CTA showcase).
+  - Surface: Soft, feathered internal `#0d4bfa` radial glow (never a hard clipped top bar) over `bg-white dark:bg-[#070912]`.
+  - Border: Subtle cobalt-tinted hairline (`border border-[#0d4bfa]/20 dark:border-[#0d4bfa]/30`) or borderless when melting into `<AmbientSmoke />`.
+- **Tier 3 — Nested Elements, Chips & Inner Rows (Strictly Borderless):**
+  - Never create noisy box-in-a-box double borders.
+  - Elements *inside* a Tier 1 or Tier 2 card (checklist rows `01–04`, icon badges, status pills, eyebrow kickers, secondary metric tiles, inner mocks, and accordion `+` buttons) must stay borderless (`border-0`), separated purely via soft tonal fills (`bg-black/[0.04] dark:bg-white/[0.04]` or `bg-[#0d4bfa]/10`).
 
-### Zero-Border & 3-Tier Radius System
-- **No resting borders:** Do NOT use `border`, `border-t`, `border-b`, `border-white/...`, `border-black/...`, `ring-1`, or `divide-y` on cards, sections, tables, modals, or accordions. Separate depth purely via surface contrast, spacing, and subtle shadows.
-- **Accessibility focus only:** Keep `focus-visible:outline-2 focus-visible:outline-[#3847ff] focus-visible:outline-offset-2` for keyboard navigation.
+### 3-Tier Corner Radius System & Focus
+- **Accessibility focus:** Keep `focus-visible:outline-2 focus-visible:outline-[#0d4bfa] focus-visible:outline-offset-2` for keyboard navigation.
 - **Strict Corner Radii:**
-  - `rounded-4xl`: Large showcase containers, hero preview frames, CTA banners, and modal shells.
+  - `rounded-4xl`: Large showcase containers, hero preview frames, CTA banners, form containers, and modal shells.
   - `rounded-3xl`: Main cards, capability items, FAQ items, and process steps.
-  - `rounded-xl`: Inner metric tiles, badges, buttons, chips, and media controls.
+  - `rounded-xl`: Inner metric tiles, badges, buttons, form inputs, chips, and media controls.
 
 ### Typography
 - Use one cohesive primary sans font across all headings, `p`, and `span` elements (mono font strictly for technical specs like `24 kHz`, `01 / 05`, `gRPC`).

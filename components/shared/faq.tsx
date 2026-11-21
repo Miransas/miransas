@@ -19,8 +19,8 @@ export function Faq() {
         <Reveal className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
           <div className="flex flex-col justify-between">
             <div>
-              <div className="surface-blue-gradient text-prominent inline-flex items-center gap-2 rounded-xl px-3.5 py-1.5 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
-                <HelpCircle className="size-3.5 text-[#3847ff]" />
+              <div className="text-prominent inline-flex items-center gap-2 rounded-xl bg-[#0d4bfa]/10 px-3.5 py-1.5 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px] dark:bg-[#0d4bfa]/15">
+                <HelpCircle className="size-3.5 text-[#0d4bfa]" />
                 <span>FAQ</span>
               </div>
               <h2 className="text-heading mt-5 text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]">
@@ -41,10 +41,10 @@ export function Faq() {
                         setGroup(key);
                         setOpen(0);
                       }}
-                      className={`rounded-xl px-4 py-2 text-xs font-medium transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] sm:text-[13px] ${
+                      className={`rounded-xl px-4 py-2 text-xs font-medium transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px] ${
                         isActive
-                          ? 'bg-[#3847ff] text-white'
-                          : 'surface-card hover:surface-card-elevated text-prominent'
+                          ? 'bg-[#0d4bfa] text-white'
+                          : 'text-prominent border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
                       }`}
                     >
                       {key}
@@ -53,20 +53,26 @@ export function Faq() {
                 })}
               </div>
             </div>
-            <div className="surface-blue-gradient mt-10 rounded-3xl p-6 sm:p-8">
-              <h3 className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
-                Got questions?
-              </h3>
-              <p className="text-secondary-copy mt-2 text-[15px] leading-[1.6] sm:text-base">
-                Can&#39;t find what you&#39;re looking for? Reach out — the team will read your message.
-              </p>
-              <a
-                href="/contact"
-                className="group text-heading mt-4 inline-flex items-center gap-2 rounded-xl text-xs font-semibold transition-all hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] sm:text-[13px]"
-              >
-                <span>Contact us</span>
-                <ArrowRight className="size-3.5 text-[#3847ff] transition-transform group-hover:translate-x-1" />
-              </a>
+            <div className="relative mt-10 overflow-hidden rounded-3xl border border-[#0d4bfa]/20 bg-white p-6 sm:p-8 dark:border-[#0d4bfa]/30 dark:bg-[#070912]">
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
+              />
+              <div className="relative z-10">
+                <h3 className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
+                  Got questions?
+                </h3>
+                <p className="text-secondary-copy mt-2 text-[15px] leading-[1.6] sm:text-base">
+                  Can&#39;t find what you&#39;re looking for? Reach out — the team will read your message.
+                </p>
+                <a
+                  href="/contact"
+                  className="group text-heading mt-4 inline-flex items-center gap-2 rounded-xl text-xs font-semibold transition-all hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px]"
+                >
+                  <span>Contact us</span>
+                  <ArrowRight className="size-3.5 text-[#0d4bfa] transition-transform group-hover:translate-x-1" />
+                </a>
+              </div>
             </div>
           </div>
 
@@ -77,17 +83,25 @@ export function Faq() {
               return (
                 <div
                   key={item.q}
-                  className={`overflow-hidden rounded-3xl transition-all duration-300 ${
-                    isOpen ? 'surface-blue-gradient' : 'surface-card hover-surface-blue-gradient'
+                  className={`relative overflow-hidden rounded-3xl transition-colors duration-300 ${
+                    isOpen
+                      ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#070912]'
+                      : 'border border-black/[0.07] bg-white hover:border-black/[0.15] dark:border-white/[0.09] dark:bg-background dark:hover:border-white/[0.18]'
                   }`}
                 >
+                  {isOpen && (
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.08)_0%,rgba(13,75,250,0.025)_45%,transparent_72%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_45%,transparent_72%)]"
+                    />
+                  )}
                   <button
                     type="button"
                     id={`faq-trigger-${groupId}-${index}`}
                     aria-expanded={isOpen}
                     aria-controls={`faq-answer-${groupId}-${index}`}
                     onClick={() => setOpen(isOpen ? null : index)}
-                    className="flex w-full items-center justify-between gap-4 rounded-3xl p-5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] sm:p-6"
+                    className="relative z-10 flex w-full items-center justify-between gap-4 rounded-3xl p-5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:p-6"
                   >
                     <span
                       className={`text-base leading-[1.5] font-medium sm:text-lg ${
@@ -97,8 +111,10 @@ export function Faq() {
                       {item.q}
                     </span>
                     <div
-                      className={`surface-card-elevated flex size-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 ${
-                        isOpen ? 'rotate-180 text-[#3847ff]' : 'text-secondary-copy'
+                      className={`flex size-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 ${
+                        isOpen
+                          ? 'rotate-180 bg-[#0d4bfa]/15 text-[#0d4bfa] dark:bg-[#0d4bfa]/25'
+                          : 'text-secondary-copy bg-black/[0.04] dark:bg-white/[0.04]'
                       }`}
                     >
                       <ChevronDown className="size-4" />
@@ -110,7 +126,7 @@ export function Faq() {
                     role="region"
                     aria-labelledby={`faq-trigger-${groupId}-${index}`}
                     aria-hidden={!isOpen}
-                    className={`grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    className={`relative z-10 grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                       isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                     }`}
                   >

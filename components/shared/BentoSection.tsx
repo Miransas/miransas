@@ -70,9 +70,10 @@ function Waveform({ bars = 24, color = 'bg-[#0d4bfa]/75' }: { bars?: number; col
   );
 }
 
+// Tier 3 (Strictly Borderless) inner mocks — separated purely by tonal fills
 function AgentMock() {
   return (
-    <div className="surface-card flex h-full min-h-[250px] flex-col overflow-hidden rounded-3xl p-4">
+    <div className="flex h-full min-h-[250px] flex-col overflow-hidden rounded-3xl bg-black/[0.04] p-4 dark:bg-white/[0.04]">
       <div className="text-secondary-copy flex flex-wrap items-center justify-between gap-2 font-mono text-xs leading-[1.45]">
         <span className="text-prominent flex items-center gap-2">
           <span className="relative flex h-2 w-2">
@@ -85,10 +86,10 @@ function AgentMock() {
       </div>
 
       <div className="mt-4 space-y-3 text-xs leading-[1.55] sm:text-sm">
-        <div className="surface-card-elevated text-prominent max-w-[90%] rounded-xl px-3.5 py-2.5">
+        <div className="text-prominent max-w-[90%] rounded-xl bg-black/[0.04] px-3.5 py-2.5 dark:bg-white/[0.05]">
           Hi, I need to change the delivery address for order #48213.
         </div>
-        <div className="surface-blue-gradient text-heading ml-auto max-w-[90%] rounded-xl px-3.5 py-2.5">
+        <div className="text-heading ml-auto max-w-[90%] rounded-xl bg-[#0d4bfa]/10 px-3.5 py-2.5 dark:bg-[#0d4bfa]/20">
           Of course — I&#39;ve pulled up order #48213. What&#39;s the new address?
         </div>
       </div>
@@ -114,15 +115,15 @@ function TtsMock() {
   ];
 
   return (
-    <div className="surface-card flex h-full min-h-[250px] flex-col overflow-hidden rounded-3xl p-4">
+    <div className="flex h-full min-h-[250px] flex-col overflow-hidden rounded-3xl bg-black/[0.04] p-4 dark:bg-white/[0.04]">
       <div className="text-secondary-copy flex flex-wrap items-center justify-between gap-2 font-mono text-xs leading-[1.45]">
         <span className="text-prominent">Studio TTS</span>
-        <span className="surface-card-elevated text-prominent rounded-xl px-2.5 py-1">
+        <span className="text-prominent rounded-xl bg-black/[0.04] px-2.5 py-1 dark:bg-white/[0.05]">
           Example voice
         </span>
       </div>
 
-      <p className="surface-card-elevated text-prominent mt-4 rounded-xl px-3.5 py-3 text-xs leading-[1.6] italic sm:text-sm">
+      <p className="text-prominent mt-4 rounded-xl bg-black/[0.04] px-3.5 py-3 text-xs leading-[1.6] italic sm:text-sm dark:bg-white/[0.05]">
         &ldquo;Assalomu alaykum! Buyurtmangiz yo&#39;lga chiqdi.&rdquo;
       </p>
 
@@ -133,7 +134,7 @@ function TtsMock() {
             className={`rounded-xl px-2.5 py-1 text-xs font-medium transition-colors ${
               v.active
                 ? 'bg-[#0d4bfa] text-white'
-                : 'surface-card-elevated text-secondary-copy'
+                : 'text-secondary-copy bg-black/[0.04] dark:bg-white/[0.05]'
             }`}
           >
             {v.lang} · {v.name}
@@ -154,7 +155,7 @@ function TtsMock() {
 
 function VoiceCloneMock() {
   return (
-    <div className="surface-card flex h-full min-h-[250px] flex-col overflow-hidden rounded-3xl p-4">
+    <div className="flex h-full min-h-[250px] flex-col overflow-hidden rounded-3xl bg-black/[0.04] p-4 dark:bg-white/[0.04]">
       <div className="text-secondary-copy flex flex-wrap items-center justify-between gap-2 font-mono text-xs leading-[1.45]">
         <span className="text-prominent">Voice cloning concept</span>
         <span className="text-prominent flex items-center gap-1.5">
@@ -164,7 +165,7 @@ function VoiceCloneMock() {
       </div>
 
       <div className="mt-4 flex flex-col gap-3">
-        <div className="surface-card-elevated rounded-xl p-3 transition-colors">
+        <div className="rounded-xl bg-black/[0.04] p-3 transition-colors dark:bg-white/[0.05]">
           <div className="text-secondary-copy mb-2 flex items-center justify-between font-mono text-[11px] leading-[1.45]">
             <span>Reference audio</span>
             <span>speaker_01.wav</span>
@@ -172,7 +173,7 @@ function VoiceCloneMock() {
           <div className="flex items-center gap-3">
             <span
               aria-hidden="true"
-              className="surface-card text-prominent flex h-7 w-7 shrink-0 items-center justify-center rounded-xl text-xs"
+              className="text-prominent flex h-7 w-7 shrink-0 items-center justify-center rounded-xl bg-black/[0.06] text-xs dark:bg-white/[0.08]"
             >
               ▶
             </span>
@@ -182,11 +183,11 @@ function VoiceCloneMock() {
           </div>
         </div>
         <div className="relative flex justify-center py-0.5">
-          <div className="surface-card-elevated text-prominent relative rounded-xl px-2.5 py-0.5 font-mono text-[11px] tracking-[0.12em] uppercase">
+          <div className="text-prominent relative rounded-xl bg-black/[0.04] px-2.5 py-0.5 font-mono text-[11px] tracking-[0.12em] uppercase dark:bg-white/[0.05]">
             generating
           </div>
         </div>
-        <div className="surface-blue-gradient rounded-xl p-3">
+        <div className="rounded-xl bg-[#0d4bfa]/10 p-3 dark:bg-[#0d4bfa]/20">
           <div className="text-heading mb-2 flex items-center justify-between font-mono text-[11px] leading-[1.45]">
             <span>Synthesized Output</span>
             <span>Example output</span>
@@ -253,7 +254,11 @@ export function Bento() {
                 initial="hidden"
                 whileInView="show"
                 viewport={{ once: true, amount: 0.2 }}
-                className="group surface-card relative flex min-h-[290px] flex-col justify-between overflow-hidden rounded-3xl p-7 transition-transform duration-300 hover:-translate-y-1 lg:p-8"
+                className={`group relative flex min-h-[290px] flex-col justify-between overflow-hidden rounded-3xl p-7 transition-all duration-300 hover:-translate-y-1 lg:p-8 ${
+                  isFeatured
+                    ? 'border border-[#0d4bfa]/20 bg-white hover:border-[#0d4bfa]/35 dark:border-[#0d4bfa]/30 dark:bg-[#070912] dark:hover:border-[#0d4bfa]/45'
+                    : 'border border-black/[0.08] bg-white hover:border-black/[0.16] dark:border-white/10 dark:bg-background dark:hover:border-white/20'
+                }`}
               >
                 {isFeatured && (
                   <div
@@ -269,7 +274,7 @@ export function Bento() {
                 <motion.div variants={textStagger} className="relative z-10">
                   <motion.span
                     variants={inner}
-                    className="surface-card-elevated text-prominent inline-flex items-center gap-2 rounded-xl px-3 py-1 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]"
+                    className="text-prominent inline-flex items-center gap-2 rounded-xl bg-black/[0.04] px-3 py-1 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px] dark:bg-white/[0.04]"
                   >
                     <span aria-hidden="true" className="size-1.5 rounded-xl bg-[#0d4bfa]" />
                     {item.tag}
@@ -287,7 +292,7 @@ export function Bento() {
                     {item.body}
                   </motion.p>
                   <motion.div variants={inner} className="mt-5">
-                    <span className="surface-card-elevated text-secondary-copy inline-flex items-center rounded-xl px-3 py-1 font-mono text-xs leading-[1.45]">
+                    <span className="text-secondary-copy inline-flex items-center rounded-xl bg-black/[0.04] px-3 py-1 font-mono text-xs leading-[1.45] dark:bg-white/[0.04]">
                       {item.aside}
                     </span>
                   </motion.div>
@@ -295,20 +300,18 @@ export function Bento() {
 
                 <motion.div
                   variants={visual}
-                  className="relative z-10 mt-7 flex w-full items-center justify-center"
+                  className="relative z-10 mt-7 flex w-full flex-col"
                 >
-                  <div className="surface-card-elevated relative z-10 w-full min-w-0 rounded-3xl p-3.5">
-                    <span className="text-secondary-copy mb-2.5 block font-mono text-[11px] leading-[1.45] tracking-[0.12em] uppercase">
-                      Illustrative interface · sample data
-                    </span>
-                    {item.visual === 'agents' ? (
-                      <AgentMock />
-                    ) : item.visual === 'tts' ? (
-                      <TtsMock />
-                    ) : (
-                      <VoiceCloneMock />
-                    )}
-                  </div>
+                  <span className="text-secondary-copy mb-2.5 block font-mono text-[11px] leading-[1.45] tracking-[0.12em] uppercase">
+                    Illustrative interface · sample data
+                  </span>
+                  {item.visual === 'agents' ? (
+                    <AgentMock />
+                  ) : item.visual === 'tts' ? (
+                    <TtsMock />
+                  ) : (
+                    <VoiceCloneMock />
+                  )}
                 </motion.div>
               </motion.article>
             );

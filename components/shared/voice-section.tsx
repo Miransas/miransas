@@ -47,7 +47,7 @@ function StepTextItem({
           {step.eyebrow}
         </span>
         <div className="flex items-center gap-3">
-          <div className="surface-card flex size-10 shrink-0 items-center justify-center rounded-xl text-[#3847ff]">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-[#0d4bfa]/15">
             <Icon className="h-5 w-5" />
           </div>
           <h3 className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
