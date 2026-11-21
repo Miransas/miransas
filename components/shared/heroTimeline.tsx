@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react';
 import { motion, useScroll, useMotionValueEvent, useReducedMotion } from 'framer-motion';
 import { Reveal } from './reval';
+import { AmbientSmoke } from './AmbientSmoke';
 import { Search, PenTool, Settings, RefreshCw, Rocket } from 'lucide-react';
 
 const timelineData = [
@@ -53,8 +54,12 @@ export default function Timeline() {
   });
 
   return (
-    <section aria-label="How we build" className="surface-page text-foreground px-6 py-24 md:py-32">
-      <Reveal className="mx-auto mb-14 max-w-4xl">
+    <section
+      aria-label="How we build"
+      className="surface-page text-foreground relative overflow-x-clip px-6 py-24 md:py-32"
+    >
+      <AmbientSmoke anchor="center-left" seed={4.3} intensity={0.48} />
+      <Reveal className="relative z-10 mx-auto mb-14 max-w-4xl">
         <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
           The engineering process
         </span>
@@ -65,7 +70,7 @@ export default function Timeline() {
           A sequence of decisions, built around the problem. From discovery to refinement, each step makes the next decision clearer.
         </p>
       </Reveal>
-      <div className="relative mx-auto max-w-4xl" ref={containerRef}>
+      <div className="relative z-10 mx-auto max-w-4xl" ref={containerRef}>
         <div aria-hidden className="surface-card-elevated absolute top-0 bottom-0 left-4 w-0.5 rounded-xl md:left-1/2" />
         <motion.div
           aria-hidden
