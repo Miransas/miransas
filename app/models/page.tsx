@@ -1,41 +1,108 @@
-import Models from './models.mdx';
-import { Callout } from '@/components/provider/Callout';
-import { PageIntro, PageAction } from '@/components/pages/page-intro';
+import { Suspense } from 'react';
 import type { Metadata } from 'next';
+import { ModelsView } from '@/components/models/ModelsView';
 import { JsonLd } from '@/src/components/seo/JsonLd';
-import { createPageMetadata, getBreadcrumbJsonLd } from '@/src/lib/seo';
+import {
+  SITE_NAME,
+  SITE_URL,
+  createPageMetadata,
+  getBreadcrumbJsonLd,
+} from '@/src/lib/seo';
+
+const MODELS_DESCRIPTION =
+  'Explore the open-source audio models behind Miralas: Chatterbox Multilingual TTS, Uzbek speech research, ACE-Step 1.5 music generation, and Stable Audio Open SFX.';
 
 export const metadata: Metadata = createPageMetadata({
-  title: 'Speech Models — Chatterbox & Uzbek Speech Research',
-  description:
-    'Technical notes on the Chatterbox Multilingual 23-language baseline, pinned artifact verification, permission-based voice cloning, and Uzbek speech research.',
+  title: 'Models',
+  description: MODELS_DESCRIPTION,
   path: '/models',
+  keywords: [
+    'Miralas models',
+    'Chatterbox Multilingual TTS',
+    't3_mtl23ls_v2.safetensors',
+    'Uzbek speech research',
+    'ACE-Step 1.5 music generation',
+    'Stable Audio Open SFX',
+    'Miransas voice AI',
+  ],
 });
+
+const modelsJsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${SITE_URL}/models#collectionpage`,
+    name: `Models | ${SITE_NAME}`,
+    url: `${SITE_URL}/models`,
+    description: MODELS_DESCRIPTION,
+    isPartOf: {
+      '@id': `${SITE_URL}/#website`,
+    },
+    about: {
+      '@id': 'https://miralas.io/#application',
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      name: 'Miralas Audio Model Architecture Stack',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          item: {
+            '@type': 'SoftwareSourceCode',
+            name: 'Chatterbox Multilingual (t3_mtl23ls_v2.safetensors)',
+            url: `${SITE_URL}/models?tab=chatterbox`,
+            license: 'https://opensource.org/licenses/MIT',
+            programmingLanguage: ['Python', 'Rust'],
+            description:
+              'Current Miralas speech synthesis and zero-shot voice cloning baseline supporting 23 languages with PerTh neural watermarking and active Uzbek speech research.',
+          },
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          item: {
+            '@type': 'SoftwareSourceCode',
+            name: 'ACE-Step 1.5',
+            url: `${SITE_URL}/models?tab=ace-step`,
+            license: 'https://opensource.org/licenses/MIT',
+            programmingLanguage: ['Python', 'Rust'],
+            description:
+              'Open-source full-song music generation model (MIT core with Apache-2.0 Qwen3-Embedding-0.6B text encoder) currently in evaluation for Miralas across 50+ languages and durations up to 10 minutes.',
+          },
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          item: {
+            '@type': 'SoftwareSourceCode',
+            name: 'Stable Audio Open 1.0',
+            url: `${SITE_URL}/models?tab=stable-audio`,
+            programmingLanguage: ['Python', 'Rust'],
+            description:
+              'Latent Diffusion Transformer text-to-audio model under the Stability Community License, currently in evaluation for Miralas 44.1 kHz stereo sound effects, foley, and instrumental loops up to 47 seconds.',
+          },
+        },
+      ],
+    },
+  },
+  getBreadcrumbJsonLd([
+    { name: 'Home', path: '/' },
+    { name: 'Models', path: '/models' },
+  ]),
+];
 
 export default function ModelsPage() {
   return (
-    <div className="mx-auto max-w-5xl min-w-0 px-6 py-16 md:py-24">
-      <JsonLd
-        data={getBreadcrumbJsonLd([
-          { name: 'Home', path: '/' },
-          { name: 'Speech Models', path: '/models' },
-        ])}
-      />
-      <PageIntro
-        eyebrow="Model notes / open-source foundations"
-        title="Chatterbox, in context."
-        description="A look at the open-source speech family described in our voice-layer notes. Upstream model capabilities and Miransas product availability are separate questions."
+    <>
+      <JsonLd data={modelsJsonLd} />
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-[#EFEFEF] pt-16 pb-24 dark:bg-[#050505]" />
+        }
       >
-        <div className="mt-8 flex flex-wrap gap-3">
-          <PageAction href="https://github.com/resemble-ai/chatterbox" primary>
-            Read the upstream documentation
-          </PageAction>
-          <PageAction href="/news/chatterbox">Our integration note</PageAction>
-        </div>
-      </PageIntro>
-      <div className="mt-12 max-w-3xl min-w-0">
-        <Models components={{ Callout }} />
-      </div>
-    </div>
+        <ModelsView />
+      </Suspense>
+    </>
   );
 }

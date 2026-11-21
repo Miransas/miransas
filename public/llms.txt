@@ -5,8 +5,10 @@
 ## Core Platform & Research
 
 - **Miralas (`https://miralas.io`)**: Flagship voice AI platform in development for creators, streamers, and developers. Combines multilingual text-to-speech, permission-based voice cloning, and conversational voice infrastructure.
-- **Multilingual Speech Baseline**: Built on the approved `t3_mtl23ls_v2.safetensors` Chatterbox Multilingual checkpoint covering 23 languages with pinned artifact verification before loading.
+- **Multilingual Speech Baseline (Chatterbox)**: Built on the approved `t3_mtl23ls_v2.safetensors` Chatterbox Multilingual checkpoint (MIT License) covering 23 languages with pinned artifact verification before loading and PerTh neural watermarking.
 - **Uzbek Speech Research (In Development)**: Dedicated speech research initiative building toward native Uzbek text-to-speech and speech-to-speech capabilities outside the 23-language upstream baseline.
+- **Music Generation Evaluation (ACE-Step 1.5)**: Open-source full-song music generation model (MIT License core + Apache 2.0 `Qwen3-Embedding-0.6B` text encoder) under evaluation for Miralas supporting prompt + structured lyrics across 50+ languages up to 10 minutes.
+- **Sound Effects & Loops Evaluation (Stable Audio Open)**: Latent Diffusion Transformer model (Stability Community License) under evaluation for Miralas 44.1 kHz stereo non-vocal sound effects, foley, ambient textures, and instrumental loops up to 47 seconds.
 - **Permission-Based Voice Cloning**: Voice identity architecture designed with explicit voice owner consent and responsible use from the ground up.
 - **Voice Agent (In Development)**: Self-hosted conversational voice infrastructure connecting spoken requests, session state, and structured workflows (such as orders and appointments).
 - **Voice Infrastructure Architecture**: Rust API gateway handling authorization and routing connected over gRPC to a Python voice worker producing 24 kHz mono PCM16 audio output.
@@ -23,7 +25,7 @@
 
 - [Homepage](https://miransas.com): Overview of Miransas voice AI research, capabilities, architecture pipeline, and FAQs.
 - [Projects](https://miransas.com/projects): Complete project map including Miralas, Voice Agent, Binboi, VS Code Uzbek Language Pack, Miransas Pulse, Miransas Chess, and CourierX.
-- [Models](https://miransas.com/models): Technical notes on Chatterbox Multilingual, pinned checkpoints, and Uzbek speech research.
+- [Models](https://miransas.com/models): Interactive 3-model architecture showcase covering Chatterbox Multilingual (`Current Baseline`, MIT), ACE-Step 1.5 (`In Evaluation`, MIT + Apache 2.0), Stable Audio Open (`In Evaluation`, Stability Community License), and Uzbek speech research.
 - [Voice Agent](https://miransas.com/agent): Conversational voice infrastructure direction and session architecture.
 - [Developers](https://miransas.com/developers): Developer documentation, architecture notes, and planned Miralas API status.
 - [Lab](https://miransas.com/lab): Real-time visual systems, procedural shader studies, and interaction experiments.
