@@ -20,7 +20,7 @@ const ITEMS: {
 }[] = [
     {
       label: 'Voice Cloning',
-      mode: { amp: 0.42, freq: 1.08, speed: 0.82 },
+      mode: { amp: 0.70, freq: 1.44, speed: 1.72 },
     },
     {
       label: 'Text to Speech',
@@ -44,7 +44,6 @@ const COPY = {
 };
 
 export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
-  const sectionRef = useRef<HTMLElement>(null);
   const tabAudioRef = useRef<HTMLAudioElement | null>(null);
   const [active, setActive] = useState(0);
   const { resolvedTheme } = useTheme();
@@ -84,44 +83,6 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
     }
   };
 
-  useEffect(() => {
-    const header = document.querySelector('header') as HTMLElement | null;
-    if (!header) return;
-
-    const prevTransition = header.style.transition;
-    header.style.transition =
-      'background-color 250ms ease, backdrop-filter 250ms ease';
-
-    const syncHeaderBg = () => {
-      const rect = sectionRef.current?.getBoundingClientRect();
-      const inHeroTop =
-        window.scrollY <= 24 && (rect ? rect.bottom > 120 : true);
-
-      if (inHeroTop) {
-        header.style.backgroundColor = 'transparent';
-        header.style.backdropFilter = 'none';
-        header.setAttribute('data-hero-transparent', 'true');
-      } else {
-        header.style.removeProperty('background-color');
-        header.style.removeProperty('backdrop-filter');
-        header.removeAttribute('data-hero-transparent');
-      }
-    };
-
-    syncHeaderBg();
-    window.addEventListener('scroll', syncHeaderBg, { passive: true });
-    window.addEventListener('resize', syncHeaderBg, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', syncHeaderBg);
-      window.removeEventListener('resize', syncHeaderBg);
-      header.style.transition = prevTransition;
-      header.style.removeProperty('background-color');
-      header.style.removeProperty('backdrop-filter');
-      header.removeAttribute('data-hero-transparent');
-    };
-  }, []);
-
   const onModeKeyDown = (
     event: KeyboardEvent<HTMLButtonElement>,
     index: number
@@ -141,81 +102,76 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
 
   return (
     <section
-      ref={sectionRef}
       data-tone={orbTone}
       data-site-hero="true"
-      className="surface-page text-foreground relative isolate -mt-[var(--header-h)] flex min-h-[760px] flex-col overflow-hidden sm:min-h-[820px] lg:min-h-[max(800px,100svh)]"
+      className="surface-page text-foreground relative isolate flex min-h-[760px] flex-col overflow-x-clip sm:min-h-[820px] xl:-mt-[var(--header-h)] xl:min-h-[max(800px,100svh)]"
     >
-      {/* Layer 0: Giant MIRANSAS wordmark behind the sphere, veiled by live blue smoke */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-[44%] z-0 flex -translate-y-1/2 select-none items-center justify-center overflow-hidden px-4 md:top-[46%]"
-        style={{
-          maskImage:
-            'radial-gradient(ellipse 72% 64% at 50% 50%, rgba(0,0,0,0.95) 28%, rgba(0,0,0,0.28) 72%, transparent 100%)',
-          WebkitMaskImage:
-            'radial-gradient(ellipse 72% 64% at 50% 50%, rgba(0,0,0,0.95) 28%, rgba(0,0,0,0.28) 72%, transparent 100%)',
-        }}
-      >
-        <span
-          className="bg-clip-text text-center font-semibold uppercase leading-none tracking-[-0.045em] text-transparent"
-          style={{
-            fontSize: 'clamp(4.25rem, 16.5vw, 15.5rem)',
-            backgroundImage:
-              orbTone === 'light'
-                ? 'linear-gradient(180deg, rgba(13,75,250,0.16) 0%, rgba(5,5,5,0.08) 55%, rgba(13,75,250,0.05) 100%)'
-                : 'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(13,75,250,0.22) 55%, rgba(13,75,250,0.05) 100%)',
-            filter: 'blur(0.4px)',
-          }}
-        >
-          MIRANSAS
-        </span>
-      </div>
-
-      {/* Layer 1: Live WebGL Blue Smoke, Dust & #0d4bfa Orb */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-[1] h-full w-full overflow-hidden"
-      >
-        {hydrated && (
-          <VoiceOrb
-            tone={orbTone} // sabit istersen "dark" veya "light"
-            mode={{
-              amp: 0.70,   // dalga yüksekliği / kürenin açılıp dağılması
-              freq: 1.44,  // dalga sıklığı / kırışıklık detay sayısı
-              speed: 1.72, // dönüş + duman akış hızı
-            }}
-            color="#0d4bfa"
-            fog={1.25}     // mavi duman yoğunluğu (0.0 – 2.0)
-            dust={1.38}    // süzülen ince toz parçacıkları (0.0 – 2.0)
-            dots={1.12}    // seyrek parlak noktalar (0.0 – 2.0)
-            className="absolute inset-0"
-          />
-        )}
-      </div>
-
       {/* Top Eyebrow */}
-      <div className="relative z-20 mx-auto flex w-full max-w-[1440px] items-center gap-3 px-6 pt-[calc(var(--header-h)+24px)] md:px-12 lg:px-20">
+      <div className="relative z-20 mx-auto flex w-full max-w-[1440px] items-center gap-3 px-6 pt-6 md:px-12 lg:px-20 xl:pt-[calc(var(--header-h)+24px)]">
         <span aria-hidden className="size-1.5 rounded-xl bg-[#0d4bfa]" />
         <span className="text-prominent text-xs font-medium uppercase tracking-[0.12em] sm:text-[13px]">
           {COPY.eyebrow}
         </span>
       </div>
 
+      {/* One reserved visual stage; the fixed header is outside this stacking context. */}
+      <div
+        aria-hidden="true"
+        data-hero-visual
+        className="pointer-events-none relative z-[1] mt-4 h-[clamp(260px,76vw,520px)] w-full overflow-hidden xl:absolute xl:inset-x-0 xl:top-0 xl:mt-0 xl:aspect-[2/1] xl:h-auto"
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-1/2 z-0 flex -translate-y-1/2 select-none items-center justify-center overflow-hidden px-4 xl:top-[calc(max(800px,100svh)*0.46)]"
+          style={{
+            maskImage:
+              'radial-gradient(ellipse 72% 64% at 50% 50%, rgba(0,0,0,0.95) 28%, rgba(0,0,0,0.28) 72%, transparent 100%)',
+            WebkitMaskImage:
+              'radial-gradient(ellipse 72% 64% at 50% 50%, rgba(0,0,0,0.95) 28%, rgba(0,0,0,0.28) 72%, transparent 100%)',
+          }}
+        >
+          <span
+            className="bg-clip-text text-center font-semibold uppercase leading-none tracking-[-0.045em] text-transparent"
+            style={{
+              fontSize: 'clamp(4.25rem, 16.5vw, 15.5rem)',
+              backgroundImage:
+                orbTone === 'light'
+                  ? 'linear-gradient(180deg, rgba(13,75,250,0.16) 0%, rgba(5,5,5,0.08) 55%, rgba(13,75,250,0.05) 100%)'
+                  : 'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(13,75,250,0.22) 55%, rgba(13,75,250,0.05) 100%)',
+              filter: 'blur(0.4px)',
+            }}
+          >
+            MIRANSAS
+          </span>
+        </div>
+
+        {hydrated && (
+          <VoiceOrb
+            tone={orbTone}
+            mode={current.mode}
+            color="#0d4bfa"
+            fog={1.25 * (orbTone === 'light' ? 0.7 : 0.875)}
+            dust={1.38}
+            dots={1.12}
+            className="absolute inset-0"
+          />
+        )}
+      </div>
+
       {/* Left Technology Orb Mode Controls */}
       <nav
         aria-label="Voice technologies"
         style={{ top: '36%' }}
-        className="z-20 mx-auto hidden w-full max-w-[1440px] px-6 md:px-12 lg:pointer-events-none lg:absolute lg:inset-x-0 lg:top-[36%] lg:mt-0 lg:block lg:px-20"
+        className="z-20 mx-auto hidden w-full max-w-[1440px] px-6 md:px-12 lg:block xl:pointer-events-none xl:absolute xl:inset-x-0 xl:top-[36%] xl:mt-0 xl:block xl:px-20"
       >
-        <div className="lg:pointer-events-auto lg:w-fit">
-          <span className="text-secondary-copy mb-3 block text-xs font-medium uppercase tracking-[0.12em] sm:text-[13px]">
+        <div className="xl:pointer-events-auto xl:w-fit">
+          <span className="text-prominent mb-3 block text-xs font-medium uppercase tracking-[0.12em] sm:text-[13px]">
             OUR TECHNOLOGY
           </span>
           <div
             role="group"
             aria-label="Voice technology modes"
-            className="flex flex-col gap-1.5"
+            className="grid grid-cols-4 gap-1.5 xl:flex xl:flex-col"
           >
             {ITEMS.map((item, i) => {
               const selected = i === active;
@@ -228,8 +184,8 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
                   onClick={() => handleSelectMode(i)}
                   onKeyDown={(event) => onModeKeyDown(event, i)}
                   className={`group relative flex min-h-9 min-w-[200px] items-center gap-2.5 rounded-xl px-2.5 py-1.5 text-left text-xs leading-[1.45] transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px] ${selected
-                      ? 'text-prominent font-medium'
-                      : 'text-secondary-copy hover:text-prominent'
+                      ? 'text-heading font-medium'
+                      : 'text-prominent hover:text-heading'
                     }`}
                 >
                   <span
@@ -247,7 +203,7 @@ export function NewHero({ tone }: { tone?: 'light' | 'dark' }) {
       </nav>
 
       {/* Bottom Copy & CTAs */}
-      <div className="relative z-10 mx-auto mt-auto grid w-full max-w-[1440px] gap-8 px-6 pt-[clamp(260px,45vw,420px)] pb-10 sm:pb-14 md:px-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16 lg:px-20 lg:pt-24 lg:pb-20">
+      <div className="relative z-10 mx-auto mt-auto grid w-full max-w-[1440px] gap-8 px-6 pt-8 pb-10 sm:pb-14 md:px-12 lg:grid-cols-[1.15fr_0.85fr] lg:items-end lg:gap-16 lg:px-20 xl:pt-24 lg:pb-20">
         <div>
           <h1 className="text-heading max-w-[780px] whitespace-pre-line text-[2.75rem] font-semibold leading-[1.03] tracking-[-0.03em] sm:text-6xl lg:text-[4.5rem]">
             <span

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { getOrbLayout } from "./voice-orb-layout";
 
 export type OrbMode = { amp: number; freq: number; speed: number };
 
@@ -40,6 +41,8 @@ uniform float uBurst;
 uniform vec4 uLens;   // pointer x, y, radius, strength (CSS px)
 uniform vec3 uAmount; // fog, dust, dots
 uniform float uTheme; // 0 dark, 1 light
+uniform float uOrbScale;
+uniform float uCenterY;
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -82,11 +85,10 @@ float particle(vec2 pixel, float spacing, float threshold, float radius, float t
 void main() {
   vec2 frag = vec2(gl_FragCoord.x, uResolution.y * uDpr - gl_FragCoord.y) / uDpr;
   vec2 uv = frag / uResolution;
-  bool mobile = uResolution.x < 768.0;
 
   // Aligned with ORB_VERT centerY and behind-orb MIRANSAS wordmark
-  vec2 origin = vec2(uResolution.x * 0.5, uResolution.y * (mobile ? 0.43 : 0.44));
-  float radius = uResolution.y * (mobile ? 0.36 : 0.265);
+  vec2 origin = vec2(uResolution.x * 0.5, uResolution.y * (1.0 - uCenterY) * 0.5);
+  float radius = uResolution.y * uOrbScale * 0.5;
   vec2 p = (frag - origin) / max(radius, 1.0);
   float r = length(p);
   float t = uTime;
@@ -391,7 +393,12 @@ function createProgram(
   const vs = compile(gl, gl.VERTEX_SHADER, vsSource);
   const fs = compile(gl, gl.FRAGMENT_SHADER, fsSource);
   const program = gl.createProgram();
-  if (!vs || !fs || !program) return null;
+  if (!vs || !fs || !program) {
+    if (vs) gl.deleteShader(vs);
+    if (fs) gl.deleteShader(fs);
+    if (program) gl.deleteProgram(program);
+    return null;
+  }
   gl.attachShader(program, vs);
   gl.attachShader(program, fs);
   gl.linkProgram(program);
@@ -421,22 +428,26 @@ export function VoiceOrb({
   const toneRef = useRef<"light" | "dark" | undefined>(tone);
   const amountsRef = useRef({ fog, dust, dots });
   const [fallback, setFallback] = useState(false);
+  const redrawRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     modeRef.current = mode;
+    redrawRef.current?.();
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
     burstRef.current = 0.24;
-  }, [mode.amp, mode.freq, mode.speed]);
+  }, [mode]);
 
   useEffect(() => {
     toneRef.current = tone;
+    redrawRef.current?.();
   }, [tone]);
 
   useEffect(() => {
     amountsRef.current = { fog, dust, dots };
+    redrawRef.current?.();
   }, [fog, dust, dots]);
 
   useEffect(() => {
@@ -457,6 +468,8 @@ export function VoiceOrb({
     const atmosProg = createProgram(gl, ATMOS_VERT, ATMOS_FRAG);
     const orbProg = createProgram(gl, ORB_VERT, ORB_FRAG);
     if (!atmosProg || !orbProg) {
+      if (atmosProg) gl.deleteProgram(atmosProg);
+      if (orbProg) gl.deleteProgram(orbProg);
       setFallback(true);
       return;
     }
@@ -470,53 +483,44 @@ export function VoiceOrb({
     );
     const aQuadPos = gl.getAttribLocation(atmosProg, "aPosition");
 
-    const small = window.matchMedia("(max-width: 767px)").matches;
-    const baseSize = small ? 2.1 : 1.95;
-
-    const SHELLS = small
-      ? [
-          { r: 0.78, rings: 40, eqDots: 80, s: 2 },
-          { r: 0.89, rings: 54, eqDots: 108, s: 1 },
-          { r: 1.0, rings: 74, eqDots: 148, s: 0 },
-        ]
-      : [
-          { r: 0.78, rings: 52, eqDots: 104, s: 2 },
-          { r: 0.89, rings: 76, eqDots: 152, s: 1 },
-          { r: 1.0, rings: 112, eqDots: 224, s: 0 },
-        ];
-
-    const tempPos: number[] = [];
-    const tempShell: number[] = [];
-
-    SHELLS.forEach((shell) => {
-      for (let lat = 1; lat < shell.rings; lat++) {
-        const phi = (Math.PI * lat) / shell.rings;
-        const y = Math.cos(phi);
-        const sinPhi = Math.sin(phi);
-        const dotsInRing = Math.max(8, Math.round(shell.eqDots * sinPhi));
-        const ringTwist = lat * 0.13 + shell.s * 0.7;
-
-        for (let lon = 0; lon < dotsInRing; lon++) {
-          const theta = (2 * Math.PI * lon) / dotsInRing + ringTwist;
-          const x = Math.cos(theta) * sinPhi;
-          const z = Math.sin(theta) * sinPhi;
-
-          tempPos.push(x * shell.r, y * shell.r, z * shell.r);
-          tempShell.push(shell.s);
-        }
-      }
-    });
-
-    const orbCount = tempShell.length;
     const orbPosBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, orbPosBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tempPos), gl.STATIC_DRAW);
-    const aOrbPos = gl.getAttribLocation(orbProg, "aPos");
-
     const orbShellBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, orbShellBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(tempShell), gl.STATIC_DRAW);
+    const aOrbPos = gl.getAttribLocation(orbProg, "aPos");
     const aOrbShell = gl.getAttribLocation(orbProg, "aShell");
+    let layout = getOrbLayout(1, 1, window.devicePixelRatio);
+    let particleProfile = "";
+    let orbCount = 0;
+
+    // Re-upload only when crossing a quality breakpoint; retain the same context.
+    const resizeParticles = () => {
+      if (particleProfile === layout.profile) return;
+      particleProfile = layout.profile;
+      const positions: number[] = [];
+      const shells: number[] = [];
+      layout.shells.forEach((shell) => {
+        for (let lat = 1; lat < shell.rings; lat++) {
+          const phi = (Math.PI * lat) / shell.rings;
+          const y = Math.cos(phi);
+          const sinPhi = Math.sin(phi);
+          const dotsInRing = Math.max(8, Math.round(shell.eqDots * sinPhi));
+          const ringTwist = lat * 0.13 + shell.s * 0.7;
+          for (let lon = 0; lon < dotsInRing; lon++) {
+            const theta = (2 * Math.PI * lon) / dotsInRing + ringTwist;
+            positions.push(
+              Math.cos(theta) * sinPhi * shell.r,
+              y * shell.r,
+              Math.sin(theta) * sinPhi * shell.r,
+            );
+            shells.push(shell.s);
+          }
+        }
+      });
+      orbCount = shells.length;
+      gl.bindBuffer(gl.ARRAY_BUFFER, orbPosBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+      gl.bindBuffer(gl.ARRAY_BUFFER, orbShellBuffer);
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(shells), gl.STATIC_DRAW);
+    };
 
     const uAtmos = {
       res: gl.getUniformLocation(atmosProg, "uResolution"),
@@ -527,6 +531,8 @@ export function VoiceOrb({
       lens: gl.getUniformLocation(atmosProg, "uLens"),
       amount: gl.getUniformLocation(atmosProg, "uAmount"),
       theme: gl.getUniformLocation(atmosProg, "uTheme"),
+      orbScale: gl.getUniformLocation(atmosProg, "uOrbScale"),
+      centerY: gl.getUniformLocation(atmosProg, "uCenterY"),
     };
 
     const uOrb = {
@@ -620,7 +626,6 @@ export function VoiceOrb({
     };
 
     const render = () => {
-      const isMobile = cssW < 768;
       const scale = Math.max(0.25, Math.min(cssW / 585, cssH / 507));
       const isLight = toneRef.current === "light" ? 1 : 0;
 
@@ -639,7 +644,14 @@ export function VoiceOrb({
       gl.uniform1f(uAtmos.burst, burstRef.current);
       gl.uniform4f(uAtmos.lens, lens.x, lens.y, 130 * scale, lens.strength);
       const amounts = amountsRef.current;
-      gl.uniform3f(uAtmos.amount, amounts.fog, amounts.dust, amounts.dots);
+      gl.uniform3f(
+        uAtmos.amount,
+        amounts.fog * layout.atmosphere,
+        amounts.dust * layout.atmosphere,
+        amounts.dots * layout.atmosphere,
+      );
+      gl.uniform1f(uAtmos.orbScale, layout.scale);
+      gl.uniform1f(uAtmos.centerY, layout.centerY);
       gl.uniform1f(uAtmos.theme, isLight);
 
       gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -662,11 +674,11 @@ export function VoiceOrb({
       gl.uniform1f(uOrb.burst, burstRef.current);
       gl.uniform2f(uOrb.rot, rotX, rotY);
       gl.uniform1f(uOrb.aspect, cssW / cssH);
-      gl.uniform1f(uOrb.scale, isMobile ? 0.72 : 0.53);
-      gl.uniform1f(uOrb.px, baseSize * dpr);
+      gl.uniform1f(uOrb.scale, layout.scale);
+      gl.uniform1f(uOrb.px, layout.pointSize * dpr);
       gl.uniform2f(uOrb.pointer, pointer.nx, pointer.ny);
       gl.uniform1f(uOrb.pointerOn, pointer.on);
-      gl.uniform1f(uOrb.centerY, isMobile ? 0.14 : 0.12);
+      gl.uniform1f(uOrb.centerY, layout.centerY);
       gl.uniform1f(uOrb.theme, isLight);
 
       gl.drawArrays(gl.POINTS, 0, orbCount);
@@ -683,7 +695,7 @@ export function VoiceOrb({
     };
 
     const start = () => {
-      if (reduceMotion || raf) return;
+      if (reduceMotion || raf || !inView || document.hidden) return;
       last = performance.now();
       raf = requestAnimationFrame(frame);
     };
@@ -697,7 +709,9 @@ export function VoiceOrb({
       const rect = canvas.getBoundingClientRect();
       cssW = Math.max(1, rect.width);
       cssH = Math.max(1, rect.height);
-      dpr = Math.min(window.devicePixelRatio || 1, cssW < 768 ? 1.25 : 1.5);
+      layout = getOrbLayout(cssW, cssH, window.devicePixelRatio);
+      dpr = layout.dpr;
+      resizeParticles();
       const w = Math.max(1, Math.round(cssW * dpr));
       const h = Math.max(1, Math.round(cssH * dpr));
       if (canvas.width !== w || canvas.height !== h) {
@@ -734,7 +748,10 @@ export function VoiceOrb({
 
     const onVisibility = () => {
       if (document.hidden) stop();
-      else if (inView) start();
+      else if (inView) {
+        redrawRef.current?.();
+        start();
+      }
     };
 
     const onReducedMotionChange = () => {
@@ -751,8 +768,10 @@ export function VoiceOrb({
     const intersection = new IntersectionObserver(
       (entries) => {
         inView = entries[0]?.isIntersecting ?? true;
-        if (inView && !document.hidden) start();
-        else stop();
+        if (inView && !document.hidden) {
+          redrawRef.current?.();
+          start();
+        } else stop();
       },
       { threshold: 0 },
     );
@@ -763,10 +782,16 @@ export function VoiceOrb({
     document.documentElement.addEventListener("pointerleave", onLeave);
     document.addEventListener("visibilitychange", onVisibility);
 
+    redrawRef.current = () => {
+      if (!inView || document.hidden) return;
+      if (reduceMotion) Object.assign(cur, modeRef.current);
+      render();
+    };
     resize();
     start();
 
     return () => {
+      redrawRef.current = null;
       stop();
       reducedMotionMedia.removeEventListener("change", onReducedMotionChange);
       resizeObserver.disconnect();
@@ -774,6 +799,9 @@ export function VoiceOrb({
       window.removeEventListener("pointermove", onPointerMove);
       document.documentElement.removeEventListener("pointerleave", onLeave);
       document.removeEventListener("visibilitychange", onVisibility);
+      // Release the active bindings so deletion completes before the canvas is collected.
+      gl.useProgram(null);
+      gl.bindBuffer(gl.ARRAY_BUFFER, null);
       gl.deleteBuffer(quadBuffer);
       gl.deleteBuffer(orbPosBuffer);
       gl.deleteBuffer(orbShellBuffer);
@@ -798,7 +826,7 @@ export function VoiceOrb({
   return (
     <span
       className={className}
-      style={{ position: "relative", display: "block" }}
+      style={{ display: "block", width: "100%", height: "100%" }}
     >
       <canvas
         ref={canvasRef}
