@@ -52,13 +52,13 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     strong: (p) => <strong className="text-heading font-semibold" {...p} />,
     blockquote: (p) => (
       <blockquote
-        className="surface-blue-gradient text-prominent my-6 rounded-3xl p-5"
+        className="bg-surface-card-elevated text-prominent my-6 rounded-3xl p-6"
         {...p}
       />
     ),
 
     table: (p) => (
-      <div className="surface-card my-6 overflow-x-auto rounded-3xl p-2">
+      <div className="surface-card my-6 overflow-x-auto overscroll-x-contain rounded-3xl p-2">
         <table className="w-full text-sm" {...p} />
       </div>
     ),
@@ -71,14 +71,14 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     td: (p) => (
       <td
-        className="text-secondary-copy px-4 py-3 align-top"
+        className="text-supporting-copy px-4 py-3 align-top"
         {...p}
       />
     ),
 
     details: (p) => (
       <details
-        className="surface-card open:surface-blue-gradient my-3 rounded-3xl px-5 py-4 transition-all"
+        className="surface-card my-3 rounded-3xl px-5 py-4 transition-colors open:bg-surface-card-elevated"
         {...p}
       />
     ),

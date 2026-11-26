@@ -18,19 +18,16 @@ const themes = [
     number: '01',
     title: 'Real-time visual systems',
     text: 'We explore how light, particles and procedural forms can become expressive digital materials. The focus is on systems that respond continuously while staying considerate of the devices people use.',
-    featured: true,
   },
   {
     number: '02',
     title: 'Interaction and motion',
     text: 'Timing changes how an interface feels. We explore transitions, feedback and movement that help people understand a system, with room for quieter experiences and reduced motion.',
-    featured: false,
   },
   {
     number: '03',
     title: 'Voice and intelligent interfaces',
     text: 'We are interested in the space between listening, understanding and responding. That means exploring how voice and language can fit naturally into useful software, without adding unnecessary complexity.',
-    featured: false,
   },
 ];
 
@@ -71,7 +68,7 @@ export default function LabPage() {
             >
               A field of possibilities.
             </h2>
-            <p className="text-secondary-copy mt-5 text-[15px] leading-[1.6] sm:text-base">
+            <p className="text-supporting-copy mt-5 text-[15px] leading-[1.6] sm:text-base">
               A continuous study of light and particle motion. Different appearances reveal how a few changes in rhythm, color and interaction can shift the character of the same system.
             </p>
             <Link
@@ -82,7 +79,7 @@ export default function LabPage() {
               <ArrowUpRight className="size-4" aria-hidden />
             </Link>
           </Reveal>
-          <figure className="surface-blue-gradient rounded-4xl p-6">
+          <figure className="surface-card rounded-4xl p-6">
             <div className="mx-auto aspect-square w-full max-w-[600px]">
               <CrystalizedBall
                 preset="abyss"
@@ -92,7 +89,7 @@ export default function LabPage() {
                 sparks={0.12}
               />
             </div>
-            <figcaption className="text-secondary-copy mt-2 text-center font-mono text-xs leading-[1.45] tracking-[0.12em] uppercase">
+            <figcaption className="text-supporting-copy mt-2 text-center text-xs leading-[1.45] tracking-[0.12em] uppercase">
               CRYSTAL FIELD — A REAL-TIME VISUAL STUDY
             </figcaption>
           </figure>
@@ -114,11 +111,7 @@ export default function LabPage() {
             {themes.map((theme) => (
               <Reveal
                 key={theme.number}
-                className={`grid items-start gap-5 rounded-3xl p-6 sm:p-8 md:grid-cols-[72px_1fr_1.2fr] md:gap-10 ${
-                  theme.featured
-                    ? 'surface-blue-gradient'
-                    : 'surface-card hover-surface-blue-gradient'
-                }`}
+                className="surface-card grid items-start gap-5 rounded-3xl p-6 sm:p-8 md:grid-cols-[72px_1fr_1.2fr] md:gap-10"
               >
                 <span className="text-prominent pt-1 font-mono text-xs leading-[1.45] sm:text-[13px]">
                   {theme.number} / 03
@@ -126,7 +119,7 @@ export default function LabPage() {
                 <h3 className="text-heading max-w-xs text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
                   {theme.title}
                 </h3>
-                <p className="text-secondary-copy max-w-lg text-[15px] leading-[1.6] sm:text-base">
+                <p className="text-supporting-copy max-w-lg text-[15px] leading-[1.6] sm:text-base">
                   {theme.text}
                 </p>
               </Reveal>

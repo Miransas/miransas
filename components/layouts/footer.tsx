@@ -96,7 +96,7 @@ export function SiteFooter() {
           <div className="grid min-w-0 flex-1 grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-3 xl:grid-cols-5">
             {FOOTER_NAV.map((column) => (
               <div key={column.title}>
-                <h3 className="text-heading mb-5 text-sm font-semibold tracking-wide">{column.title}</h3>
+                <h2 className="text-heading mb-5 text-sm font-semibold tracking-wide">{column.title}</h2>
 
                 <ul className="space-y-3">
                   {column.links.map((link) => (

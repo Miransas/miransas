@@ -77,7 +77,7 @@ function AgentMock() {
         <div className="text-supporting-copy mt-3 flex flex-wrap items-center justify-between gap-2 font-mono text-[11px] leading-[1.45]">
           <span>agent-2 · intent: change_address</span>
           <span className="text-prominent flex items-center gap-1">
-            resolved <span className="text-[#0d4bfa]">✓</span>
+            resolved <span aria-hidden="true" className="text-prominent">✓</span>
           </span>
         </div>
       </div>
@@ -223,7 +223,7 @@ export function Bento() {
           </motion.p>
         </motion.div>
 
-        <div className="mt-12 grid grid-cols-1 gap-5 md:grid-cols-3">
+        <div className="mt-12 grid gap-6">
           {Bentoitems.map((item) => {
             return (
               <motion.article
@@ -232,7 +232,7 @@ export function Bento() {
                 initial={reduce ? false : 'hidden'}
                 whileInView="show"
                 viewport={{ once: true, amount: 0.2 }}
-                className="surface-card relative flex flex-col justify-between rounded-3xl p-6 sm:p-7 lg:p-8"
+                className="surface-card relative grid gap-8 rounded-4xl p-6 sm:p-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-12 lg:p-10"
               >
                 <div className="relative z-10">
                   <span className="text-prominent inline-flex items-center gap-2 rounded-xl bg-[#F7F8FC] px-3 py-1 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px] dark:bg-[#121214]">
@@ -251,7 +251,7 @@ export function Bento() {
                     </span>
                   </div>
                 </div>
-                <div className="relative z-10 mt-7 flex w-full flex-col">
+                <div className="relative z-10 flex w-full min-w-0 flex-col">
                   <span className="text-supporting-copy mb-2.5 block text-[11px] leading-[1.45] tracking-[0.12em] uppercase">
                     Illustrative interface · sample data
                   </span>

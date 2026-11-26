@@ -36,9 +36,9 @@ export default async function NewsPage({
   );
 
   const chip =
-    'rounded-xl px-3.5 py-1.5 text-xs sm:text-[13px] font-medium transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]';
+    'inline-flex min-h-11 items-center rounded-xl px-4 py-2 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]';
   const chipIdle =
-    'surface-card hover:surface-card-elevated text-prominent';
+    'surface-card hover:bg-surface-card-elevated text-prominent';
   const chipActive = 'bg-[#3847ff] text-white';
 
   return (
@@ -86,7 +86,7 @@ export default async function NewsPage({
           <h2 className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl">
             No notes with this tag yet.
           </h2>
-          <p className="text-secondary-copy mt-3 text-[15px] leading-[1.6] sm:text-base">
+          <p className="text-supporting-copy mt-3 text-[15px] leading-[1.6] sm:text-base">
             Try another topic or return to the full publishing archive.
           </p>
           <Link
@@ -103,11 +103,7 @@ export default async function NewsPage({
               <Reveal className="h-full">
                 <Link
                   href={`/news/${item.slug}`}
-                  className={`group flex h-full flex-col overflow-hidden rounded-3xl transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] ${
-                    i === 0
-                      ? 'surface-blue-gradient'
-                      : 'surface-card hover-surface-blue-gradient'
-                  }`}
+                  className="surface-card group flex h-full flex-col overflow-hidden rounded-3xl transition-colors duration-200 hover:bg-surface-card-elevated focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
                 >
                   <div className="relative aspect-[1200/630] w-full overflow-hidden">
                     <Image
@@ -115,7 +111,7 @@ export default async function NewsPage({
                       alt={item.title}
                       fill
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                      className="object-cover transition duration-300 group-hover:scale-[1.03] group-hover:brightness-95"
+                      className="object-cover transition-transform duration-300 motion-safe:group-hover:scale-[1.02]"
                     />
                   </div>
 
@@ -134,11 +130,11 @@ export default async function NewsPage({
                     <h2 className="text-heading mt-4 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl">
                       {item.title}
                     </h2>
-                    <p className="text-secondary-copy mt-3 line-clamp-3 text-[15px] leading-[1.6] sm:text-base">
+                    <p className="text-supporting-copy mt-3 line-clamp-3 text-[15px] leading-[1.6] sm:text-base">
                       {item.summary}
                     </p>
 
-                    <div className="text-secondary-copy mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 pt-5 text-xs leading-[1.45] sm:text-[13px]">
+                    <div className="text-supporting-copy mt-auto flex flex-wrap items-center gap-x-2 gap-y-1 pt-5 text-xs leading-[1.45] sm:text-[13px]">
                       <span className="text-prominent font-medium">
                         {getAuthor(item.author).name}
                       </span>

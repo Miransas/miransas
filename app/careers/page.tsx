@@ -36,7 +36,7 @@ export default function CareersPage() {
       </PageIntro>
       <section
         aria-labelledby="open-roles"
-        className="surface-blue-gradient mt-8 grid gap-4 rounded-3xl p-6 sm:grid-cols-[1fr_2fr] sm:p-8"
+        className="surface-card mt-8 grid gap-4 rounded-3xl p-6 sm:grid-cols-[1fr_2fr] sm:p-8"
       >
         <h2
           id="open-roles"
@@ -48,7 +48,7 @@ export default function CareersPage() {
           <p className="text-prominent text-base leading-[1.6] font-medium sm:text-lg">
             No open roles currently listed.
           </p>
-          <p className="text-secondary-copy mt-2 text-[15px] leading-[1.6] sm:text-base">
+          <p className="text-supporting-copy mt-2 text-[15px] leading-[1.6] sm:text-base">
             Follow News for future announcements. An introduction is welcome, but it is not an application to an advertised position.
           </p>
         </div>

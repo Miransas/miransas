@@ -21,7 +21,6 @@ const projects = [
       'A self-hosted ngrok alternative, with a Go backend and Next.js frontend.',
     state: 'Live in production',
     href: 'https://binboi.com',
-    featured: true,
   },
   {
     name: 'VS Code Uzbek Language Pack',
@@ -29,7 +28,6 @@ const projects = [
     description: 'An Uzbek translation of the Visual Studio Code interface.',
     state: 'Published on the Marketplace',
     href: '/news/built-so-far',
-    featured: false,
   },
   {
     name: 'Miransas Pulse',
@@ -38,7 +36,6 @@ const projects = [
       'A native macOS system monitor written in C, Objective-C and Cocoa.',
     state: 'Built',
     href: '/news/built-so-far',
-    featured: false,
   },
   {
     name: 'Miransas Chess',
@@ -46,7 +43,6 @@ const projects = [
     description: 'A chess engine written in Rust.',
     state: 'In development',
     href: '/news/built-so-far',
-    featured: false,
   },
   {
     name: 'CourierX',
@@ -54,7 +50,6 @@ const projects = [
     description: 'A self-hosted email API in Rust. Paused to focus on Miralas.',
     state: 'Paused',
     href: '/news/built-so-far',
-    featured: false,
   },
 ];
 
@@ -88,8 +83,8 @@ export default function ProjectsPage() {
         className="scroll-mt-28 py-10 md:py-16"
       >
         <Reveal className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="surface-blue-gradient rounded-4xl p-8 sm:p-10">
-            <span className="text-prominent block font-mono text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
+          <div className="surface-card rounded-4xl p-8 sm:p-10">
+            <span className="text-prominent block text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
               Current focus · in development
             </span>
             <h2
@@ -98,7 +93,7 @@ export default function ProjectsPage() {
             >
               Miralas
             </h2>
-            <p className="text-secondary-copy mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
+            <p className="text-supporting-copy mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
               Voice AI in development for streamers and content creators. Multilingual text-to-speech is the current baseline. Uzbek speech and speech-to-speech remain research directions.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
@@ -110,13 +105,13 @@ export default function ProjectsPage() {
           </div>
 
           <div className="surface-card flex flex-col justify-center rounded-4xl p-8 sm:p-10">
-            <span className="text-prominent block font-mono text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
+            <span className="text-prominent block text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
               Next in the sequence
             </span>
             <h3 className="text-heading mt-4 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
               Voice Agent
             </h3>
-            <p className="text-secondary-copy mt-4 text-[15px] leading-[1.6] sm:text-base">
+            <p className="text-supporting-copy mt-4 text-[15px] leading-[1.6] sm:text-base">
               Conversational voice infrastructure for businesses. Sessions, orders and appointments are intended use cases; the project follows the Miralas core.
             </p>
             <Link
@@ -137,7 +132,7 @@ export default function ProjectsPage() {
           >
             The wider project map.
           </h2>
-          <p className="text-secondary-copy mt-4 max-w-2xl text-[15px] leading-[1.6] sm:text-base">
+          <p className="text-supporting-copy mt-4 max-w-2xl text-[15px] leading-[1.6] sm:text-base">
             Project states follow the notes published on 1 November 2026. Read the original update for the context behind each project.
           </p>
         </Reveal>
@@ -146,14 +141,10 @@ export default function ProjectsPage() {
             <Reveal
               key={project.name}
               delay={(index % 2) * 0.04}
-              className={`grid items-center gap-4 rounded-3xl p-6 transition-all duration-300 sm:p-8 md:grid-cols-[0.9fr_1.3fr_0.7fr] ${
-                project.featured
-                  ? 'surface-blue-gradient'
-                  : 'surface-card hover-surface-blue-gradient'
-              }`}
+              className="surface-card grid items-center gap-4 rounded-3xl p-6 transition-colors duration-300 sm:p-8 md:grid-cols-[0.9fr_1.3fr_0.7fr]"
             >
               <div>
-                <span className="text-prominent block font-mono text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
+                <span className="text-prominent block text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
                   {project.category}
                 </span>
                 <h3 className="text-heading mt-2 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
@@ -165,10 +156,10 @@ export default function ProjectsPage() {
                   </Link>
                 </h3>
               </div>
-              <p className="text-secondary-copy text-[15px] leading-[1.6] sm:text-base">
+              <p className="text-supporting-copy text-[15px] leading-[1.6] sm:text-base">
                 {project.description}
               </p>
-              <span className="text-prominent font-mono text-xs leading-[1.45] sm:text-[13px] md:text-right">
+              <span className="text-prominent text-xs leading-[1.45] sm:text-[13px] md:text-right">
                 {project.state}
               </span>
             </Reveal>

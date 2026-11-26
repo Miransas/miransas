@@ -38,12 +38,13 @@ export function Toc({ items }: { items: TocItem[] }) {
           <li key={item.id}>
             <a
               href={`#${item.id}`}
-              className={`block rounded-xl py-1.5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] ${
+              aria-current={active === item.id ? 'location' : undefined}
+              className={`block min-h-11 rounded-xl py-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] ${
                 item.level === 3 ? 'pl-5' : 'pl-2.5'
               } ${
                 active === item.id
-                  ? 'surface-blue-gradient text-heading font-medium'
-                  : 'text-secondary-copy hover:text-prominent'
+                  ? 'bg-surface-card-elevated text-heading font-medium'
+                  : 'text-supporting-copy hover:text-prominent'
               }`}
             >
               {item.text}

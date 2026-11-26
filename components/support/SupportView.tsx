@@ -94,7 +94,7 @@ export function SupportView() {
         {/* Quick Links (Tier 1 Cards + Tier 3 Inner Icon Badges) */}
         <section aria-labelledby="quick-links" className="mt-14 md:mt-18">
           <div className="mb-7">
-            <span className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+            <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
               Shortcuts
             </span>
             <h2
@@ -105,11 +105,11 @@ export function SupportView() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {QUICK_LINKS.map((item) => {
               const Icon = item.icon;
               const classes =
-                'group flex flex-col justify-between rounded-3xl border border-black/[0.08] bg-white p-6 transition-colors duration-200 hover:-translate-y-0.5 hover:border-black/[0.16] hover:bg-[#F7F8FC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]';
+                'group flex flex-col justify-between rounded-3xl border border-black/[0.08] bg-white p-6 transition-colors duration-200 hover:border-black/[0.16] hover:bg-[#F7F8FC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]';
 
               const inner = (
                 <>
@@ -118,13 +118,13 @@ export function SupportView() {
                       <Icon className="size-4" aria-hidden />
                     </span>
                     <ArrowUpRight
-                      className="size-4 text-neutral-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#0d4bfa] dark:text-[#6E6E74]"
+                      className="size-4 text-neutral-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#0d4bfa] dark:text-supporting-copy"
                       aria-hidden
                     />
                   </div>
 
                   <div className="mt-6">
-                    <p className="text-sm leading-snug text-neutral-600 dark:text-[#6E6E74]">
+                    <p className="text-sm leading-snug text-neutral-600 dark:text-supporting-copy">
                       {item.title}
                     </p>
                     <span className="mt-2 block text-sm font-semibold text-[#1d1d1f] dark:text-[#D1D1D1]">
@@ -160,7 +160,7 @@ export function SupportView() {
         {/* FAQ Accordion (Tier 1 Closed -> Tier 2 Open + Tier 3 Inner Plus Button) */}
         <section aria-labelledby="support-faq" className="mt-16 md:mt-24">
           <div className="mb-8 max-w-2xl">
-            <span className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+            <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
               FAQ
             </span>
             <h2
@@ -182,16 +182,10 @@ export function SupportView() {
                   key={item.id}
                   className={`relative overflow-hidden rounded-3xl transition-colors duration-300 ${
                     isOpen
-                      ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]'
-                      : 'border border-black/[0.07] bg-white hover:border-black/[0.15] hover:bg-[#F7F8FC] dark:border-white/[0.09] dark:bg-[#0a0a0a] dark:hover:border-white/[0.18] dark:hover:bg-[#121214]'
+                      ? 'border border-black/[0.08] bg-surface-card-elevated dark:border-white/10'
+                      : 'border border-black/[0.08] bg-white hover:border-black/[0.15] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/[0.18] dark:hover:bg-[#121214]'
                   }`}
                 >
-                  {isOpen && (
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.08)_0%,rgba(13,75,250,0.025)_45%,transparent_72%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_45%,transparent_72%)]"
-                    />
-                  )}
                   <button
                     id={triggerId}
                     type="button"
@@ -231,6 +225,7 @@ export function SupportView() {
                     role="region"
                     aria-labelledby={triggerId}
                     aria-hidden={!isOpen}
+                    inert={!isOpen}
                     className={`relative z-10 grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
                       isOpen
                         ? 'grid-rows-[1fr] opacity-100'
@@ -279,13 +274,13 @@ export function SupportView() {
         <section className="mt-16 grid grid-cols-1 gap-5 md:mt-24 lg:grid-cols-12">
           {/* Left: Checklist */}
           <article className="rounded-4xl border border-black/[0.08] bg-white p-8 md:p-10 lg:col-span-7 dark:border-white/10 dark:bg-[#0a0a0a]">
-            <span className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+            <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
               Checklist
             </span>
             <h2 className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-[#1d1d1f] sm:text-3xl dark:text-white">
               Contacting support
             </h2>
-            <p className="mt-3 text-[15px] leading-[1.6] text-neutral-600 dark:text-[#6E6E74]">
+            <p className="mt-3 text-[15px] leading-[1.6] text-neutral-600 dark:text-supporting-copy">
               When you write, include:
             </p>
 
@@ -319,10 +314,6 @@ export function SupportView() {
           {/* Right: Security Callout (Tier 1) + Response Times (Tier 2) */}
           <div className="flex flex-col gap-5 lg:col-span-5">
             <article className="relative overflow-hidden rounded-4xl border border-black/[0.08] bg-white p-8 dark:border-white/10 dark:bg-[#0a0a0a]">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.08)_0%,transparent_68%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.1)_0%,transparent_68%)]"
-              />
               <div className="relative z-10">
                 <span className="flex size-10 items-center justify-center rounded-xl bg-amber-500/15 text-amber-600 dark:bg-[#121214] dark:text-amber-400">
                   <AlertTriangle className="size-5" aria-hidden />
@@ -337,11 +328,7 @@ export function SupportView() {
               </div>
             </article>
 
-            <article className="relative flex flex-1 flex-col justify-between overflow-hidden rounded-4xl border border-[#0d4bfa]/20 bg-white p-8 dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]">
-              <div
-                aria-hidden="true"
-                className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
-              />
+            <article className="relative flex flex-1 flex-col justify-between overflow-hidden rounded-4xl border border-black/[0.08] bg-white p-8 dark:border-white/10 dark:bg-[#0a0a0a]">
               <div className="relative z-10">
                 <span className="flex size-10 items-center justify-center rounded-xl bg-[#0d4bfa]/12 text-[#0d4bfa] dark:bg-[#121214] dark:text-[#89abff]">
                   <Clock className="size-5" aria-hidden />

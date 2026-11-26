@@ -1,7 +1,6 @@
 'use client';
 
 import {
-  ArrowUpRight,
   BrainCircuit,
   Cpu,
   Globe2,
@@ -27,7 +26,6 @@ type AboutBlock = {
   title: string;
   description: string;
   icon: IconComponent;
-  featured?: boolean;
 };
 
 const ABOUT_BLOCKS: AboutBlock[] = [
@@ -38,7 +36,6 @@ const ABOUT_BLOCKS: AboutBlock[] = [
     description:
       'Miransas is an independent technology studio focused on voice, conversational AI, and intelligent software experiences.',
     icon: Users,
-    featured: true,
   },
   {
     number: '02',
@@ -160,7 +157,7 @@ export function AboutContent() {
       <section className="relative z-10">
         <div className="mx-auto grid max-w-7xl gap-14 px-6 py-24 md:grid-cols-[0.7fr_1.3fr] md:items-start lg:px-8 lg:py-32">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={reduce ? false : { opacity: 0, x: -12 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.25 }}
           >
@@ -174,7 +171,7 @@ export function AboutContent() {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={reduce ? false : { opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.25 }}
             transition={{ delay: 0.08 }}
@@ -183,10 +180,10 @@ export function AboutContent() {
             <p className="text-prominent">
               Miransas explores voice, language, automation, and agent-based software with one simple goal: build systems people can actually use.
             </p>
-            <p className="text-secondary-copy">
+            <p className="text-supporting-copy">
               We care about the experience around the model as much as the model itself. A powerful system should still feel clear, fast, approachable, and intentional.
             </p>
-            <p className="text-secondary-copy">
+            <p className="text-supporting-copy">
               Our work moves between research and product — from voice models and multilingual speech to the interfaces that turn those capabilities into useful experiences.
             </p>
           </motion.div>
@@ -202,15 +199,11 @@ export function AboutContent() {
               return (
                 <motion.article
                   key={block.number}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={reduce ? false : { opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-60px' }}
                   transition={{ duration: 0.6, delay: index * 0.07 }}
-                  className={`group relative min-h-[320px] overflow-hidden rounded-3xl p-6 transition-all duration-300 sm:p-8 ${
-                    block.featured
-                      ? 'surface-blue-gradient'
-                      : 'surface-card hover-surface-blue-gradient'
-                  }`}
+                  className="surface-card relative min-h-[320px] overflow-hidden rounded-3xl p-6 sm:p-8"
                 >
                   <div className="relative flex items-center justify-between">
                     <div className="surface-card-elevated flex size-11 items-center justify-center rounded-xl text-[#3847ff]">
@@ -228,13 +221,11 @@ export function AboutContent() {
                     <h3 className="text-heading mt-3 max-w-md text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
                       {block.title}
                     </h3>
-                    <div className="mt-5 h-0.5 w-8 rounded-xl bg-[#3847ff] transition-all group-hover:w-14" />
-                    <p className="text-secondary-copy mt-4 max-w-lg text-[15px] leading-[1.6] sm:text-base">
+                    <div className="mt-5 h-0.5 w-8 rounded-xl bg-surface-card-elevated" />
+                    <p className="text-supporting-copy mt-4 max-w-lg text-[15px] leading-[1.6] sm:text-base">
                       {block.description}
                     </p>
                   </div>
-
-                  <ArrowUpRight className="text-secondary-copy absolute right-6 bottom-6 size-4 transition-all group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#3847ff]" />
                 </motion.article>
               );
             })}
@@ -271,11 +262,11 @@ export function AboutContent() {
             return (
               <motion.div
                 key={item.label}
-                initial={{ opacity: 0, y: 15 }}
+                initial={reduce ? false : { opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.06 }}
-                className="surface-card hover-surface-blue-gradient rounded-3xl p-6 transition-all duration-300"
+                className="surface-card rounded-3xl p-6"
               >
                 <div className="surface-card-elevated flex size-10 items-center justify-center rounded-xl text-[#3847ff]">
                   <Icon className="size-4" />
@@ -283,7 +274,7 @@ export function AboutContent() {
                 <h3 className="text-heading mt-5 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
                   {item.label}
                 </h3>
-                <p className="text-secondary-copy mt-2 text-[15px] leading-[1.6] sm:text-base">
+                <p className="text-supporting-copy mt-2 text-[15px] leading-[1.6] sm:text-base">
                   {item.text}
                 </p>
               </motion.div>
@@ -293,9 +284,9 @@ export function AboutContent() {
       </section>
 
       <section className="relative z-10 overflow-hidden px-6 py-24">
-        <div className="surface-blue-gradient mx-auto max-w-5xl rounded-4xl px-6 py-16 text-center md:py-24">
+        <div className="surface-card mx-auto max-w-5xl rounded-4xl px-6 py-16 text-center md:py-24">
           <motion.div
-            initial={{ opacity: 0, y: 25 }}
+            initial={reduce ? false : { opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.7 }}
@@ -314,7 +305,7 @@ export function AboutContent() {
               That&#39;s the interesting part.
             </h2>
 
-            <p className="text-secondary-copy mx-auto mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
+            <p className="text-supporting-copy mx-auto mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
               More voices, more languages, smarter agents, and more useful ways to interact with software are already on the way.
             </p>
 
@@ -327,7 +318,7 @@ export function AboutContent() {
               </Link>
               <Link
                 href="/contact"
-                className="surface-card hover:surface-card-elevated text-prominent inline-flex min-h-11 items-center rounded-xl px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                className="surface-card hover:bg-surface-card-elevated text-prominent inline-flex min-h-11 items-center rounded-xl px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
               >
                 Get in touch
               </Link>

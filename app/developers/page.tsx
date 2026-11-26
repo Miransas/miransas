@@ -34,9 +34,9 @@ export default function DevelopersPage() {
           </PageAction>
         </div>
       </PageIntro>
-      <div className="surface-blue-gradient mt-6 flex flex-wrap items-center justify-between gap-4 rounded-3xl px-6 py-5 text-sm">
+      <div className="surface-card mt-6 flex flex-wrap items-center justify-between gap-4 rounded-3xl px-6 py-5 text-sm">
         <span className="text-heading font-semibold">Miralas public API</span>
-        <span className="text-prominent font-mono text-xs sm:text-[13px]">
+        <span className="text-prominent text-xs sm:text-[13px]">
           Planned · no public endpoint or SDK release
         </span>
       </div>

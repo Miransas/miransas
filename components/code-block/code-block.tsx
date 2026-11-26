@@ -29,7 +29,7 @@ export async function CodeBlock({ children, language }: Props) {
         <CopyButton text={children} />
       </div>
       <div
-        className="overflow-x-auto p-5 text-sm leading-6 [&_code]:font-mono [&_pre]:m-0 [&_pre]:!bg-transparent [&_pre]:p-0"
+        className="overflow-x-auto overscroll-x-contain p-5 text-sm leading-6 [&_code]:font-mono [&_pre]:m-0 [&_pre]:!bg-transparent [&_pre]:p-0"
         dangerouslySetInnerHTML={{ __html: html }}
       />
     </div>

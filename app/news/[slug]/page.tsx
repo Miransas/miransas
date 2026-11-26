@@ -222,15 +222,15 @@ export default async function NewsPostPage({
                   <li key={r.slug}>
                     <Link
                       href={`/news/${r.slug}`}
-                      className="surface-card hover-surface-blue-gradient block h-full rounded-3xl p-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                      className="surface-card hover:bg-surface-card-elevated block h-full rounded-3xl p-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
                     >
-                      <span className="text-secondary-copy block text-xs leading-[1.45]">
+                      <span className="text-supporting-copy block text-xs leading-[1.45]">
                         {formatDate(r.date)}
                       </span>
                       <h3 className="text-heading mt-2 text-lg leading-[1.2] font-semibold">
                         {r.title}
                       </h3>
-                      <p className="text-secondary-copy mt-2 line-clamp-2 text-[15px] leading-[1.6]">
+                      <p className="text-supporting-copy mt-2 line-clamp-2 text-[15px] leading-[1.6]">
                         {r.summary}
                       </p>
                     </Link>
@@ -247,9 +247,9 @@ export default async function NewsPostPage({
             {older ? (
               <Link
                 href={`/news/${older.slug}`}
-                className="surface-card hover-surface-blue-gradient rounded-3xl p-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                className="surface-card hover:bg-surface-card-elevated rounded-3xl p-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
               >
-                <span className="text-secondary-copy block text-xs leading-[1.45]">
+                <span className="text-supporting-copy block text-xs leading-[1.45]">
                   ← Older
                 </span>
                 <span className="text-heading mt-1 block font-semibold">
@@ -262,9 +262,9 @@ export default async function NewsPostPage({
             {newer ? (
               <Link
                 href={`/news/${newer.slug}`}
-                className="surface-card hover-surface-blue-gradient rounded-3xl p-5 text-right transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                className="surface-card hover:bg-surface-card-elevated rounded-3xl p-5 text-right transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
               >
-                <span className="text-secondary-copy block text-xs leading-[1.45]">
+                <span className="text-supporting-copy block text-xs leading-[1.45]">
                   Newer →
                 </span>
                 <span className="text-heading mt-1 block font-semibold">

@@ -21,7 +21,7 @@ export function VisualPlayground() {
       data-visual-playground
     >
       <figure className="min-w-0">
-        <div className="surface-blue-gradient relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-4xl sm:min-h-[520px] lg:min-h-[600px]">
+        <div className="surface-card relative flex min-h-[320px] items-center justify-center overflow-hidden rounded-4xl sm:min-h-[520px] lg:min-h-[600px]">
           <div className="aspect-square w-full max-w-[720px]">
             <CrystalizedBall
               preset={preset}
@@ -46,7 +46,7 @@ export function VisualPlayground() {
             }
             aria-pressed={paused || reduce}
             onClick={() => setPaused((value) => !value)}
-            className="surface-card text-prominent hover:surface-card-elevated absolute right-5 bottom-5 inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] disabled:cursor-default sm:right-7 sm:bottom-7 sm:text-[13px]"
+            className="surface-card text-prominent hover:bg-surface-card-elevated absolute right-5 bottom-5 inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] disabled:cursor-default sm:right-7 sm:bottom-7 sm:text-[13px]"
           >
             {paused || reduce ? (
               <Play className="size-3.5 text-[#3847ff]" aria-hidden />
@@ -56,11 +56,11 @@ export function VisualPlayground() {
             {reduce ? 'Reduced motion' : paused ? 'Play' : 'Pause'}
           </button>
         </div>
-        <figcaption className="text-secondary-copy mt-5 flex flex-col justify-between gap-2 text-xs leading-[1.45] sm:flex-row sm:gap-6 sm:text-[13px]">
+        <figcaption className="text-supporting-copy mt-5 flex flex-col justify-between gap-2 text-xs leading-[1.45] sm:flex-row sm:gap-6 sm:text-[13px]">
           <span role="status" aria-live="polite">
             {current.description}
           </span>
-          <span className="shrink-0">
+          <span className="sm:max-w-xs sm:text-right">
             {reduce
               ? 'A still composition, at your pace.'
               : interactive
@@ -120,7 +120,7 @@ export function VisualPlayground() {
           />
           <div
             aria-hidden
-            className="text-secondary-copy mt-1 flex justify-between font-mono text-xs leading-[1.45]"
+            className="text-supporting-copy mt-1 flex justify-between font-mono text-xs leading-[1.45]"
           >
             <span>SLOW</span>
             <span>LIVELY</span>
@@ -148,7 +148,7 @@ export function VisualPlayground() {
             />
           </span>
         </label>
-        <p className="text-secondary-copy mt-3 text-xs leading-[1.45] sm:text-[13px]">
+        <p className="text-supporting-copy mt-3 text-xs leading-[1.45] sm:text-[13px]">
           {reduce
             ? 'Animation follows your device’s reduced-motion preference. You can still explore every appearance.'
             : 'Optional pointer response. The field continues to evolve with interaction turned off.'}

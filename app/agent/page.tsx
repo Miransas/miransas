@@ -38,14 +38,14 @@ export default function AgentPage() {
           <Agent />
         </div>
         <aside className="self-start lg:sticky lg:top-28">
-          <Reveal className="surface-blue-gradient rounded-3xl p-6">
-            <span className="text-prominent block font-mono text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
+          <Reveal className="surface-card rounded-3xl p-6">
+            <span className="text-prominent block text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
               Release state
             </span>
             <h2 className="text-heading mt-3 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl">
               Building the foundations.
             </h2>
-            <p className="text-secondary-copy mt-3 text-[15px] leading-[1.6] sm:text-base">
+            <p className="text-supporting-copy mt-3 text-[15px] leading-[1.6] sm:text-base">
               The agent follows the Miralas core. There is no public release date or production API advertised here.
             </p>
           </Reveal>
