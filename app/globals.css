@@ -13,6 +13,7 @@
   --color-heading: var(--text-heading);
   --color-prominent: var(--text-prominent);
   --color-secondary-copy: var(--text-secondary);
+  --color-supporting-copy: var(--text-supporting);
   --color-brand-blue: #3847ff;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -52,6 +53,7 @@
   --text-heading: #050505;
   --text-prominent: #242428;
   --text-secondary: #5A5A62;
+  --text-supporting: #5A5A62;
 
   --background: var(--surface-page);
   --foreground: var(--text-heading);
@@ -93,6 +95,7 @@
   --text-heading: #FFFFFF;
   --text-prominent: #D1D1D1;
   --text-secondary: #6E6E74;
+  --text-supporting: #A1A1AA;
 
   --background: var(--surface-page);
   --foreground: var(--text-heading);

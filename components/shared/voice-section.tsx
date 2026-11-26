@@ -55,7 +55,7 @@ function StepTextItem({
           </h3>
         </div>
 
-        <p className="text-secondary-copy text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
+        <p className="text-supporting-copy text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
           {step.description}
         </p>
 
@@ -138,7 +138,7 @@ export function VoiceSection() {
   return (
     <section
       id="voice-agents"
-      className="surface-page text-foreground relative py-16"
+      className="surface-page text-foreground relative py-24 sm:py-32"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-12 lg:px-16">
         <div className="relative flex flex-col items-start gap-12 lg:flex-row lg:gap-16">
@@ -150,14 +150,14 @@ export function VoiceSection() {
                 index={index}
                 setActiveIndex={setActiveIndex}
               >
-                <div className="surface-blue-gradient h-[460px] w-full overflow-hidden rounded-4xl p-3">
+                <div className="surface-card h-[460px] w-full overflow-hidden rounded-4xl p-3">
                   {!desktop && <DynamicComponentSlot activeIndex={index} />}
                 </div>
               </StepTextItem>
             ))}
           </div>
           <div className="sticky top-[calc(50vh-240px)] hidden h-[500px] w-1/2 lg:block">
-            <div className="surface-blue-gradient relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-4xl p-6 shadow-[0_24px_80px_rgba(56,71,255,0.12)]">
+            <div className="surface-card relative flex h-full w-full flex-col items-center justify-center overflow-hidden rounded-4xl p-6">
               {desktop && <DynamicComponentSlot activeIndex={activeIndex} />}
             </div>
           </div>

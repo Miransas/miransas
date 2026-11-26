@@ -289,20 +289,7 @@ function HorizontalConnector() {
           strokeWidth="1.5"
           strokeDasharray="3 3"
         />
-        <circle cx="15" cy="10" r="2.2" fill="currentColor">
-          <animate
-            attributeName="cx"
-            values="4;26;4"
-            dur="2.8s"
-            repeatCount="indefinite"
-          />
-          <animate
-            attributeName="opacity"
-            values="0.35;1;0.35"
-            dur="2.8s"
-            repeatCount="indefinite"
-          />
-        </circle>
+        <circle cx="15" cy="10" r="2.2" fill="currentColor" />
         <path
           d="M25 5.5L30.5 10L25 14.5"
           stroke="currentColor"
@@ -356,7 +343,7 @@ export function ModelPipelineDiagram({ modelId }: { modelId: ModelTabId }) {
   return (
     <div className="rounded-3xl bg-[#F7F8FC] p-6 sm:p-8 dark:bg-[#121214]">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-        <div>
+        <div className="min-w-0">
           <span className="inline-flex items-center gap-2 font-mono text-xs tracking-[0.12em] text-[#0d4bfa] uppercase dark:text-[#6b93ff]">
             <span aria-hidden="true" className="size-1.5 rounded-xl bg-[#0d4bfa]" />
             Architecture &amp; Execution Flow
@@ -364,12 +351,12 @@ export function ModelPipelineDiagram({ modelId }: { modelId: ModelTabId }) {
           <h3 className="mt-2 text-xl font-semibold tracking-[-0.02em] text-[#1d1d1f] sm:text-2xl dark:text-white">
             {config.heading}
           </h3>
-          <p className="mt-1.5 max-w-2xl text-sm leading-[1.6] text-neutral-600 dark:text-[#6E6E74]">
+          <p className="mt-1.5 max-w-2xl text-sm leading-[1.6] text-neutral-600 dark:text-supporting-copy">
             {config.subheading}
           </p>
         </div>
 
-        <span className="inline-flex w-fit shrink-0 items-center rounded-xl bg-black/[0.04] px-3 py-1.5 font-mono text-xs text-neutral-700 dark:bg-white/[0.05] dark:text-[#D1D1D1]">
+        <span className="inline-flex w-fit max-w-full shrink-0 items-center rounded-xl sm:max-w-xs bg-black/[0.04] px-3 py-1.5 font-mono text-xs text-neutral-700 dark:bg-white/[0.05] dark:text-[#D1D1D1]">
           {config.runtimeLabel}
         </span>
       </div>
@@ -397,7 +384,7 @@ export function ModelPipelineDiagram({ modelId }: { modelId: ModelTabId }) {
                   <div className="flex items-center justify-between gap-2">
                     <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium text-[#0d4bfa] dark:text-[#89abff]">
                       <span>{node.step}</span>
-                      <span className="text-neutral-400 dark:text-[#6E6E74]">·</span>
+                      <span className="text-neutral-400 dark:text-supporting-copy">·</span>
                       <span className="tracking-[0.06em] uppercase">{node.stage}</span>
                     </span>
                     <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-white/[0.06] dark:text-[#89abff]">
@@ -415,7 +402,7 @@ export function ModelPipelineDiagram({ modelId }: { modelId: ModelTabId }) {
                 </div>
 
                 <div className="mt-4 pt-2">
-                  <span className="inline-flex rounded-xl bg-[#EFEFEF]/80 px-2.5 py-1 font-mono text-[11px] leading-[1.4] text-neutral-700 dark:bg-[#121214] dark:text-[#D1D1D1]">
+                  <span className="inline-flex rounded-xl bg-[#EFEFEF]/80 px-2.5 py-1 font-mono text-[11px] leading-[1.4] [overflow-wrap:anywhere] text-neutral-700 dark:bg-[#121214] dark:text-[#D1D1D1]">
                     {node.spec}
                   </span>
                 </div>
@@ -438,7 +425,7 @@ export function ModelPipelineDiagram({ modelId }: { modelId: ModelTabId }) {
           <h4 className="text-sm font-semibold tracking-[-0.01em] text-[#1d1d1f] dark:text-white">
             {config.internalTitle}
           </h4>
-          <p className="text-xs text-neutral-500 dark:text-[#6E6E74]">
+          <p className="text-xs text-secondary-copy dark:text-supporting-copy">
             {config.internalNote}
           </p>
         </div>
@@ -464,7 +451,7 @@ export function ModelPipelineDiagram({ modelId }: { modelId: ModelTabId }) {
                     {stage.name}
                   </span>
                 </div>
-                <p className="mt-2 text-xs leading-[1.55] text-neutral-600 dark:text-[#6E6E74]">
+                <p className="mt-2 text-xs leading-[1.55] text-neutral-600 dark:text-supporting-copy">
                   {stage.role}
                 </p>
               </div>

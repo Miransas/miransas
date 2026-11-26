@@ -1,16 +1,15 @@
 'use client';
 
-import { AmbientSmoke } from '../shared/AmbientSmoke';
+import Link from 'next/link';
+import { ArrowUpRight } from 'lucide-react';
 import { Reveal } from '../shared/reval';
-import { GlowButton } from '../ui/glow-button';
 
 export function ShaderCTA() {
   return (
     <section
       id="imagination"
-      className="surface-page relative overflow-x-clip py-24"
+      className="surface-page relative overflow-x-clip py-24 sm:py-32"
     >
-      <AmbientSmoke anchor="center" seed={11.4} intensity={0.62} />
       <Reveal className="relative z-10 mx-auto max-w-6xl px-6">
         <div className="dark-visual relative min-h-[420px] w-full overflow-hidden rounded-4xl bg-[#0a0a0a] md:aspect-[16/7]">
           <div className="absolute inset-0">
@@ -25,10 +24,7 @@ export function ShaderCTA() {
 
           <div
             className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                'radial-gradient(80% 80% at 50% 50%, rgba(13, 75, 250, 0.24) 0%, rgba(10, 10, 10, 0.76) 72%)',
-            }}
+            style={{ background: 'rgba(5, 5, 5, 0.68)' }}
             aria-hidden
           />
 
@@ -36,13 +32,17 @@ export function ShaderCTA() {
             <h2 className="text-3xl leading-[1.06] font-semibold tracking-[-0.025em] text-white sm:text-5xl lg:text-[3.5rem]">
               Imagination, engineered.
             </h2>
-            <p className="mt-5 max-w-md text-base leading-[1.6] text-[#D1D1D1] sm:text-lg [text-shadow:0_1px_12px_rgba(0,0,0,0.8)]">
+            <p className="mt-5 max-w-md text-base leading-[1.6] text-[#D1D1D1] sm:text-lg">
               Build, send and observe — the infrastructure gets out of your way.
             </p>
             <div className="mt-8 flex gap-4">
-              <GlowButton color="blue" href="/developers">
+              <Link
+                href="/developers"
+                className="inline-flex min-h-11 items-center gap-2.5 rounded-xl bg-[#0d4bfa] px-6 py-3.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
+              >
                 Start building
-              </GlowButton>
+                <ArrowUpRight aria-hidden className="size-4" />
+              </Link>
             </div>
           </div>
         </div>

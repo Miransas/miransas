@@ -35,12 +35,12 @@ export function EngineeringVisualSection() {
           >
             Beyond the interface.
           </h2>
-          <p className="text-secondary-copy mt-6 max-w-md text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
+          <p className="text-supporting-copy mt-6 max-w-md text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
             We explore the systems behind responsive, expressive digital experiences — from real-time rendering to intelligent voice infrastructure.
           </p>
           <Link
             href="/lab"
-            className="surface-card hover-surface-blue-gradient text-prominent mt-8 inline-flex min-h-11 items-center gap-3 rounded-xl px-5 py-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+            className="surface-card hover:bg-surface-card-elevated text-prominent mt-8 inline-flex min-h-11 items-center gap-3 rounded-xl px-5 py-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
           >
             Explore the Lab{' '}
             <ArrowUpRight className="size-4 text-[#3847ff]" aria-hidden="true" />
@@ -48,18 +48,18 @@ export function EngineeringVisualSection() {
         </Reveal>
         <motion.figure
           style={{ y: reduce ? 0 : y, scale: reduce ? 1 : scale }}
-          className="surface-blue-gradient relative mx-auto w-full max-w-[640px] rounded-4xl p-6"
+          className="surface-card relative mx-auto w-full max-w-[640px] rounded-4xl p-6"
         >
           <div className="aspect-square w-full">
             <CrystalizedBall
               preset="abyss"
               color="#3847ff"
               speed={0.5}
-              glow={0.34}
-              sparks={0.12}
+              glow={0.12}
+              sparks={0.04}
             />
           </div>
-          <figcaption className="text-secondary-copy flex justify-between gap-4 px-2 font-mono text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
+          <figcaption className="text-supporting-copy flex flex-wrap justify-between gap-2 px-2 text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
             <span>VISUAL STUDY / 001</span>
             <span>LIGHT IN MOTION</span>
           </figcaption>

@@ -517,19 +517,12 @@ export function ModelsView() {
                   onKeyDown={(event) => handleTabKeyDown(event, index)}
                   className={`group relative flex flex-col justify-between overflow-hidden rounded-xl p-5 text-left transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] ${
                     isSelected
-                      ? 'border border-[#0d4bfa]/25 bg-white dark:border-[#0d4bfa]/40 dark:bg-[#0a0a0a]'
+                      ? 'border border-black/[0.08] bg-surface-card-elevated dark:border-white/10'
                       : 'border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
                   }`}
                 >
-                  {isSelected && (
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute top-1/2 left-1/2 h-[150%] w-[150%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_45%,transparent_72%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.18)_0%,rgba(13,75,250,0.05)_45%,transparent_72%)]"
-                    />
-                  )}
-
                   <div className="relative z-10 flex w-full items-center justify-between gap-2">
-                    <span className="font-mono text-xs font-medium text-neutral-500 dark:text-[#6E6E74]">
+                    <span className="font-mono text-xs font-medium text-secondary-copy dark:text-supporting-copy">
                       {model.number} · {model.name}
                     </span>
                     <span
@@ -569,20 +562,15 @@ export function ModelsView() {
             {MODELS.map((model) => {
               const isSelected = selectedTab === model.id;
               return (
-                <article
+                <div
                   key={model.id}
                   id={`model-panel-${model.id}`}
                   role="tabpanel"
+                  tabIndex={0}
                   aria-labelledby={`model-tab-${model.id}`}
                   hidden={!isSelected}
                   className="relative overflow-hidden rounded-4xl border border-black/[0.08] bg-white p-7 sm:p-10 md:p-12 dark:border-white/10 dark:bg-[#0a0a0a]"
                 >
-                  {/* Soft ambient glow inside panel */}
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute top-1/3 left-1/2 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.06)_0%,transparent_68%)] blur-3xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.12)_0%,transparent_68%)]"
-                  />
-
                   <div className="relative z-10 space-y-10">
                     {/* Block 1: Overview & Specs (2-Column) */}
                     <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
@@ -625,7 +613,7 @@ export function ModelsView() {
                             {model.summary}
                           </p>
 
-                          <p className="mt-3 text-[15px] leading-[1.68] text-neutral-600 sm:text-base dark:text-[#6E6E74]">
+                          <p className="mt-3 text-[15px] leading-[1.68] text-neutral-600 sm:text-base dark:text-supporting-copy">
                             {model.secondarySummary}
                           </p>
                         </div>
@@ -653,7 +641,7 @@ export function ModelsView() {
                       <div className="flex flex-col justify-between rounded-3xl bg-[#F7F8FC] p-6 sm:p-7 lg:col-span-5 dark:bg-[#121214]">
                         <div>
                           <div className="flex items-center justify-between gap-2">
-                            <span className="font-mono text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+                            <span className="font-mono text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
                               Technical Specifications
                             </span>
                             <span className="font-mono text-xs text-[#0d4bfa] dark:text-[#89abff]">
@@ -667,7 +655,7 @@ export function ModelsView() {
                                 key={spec.label}
                                 className="rounded-xl bg-white p-3.5 dark:bg-[#0a0a0a]"
                               >
-                                <dt className="text-[11px] font-medium tracking-[0.08em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+                                <dt className="text-[11px] font-medium tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
                                   {spec.label}
                                 </dt>
                                 <dd
@@ -683,7 +671,7 @@ export function ModelsView() {
                         </div>
 
                         <div className="mt-5 rounded-xl bg-white p-3.5 dark:bg-[#0a0a0a]">
-                          <span className="block text-[11px] font-medium tracking-[0.08em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+                          <span className="block text-[11px] font-medium tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
                             License &amp; Commercial Terms
                           </span>
                           <p className="mt-1 text-xs leading-[1.55] text-neutral-700 dark:text-[#D1D1D1]">
@@ -699,7 +687,7 @@ export function ModelsView() {
                         <h3 className="text-lg font-semibold tracking-[-0.015em] text-[#1d1d1f] sm:text-xl dark:text-white">
                           Core capabilities &amp; scope
                         </h3>
-                        <span className="font-mono text-xs text-neutral-500 dark:text-[#6E6E74]">
+                        <span className="font-mono text-xs text-secondary-copy dark:text-supporting-copy">
                           {model.role}
                         </span>
                       </div>
@@ -763,13 +751,13 @@ export function ModelsView() {
                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
                           {/* Model Family Variants */}
                           <div className="rounded-3xl bg-[#F7F8FC] p-6 sm:p-7 lg:col-span-7 dark:bg-[#121214]">
-                            <span className="font-mono text-xs tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+                            <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
                               Upstream Model Family
                             </span>
                             <h3 className="mt-2 text-lg font-semibold tracking-[-0.015em] text-[#1d1d1f] sm:text-xl dark:text-white">
                               Chatterbox variants &amp; Miralas selection
                             </h3>
-                            <p className="mt-1.5 text-xs leading-[1.6] text-neutral-600 sm:text-sm dark:text-[#6E6E74]">
+                            <p className="mt-1.5 text-xs leading-[1.6] text-neutral-600 sm:text-sm dark:text-supporting-copy">
                               Chatterbox is a four-model open-source family.
                               Miralas uses the approved{' '}
                               <code className="rounded-xl bg-black/[0.05] px-1.5 py-0.5 font-mono text-xs text-[#1d1d1f] dark:bg-white/[0.07] dark:text-white">
@@ -799,13 +787,13 @@ export function ModelsView() {
                                         </span>
                                       )}
                                     </div>
-                                    <span className="font-mono text-xs text-neutral-500 dark:text-[#6E6E74]">
+                                    <span className="font-mono text-xs text-secondary-copy dark:text-supporting-copy">
                                       {variant.params} · {variant.languages}
                                     </span>
                                   </div>
                                   <p className="mt-1.5 text-xs leading-[1.55] text-neutral-600 dark:text-[#D1D1D1]">
                                     {variant.feature} —{' '}
-                                    <span className="text-neutral-500 dark:text-[#6E6E74]">
+                                    <span className="text-secondary-copy dark:text-supporting-copy">
                                       {variant.bestFor}
                                     </span>
                                   </p>
@@ -817,13 +805,13 @@ export function ModelsView() {
                           {/* 23 Supported Languages + Uzbek Research Priority */}
                           <div className="flex flex-col justify-between rounded-3xl bg-[#F7F8FC] p-6 sm:p-7 lg:col-span-5 dark:bg-[#121214]">
                             <div>
-                              <span className="font-mono text-xs tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+                              <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
                                 Language Coverage
                               </span>
                               <h3 className="mt-2 text-lg font-semibold tracking-[-0.015em] text-[#1d1d1f] sm:text-xl dark:text-white">
                                 23 baseline languages &amp; Uzbek priority
                               </h3>
-                              <p className="mt-1.5 text-xs leading-[1.6] text-neutral-600 sm:text-sm dark:text-[#6E6E74]">
+                              <p className="mt-1.5 text-xs leading-[1.6] text-neutral-600 sm:text-sm dark:text-supporting-copy">
                                 Chatterbox-Multilingual supports 23 languages
                                 out of the box (including Turkish, English, and
                                 Russian).
@@ -870,7 +858,7 @@ export function ModelsView() {
                         <div className="rounded-3xl bg-[#F7F8FC] p-6 sm:p-7 dark:bg-[#121214]">
                           <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
                             <div>
-                              <span className="font-mono text-xs tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+                              <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
                                 Operational Notes &amp; Guardrails
                               </span>
                               <h3 className="mt-1 text-lg font-semibold tracking-[-0.015em] text-[#1d1d1f] sm:text-xl dark:text-white">
@@ -895,7 +883,7 @@ export function ModelsView() {
                                 <h4 className="text-sm font-semibold text-[#1d1d1f] dark:text-white">
                                   {lim.title}
                                 </h4>
-                                <p className="mt-1.5 text-xs leading-[1.6] text-neutral-600 dark:text-[#6E6E74]">
+                                <p className="mt-1.5 text-xs leading-[1.6] text-neutral-600 dark:text-supporting-copy">
                                   {lim.detail}
                                 </p>
                               </div>
@@ -905,7 +893,7 @@ export function ModelsView() {
                       </div>
                     )}
                   </div>
-                </article>
+                </div>
               );
             })}
           </div>
@@ -917,7 +905,7 @@ export function ModelsView() {
           className="mt-16 md:mt-24"
         >
           <div className="mb-8 max-w-2xl">
-            <span className="text-xs font-medium tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+            <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
               Open-Source Attribution &amp; Status
             </span>
             <h2
@@ -926,7 +914,7 @@ export function ModelsView() {
             >
               Model &amp; license matrix
             </h2>
-            <p className="mt-3 text-[15px] leading-[1.6] text-neutral-600 sm:text-base dark:text-[#6E6E74]">
+            <p className="mt-3 text-[15px] leading-[1.6] text-neutral-600 sm:text-base dark:text-supporting-copy">
               Every audio foundation model in the Miralas stack is selected for
               clear licensing, self-hosted execution, and domain specialization.
               Select any model card to inspect its architecture diagram.
@@ -939,19 +927,12 @@ export function ModelsView() {
               return (
                 <div
                   key={model.id}
-                  className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl p-7 transition-all duration-200 hover:-translate-y-1 ${
+                  className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl p-7 transition-colors duration-200 ${
                     isSelected
-                      ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]'
+                      ? 'border border-black/[0.08] bg-surface-card-elevated dark:border-white/10'
                       : 'border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
                   }`}
                 >
-                  {isSelected && (
-                    <div
-                      aria-hidden="true"
-                      className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
-                    />
-                  )}
-
                   <div className="relative z-10">
                     <div className="flex items-center justify-between gap-2">
                       <span className="inline-flex items-center gap-2 rounded-xl bg-[#F7F8FC] px-3 py-1 text-xs font-medium tracking-[0.08em] text-neutral-800 uppercase dark:bg-[#121214] dark:text-[#D1D1D1]">
@@ -961,7 +942,7 @@ export function ModelsView() {
                         />
                         {model.badge}
                       </span>
-                      <span className="font-mono text-xs text-neutral-500 dark:text-[#6E6E74]">
+                      <span className="font-mono text-xs text-secondary-copy dark:text-supporting-copy">
                         {model.number} / 03
                       </span>
                     </div>
@@ -975,7 +956,7 @@ export function ModelsView() {
 
                     <div className="mt-5 space-y-2.5">
                       <div className="rounded-xl bg-[#F7F8FC] p-3.5 dark:bg-[#121214]">
-                        <span className="block font-mono text-[11px] tracking-[0.08em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+                        <span className="block font-mono text-[11px] tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
                           License
                         </span>
                         <span className="mt-1 block text-xs font-semibold text-[#1d1d1f] sm:text-[13px] dark:text-white">
@@ -984,7 +965,7 @@ export function ModelsView() {
                       </div>
 
                       <div className="rounded-xl bg-[#F7F8FC] p-3.5 dark:bg-[#121214]">
-                        <span className="block font-mono text-[11px] tracking-[0.08em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+                        <span className="block font-mono text-[11px] tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
                           Commercial &amp; Hosting Terms
                         </span>
                         <p className="mt-1 text-xs leading-[1.55] text-neutral-600 dark:text-[#D1D1D1]">
@@ -998,7 +979,7 @@ export function ModelsView() {
                     <button
                       type="button"
                       onClick={() => handleSelectTab(model.id, true)}
-                      className="inline-flex items-center gap-1.5 rounded-xl text-xs font-semibold text-[#0d4bfa] transition-colors hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px] dark:text-white"
+                      className="inline-flex min-h-11 items-center gap-1.5 rounded-xl text-xs font-semibold text-[#0d4bfa] transition-colors hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px] dark:text-white"
                     >
                       <span>
                         {isSelected
@@ -1012,7 +993,7 @@ export function ModelsView() {
                       href={model.upstreamUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 rounded-xl font-mono text-[11px] text-neutral-500 transition-colors hover:text-[#0d4bfa] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-[#6E6E74] dark:hover:text-[#D1D1D1]"
+                      className="inline-flex min-h-11 items-center gap-1 rounded-xl text-xs text-secondary-copy transition-colors hover:text-[#0d4bfa] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-supporting-copy dark:hover:text-[#D1D1D1]"
                     >
                       <span>Upstream</span>
                       <ExternalLink className="size-3" aria-hidden />
@@ -1031,7 +1012,7 @@ export function ModelsView() {
         >
           <div className="flex flex-col justify-between gap-6 rounded-3xl border border-black/[0.08] bg-white p-7 sm:p-8 lg:flex-row lg:items-center dark:border-white/10 dark:bg-[#0a0a0a]">
             <div>
-              <span className="font-mono text-xs tracking-[0.12em] text-neutral-500 uppercase dark:text-[#6E6E74]">
+              <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
                 Continue exploring
               </span>
               <h2 className="mt-1.5 text-xl font-semibold tracking-[-0.02em] text-[#1d1d1f] sm:text-2xl dark:text-white">

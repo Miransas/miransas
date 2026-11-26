@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import {
   motion,
   useReducedMotion,
@@ -32,13 +32,13 @@ const leftContainerVariants: Variants = {
 const leftItemVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 18,
+    y: 12,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.72,
+      duration: 0.5,
       ease: EASE_OUT_EXPO,
     },
   },
@@ -47,13 +47,13 @@ const leftItemVariants: Variants = {
 const cardRevealVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 22,
+    y: 12,
   },
   visible: (index: number) => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.68,
+      duration: 0.5,
       delay: index * 0.06,
       ease: EASE_OUT_EXPO,
     },
@@ -120,7 +120,6 @@ export default function StickySplitSection() {
             className="mb-6 inline-flex items-center gap-3"
           >
             <span className="relative flex size-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-xl bg-[#0d4bfa] opacity-60" />
               <span className="relative inline-flex size-2 rounded-xl bg-[#0d4bfa]" />
             </span>
 
@@ -138,7 +137,7 @@ export default function StickySplitSection() {
 
           <motion.p
             variants={leftItemVariants}
-            className="text-secondary-copy mt-6 max-w-md text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]"
+            className="text-supporting-copy mt-6 max-w-md text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]"
           >
             Miransas brings speech generation, transcription, and voice
             experiences together in a developer-focused platform.
@@ -149,7 +148,7 @@ export default function StickySplitSection() {
             className="mt-8 hidden items-center gap-3 lg:flex"
             aria-hidden="true"
           >
-            <span className="text-prominent font-mono text-xs leading-[1.45] sm:text-[13px]">
+            <span className="text-prominent font-mono tabular-nums text-xs leading-[1.45] sm:text-[13px]">
               {capabilities[currentFocus]?.number}
             </span>
             <div className="flex items-center gap-1.5">
@@ -180,7 +179,7 @@ export default function StickySplitSection() {
                 );
               })}
             </div>
-            <span className="text-secondary-copy font-mono text-xs leading-[1.45] sm:text-[13px]">
+            <span className="text-supporting-copy font-mono tabular-nums text-xs leading-[1.45] sm:text-[13px]">
               05
             </span>
           </motion.div>
@@ -188,12 +187,12 @@ export default function StickySplitSection() {
           <motion.div variants={leftItemVariants} className="mt-9">
             <a
               href="#voice-capabilities"
-              className="group inline-flex items-center gap-3 rounded-xl bg-[#0d4bfa] px-6 py-3.5 text-sm font-medium text-white transition-[transform,opacity,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:opacity-92 hover:shadow-[0_12px_30px_rgba(13,75,250,0.28)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] active:scale-[0.98]"
+              className="group inline-flex items-center gap-3 rounded-xl bg-[#0d4bfa] px-6 py-3.5 text-sm font-medium text-white transition-opacity duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:opacity-92 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
             >
               Explore capabilities
               <ArrowRight
                 aria-hidden
-                className="size-4 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1"
+                className="size-4"
               />
             </a>
           </motion.div>
@@ -218,18 +217,8 @@ export default function StickySplitSection() {
                 onViewportEnter={() => setActiveIndex(index)}
                 onMouseEnter={() => setHoveredIndex(index)}
                 variants={cardRevealVariants}
-                className={`group relative overflow-hidden rounded-3xl p-6 transition-all duration-300 sm:p-8 ${
-                  isHighlighted
-                    ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]'
-                    : 'border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
-                }`}
+                className={`group relative rounded-3xl border border-black/[0.08] p-6 dark:border-white/10 sm:p-8 ${isHighlighted ? 'bg-surface-card-elevated' : 'bg-surface-card'}`}
               >
-                {isHighlighted && (
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
-                  />
-                )}
                 <div className="relative z-10 mb-4 flex items-center justify-between gap-4">
                   <div className="inline-flex items-center gap-2.5">
                     <span
@@ -247,26 +236,22 @@ export default function StickySplitSection() {
 
                   <div className="flex items-center gap-1.5">
                     <span
-                      className={`font-mono text-xs leading-[1.45] transition-colors duration-300 sm:text-[13px] ${
+                      className={`font-mono tabular-nums text-xs leading-[1.45] transition-colors duration-300 sm:text-[13px] ${
                         isHighlighted
                           ? 'text-prominent'
-                          : 'text-secondary-copy group-hover:text-prominent'
+                          : 'text-supporting-copy group-hover:text-prominent'
                       }`}
                     >
                       {item.number} / 05
                     </span>
-                    <ArrowUpRight
-                      aria-hidden="true"
-                      className="size-3.5 -translate-x-1 translate-y-1 text-[#0d4bfa] opacity-0 transition-[transform,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0 group-hover:translate-y-0 group-hover:opacity-100"
-                    />
                   </div>
                 </div>
 
-                <h3 className="text-heading relative z-10 text-xl leading-[1.15] font-semibold tracking-[-0.02em] transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-1 sm:text-2xl lg:text-[1.65rem]">
+                <h3 className="text-heading relative z-10 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
                   {item.title}
                 </h3>
 
-                <p className="text-secondary-copy relative z-10 mt-3 max-w-xl text-[15px] leading-[1.6] sm:text-base">
+                <p className="text-supporting-copy relative z-10 mt-3 max-w-xl text-[15px] leading-[1.6] sm:text-base">
                   {item.description}
                 </p>
               </motion.article>

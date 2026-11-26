@@ -42,7 +42,7 @@ export function Features() {
   const current = tabs.find((tab) => tab.id === active) ?? tabs[0];
 
   return (
-    <section id="capabilities" className="surface-page px-6 pb-24">
+    <section id="capabilities" className="surface-page px-6 pb-24 sm:pb-32">
       <Reveal className="mx-auto max-w-6xl">
         <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
           Core Capabilities
@@ -50,7 +50,7 @@ export function Features() {
         <h2 className="text-heading mt-5 max-w-2xl text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]">
           From voice research to useful interfaces.
         </h2>
-        <p className="text-secondary-copy mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
+        <p className="text-supporting-copy mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
           We are bringing speech generation, voice identity and conversational infrastructure into a coherent developer experience.
         </p>
         <div className="mt-10 flex flex-wrap gap-2">
@@ -61,7 +61,7 @@ export function Features() {
               aria-pressed={active === tab.id}
               aria-controls="capability-preview"
               onClick={() => setActive(tab.id)}
-              className={`rounded-xl px-4 py-2 text-xs font-medium transition-all duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px] ${
+              className={`min-h-11 rounded-xl px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] ${
                 active === tab.id
                   ? 'bg-[#0d4bfa] text-white'
                   : 'text-prominent border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
@@ -74,10 +74,10 @@ export function Features() {
         <motion.div
           id="capability-preview"
           key={current.id}
-          initial={{ opacity: 0, y: 16 }}
+          initial={reduce ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          className="surface-blue-gradient mt-8 overflow-hidden rounded-4xl"
+          transition={{ duration: reduce ? 0 : 0.3 }}
+          className="surface-card mt-8 overflow-hidden rounded-4xl"
         >
           <div className="grid md:grid-cols-[1.1fr_0.9fr]">
             <div className="relative min-h-[320px] overflow-hidden bg-black">
@@ -98,7 +98,7 @@ export function Features() {
               <h3 className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
                 {current.copy}
               </h3>
-              <p className="text-secondary-copy mt-4 text-[15px] leading-[1.6] sm:text-base">
+              <p className="text-supporting-copy mt-4 text-[15px] leading-[1.6] sm:text-base">
                 Visual study · illustrative footage. Follow our engineering notes for product availability and implementation details.
               </p>
             </div>

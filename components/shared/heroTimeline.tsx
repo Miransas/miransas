@@ -3,7 +3,6 @@
 import { useRef, useState } from 'react';
 import { motion, useScroll, useMotionValueEvent, useReducedMotion } from 'framer-motion';
 import { Reveal } from './reval';
-import { AmbientSmoke } from './AmbientSmoke';
 import { Search, PenTool, Settings, RefreshCw, Rocket } from 'lucide-react';
 
 const timelineData = [
@@ -58,7 +57,6 @@ export default function Timeline() {
       aria-label="How we build"
       className="surface-page text-foreground relative overflow-x-clip px-6 py-24 md:py-32"
     >
-      <AmbientSmoke anchor="center-left" seed={4.3} intensity={0.48} />
       <Reveal className="relative z-10 mx-auto mb-14 max-w-4xl">
         <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
           The engineering process
@@ -66,7 +64,7 @@ export default function Timeline() {
         <h2 className="text-heading mt-4 max-w-2xl text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]">
           From a question to a working system.
         </h2>
-        <p className="text-secondary-copy mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
+        <p className="text-supporting-copy mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
           A sequence of decisions, built around the problem. From discovery to refinement, each step makes the next decision clearer.
         </p>
       </Reveal>
@@ -89,26 +87,16 @@ export default function Timeline() {
                 animate={isActive ? 'active' : 'inactive'}
                 data-active={isActive}
                 aria-current={isActive ? 'step' : undefined}
-                className={`relative grid grid-cols-[2rem_minmax(0,1fr)] gap-5 overflow-hidden rounded-3xl p-6 transition-all duration-300 sm:p-8 md:grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] md:gap-8 ${
-                  isActive
-                    ? 'border border-[#0d4bfa]/20 bg-white dark:border-[#0d4bfa]/30 dark:bg-[#0a0a0a]'
-                    : 'border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
-                }`}
+                className={`relative grid grid-cols-[2rem_minmax(0,1fr)] gap-5 rounded-3xl border border-black/[0.08] p-6 dark:border-white/10 sm:p-8 md:grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] md:gap-8 ${isActive ? 'bg-surface-card-elevated' : 'bg-surface-card'}`}
               >
-                {isActive && (
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute top-1/2 left-1/2 h-[140%] w-[140%] -translate-x-1/2 -translate-y-1/2 rounded-4xl bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.09)_0%,rgba(13,75,250,0.03)_42%,transparent_70%)] blur-2xl dark:bg-[radial-gradient(circle_at_center,rgba(13,75,250,0.16)_0%,rgba(13,75,250,0.05)_42%,transparent_70%)]"
-                  />
-                )}
                 <div className={`relative z-10 col-start-2 row-start-1 min-w-0 ${isEven ? 'md:col-start-3' : 'md:col-start-1 md:text-right'}`}>
-                  <span className="text-prominent mb-3 block font-mono text-xs leading-[1.45] sm:text-[13px]">
+                  <span className="text-prominent mb-3 block font-mono tabular-nums text-xs leading-[1.45] sm:text-[13px]">
                     {item.id} / 05
                   </span>
                   <h3 className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
                     {item.title}
                   </h3>
-                  <p className={`text-secondary-copy mt-3 max-w-sm text-[15px] leading-[1.6] sm:text-base ${!isEven ? 'md:ml-auto' : ''}`}>
+                  <p className={`text-supporting-copy mt-3 max-w-sm text-[15px] leading-[1.6] sm:text-base ${!isEven ? 'md:ml-auto' : ''}`}>
                     {item.description}
                   </p>
                 </div>

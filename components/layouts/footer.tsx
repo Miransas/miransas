@@ -52,7 +52,7 @@ export function SiteFooter() {
               <span className="shrink-0">
                 <img
                   src="/icons/logo-dark.png"
-                  alt="Miransas"
+                  alt=""
                   width={44}
                   height={44}
                   className="block size-11 object-contain dark:hidden"
@@ -60,7 +60,7 @@ export function SiteFooter() {
 
                 <img
                   src="/icons/logo-white.png"
-                  alt="Miransas"
+                  alt=""
                   width={44}
                   height={44}
                   className="hidden size-11 object-contain dark:block"
@@ -69,7 +69,7 @@ export function SiteFooter() {
               <span className="text-heading text-xl font-semibold tracking-tight">Miransas</span>
             </Link>
 
-            <p className="text-secondary-copy mb-6 text-[15px] leading-[1.6] sm:text-base">
+            <p className="text-supporting-copy mb-6 text-[15px] leading-[1.6] sm:text-base">
               Building voice AI, researching Uzbek speech and developing the infrastructure behind them.
             </p>
 
@@ -84,7 +84,7 @@ export function SiteFooter() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="surface-card hover-surface-blue-gradient text-prominent hover:text-heading flex h-9 w-9 items-center justify-center rounded-xl transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                    className="surface-card hover:bg-surface-card-elevated text-prominent hover:text-heading flex h-11 w-11 items-center justify-center rounded-xl transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
                   >
                     <Icon className="size-4" />
                   </a>
@@ -106,16 +106,16 @@ export function SiteFooter() {
                           href={link.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="group text-secondary-copy hover:text-prominent inline-flex items-center gap-1 rounded-xl text-sm transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                          className="group text-supporting-copy hover:text-prominent inline-flex items-center gap-1 rounded-xl text-sm transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
                         >
                           <span>{link.label}</span>
-                          <ArrowUpRight className="text-secondary-copy group-hover:text-prominent size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          <ArrowUpRight className="text-supporting-copy group-hover:text-prominent size-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </a>
                       ) : (
                         <Link
                           href={link.href}
                           onClick={(e) => handleAnchorClick(e, link.href)}
-                          className="text-secondary-copy hover:text-prominent rounded-xl text-sm transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                          className="text-supporting-copy hover:text-prominent rounded-xl text-sm transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
                         >
                           {link.label}
                         </Link>
@@ -128,12 +128,12 @@ export function SiteFooter() {
           </div>
         </div>
 
-        <div className="text-secondary-copy mt-16 flex flex-col items-center justify-between gap-4 pt-8 text-xs md:flex-row">
+        <div className="text-supporting-copy mt-16 flex flex-col items-center justify-between gap-4 pt-8 text-xs md:flex-row">
           <div className="flex flex-col items-center gap-2 md:flex-row md:gap-4">
-            <p className="text-secondary-copy text-xs leading-[1.45] sm:text-[13px]">© {currentYear} Miransas. All rights reserved.</p>
+            <p className="text-supporting-copy text-xs leading-[1.45] sm:text-[13px]">© {currentYear} Miransas. All rights reserved.</p>
 
             <span className="hidden h-1 w-1 rounded-xl bg-[#3847ff] md:block" />
-            <p className="text-secondary-copy flex items-center gap-2 font-mono text-xs leading-[1.45] sm:text-[13px]">
+            <p className="text-supporting-copy flex items-center gap-2 font-mono text-xs leading-[1.45] sm:text-[13px]">
               <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -145,7 +145,7 @@ export function SiteFooter() {
             href="https://status.miransas.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="surface-card hover-surface-blue-gradient text-prominent inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-xs leading-[1.45] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] sm:text-[13px]"
+            className="surface-card hover:bg-surface-card-elevated text-prominent inline-flex min-h-11 items-center gap-2 rounded-xl px-3.5 py-2 text-xs leading-[1.45] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] sm:text-[13px]"
           >
             <span className="h-2 w-2 rounded-xl bg-[#3847ff]" />
             <span className="font-medium">System status</span>
