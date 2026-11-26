@@ -1,6 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
+import { UI_DURATION, UI_EASE, UI_MOTION_STYLE } from '@/lib/ui-motion';
+
 import { ArrowRight, ChevronDown, Menu, X } from 'lucide-react';
 import {
   AnimatePresence,
@@ -256,19 +258,18 @@ export function SiteHeader() {
                       {isOpen && (
                         <motion.div
                           id={id}
+                          style={UI_MOTION_STYLE}
                           initial={
                             reduce
                               ? false
                               : {
                                   opacity: 0,
                                   y: 8,
-                                  scale: 0.97,
                                 }
                           }
                           animate={{
                             opacity: 1,
                             y: 0,
-                            scale: 1,
                           }}
                           exit={
                             reduce
@@ -276,38 +277,26 @@ export function SiteHeader() {
                               : {
                                   opacity: 0,
                                   y: 4,
-                                  scale: 0.985,
                                 }
                           }
                           transition={{
-                            duration: reduce ? 0 : 0.24,
-                            ease: EASE_OUT_EXPO,
+                            duration: reduce ? 0 : UI_DURATION.overlay,
+                            ease: UI_EASE,
                           }}
-                          className="absolute top-full left-0 z-50 w-76 origin-top-left pt-2.5"
+                          className="content-theme absolute top-full left-0 z-50 w-76 origin-top-left pt-2.5"
                         >
-                          <div className="rounded-3xl border-0 bg-transparent p-2 shadow-none ring-0 backdrop-blur-md">
-                            {menu.items.map((item, idx) => (
-                              <motion.div
-                                key={item.label}
-                                initial={
-                                  reduce ? false : { opacity: 0, y: 4 }
-                                }
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{
-                                  duration: reduce ? 0 : 0.2,
-                                  delay: reduce ? 0 : idx * 0.025,
-                                  ease: EASE_OUT_EXPO,
-                                }}
-                              >
+                          <div className="rounded-3xl border-0 bg-surface-card p-2 shadow-none ring-0">
+                            {menu.items.map((item) => (
+                              <div key={item.label}>
                                 <Link
                                   href={item.href}
                                   onClick={() => setOpenMenu(null)}
                                   aria-current={
                                     pathname === item.href ? 'page' : undefined
                                   }
-                                  className="group/item block rounded-xl border-0 bg-transparent px-3.5 py-2.5 shadow-none ring-0 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
+                                  className="group/item block rounded-xl border-0 bg-transparent hover:bg-surface-hover px-3.5 py-2.5 shadow-none ring-0 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
                                 >
-                                  <span className="flex items-center justify-between text-sm font-medium text-[#1d1d1f] transition-colors duration-200 group-hover/item:text-[#0d4bfa] group-aria-[current=page]/item:text-[#0d4bfa] dark:text-[#D1D1D1] dark:group-hover/item:text-white dark:group-aria-[current=page]/item:text-white">
+                                  <span className="flex items-center justify-between text-sm font-medium text-heading transition-colors duration-200 group-hover/item:text-[#0d4bfa] group-aria-[current=page]/item:text-[#0d4bfa] dark:group-hover/item:text-white dark:group-aria-[current=page]/item:text-white">
                                     {item.label}
                                     <ArrowRight
                                       aria-hidden
@@ -315,12 +304,12 @@ export function SiteHeader() {
                                     />
                                   </span>
                                   {'hint' in item && (
-                                    <span className="text-secondary-copy mt-1 block text-xs leading-[1.45] transition-colors duration-200 group-hover/item:text-[#1d1d1f] dark:group-hover/item:text-[#D1D1D1]">
+                                    <span className="text-secondary-copy mt-1 block text-xs leading-[1.45] transition-colors duration-200 group-hover/item:text-heading">
                                       {item.hint}
                                     </span>
                                   )}
                                 </Link>
-                              </motion.div>
+                              </div>
                             ))}
                           </div>
                         </motion.div>
@@ -392,14 +381,15 @@ export function SiteHeader() {
         {open && (
           <motion.div
             ref={mobileRef}
+            style={UI_MOTION_STYLE}
             id="mobile-navigation"
             role="dialog"
             aria-modal="true"
             aria-label="Navigation"
             data-lenis-prevent
-            className="bg-background/96 pointer-events-auto fixed inset-x-0 top-[var(--header-h)] h-[calc(100dvh-var(--header-h))] overflow-y-auto overscroll-contain px-6 py-6 backdrop-blur-2xl xl:hidden"
+            className="content-theme bg-background pointer-events-auto fixed inset-x-0 top-[var(--header-h)] h-[calc(100dvh-var(--header-h))] overflow-y-auto overscroll-contain px-6 py-6 xl:hidden"
             initial={
-              reduce ? false : { opacity: 0, y: -12 }
+              reduce ? false : { opacity: 0, y: -10 }
             }
             animate={{ opacity: 1, y: 0 }}
             exit={
@@ -407,7 +397,7 @@ export function SiteHeader() {
                 ? { opacity: 0 }
                 : { opacity: 0, y: -8 }
             }
-            transition={{ duration: reduce ? 0 : 0.28, ease: EASE_OUT_EXPO }}
+            transition={{ duration: reduce ? 0 : UI_DURATION.overlay, ease: UI_EASE }}
           >
             <div className="mx-auto max-w-[1440px]">
               <div className="mb-8 flex items-center justify-between pb-5">
@@ -431,9 +421,9 @@ export function SiteHeader() {
                     initial={reduce ? false : { opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
-                      duration: reduce ? 0 : 0.24,
-                      delay: reduce ? 0 : menuIdx * 0.04,
-                      ease: EASE_OUT_EXPO,
+                      duration: reduce ? 0 : UI_DURATION.overlay,
+                      delay: reduce ? 0 : menuIdx * UI_DURATION.stagger,
+                      ease: UI_EASE,
                     }}
                   >
                     <p className="text-prominent mb-2 font-mono text-xs tracking-[0.12em] uppercase">
@@ -447,7 +437,7 @@ export function SiteHeader() {
                           aria-current={
                             pathname === item.href ? 'page' : undefined
                           }
-                          className="group/mobile rounded-xl border-0 bg-transparent px-3 py-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
+                          className="group/mobile rounded-xl border-0 bg-transparent hover:bg-surface-hover px-3 py-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
                           onClick={() => setMobilePath(null)}
                         >
                           <span className="text-heading block text-base font-medium transition-colors group-hover/mobile:text-[#0d4bfa] dark:group-hover/mobile:text-white">

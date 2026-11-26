@@ -43,7 +43,7 @@ export function Faq() {
                       className={`min-h-11 rounded-xl px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] ${
                         isActive
                           ? 'bg-[#0d4bfa] text-white'
-                          : 'text-prominent border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
+                          : 'text-prominent border border-transparent bg-surface-card hover:bg-surface-hover'
                       }`}
                     >
                       {key}
@@ -78,10 +78,10 @@ export function Faq() {
               return (
                 <div
                   key={item.q}
-                  className={`relative overflow-hidden rounded-3xl transition-colors duration-300 ${
+                  className={`relative overflow-hidden rounded-3xl transition-colors duration-[280ms] ${
                     isOpen
-                      ? 'border border-black/[0.08] bg-surface-card-elevated dark:border-white/10'
-                      : 'surface-card hover:bg-surface-card-elevated'
+                      ? 'border border-transparent bg-surface-card-elevated'
+                      : 'surface-card hover:bg-surface-hover'
                   }`}
                 >
                   <button
@@ -100,10 +100,10 @@ export function Faq() {
                       {item.q}
                     </span>
                     <div
-                      className={`flex size-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-300 ${
+                      className={`flex size-8 shrink-0 items-center justify-center rounded-xl transition-transform duration-[280ms] ${
                         isOpen
                           ? 'rotate-180 bg-[#0d4bfa]/15 text-[#0d4bfa] dark:bg-[#0d4bfa]/25'
-                          : 'text-supporting-copy bg-[#F7F8FC] dark:bg-[#121214]'
+                          : 'text-supporting-copy bg-surface-card-elevated '
                       }`}
                     >
                       <ChevronDown className="size-4" />
@@ -111,11 +111,12 @@ export function Faq() {
                   </button>
 
                   <div
+                    data-ui-panel
                     id={`faq-answer-${groupId}-${index}`}
                     role="region"
                     aria-labelledby={`faq-trigger-${groupId}-${index}`}
                     aria-hidden={!isOpen}
-                    className={`relative z-10 grid transition-[grid-template-rows,opacity] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+                    className={`relative z-10 grid transition-[grid-template-rows,opacity] duration-[280ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
                       isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
                     }`}
                   >

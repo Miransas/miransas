@@ -1,3 +1,4 @@
+import { ContentTheme } from '@/components/shared/content-theme';
 import type { Metadata } from 'next';
 import Agent from './agent.mdx';
 import { PageIntro, PageAction } from '@/components/pages/page-intro';
@@ -33,24 +34,26 @@ export default function AgentPage() {
           <PageAction href="/contact">Talk to the team</PageAction>
         </div>
       </PageIntro>
-      <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_18rem]">
-        <div className="max-w-3xl min-w-0">
-          <Agent />
+      <ContentTheme>
+        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,1fr)_18rem]">
+          <div className="max-w-3xl min-w-0">
+            <Agent />
+          </div>
+          <aside className="self-start lg:sticky lg:top-28">
+            <Reveal className="surface-card rounded-3xl p-6">
+              <span className="text-prominent block text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
+                Release state
+              </span>
+              <h2 className="text-heading mt-3 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl">
+                Building the foundations.
+              </h2>
+              <p className="text-supporting-copy mt-3 text-[15px] leading-[1.6] sm:text-base">
+                The agent follows the Miralas core. There is no public release date or production API advertised here.
+              </p>
+            </Reveal>
+          </aside>
         </div>
-        <aside className="self-start lg:sticky lg:top-28">
-          <Reveal className="surface-card rounded-3xl p-6">
-            <span className="text-prominent block text-xs leading-[1.45] tracking-[0.12em] uppercase sm:text-[13px]">
-              Release state
-            </span>
-            <h2 className="text-heading mt-3 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl">
-              Building the foundations.
-            </h2>
-            <p className="text-supporting-copy mt-3 text-[15px] leading-[1.6] sm:text-base">
-              The agent follows the Miralas core. There is no public release date or production API advertised here.
-            </p>
-          </Reveal>
-        </aside>
-      </div>
+      </ContentTheme>
     </div>
   );
 }

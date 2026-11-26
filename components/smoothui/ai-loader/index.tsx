@@ -118,7 +118,7 @@ const Elapsed = () => {
   });
 
   return (
-    <span className="tabular-nums opacity-60">
+    <span className="text-secondary-copy tabular-nums">
       {seconds.toFixed(ELAPSED_DECIMALS)}s
     </span>
   );

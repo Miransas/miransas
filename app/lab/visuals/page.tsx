@@ -1,3 +1,4 @@
+import { ContentTheme } from '@/components/shared/content-theme';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
@@ -42,7 +43,9 @@ export default function LabVisualsPage() {
             Explore light, motion and particle behavior. Choose an appearance, adjust the pace, or let the system move on its own.
           </p>
         </HeroEnter>
-        <VisualPlayground />
+      <ContentTheme>
+          <VisualPlayground />
+      </ContentTheme>
       </div>
     </div>
   );

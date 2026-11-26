@@ -1,5 +1,7 @@
 'use client';
 
+import { ContentTheme } from '@/components/shared/content-theme';
+
 import { useState, type FormEvent } from 'react';
 import Link from 'next/link';
 import {
@@ -135,7 +137,7 @@ type FormFeedback =
     };
 
 const INPUT_CLASSES =
-  'w-full rounded-xl border border-black/[0.08] bg-[#EFEFEF]/60 px-4 py-3.5 text-sm text-[#1d1d1f] placeholder:text-supporting-copy transition-colors focus:border-[#0d4bfa] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d4bfa]/30 dark:border dark:border-white/10 dark:bg-[#050505] dark:text-white';
+  'w-full rounded-xl border bg-surface-page px-4 py-3.5 text-sm text-heading placeholder:text-secondary-copy transition-colors focus:border-[#0d4bfa] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0d4bfa]/30';
 
 export function ContactView() {
   const [copied, setCopied] = useState(false);
@@ -325,479 +327,481 @@ export function ContactView() {
             </Link>
           </div>
         </header>
+      <ContentTheme>
 
-        {/* Interactive Contact Form (Tier 1 Container) */}
-        <section
-          aria-labelledby="direct-message-heading"
-          className="mt-14 md:mt-20"
-        >
-          <div className="rounded-4xl border border-black/[0.08] bg-white p-7 sm:p-10 md:p-12 dark:border-white/10 dark:bg-[#0a0a0a]">
-            <div className="max-w-2xl">
-              <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
-                Direct message
-              </span>
-              <h2
-                id="direct-message-heading"
-                className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-[#1d1d1f] sm:text-4xl dark:text-white"
-              >
-                Tell us what you are working on.
-              </h2>
-              <p className="mt-3 text-[15px] leading-[1.6] text-neutral-600 sm:text-base dark:text-supporting-copy">
-                Fill out the fields below to reach the team. Product and
-                security inquiries are prioritized.
-              </p>
-            </div>
-
-            <form
-              onSubmit={handleSubmit}
-              noValidate
-              className="mt-8 space-y-6 sm:mt-10"
-            >
-              {/* Hidden honeypot field */}
-              <div className="sr-only" aria-hidden="true">
-                <label htmlFor="contact-company">Company</label>
-                <input
-                  id="contact-company"
-                  name="company"
-                  type="text"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                />
-              </div>
-
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                <div>
-                  <label
-                    htmlFor="contact-name"
-                    className="mb-2 block text-xs font-medium tracking-[0.08em] text-neutral-700 uppercase sm:text-[13px] dark:text-[#D1D1D1]"
-                  >
-                    Name
-                  </label>
-                  <input
-                    id="contact-name"
-                    name="name"
-                    type="text"
-                    required
-                    minLength={2}
-                    maxLength={120}
-                    autoComplete="name"
-                    placeholder="Your name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className={INPUT_CLASSES}
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="contact-email"
-                    className="mb-2 block text-xs font-medium tracking-[0.08em] text-neutral-700 uppercase sm:text-[13px] dark:text-[#D1D1D1]"
-                  >
-                    Email
-                  </label>
-                  <input
-                    id="contact-email"
-                    name="email"
-                    type="email"
-                    required
-                    maxLength={254}
-                    autoComplete="email"
-                    placeholder="you@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={INPUT_CLASSES}
-                  />
-                </div>
-
-                <div className="sm:col-span-2 lg:col-span-1">
-                  <label
-                    htmlFor="contact-topic"
-                    className="mb-2 block text-xs font-medium tracking-[0.08em] text-neutral-700 uppercase sm:text-[13px] dark:text-[#D1D1D1]"
-                  >
-                    Topic
-                  </label>
-                  <select
-                    id="contact-topic"
-                    name="topic"
-                    value={topic}
-                    onChange={(e) => setTopic(e.target.value as TopicOption)}
-                    className={INPUT_CLASSES}
-                  >
-                    {TOPIC_OPTIONS.map((opt) => (
-                      <option
-                        key={opt}
-                        value={opt}
-                        className="bg-white text-[#1d1d1f] dark:bg-[#0a0a0a] dark:text-white"
-                      >
-                        {opt}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="contact-message"
-                  className="mb-2 block text-xs font-medium tracking-[0.08em] text-neutral-700 uppercase sm:text-[13px] dark:text-[#D1D1D1]"
+          {/* Interactive Contact Form (Tier 1 Container) */}
+          <section
+            aria-labelledby="direct-message-heading"
+            className="mt-14 md:mt-20"
+          >
+            <div className="rounded-4xl border border-transparent bg-surface-card p-7 sm:p-10 md:p-12">
+              <div className="max-w-2xl">
+                <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
+                  Direct message
+                </span>
+                <h2
+                  id="direct-message-heading"
+                  className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-heading sm:text-4xl"
                 >
-                  Message
-                </label>
-                <textarea
-                  id="contact-message"
-                  name="message"
-                  required
-                  minLength={10}
-                  maxLength={5000}
-                  rows={5}
-                  placeholder="Tell us which product or topic, what you expected, and any relevant details..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  className={`${INPUT_CLASSES} resize-y leading-relaxed`}
-                />
-                <p className="mt-2.5 text-xs leading-[1.45] text-secondary-copy sm:text-[13px] dark:text-supporting-copy">
-                  Never send passwords, API keys, or tokens in a message.
+                  Tell us what you are working on.
+                </h2>
+                <p className="mt-3 text-[15px] leading-[1.6] text-supporting-copy sm:text-base dark:text-supporting-copy">
+                  Fill out the fields below to reach the team. Product and
+                  security inquiries are prioritized.
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-4">
-                <button
-                  type="submit"
-                  disabled={submitting}
-                  className="inline-flex min-h-11 items-center gap-2.5 rounded-xl bg-[#0d4bfa] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] disabled:cursor-not-allowed disabled:opacity-60"
-                >
-                  {submitting ? (
-                    <>
-                      <Loader2 className="size-4 animate-spin" aria-hidden />
-                      <span>Sending...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>Send message</span>
-                      <ArrowRight className="size-4" aria-hidden />
-                    </>
-                  )}
-                </button>
-              </div>
-
-              {feedback.type === 'delivered' && (
-                <div
-                  role="status"
-                  aria-live="polite"
-                  className="flex items-start gap-3 rounded-xl bg-surface-card-elevated p-5"
-                >
-                  <CheckCircle2
-                    className="mt-0.5 size-5 shrink-0 text-[#0d4bfa]"
-                    aria-hidden
+              <form
+                onSubmit={handleSubmit}
+                noValidate
+                className="mt-8 space-y-6 sm:mt-10"
+              >
+                {/* Hidden honeypot field */}
+                <div className="sr-only" aria-hidden="true">
+                  <label htmlFor="contact-company">Company</label>
+                  <input
+                    id="contact-company"
+                    name="company"
+                    type="text"
+                    tabIndex={-1}
+                    autoComplete="off"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
                   />
-                  <p className="text-sm leading-[1.6] text-[#1d1d1f] dark:text-[#D1D1D1]">
-                    {feedback.message}
+                </div>
+
+                <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                  <div>
+                    <label
+                      htmlFor="contact-name"
+                      className="mb-2 block text-xs font-medium tracking-[0.08em] text-prominent uppercase sm:text-[13px]"
+                    >
+                      Name
+                    </label>
+                    <input
+                      id="contact-name"
+                      name="name"
+                      type="text"
+                      required
+                      minLength={2}
+                      maxLength={120}
+                      autoComplete="name"
+                      placeholder="Your name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className={INPUT_CLASSES}
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="contact-email"
+                      className="mb-2 block text-xs font-medium tracking-[0.08em] text-prominent uppercase sm:text-[13px]"
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="contact-email"
+                      name="email"
+                      type="email"
+                      required
+                      maxLength={254}
+                      autoComplete="email"
+                      placeholder="you@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className={INPUT_CLASSES}
+                    />
+                  </div>
+
+                  <div className="sm:col-span-2 lg:col-span-1">
+                    <label
+                      htmlFor="contact-topic"
+                      className="mb-2 block text-xs font-medium tracking-[0.08em] text-prominent uppercase sm:text-[13px]"
+                    >
+                      Topic
+                    </label>
+                    <select
+                      id="contact-topic"
+                      name="topic"
+                      value={topic}
+                      onChange={(e) => setTopic(e.target.value as TopicOption)}
+                      className={INPUT_CLASSES}
+                    >
+                      {TOPIC_OPTIONS.map((opt) => (
+                        <option
+                          key={opt}
+                          value={opt}
+                          className="bg-surface-card text-heading"
+                        >
+                          {opt}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="contact-message"
+                    className="mb-2 block text-xs font-medium tracking-[0.08em] text-prominent uppercase sm:text-[13px]"
+                  >
+                    Message
+                  </label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    required
+                    minLength={10}
+                    maxLength={5000}
+                    rows={5}
+                    placeholder="Tell us which product or topic, what you expected, and any relevant details..."
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    className={`${INPUT_CLASSES} resize-y leading-relaxed`}
+                  />
+                  <p className="mt-2.5 text-xs leading-[1.45] text-secondary-copy sm:text-[13px] dark:text-supporting-copy">
+                    Never send passwords, API keys, or tokens in a message.
                   </p>
                 </div>
-              )}
 
-              {feedback.type === 'fallback' && (
-                <div
-                  role="status"
-                  aria-live="polite"
-                  className="flex flex-col justify-between gap-4 rounded-xl bg-surface-card-elevated p-6 sm:flex-row sm:items-center"
-                >
-                  <div className="flex items-start gap-3">
-                    <Mail
-                      className="mt-0.5 size-5 shrink-0 text-[#0d4bfa]"
-                      aria-hidden
-                    />
-                    <p className="text-sm leading-[1.6] text-[#1d1d1f] dark:text-[#D1D1D1]">
-                      {feedback.message}
-                    </p>
-                  </div>
-                  <a
-                    href={feedback.mailtoUrl}
-                    className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl bg-[#0d4bfa] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="inline-flex min-h-11 items-center gap-2.5 rounded-xl bg-[#0d4bfa] px-6 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] disabled:cursor-not-allowed disabled:opacity-60"
                   >
-                    <span>Open pre-filled email</span>
-                    <ArrowUpRight className="size-4" aria-hidden />
-                  </a>
+                    {submitting ? (
+                      <>
+                        <Loader2 className="size-4 animate-spin" aria-hidden />
+                        <span>Sending...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span>Send message</span>
+                        <ArrowRight className="size-4" aria-hidden />
+                      </>
+                    )}
+                  </button>
                 </div>
-              )}
 
-              {feedback.type === 'error' && (
-                <div
-                  role="alert"
-                  className="flex flex-col justify-between gap-4 rounded-3xl bg-black/[0.04] p-5 sm:flex-row sm:items-center dark:bg-white/[0.04]"
-                >
-                  <div className="flex items-start gap-3">
-                    <AlertCircle
-                      className="mt-0.5 size-5 shrink-0 text-amber-500"
+                {feedback.type === 'delivered' && (
+                  <div
+                    role="status"
+                    aria-live="polite"
+                    className="flex items-start gap-3 rounded-xl bg-surface-card-elevated p-5"
+                  >
+                    <CheckCircle2
+                      className="mt-0.5 size-5 shrink-0 text-heading"
                       aria-hidden
                     />
-                    <p className="text-sm leading-[1.6] text-[#1d1d1f] dark:text-[#D1D1D1]">
+                    <p className="text-sm leading-[1.6] text-heading">
                       {feedback.message}
                     </p>
                   </div>
-                  {feedback.mailtoUrl && (
+                )}
+
+                {feedback.type === 'fallback' && (
+                  <div
+                    role="status"
+                    aria-live="polite"
+                    className="flex flex-col justify-between gap-4 rounded-xl bg-surface-card-elevated p-6 sm:flex-row sm:items-center"
+                  >
+                    <div className="flex items-start gap-3">
+                      <Mail
+                        className="mt-0.5 size-5 shrink-0 text-heading"
+                        aria-hidden
+                      />
+                      <p className="text-sm leading-[1.6] text-heading">
+                        {feedback.message}
+                      </p>
+                    </div>
                     <a
                       href={feedback.mailtoUrl}
-                      className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl bg-[#0d4bfa] px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
+                      className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl bg-[#0d4bfa] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
                     >
-                      <span>Send via email client</span>
-                      <ArrowUpRight className="size-3.5" aria-hidden />
+                      <span>Open pre-filled email</span>
+                      <ArrowUpRight className="size-4" aria-hidden />
                     </a>
-                  )}
-                </div>
-              )}
-            </form>
-          </div>
-        </section>
+                  </div>
+                )}
 
-        {/* Who to write to (Tier 1 standard cards + Tier 2 General & Partnerships) */}
-        <section aria-labelledby="who-to-write" className="mt-16 md:mt-24">
-          <div className="mb-8">
-            <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
-              Directory
-            </span>
-            <h2
-              id="who-to-write"
-              className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-[#1d1d1f] sm:text-4xl dark:text-white"
-            >
-              Who to write to
-            </h2>
-          </div>
+                {feedback.type === 'error' && (
+                  <div
+                    role="alert"
+                    className="flex flex-col justify-between gap-4 rounded-3xl bg-surface-card-elevated p-5 sm:flex-row sm:items-center "
+                  >
+                    <div className="flex items-start gap-3">
+                      <AlertCircle
+                        className="mt-0.5 size-5 shrink-0 text-amber-500"
+                        aria-hidden
+                      />
+                      <p className="text-sm leading-[1.6] text-heading">
+                        {feedback.message}
+                      </p>
+                    </div>
+                    {feedback.mailtoUrl && (
+                      <a
+                        href={feedback.mailtoUrl}
+                        className="inline-flex min-h-11 shrink-0 items-center gap-2 rounded-xl bg-[#0d4bfa] px-5 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
+                      >
+                        <span>Send via email client</span>
+                        <ArrowUpRight className="size-3.5" aria-hidden />
+                      </a>
+                    )}
+                  </div>
+                )}
+              </form>
+            </div>
+          </section>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {CHANNELS.map((item) => {
-              const Icon = item.icon;
-              const cardClasses =
-                'surface-card group relative flex flex-col justify-between rounded-3xl p-6 transition-colors duration-200 hover:bg-surface-card-elevated focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:p-7';
+          {/* Who to write to (Tier 1 standard cards + Tier 2 General & Partnerships) */}
+          <section aria-labelledby="who-to-write" className="mt-16 md:mt-24">
+            <div className="mb-8">
+              <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
+                Directory
+              </span>
+              <h2
+                id="who-to-write"
+                className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-heading sm:text-4xl"
+              >
+                Who to write to
+              </h2>
+            </div>
 
-              if (item.secondaryHref) {
-                return (
-                  <article key={item.topic} className={cardClasses}>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {CHANNELS.map((item) => {
+                const Icon = item.icon;
+                const cardClasses =
+                  'surface-card group relative flex flex-col justify-between rounded-3xl p-6 transition-colors duration-200 hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:p-7';
+
+                if (item.secondaryHref) {
+                  return (
+                    <article key={item.topic} className={cardClasses}>
+                      <div className="relative z-10">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="flex size-10 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-heading dark:bg-[#0d4bfa]/15 dark:text-[#6b93ff]">
+                            <Icon className="size-5" aria-hidden />
+                          </span>
+                          <ArrowUpRight
+                            className="size-4 text-secondary-copy transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-heading dark:text-supporting-copy"
+                            aria-hidden
+                          />
+                        </div>
+
+                        <h3 className="mt-6 text-lg font-semibold tracking-[-0.02em] text-heading">
+                          {item.topic}
+                        </h3>
+                        <p className="mt-2 text-[15px] leading-[1.6] text-supporting-copy dark:text-supporting-copy">
+                          {item.description}
+                        </p>
+                      </div>
+
+                      <div className="relative z-10 mt-6 flex flex-wrap items-center gap-3 text-sm font-medium">
+                        <Link
+                          href={item.href}
+                          className="rounded-xl text-heading underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
+                        >
+                          {item.label}
+                        </Link>
+                        <span className="text-secondary-copy dark:text-supporting-copy">
+                          ·
+                        </span>
+                        <Link
+                          href={item.secondaryHref}
+                          className="rounded-xl text-heading underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
+                        >
+                          {item.secondaryLabel}
+                        </Link>
+                      </div>
+                    </article>
+                  );
+                }
+
+                const content = (
+                  <>
                     <div className="relative z-10">
                       <div className="flex items-center justify-between gap-3">
-                        <span className="flex size-10 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-[#0d4bfa]/15 dark:text-[#6b93ff]">
+                        <span className="flex size-10 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-heading dark:bg-[#0d4bfa]/15 dark:text-[#6b93ff]">
                           <Icon className="size-5" aria-hidden />
                         </span>
                         <ArrowUpRight
-                          className="size-4 text-neutral-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#0d4bfa] dark:text-supporting-copy"
+                          className="size-4 text-secondary-copy transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-heading dark:text-supporting-copy"
                           aria-hidden
                         />
                       </div>
 
-                      <h3 className="mt-6 text-lg font-semibold tracking-[-0.02em] text-[#1d1d1f] dark:text-white">
+                      <h3 className="mt-6 text-lg font-semibold tracking-[-0.02em] text-heading">
                         {item.topic}
                       </h3>
-                      <p className="mt-2 text-[15px] leading-[1.6] text-neutral-600 dark:text-supporting-copy">
+                      <p className="mt-2 text-[15px] leading-[1.6] text-supporting-copy dark:text-supporting-copy">
                         {item.description}
                       </p>
                     </div>
 
-                    <div className="relative z-10 mt-6 flex flex-wrap items-center gap-3 text-sm font-medium">
-                      <Link
-                        href={item.href}
-                        className="rounded-xl text-[#0d4bfa] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-[#D1D1D1]"
-                      >
-                        {item.label}
-                      </Link>
-                      <span className="text-neutral-400 dark:text-supporting-copy">
-                        ·
-                      </span>
-                      <Link
-                        href={item.secondaryHref}
-                        className="rounded-xl text-[#0d4bfa] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-[#D1D1D1]"
-                      >
-                        {item.secondaryLabel}
-                      </Link>
-                    </div>
-                  </article>
+                    <span className="relative z-10 mt-6 inline-block text-sm font-medium text-heading">
+                      {item.label}
+                    </span>
+                  </>
                 );
-              }
 
-              const content = (
-                <>
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-between gap-3">
-                      <span className="flex size-10 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-[#0d4bfa]/15 dark:text-[#6b93ff]">
-                        <Icon className="size-5" aria-hidden />
-                      </span>
-                      <ArrowUpRight
-                        className="size-4 text-neutral-400 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#0d4bfa] dark:text-supporting-copy"
-                        aria-hidden
-                      />
-                    </div>
+                if (item.href.startsWith('mailto:') || item.external) {
+                  return (
+                    <a
+                      key={item.topic}
+                      href={item.href}
+                      target={item.external ? '_blank' : undefined}
+                      rel={item.external ? 'noopener noreferrer' : undefined}
+                      className={cardClasses}
+                    >
+                      {content}
+                    </a>
+                  );
+                }
 
-                    <h3 className="mt-6 text-lg font-semibold tracking-[-0.02em] text-[#1d1d1f] dark:text-white">
-                      {item.topic}
-                    </h3>
-                    <p className="mt-2 text-[15px] leading-[1.6] text-neutral-600 dark:text-supporting-copy">
-                      {item.description}
-                    </p>
-                  </div>
-
-                  <span className="relative z-10 mt-6 inline-block text-sm font-medium text-[#0d4bfa] dark:text-[#D1D1D1]">
-                    {item.label}
-                  </span>
-                </>
-              );
-
-              if (item.href.startsWith('mailto:') || item.external) {
                 return (
-                  <a
-                    key={item.topic}
-                    href={item.href}
-                    target={item.external ? '_blank' : undefined}
-                    rel={item.external ? 'noopener noreferrer' : undefined}
-                    className={cardClasses}
-                  >
+                  <Link key={item.topic} href={item.href} className={cardClasses}>
                     {content}
-                  </a>
+                  </Link>
                 );
-              }
+              })}
+            </div>
+          </section>
 
-              return (
-                <Link key={item.topic} href={item.href} className={cardClasses}>
-                  {content}
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Before you write (Tier 1 Cards + Tier 3 Nested Badges) */}
-        <section aria-labelledby="before-you-write" className="mt-16 md:mt-24">
-          <div className="mb-8">
-            <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
-              Guidelines
-            </span>
-            <h2
-              id="before-you-write"
-              className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-[#1d1d1f] sm:text-4xl dark:text-white"
-            >
-              Before you write
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {BEFORE_YOU_WRITE.map((item) => (
-              <article
-                key={item.step}
-                className="rounded-3xl border border-black/[0.08] bg-white p-7 dark:border-white/10 dark:bg-[#0a0a0a]"
+          {/* Before you write (Tier 1 Cards + Tier 3 Nested Badges) */}
+          <section aria-labelledby="before-you-write" className="mt-16 md:mt-24">
+            <div className="mb-8">
+              <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
+                Guidelines
+              </span>
+              <h2
+                id="before-you-write"
+                className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-heading sm:text-4xl"
               >
-                <span className="inline-flex rounded-xl bg-[#0d4bfa]/10 px-3 py-1 font-mono text-xs font-medium text-[#0d4bfa] dark:bg-[#121214] dark:text-[#6b93ff]">
-                  {item.step}
+                Before you write
+              </h2>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              {BEFORE_YOU_WRITE.map((item) => (
+                <article
+                  key={item.step}
+                  className="rounded-3xl border border-transparent bg-surface-card p-7"
+                >
+                  <span className="inline-flex rounded-xl bg-[#0d4bfa]/10 px-3 py-1 font-mono text-xs font-medium text-heading dark:text-[#6b93ff]">
+                    {item.step}
+                  </span>
+                  <h3 className="mt-5 text-xl font-semibold tracking-[-0.02em] text-heading">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2.5 text-[15px] leading-[1.6] text-supporting-copy">
+                    {item.body}
+                  </p>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          {/* Security Reports (Tier 1) & Voice Talent (Tier 2) */}
+          <section className="mt-16 grid grid-cols-1 gap-5 md:mt-24 md:grid-cols-2">
+            <article className="flex flex-col justify-between rounded-4xl border border-transparent bg-surface-card p-8 md:p-10">
+              <div>
+                <span className="inline-flex items-center gap-2 rounded-xl bg-[#0d4bfa]/10 px-3 py-1.5 text-xs font-medium tracking-[0.1em] text-heading uppercase dark:text-[#6b93ff]">
+                  <ShieldAlert className="size-3.5" aria-hidden />
+                  Responsible Disclosure
                 </span>
-                <h3 className="mt-5 text-xl font-semibold tracking-[-0.02em] text-[#1d1d1f] dark:text-white">
-                  {item.title}
-                </h3>
-                <p className="mt-2.5 text-[15px] leading-[1.6] text-neutral-600 dark:text-[#D1D1D1]">
-                  {item.body}
+                <h2 className="mt-5 text-2xl font-semibold tracking-[-0.025em] text-heading sm:text-3xl">
+                  Security reports
+                </h2>
+                <p className="mt-4 text-[15px] leading-[1.65] text-supporting-copy sm:text-base">
+                  If you found a vulnerability, write to us with the subject{' '}
+                  <strong className="font-semibold text-heading">
+                    &ldquo;Security&rdquo;
+                  </strong>{' '}
+                  and give us a chance to fix it before you share details
+                  publicly. Please include what you found, how to reproduce it,
+                  and what you think the impact is.
                 </p>
-              </article>
-            ))}
-          </div>
-        </section>
+              </div>
 
-        {/* Security Reports (Tier 1) & Voice Talent (Tier 2) */}
-        <section className="mt-16 grid grid-cols-1 gap-5 md:mt-24 md:grid-cols-2">
-          <article className="flex flex-col justify-between rounded-4xl border border-black/[0.08] bg-white p-8 md:p-10 dark:border-white/10 dark:bg-[#0a0a0a]">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-xl bg-[#0d4bfa]/10 px-3 py-1.5 text-xs font-medium tracking-[0.1em] text-[#0d4bfa] uppercase dark:bg-[#121214] dark:text-[#6b93ff]">
-                <ShieldAlert className="size-3.5" aria-hidden />
-                Responsible Disclosure
-              </span>
-              <h2 className="mt-5 text-2xl font-semibold tracking-[-0.025em] text-[#1d1d1f] sm:text-3xl dark:text-white">
-                Security reports
-              </h2>
-              <p className="mt-4 text-[15px] leading-[1.65] text-neutral-600 sm:text-base dark:text-[#D1D1D1]">
-                If you found a vulnerability, write to us with the subject{' '}
-                <strong className="font-semibold text-[#1d1d1f] dark:text-white">
-                  &ldquo;Security&rdquo;
-                </strong>{' '}
-                and give us a chance to fix it before you share details
-                publicly. Please include what you found, how to reproduce it,
-                and what you think the impact is.
-              </p>
-            </div>
+              <div className="mt-8">
+                <a
+                  href="mailto:contact@miransas.com?subject=Security"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#0d4bfa] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
+                >
+                  <span>Report a vulnerability</span>
+                  <ArrowUpRight className="size-4" aria-hidden />
+                </a>
+              </div>
+            </article>
 
-            <div className="mt-8">
-              <a
-                href="mailto:contact@miransas.com?subject=Security"
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#0d4bfa] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
-              >
-                <span>Report a vulnerability</span>
-                <ArrowUpRight className="size-4" aria-hidden />
-              </a>
-            </div>
-          </article>
+            <article className="relative flex flex-col justify-between overflow-hidden rounded-4xl border border-transparent bg-surface-card p-8 md:p-10">
+              <div className="relative z-10">
+                <span className="inline-flex items-center gap-2 rounded-xl bg-[#0d4bfa]/12 px-3 py-1.5 text-xs font-medium tracking-[0.1em] text-heading uppercase dark:text-[#89abff]">
+                  <Mic className="size-3.5" aria-hidden />
+                  Miralas · Uzbek Speech
+                </span>
+                <h2 className="mt-5 text-2xl font-semibold tracking-[-0.025em] text-heading sm:text-3xl">
+                  Voice talent
+                </h2>
+                <p className="mt-4 text-[15px] leading-[1.65] text-supporting-copy sm:text-base">
+                  If you are an Uzbek speaker interested in working on Miralas,
+                  write with the subject{' '}
+                  <strong className="font-semibold text-heading">
+                    &ldquo;Voice&rdquo;
+                  </strong>{' '}
+                  and attach a short sample recorded in a quiet room. More details
+                  are on the{' '}
+                  <Link
+                    href="/careers"
+                    className="rounded-xl font-medium text-heading underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-[#89abff]"
+                  >
+                    Careers
+                  </Link>{' '}
+                  page.
+                </p>
+              </div>
 
-          <article className="relative flex flex-col justify-between overflow-hidden rounded-4xl border border-black/[0.08] bg-white p-8 md:p-10 dark:border-white/10 dark:bg-[#0a0a0a]">
-            <div className="relative z-10">
-              <span className="inline-flex items-center gap-2 rounded-xl bg-[#0d4bfa]/12 px-3 py-1.5 text-xs font-medium tracking-[0.1em] text-[#0d4bfa] uppercase dark:bg-[#121214] dark:text-[#89abff]">
-                <Mic className="size-3.5" aria-hidden />
-                Miralas · Uzbek Speech
-              </span>
-              <h2 className="mt-5 text-2xl font-semibold tracking-[-0.025em] text-[#1d1d1f] sm:text-3xl dark:text-white">
-                Voice talent
-              </h2>
-              <p className="mt-4 text-[15px] leading-[1.65] text-neutral-600 sm:text-base dark:text-[#D1D1D1]">
-                If you are an Uzbek speaker interested in working on Miralas,
-                write with the subject{' '}
-                <strong className="font-semibold text-[#1d1d1f] dark:text-white">
-                  &ldquo;Voice&rdquo;
-                </strong>{' '}
-                and attach a short sample recorded in a quiet room. More details
-                are on the{' '}
+              <div className="relative z-10 mt-8 flex flex-wrap items-center gap-3">
+                <a
+                  href="mailto:contact@miransas.com?subject=Voice"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#1d1d1f] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-white dark:text-[#050505]"
+                >
+                  <span>Send voice sample</span>
+                  <ArrowUpRight className="size-4" aria-hidden />
+                </a>
                 <Link
                   href="/careers"
-                  className="rounded-xl font-medium text-[#0d4bfa] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-[#89abff]"
+                  className="inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-surface-card-elevated px-5 py-2.5 text-sm font-medium text-heading transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] "
                 >
-                  Careers
-                </Link>{' '}
-                page.
-              </p>
-            </div>
+                  <span>View Careers</span>
+                  <ArrowUpRight className="size-4" aria-hidden />
+                </Link>
+              </div>
+            </article>
+          </section>
 
-            <div className="relative z-10 mt-8 flex flex-wrap items-center gap-3">
-              <a
-                href="mailto:contact@miransas.com?subject=Voice"
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#1d1d1f] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-white dark:text-[#050505]"
-              >
-                <span>Send voice sample</span>
-                <ArrowUpRight className="size-4" aria-hidden />
-              </a>
-              <Link
-                href="/careers"
-                className="inline-flex min-h-11 items-center gap-1.5 rounded-xl bg-black/[0.04] px-5 py-2.5 text-sm font-medium text-[#1d1d1f] transition-colors hover:bg-black/[0.08] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-[#121214] dark:text-[#D1D1D1] dark:hover:bg-white/[0.1]"
-              >
-                <span>View Careers</span>
-                <ArrowUpRight className="size-4" aria-hidden />
-              </Link>
+          {/* What to expect (Subtle Tier 1 Strip + Tier 3 Inner Badge) */}
+          <section aria-labelledby="what-to-expect" className="mt-12 md:mt-16">
+            <div className="flex flex-col gap-4 rounded-3xl border border-transparent bg-surface-card p-7 sm:flex-row sm:items-start sm:gap-5 md:p-8">
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-heading dark:text-[#6b93ff]">
+                <Info className="size-5" aria-hidden />
+              </span>
+              <div>
+                <h2
+                  id="what-to-expect"
+                  className="text-lg font-semibold tracking-[-0.015em] text-heading"
+                >
+                  What to expect
+                </h2>
+                <p className="mt-1.5 text-[15px] leading-[1.6] text-supporting-copy">
+                  We read every message, but we cannot promise a reply to each
+                  one. Product and security messages come first.
+                </p>
+              </div>
             </div>
-          </article>
-        </section>
-
-        {/* What to expect (Subtle Tier 1 Strip + Tier 3 Inner Badge) */}
-        <section aria-labelledby="what-to-expect" className="mt-12 md:mt-16">
-          <div className="flex flex-col gap-4 rounded-3xl border border-black/[0.08] bg-white p-7 sm:flex-row sm:items-start sm:gap-5 md:p-8 dark:border-white/10 dark:bg-[#0a0a0a]">
-            <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-[#121214] dark:text-[#6b93ff]">
-              <Info className="size-5" aria-hidden />
-            </span>
-            <div>
-              <h2
-                id="what-to-expect"
-                className="text-lg font-semibold tracking-[-0.015em] text-[#1d1d1f] dark:text-white"
-              >
-                What to expect
-              </h2>
-              <p className="mt-1.5 text-[15px] leading-[1.6] text-neutral-600 dark:text-[#D1D1D1]">
-                We read every message, but we cannot promise a reply to each
-                one. Product and security messages come first.
-              </p>
-            </div>
-          </div>
-        </section>
+          </section>
+      </ContentTheme>
       </div>
     </div>
   );

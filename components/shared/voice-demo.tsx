@@ -136,7 +136,7 @@ export default function LiveVoiceStream() {
   const contentKey = thinkingText.length + speechText.length + (isStreamComplete ? 1 : 0);
 
   return (
-    <div className="text-foreground flex h-full min-h-[400px] w-full max-w-xl flex-col rounded-3xl bg-black/[0.04] p-5 font-sans dark:bg-white/[0.04]">
+    <div className="text-foreground flex h-full min-h-[400px] w-full max-w-xl flex-col rounded-3xl bg-surface-card-elevated p-5 font-sans">
       <audio
         ref={audioRef}
         src={AUDIO_SRC}
@@ -160,7 +160,7 @@ export default function LiveVoiceStream() {
 
       <AIConversation className="flex-1" contentKey={contentKey}>
         <div className="space-y-4 pr-1">
-          <div className="surface-card-elevated overflow-hidden rounded-xl transition-all duration-300">
+          <div className="surface-card-elevated overflow-hidden rounded-xl transition-colors duration-300">
             <button
               aria-expanded={isThoughtOpen}
               aria-label="Toggle demonstration steps"
@@ -263,7 +263,7 @@ export default function LiveVoiceStream() {
                       })}
 
                       <div
-                        className="pointer-events-none absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center transition-all duration-75"
+                        className="pointer-events-none absolute top-1/2 flex -translate-x-1/2 -translate-y-1/2 flex-col items-center transition-colors duration-75"
                         style={{ left: `${progressPercent}%` }}
                       >
                         <div className="h-6 w-[2px] bg-[#3847ff]" />

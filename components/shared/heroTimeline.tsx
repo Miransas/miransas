@@ -49,7 +49,7 @@ export default function Timeline() {
 
   useMotionValueEvent(scrollYProgress, 'change', (progress) => {
     const next = Math.min(timelineData.length - 1, Math.floor(progress * timelineData.length));
-    setActive((current) => (current === next ? current : next));
+    if (next !== active) setActive(next);
   });
 
   return (
@@ -87,7 +87,7 @@ export default function Timeline() {
                 animate={isActive ? 'active' : 'inactive'}
                 data-active={isActive}
                 aria-current={isActive ? 'step' : undefined}
-                className={`relative grid grid-cols-[2rem_minmax(0,1fr)] gap-5 rounded-3xl border border-black/[0.08] p-6 dark:border-white/10 sm:p-8 md:grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] md:gap-8 ${isActive ? 'bg-surface-card-elevated' : 'bg-surface-card'}`}
+                className={`relative grid grid-cols-[2rem_minmax(0,1fr)] gap-5 rounded-3xl border border-transparent p-6  sm:p-8 md:grid-cols-[minmax(0,1fr)_2rem_minmax(0,1fr)] md:gap-8 ${isActive ? 'bg-surface-card-elevated' : 'bg-surface-card'}`}
               >
                 <div className={`relative z-10 col-start-2 row-start-1 min-w-0 ${isEven ? 'md:col-start-3' : 'md:col-start-1 md:text-right'}`}>
                   <span className="text-prominent mb-3 block font-mono tabular-nums text-xs leading-[1.45] sm:text-[13px]">
@@ -102,14 +102,14 @@ export default function Timeline() {
                 </div>
                 <div aria-hidden className="relative z-10 col-start-1 row-start-1 flex justify-center md:col-start-2">
                   <motion.span
-                    variants={{ inactive: { scale: 0.8 }, active: { scale: 1.05 } }}
+                    variants={{ inactive: { opacity: 0.6 }, active: { opacity: 1 } }}
                     className={`mt-1 size-3.5 rounded-xl transition-colors ${
                       isActive ? 'bg-[#0d4bfa]' : 'bg-black/[0.08] dark:bg-white/[0.12]'
                     }`}
                   />
                 </div>
                 <div aria-hidden className={`relative z-10 hidden items-center md:flex ${isEven ? 'md:col-start-1 md:row-start-1 md:justify-end' : 'md:col-start-3'}`}>
-                  <div className="flex size-14 items-center justify-center rounded-xl bg-[#F7F8FC] text-[#0d4bfa] dark:bg-[#121214]">
+                  <div className="flex size-14 items-center justify-center rounded-xl bg-surface-card-elevated text-[#0d4bfa]">
                     <Icon size={24} strokeWidth={1.6} />
                   </div>
                 </div>

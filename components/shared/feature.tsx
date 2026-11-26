@@ -1,5 +1,6 @@
 'use client';
 
+import { UI_DURATION, UI_EASE } from '@/lib/ui-motion';
 import { Reveal } from './reval';
 
 import { motion, useReducedMotion } from 'framer-motion';
@@ -64,7 +65,7 @@ export function Features() {
               className={`min-h-11 rounded-xl px-4 py-2 text-sm font-medium transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] ${
                 active === tab.id
                   ? 'bg-[#0d4bfa] text-white'
-                  : 'text-prominent border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
+                  : 'text-prominent border border-transparent bg-surface-card hover:bg-surface-hover'
               }`}
             >
               {tab.label}
@@ -76,7 +77,7 @@ export function Features() {
           key={current.id}
           initial={reduce ? false : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: reduce ? 0 : 0.3 }}
+          transition={{ duration: reduce ? 0 : UI_DURATION.overlay, ease: UI_EASE }}
           className="surface-card mt-8 overflow-hidden rounded-4xl"
         >
           <div className="grid md:grid-cols-[1.1fr_0.9fr]">

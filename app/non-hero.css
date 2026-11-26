@@ -1,0 +1,107 @@
+@theme inline {
+  --color-surface-hover: var(--surface-hover);
+}
+
+/* Opt-in boundaries keep the root palette, hero, and hero dependencies unchanged. */
+.content-theme {
+  --surface-page: #EFEFEF;
+  --surface-card: #F7F7F7;
+  --surface-card-elevated: #FCFCFC;
+  --surface-hover: #E5E5E5;
+  --text-heading: #141414;
+  --text-prominent: #555553;
+  --text-secondary: #68686C;
+  --text-supporting: var(--text-prominent);
+  --text-secondary-hover: #66666A;
+  --background: var(--surface-page);
+  --foreground: var(--text-heading);
+  --card: var(--surface-card);
+  --card-foreground: var(--text-heading);
+  --elevated: var(--surface-card-elevated);
+  --popover: var(--surface-card);
+  --popover-foreground: var(--text-heading);
+  --primary: var(--text-heading);
+  --primary-foreground: var(--surface-page);
+  --secondary: var(--surface-card-elevated);
+  --secondary-foreground: var(--text-heading);
+  --muted: var(--surface-card-elevated);
+  --muted-foreground: var(--text-secondary);
+  --control-border: color-mix(in srgb, var(--text-secondary) 80%, var(--surface-card));
+  --surface-card-featured: var(--surface-card);
+  --surface-blue-gradient: none;
+  --surface-border-tier1: transparent;
+  --surface-border-tier1-hover: transparent;
+  --surface-border-tier2: transparent;
+  color: var(--text-heading);
+}
+
+.dark .content-theme,
+.content-theme.dark-visual,
+.content-theme .dark-visual {
+  --surface-page: #050505;
+  --surface-card: #101010;
+  --surface-card-elevated: #181818;
+  --surface-hover: #222222;
+  --text-heading: #EFEFEF;
+  --text-prominent: #B5B5B2;
+  --text-secondary: #919195;
+  --text-supporting: var(--text-prominent);
+  --text-secondary-hover: #919195;
+}
+
+.content-theme :is(.surface-card, .surface-card-elevated, .text-heading, .text-prominent, .text-secondary-copy, .text-supporting-copy) {
+  transition-property: background-color, color, border-color;
+  transition-duration: var(--ui-theme-duration);
+  transition-timing-function: var(--ui-ease);
+}
+
+.content-theme :is(a, button, input, textarea, select, summary, [data-ui-hover]) {
+  transition-duration: var(--ui-interactive-duration);
+  transition-timing-function: var(--ui-ease);
+}
+
+.content-theme :where(input:not([type='radio']):not([type='checkbox']):not([type='range']), textarea, select) {
+  background-color: var(--surface-page);
+  border-color: var(--control-border);
+}
+
+.content-theme :is(input, textarea, select):focus-visible {
+  border-color: #0d4bfa;
+}
+
+/* Light secondary text needs a small contrast adjustment on the darker hover tone. */
+.content-theme :is(a, button, [data-ui-hover]):hover .text-secondary-copy,
+.content-theme :is(a, button, [data-ui-hover]).text-secondary-copy:hover {
+  color: var(--text-secondary-hover);
+}
+
+.content-theme [data-ui-panel] {
+  transition-duration: var(--ui-panel-duration);
+  transition-timing-function: var(--ui-ease);
+}
+
+.content-theme .surface-card-interactive:hover,
+.content-theme .hover-surface-blue-gradient:hover {
+  background-color: var(--surface-hover);
+}
+
+.content-theme .dark-visual {
+  --background: var(--surface-page);
+  --foreground: var(--text-heading);
+  --card: var(--surface-card);
+  --card-foreground: var(--text-heading);
+  --elevated: var(--surface-card-elevated);
+  --muted-foreground: var(--text-secondary);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content-theme *, .content-theme *::before, .content-theme *::after {
+    transition-duration: 0.01ms;
+  }
+}
+
+/* Mermaid uses HTML labels inside SVG; inherit the scoped diagram foreground. */
+.content-theme [data-mermaid] .nodeLabel p,
+.content-theme [data-mermaid] .edgeLabel p {
+  color: var(--text-heading);
+}

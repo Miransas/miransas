@@ -1,5 +1,8 @@
 'use client';
 
+import { UI_DURATION, UI_EASE } from '@/lib/ui-motion';
+import { ContentTheme } from '@/components/shared/content-theme';
+
 import {
   BrainCircuit,
   Cpu,
@@ -153,183 +156,186 @@ export function AboutContent() {
           </motion.div>
         </div>
       </section>
+      <ContentTheme>
 
-      <section className="relative z-10">
-        <div className="mx-auto grid max-w-7xl gap-14 px-6 py-24 md:grid-cols-[0.7fr_1.3fr] md:items-start lg:px-8 lg:py-32">
-          <motion.div
-            initial={reduce ? false : { opacity: 0, x: -12 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-          >
-            <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
-              The idea
-            </span>
+        <section className="relative z-10">
+          <div className="mx-auto grid max-w-7xl gap-14 px-6 py-24 md:grid-cols-[0.7fr_1.3fr] md:items-start lg:px-8 lg:py-32">
+            <motion.div
+              initial={reduce ? false : { opacity: 0, x: -10 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: reduce ? 0 : UI_DURATION.heading, ease: UI_EASE }}
+            >
+              <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
+                The idea
+              </span>
 
-            <h2 className="text-heading mt-4 max-w-sm text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]">
-              AI should become useful before it becomes impressive.
-            </h2>
-          </motion.div>
+              <h2 className="text-heading mt-4 max-w-sm text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]">
+                AI should become useful before it becomes impressive.
+              </h2>
+            </motion.div>
 
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.25 }}
-            transition={{ delay: 0.08 }}
-            className="max-w-2xl space-y-5 text-[15px] leading-[1.6] sm:text-base"
-          >
-            <p className="text-prominent">
-              Miransas explores voice, language, automation, and agent-based software with one simple goal: build systems people can actually use.
-            </p>
-            <p className="text-supporting-copy">
-              We care about the experience around the model as much as the model itself. A powerful system should still feel clear, fast, approachable, and intentional.
-            </p>
-            <p className="text-supporting-copy">
-              Our work moves between research and product — from voice models and multilingual speech to the interfaces that turn those capabilities into useful experiences.
-            </p>
-          </motion.div>
-        </div>
-      </section>
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.25 }}
+              transition={{ duration: reduce ? 0 : UI_DURATION.paragraph, delay: reduce ? 0 : UI_DURATION.stagger, ease: UI_EASE }}
+              className="max-w-2xl space-y-5 text-[15px] leading-[1.6] sm:text-base"
+            >
+              <p className="text-prominent">
+                Miransas explores voice, language, automation, and agent-based software with one simple goal: build systems people can actually use.
+              </p>
+              <p className="text-supporting-copy">
+                We care about the experience around the model as much as the model itself. A powerful system should still feel clear, fast, approachable, and intentional.
+              </p>
+              <p className="text-supporting-copy">
+                Our work moves between research and product — from voice models and multilingual speech to the interfaces that turn those capabilities into useful experiences.
+              </p>
+            </motion.div>
+          </div>
+        </section>
 
-      <section className="relative z-10">
-        <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-20">
-          <div className="grid gap-5 md:grid-cols-2">
-            {ABOUT_BLOCKS.map((block, index) => {
-              const Icon = block.icon;
+        <section className="relative z-10">
+          <div className="mx-auto max-w-7xl px-6 py-12 lg:px-8 lg:py-20">
+            <div className="grid gap-5 md:grid-cols-2">
+              {ABOUT_BLOCKS.map((block, index) => {
+                const Icon = block.icon;
+
+                return (
+                  <motion.article
+                    key={block.number}
+                    initial={reduce ? false : { opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-60px' }}
+                    transition={{ duration: reduce ? 0 : UI_DURATION.section, delay: reduce ? 0 : index * UI_DURATION.stagger, ease: UI_EASE }}
+                    className="surface-card relative min-h-[320px] overflow-hidden rounded-3xl p-6 sm:p-8"
+                  >
+                    <div className="relative flex items-center justify-between">
+                      <div className="surface-card-elevated flex size-11 items-center justify-center rounded-xl text-[#3847ff]">
+                        <Icon className="size-5" />
+                      </div>
+                      <span className="text-prominent font-mono text-xs leading-[1.45] sm:text-[13px]">
+                        {block.number} / 04
+                      </span>
+                    </div>
+
+                    <div className="relative mt-12">
+                      <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
+                        {block.eyebrow}
+                      </span>
+                      <h3 className="text-heading mt-3 max-w-md text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
+                        {block.title}
+                      </h3>
+                      <div className="mt-5 h-0.5 w-8 rounded-xl bg-surface-card-elevated" />
+                      <p className="text-supporting-copy mt-4 max-w-lg text-[15px] leading-[1.6] sm:text-base">
+                        {block.description}
+                      </p>
+                    </div>
+                  </motion.article>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        <section className="relative z-10 py-8">
+          <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
+            {[
+              {
+                icon: Sparkles,
+                label: 'Curious',
+                text: 'We explore what is possible.',
+              },
+              {
+                icon: Target,
+                label: 'Intentional',
+                text: 'We build with a reason.',
+              },
+              {
+                icon: Waypoints,
+                label: 'Practical',
+                text: 'Useful beats impressive.',
+              },
+              {
+                icon: Globe2,
+                label: 'Open',
+                text: 'Built for a global audience.',
+              },
+            ].map((item, index) => {
+              const Icon = item.icon;
 
               return (
-                <motion.article
-                  key={block.number}
-                  initial={reduce ? false : { opacity: 0, y: 12 }}
+                <motion.div
+                  key={item.label}
+                  initial={reduce ? false : { opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 0.6, delay: index * 0.07 }}
-                  className="surface-card relative min-h-[320px] overflow-hidden rounded-3xl p-6 sm:p-8"
+                  viewport={{ once: true }}
+                  transition={{ duration: reduce ? 0 : UI_DURATION.section, delay: reduce ? 0 : index * UI_DURATION.stagger, ease: UI_EASE }}
+                  className="surface-card rounded-3xl p-6"
                 >
-                  <div className="relative flex items-center justify-between">
-                    <div className="surface-card-elevated flex size-11 items-center justify-center rounded-xl text-[#3847ff]">
-                      <Icon className="size-5" />
-                    </div>
-                    <span className="text-prominent font-mono text-xs leading-[1.45] sm:text-[13px]">
-                      {block.number} / 04
-                    </span>
+                  <div className="surface-card-elevated flex size-10 items-center justify-center rounded-xl text-[#3847ff]">
+                    <Icon className="size-4" />
                   </div>
-
-                  <div className="relative mt-12">
-                    <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
-                      {block.eyebrow}
-                    </span>
-                    <h3 className="text-heading mt-3 max-w-md text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
-                      {block.title}
-                    </h3>
-                    <div className="mt-5 h-0.5 w-8 rounded-xl bg-surface-card-elevated" />
-                    <p className="text-supporting-copy mt-4 max-w-lg text-[15px] leading-[1.6] sm:text-base">
-                      {block.description}
-                    </p>
-                  </div>
-                </motion.article>
+                  <h3 className="text-heading mt-5 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
+                    {item.label}
+                  </h3>
+                  <p className="text-supporting-copy mt-2 text-[15px] leading-[1.6] sm:text-base">
+                    {item.text}
+                  </p>
+                </motion.div>
               );
             })}
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section className="relative z-10 py-8">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-5 px-6 sm:grid-cols-2 lg:grid-cols-4 lg:px-8">
-          {[
-            {
-              icon: Sparkles,
-              label: 'Curious',
-              text: 'We explore what is possible.',
-            },
-            {
-              icon: Target,
-              label: 'Intentional',
-              text: 'We build with a reason.',
-            },
-            {
-              icon: Waypoints,
-              label: 'Practical',
-              text: 'Useful beats impressive.',
-            },
-            {
-              icon: Globe2,
-              label: 'Open',
-              text: 'Built for a global audience.',
-            },
-          ].map((item, index) => {
-            const Icon = item.icon;
+        <section className="relative z-10 overflow-hidden px-6 py-24">
+          <div className="surface-card mx-auto max-w-5xl rounded-4xl px-6 py-16 text-center md:py-24">
+            <motion.div
+              initial={reduce ? false : { opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: reduce ? 0 : UI_DURATION.section, ease: UI_EASE }}
+            >
+              <div className="surface-card-elevated mx-auto flex size-12 items-center justify-center rounded-xl text-[#3847ff]">
+                <Cpu className="size-5" />
+              </div>
 
-            return (
-              <motion.div
-                key={item.label}
-                initial={reduce ? false : { opacity: 0, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.06 }}
-                className="surface-card rounded-3xl p-6"
-              >
-                <div className="surface-card-elevated flex size-10 items-center justify-center rounded-xl text-[#3847ff]">
-                  <Icon className="size-4" />
-                </div>
-                <h3 className="text-heading mt-5 text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]">
-                  {item.label}
-                </h3>
-                <p className="text-supporting-copy mt-2 text-[15px] leading-[1.6] sm:text-base">
-                  {item.text}
-                </p>
-              </motion.div>
-            );
-          })}
-        </div>
-      </section>
+              <span className="text-prominent mt-6 block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
+                The next chapter
+              </span>
 
-      <section className="relative z-10 overflow-hidden px-6 py-24">
-        <div className="surface-card mx-auto max-w-5xl rounded-4xl px-6 py-16 text-center md:py-24">
-          <motion.div
-            initial={reduce ? false : { opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="surface-card-elevated mx-auto flex size-12 items-center justify-center rounded-xl text-[#3847ff]">
-              <Cpu className="size-5" />
-            </div>
+              <h2 className="text-heading mx-auto mt-4 max-w-3xl text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]">
+                We&#39;re still early.
+                <br />
+                That&#39;s the interesting part.
+              </h2>
 
-            <span className="text-prominent mt-6 block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
-              The next chapter
-            </span>
+              <p className="text-supporting-copy mx-auto mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
+                More voices, more languages, smarter agents, and more useful ways to interact with software are already on the way.
+              </p>
 
-            <h2 className="text-heading mx-auto mt-4 max-w-3xl text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]">
-              We&#39;re still early.
-              <br />
-              That&#39;s the interesting part.
-            </h2>
-
-            <p className="text-supporting-copy mx-auto mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]">
-              More voices, more languages, smarter agents, and more useful ways to interact with software are already on the way.
-            </p>
-
-            <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link
-                href="/projects"
-                className="inline-flex min-h-11 items-center rounded-xl bg-[#3847ff] px-5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
-              >
-                Explore our projects
-              </Link>
-              <Link
-                href="/contact"
-                className="surface-card hover:bg-surface-card-elevated text-prominent inline-flex min-h-11 items-center rounded-xl px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
-              >
-                Get in touch
-              </Link>
-            </div>
-            <div className="surface-card text-prominent mt-8 inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
-              <span className="size-1.5 rounded-xl bg-[#3847ff]" />
-              <span>Building in public</span>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+              <div className="mt-8 flex flex-wrap justify-center gap-3">
+                <Link
+                  href="/projects"
+                  className="inline-flex min-h-11 items-center rounded-xl bg-[#3847ff] px-5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                >
+                  Explore our projects
+                </Link>
+                <Link
+                  href="/contact"
+                  className="surface-card hover:bg-surface-hover text-prominent inline-flex min-h-11 items-center rounded-xl px-5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                >
+                  Get in touch
+                </Link>
+              </div>
+              <div className="surface-card text-prominent mt-8 inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
+                <span className="size-1.5 rounded-xl bg-[#3847ff]" />
+                <span>Building in public</span>
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      </ContentTheme>
     </div>
   );
 }

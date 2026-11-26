@@ -341,22 +341,22 @@ export function ModelPipelineDiagram({ modelId }: { modelId: ModelTabId }) {
   const config = PIPELINES[modelId];
 
   return (
-    <div className="rounded-3xl bg-[#F7F8FC] p-6 sm:p-8 dark:bg-[#121214]">
+    <div className="rounded-3xl bg-surface-card-elevated p-6 sm:p-8 ">
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div className="min-w-0">
           <span className="inline-flex items-center gap-2 font-mono text-xs tracking-[0.12em] text-[#0d4bfa] uppercase dark:text-[#6b93ff]">
             <span aria-hidden="true" className="size-1.5 rounded-xl bg-[#0d4bfa]" />
             Architecture &amp; Execution Flow
           </span>
-          <h3 className="mt-2 text-xl font-semibold tracking-[-0.02em] text-[#1d1d1f] sm:text-2xl dark:text-white">
+          <h3 className="mt-2 text-xl font-semibold tracking-[-0.02em] text-heading sm:text-2xl ">
             {config.heading}
           </h3>
-          <p className="mt-1.5 max-w-2xl text-sm leading-[1.6] text-neutral-600 dark:text-supporting-copy">
+          <p className="mt-1.5 max-w-2xl text-sm leading-[1.6] text-supporting-copy dark:text-supporting-copy">
             {config.subheading}
           </p>
         </div>
 
-        <span className="inline-flex w-fit max-w-full shrink-0 items-center rounded-xl sm:max-w-xs bg-black/[0.04] px-3 py-1.5 font-mono text-xs text-neutral-700 dark:bg-white/[0.05] dark:text-[#D1D1D1]">
+        <span className="inline-flex w-fit max-w-full shrink-0 items-center rounded-xl sm:max-w-xs bg-surface-card-elevated px-3 py-1.5 font-mono text-xs text-prominent dark:bg-surface-card/[0.05] ">
           {config.runtimeLabel}
         </span>
       </div>
@@ -377,32 +377,32 @@ export function ModelPipelineDiagram({ modelId }: { modelId: ModelTabId }) {
                 className={`relative flex w-full flex-col justify-between overflow-hidden rounded-xl p-5 ${
                   node.highlight
                     ? 'bg-[#0d4bfa]/[0.08] dark:bg-[#0d4bfa]/[0.14]'
-                    : 'bg-white dark:bg-[#0a0a0a]'
+                    : 'bg-surface-card '
                 }`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-2">
                     <span className="inline-flex items-center gap-1.5 font-mono text-xs font-medium text-[#0d4bfa] dark:text-[#89abff]">
                       <span>{node.step}</span>
-                      <span className="text-neutral-400 dark:text-supporting-copy">·</span>
+                      <span aria-hidden="true" className="text-secondary-copy">·</span>
                       <span className="tracking-[0.06em] uppercase">{node.stage}</span>
                     </span>
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-white/[0.06] dark:text-[#89abff]">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-surface-card/[0.06] dark:text-[#89abff]">
                       <Icon className="size-4" aria-hidden />
                     </span>
                   </div>
 
-                  <h4 className="mt-3.5 text-base leading-[1.3] font-semibold tracking-[-0.015em] text-[#1d1d1f] dark:text-white">
+                  <h4 className="mt-3.5 text-base leading-[1.3] font-semibold tracking-[-0.015em] text-heading ">
                     {node.title}
                   </h4>
 
-                  <p className="mt-2 text-xs leading-[1.6] text-neutral-600 sm:text-[13px] dark:text-[#D1D1D1]">
+                  <p className="mt-2 text-xs leading-[1.6] text-supporting-copy sm:text-[13px] ">
                     {node.detail}
                   </p>
                 </div>
 
                 <div className="mt-4 pt-2">
-                  <span className="inline-flex rounded-xl bg-[#EFEFEF]/80 px-2.5 py-1 font-mono text-[11px] leading-[1.4] [overflow-wrap:anywhere] text-neutral-700 dark:bg-[#121214] dark:text-[#D1D1D1]">
+                  <span className="inline-flex rounded-xl bg-surface-card-elevated px-2.5 py-1 font-mono text-[11px] leading-[1.4] [overflow-wrap:anywhere] text-prominent  ">
                     {node.spec}
                   </span>
                 </div>
@@ -420,9 +420,9 @@ export function ModelPipelineDiagram({ modelId }: { modelId: ModelTabId }) {
       </ol>
 
       {/* Internal Model Stage Breakdown */}
-      <div className="mt-7 rounded-xl bg-white p-5 dark:bg-[#0a0a0a]">
+      <div className="mt-7 rounded-xl bg-surface-card p-5 ">
         <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
-          <h4 className="text-sm font-semibold tracking-[-0.01em] text-[#1d1d1f] dark:text-white">
+          <h4 className="text-sm font-semibold tracking-[-0.01em] text-heading ">
             {config.internalTitle}
           </h4>
           <p className="text-xs text-secondary-copy dark:text-supporting-copy">
@@ -440,18 +440,18 @@ export function ModelPipelineDiagram({ modelId }: { modelId: ModelTabId }) {
           {config.internalStages.map((stage) => (
             <div
               key={stage.index}
-              className="flex flex-col justify-between rounded-xl bg-[#F7F8FC] p-3.5 dark:bg-[#121214]"
+              className="flex flex-col justify-between rounded-xl bg-surface-card-elevated p-3.5 "
             >
               <div>
                 <div className="flex items-center gap-2">
                   <span className="inline-flex size-5 shrink-0 items-center justify-center rounded-xl bg-[#0d4bfa]/12 font-mono text-[11px] font-semibold text-[#0d4bfa] dark:bg-[#0d4bfa]/20 dark:text-[#89abff]">
                     {stage.index}
                   </span>
-                  <span className="text-xs font-semibold text-[#1d1d1f] dark:text-white">
+                  <span className="text-xs font-semibold text-heading ">
                     {stage.name}
                   </span>
                 </div>
-                <p className="mt-2 text-xs leading-[1.55] text-neutral-600 dark:text-supporting-copy">
+                <p className="mt-2 text-xs leading-[1.55] text-supporting-copy dark:text-supporting-copy">
                   {stage.role}
                 </p>
               </div>

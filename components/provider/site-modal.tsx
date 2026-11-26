@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useSyncExternalStore } from 'react';
-import { motion } from 'framer-motion';
+import { UI_DURATION, UI_EASE, UI_MOTION_STYLE } from '@/lib/ui-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Dialog } from 'radix-ui';
 import { Sparkles, ArrowRight } from 'lucide-react';
 
@@ -12,6 +13,7 @@ const subscribe = (notify: () => void) => {
 const getSnapshot = () => !sessionStorage.getItem('hasSeenNotice');
 
 export default function NoticeModal() {
+  const reduce = useReducedMotion();
   const unseen = useSyncExternalStore(subscribe, getSnapshot, () => false);
   const [dismissed, setDismissed] = useState(false);
   const isOpen = unseen && !dismissed;
@@ -26,10 +28,11 @@ export default function NoticeModal() {
         <Dialog.Overlay className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-md" />
         <Dialog.Content asChild>
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
+            style={UI_MOTION_STYLE}
+            initial={reduce ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
-            className="surface-blue-gradient text-popover-foreground fixed top-1/2 left-1/2 z-[61] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-4xl p-6 text-center shadow-2xl sm:p-8"
+            transition={{ duration: reduce ? 0 : UI_DURATION.overlay, ease: UI_EASE }}
+            className="content-theme surface-card text-popover-foreground fixed top-1/2 left-1/2 z-[61] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 rounded-4xl p-6 max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-y-contain text-center sm:p-8"
           >
             <div className="surface-card-elevated mx-auto mb-5 flex size-12 items-center justify-center rounded-xl text-[#3847ff]">
               <Sparkles aria-hidden size={20} />

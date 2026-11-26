@@ -13,10 +13,20 @@ export function Mermaid({ chart }: { chart: string }) {
     let cancelled = false;
     (async () => {
       try {
+        const dark = resolvedTheme === 'dark';
         const mermaid = (await import('mermaid')).default;
         mermaid.initialize({
           startOnLoad: false,
-          theme: resolvedTheme === 'dark' ? 'dark' : 'neutral',
+          theme: 'base',
+          themeVariables: {
+            primaryColor: dark ? '#181818' : '#FCFCFC',
+            primaryTextColor: dark ? '#EFEFEF' : '#141414',
+            primaryBorderColor: dark ? '#919195' : '#68686C',
+            lineColor: dark ? '#919195' : '#68686C',
+            secondaryColor: dark ? '#101010' : '#F7F7F7',
+            tertiaryColor: dark ? '#101010' : '#F7F7F7',
+            edgeLabelBackground: dark ? '#101010' : '#F7F7F7',
+          },
           fontFamily: 'var(--font-sans-runtime), sans-serif',
           securityLevel: 'strict',
         });
@@ -41,6 +51,7 @@ export function Mermaid({ chart }: { chart: string }) {
 
   return (
     <div
+      data-mermaid
       className="surface-card my-8 flex justify-center overflow-x-auto rounded-3xl p-6"
       dangerouslySetInnerHTML={{ __html: svg }}
     />

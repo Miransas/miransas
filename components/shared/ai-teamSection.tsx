@@ -1,7 +1,8 @@
 'use client';
 
-import { motion, useInView, useReducedMotion } from 'framer-motion';
-import { useRef } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { UI_DURATION, UI_EASE } from '@/lib/ui-motion';
+import { Reveal } from './reval';
 import { Sparkles, Users, Cpu, ShieldCheck } from 'lucide-react';
 import RobotEyes from './RobotEyes';
 
@@ -38,10 +39,10 @@ function TeamRobot({ size, delay }: { size: RobotSize; delay: number }) {
 
   return (
     <motion.div
-      initial={reduce ? false : { opacity: 0, y: 12 }}
+      initial={reduce ? false : { opacity: 0, y: 10 }}
       whileInView={{ opacity: config.opacity, y: 0 }}
       viewport={{ once: true, amount: 0.15 }}
-      transition={{ delay: reduce ? 0 : delay, duration: reduce ? 0 : 0.5, ease: 'easeOut' }}
+      transition={{ delay: reduce ? 0 : delay, duration: reduce ? 0 : UI_DURATION.section, ease: UI_EASE }}
       className={`pointer-events-none relative shrink-0 ${config.margin}`}
       style={{
         width: config.width,
@@ -64,45 +65,28 @@ function TeamRobot({ size, delay }: { size: RobotSize; delay: number }) {
 }
 
 export function AiTeamSection() {
-  const reduce = useReducedMotion();
-  const ref = useRef<HTMLElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.2 });
-
   return (
     <section
-      ref={ref}
       className="surface-page relative flex flex-col items-center justify-between overflow-hidden py-24 sm:py-32"
     >
-      <div className="relative z-30 mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 8 }}
-          animate={inView ? { opacity: 1, y: 0 } : undefined}
-          transition={{ duration: 0.5 }}
+      <Reveal className="relative z-30 mx-auto flex max-w-3xl flex-col items-center px-6 text-center">
+        <div
           className="text-prominent inline-flex items-center gap-2 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]"
         >
           <Sparkles className="size-3.5 text-[#0d4bfa]" />
           <span>AI &amp; engineering</span>
-        </motion.div>
-        <motion.h2
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={inView ? { opacity: 1, y: 0 } : undefined}
-          transition={{ delay: 0.15, duration: 0.65, ease: 'easeOut' }}
+        </div>
+        <h2
           className="text-heading mt-5 text-3xl leading-[1.06] font-semibold tracking-[-0.025em] sm:text-5xl lg:text-[3.5rem]"
         >
           Intelligence, built to <br className="hidden sm:block" /> work together.
-        </motion.h2>
-        <motion.p
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={inView ? { opacity: 1, y: 0 } : undefined}
-          transition={{ delay: 0.25, duration: 0.65, ease: 'easeOut' }}
+        </h2>
+        <p
           className="text-supporting-copy mt-5 max-w-xl text-base leading-[1.6] sm:text-lg lg:text-[1.1875rem]"
         >
           We are exploring how voice, language and software can work as one system. The direction is collaborative intelligence, built with the same care as the infrastructure beneath it.
-        </motion.p>
-        <motion.div
-          initial={reduce ? false : { opacity: 0, y: 12 }}
-          animate={inView ? { opacity: 1, y: 0 } : undefined}
-          transition={{ duration: 0.6, delay: 0.35 }}
+        </p>
+        <div
           className="text-prominent mt-7 flex flex-wrap items-center justify-center gap-3 text-xs font-medium sm:text-[13px]"
         >
           <div className="bg-surface-card-elevated flex items-center gap-2 rounded-xl px-3.5 py-2">
@@ -117,8 +101,8 @@ export function AiTeamSection() {
             <ShieldCheck className="size-3.5 text-[#3847ff]" />
             <span>Developer control</span>
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </Reveal>
       <div className="relative z-10 mt-8 flex w-full items-end justify-center overflow-visible px-2">
         <div className="hidden xl:block">
           <TeamRobot size="outer" delay={0.1} />

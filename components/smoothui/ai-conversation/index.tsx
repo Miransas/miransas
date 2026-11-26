@@ -1,5 +1,6 @@
 "use client";
 
+import { UI_DURATION, UI_EASE } from "@/lib/ui-motion";
 import { cn } from "@/lib/utils";
 import { ArrowDown } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -10,12 +11,6 @@ import {
   useRef,
   useState,
 } from "react";
-
-const SPRING_DEFAULT = {
-  bounce: 0.1,
-  duration: 0.25,
-  type: "spring" as const,
-};
 
 const BOTTOM_THRESHOLD_PX = 48;
 
@@ -98,23 +93,23 @@ const AIConversation = ({
       <AnimatePresence initial={false}>
         {!isPinned && (
           <motion.button
-            animate={{ opacity: 1, scale: 1, y: 0 }}
+            animate={{ opacity: 1, y: 0 }}
             aria-label="Jump to latest"
-            className="surface-card-elevated text-prominent absolute inset-x-0 bottom-3 mx-auto flex w-fit cursor-pointer items-center gap-1.5 rounded-xl py-1.5 pr-3 pl-2.5 text-xs shadow-sm backdrop-blur focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+            className="surface-card-elevated text-prominent absolute inset-x-0 bottom-3 mx-auto flex w-fit cursor-pointer items-center gap-1.5 rounded-xl py-1.5 pr-3 pl-2.5 text-xs focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
             exit={
               shouldReduceMotion
                 ? { opacity: 0, transition: { duration: 0 } }
-                : { opacity: 0, scale: 0.96, y: 8 }
+                : { opacity: 0, y: 8 }
             }
             initial={
               shouldReduceMotion
-                ? { opacity: 1, scale: 1, y: 0 }
-                : { opacity: 0, scale: 0.96, y: 8 }
+                ? { opacity: 1, y: 0 }
+                : { opacity: 0, y: 8 }
             }
             onClick={() =>
               scrollToBottom(shouldReduceMotion ? "auto" : "smooth")
             }
-            transition={shouldReduceMotion ? { duration: 0 } : SPRING_DEFAULT}
+            transition={shouldReduceMotion ? { duration: 0 } : { duration: UI_DURATION.overlay, ease: UI_EASE }}
             type="button"
           >
             <ArrowDown aria-hidden="true" size={13} />

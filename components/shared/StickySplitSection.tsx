@@ -5,26 +5,17 @@ import { ArrowRight } from 'lucide-react';
 import {
   motion,
   useReducedMotion,
-  type Transition,
   type Variants,
 } from 'framer-motion';
 
-const EASE_OUT_EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1];
-
-const SPRING_INDICATOR: Transition = {
-  type: 'spring',
-  stiffness: 380,
-  damping: 32,
-  mass: 0.7,
-};
-
+import { UI_DURATION, UI_EASE } from '@/lib/ui-motion';
 const leftContainerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.05,
+      staggerChildren: UI_DURATION.stagger,
+      delayChildren: UI_DURATION.stagger,
     },
   },
 };
@@ -32,14 +23,14 @@ const leftContainerVariants: Variants = {
 const leftItemVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 12,
+    y: 10,
   },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
-      ease: EASE_OUT_EXPO,
+      duration: UI_DURATION.section,
+      ease: UI_EASE,
     },
   },
 };
@@ -47,15 +38,15 @@ const leftItemVariants: Variants = {
 const cardRevealVariants: Variants = {
   hidden: {
     opacity: 0,
-    y: 12,
+    y: 10,
   },
   visible: (index: number) => ({
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.5,
-      delay: index * 0.06,
-      ease: EASE_OUT_EXPO,
+      duration: UI_DURATION.section,
+      delay: index * UI_DURATION.stagger,
+      ease: UI_EASE,
     },
   }),
 };
@@ -162,16 +153,16 @@ export default function StickySplitSection() {
                     onClick={() => {
                       document
                         .getElementById(`capability-${cap.number}`)
-                        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        ?.scrollIntoView({ behavior: reduce ? 'instant' : 'smooth', block: 'center' });
                     }}
-                    className="relative h-1.5 rounded-xl transition-[width] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="relative h-1.5 rounded-xl"
                     style={{ width: isCurrent ? 28 : 10 }}
                   >
                     <span className="absolute inset-0 rounded-xl bg-black/[0.06] dark:bg-white/[0.08]" />
                     {isCurrent && (
                       <motion.span
                         layoutId="sticky-capability-progress"
-                        transition={reduce ? { duration: 0 } : SPRING_INDICATOR}
+                        transition={reduce ? { duration: 0 } : { duration: UI_DURATION.interactive, ease: UI_EASE }}
                         className="absolute inset-0 rounded-xl bg-[#0d4bfa]"
                       />
                     )}
@@ -217,7 +208,7 @@ export default function StickySplitSection() {
                 onViewportEnter={() => setActiveIndex(index)}
                 onMouseEnter={() => setHoveredIndex(index)}
                 variants={cardRevealVariants}
-                className={`group relative rounded-3xl border border-black/[0.08] p-6 dark:border-white/10 sm:p-8 ${isHighlighted ? 'bg-surface-card-elevated' : 'bg-surface-card'}`}
+                className={`group relative rounded-3xl border border-transparent p-6  sm:p-8 ${isHighlighted ? 'bg-surface-card-elevated' : 'bg-surface-card'}`}
               >
                 <div className="relative z-10 mb-4 flex items-center justify-between gap-4">
                   <div className="inline-flex items-center gap-2.5">
@@ -225,8 +216,8 @@ export default function StickySplitSection() {
                       aria-hidden="true"
                       className={`size-2 rounded-xl transition-[transform,background-color,opacity] duration-300 ${
                         isHighlighted
-                          ? 'scale-100 bg-[#0d4bfa] opacity-100'
-                          : 'bg-secondary-copy/40 scale-75 opacity-60 group-hover:scale-100 group-hover:bg-[#0d4bfa] group-hover:opacity-100'
+                          ? ' bg-[#0d4bfa] opacity-100'
+                          : 'bg-secondary-copy/40  opacity-60 group-hover:bg-[#0d4bfa] group-hover:opacity-100'
                       }`}
                     />
                     <span className="text-prominent text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">

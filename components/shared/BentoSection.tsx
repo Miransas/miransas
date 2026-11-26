@@ -4,28 +4,29 @@ import { useRef } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import { Bentoitems } from '../../constants/bento';
 
-const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+import { UI_DURATION, UI_EASE } from '@/lib/ui-motion';
+
 
 const headerStagger = {
   hidden: {},
-  show: { transition: { staggerChildren: 0.08 } },
+  show: { transition: { staggerChildren: UI_DURATION.stagger } },
 };
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 12 },
+  hidden: { opacity: 0, y: 10 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: EASE },
+    transition: { duration: UI_DURATION.section, ease: UI_EASE },
   },
 };
 
 const card = {
-  hidden: { opacity: 0, y: 12 },
+  hidden: { opacity: 0, y: 10 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, ease: EASE },
+    transition: { duration: UI_DURATION.section, ease: UI_EASE },
   },
 };
 
@@ -64,7 +65,7 @@ function AgentMock() {
       </div>
 
       <div className="mt-4 space-y-3 text-xs leading-[1.55] sm:text-sm">
-        <div className="text-prominent max-w-[90%] rounded-xl bg-black/[0.04] px-3.5 py-2.5 dark:bg-white/[0.05]">
+        <div className="text-prominent max-w-[90%] rounded-xl bg-surface-card-elevated px-3.5 py-2.5">
           Hi, I need to change the delivery address for order #48213.
         </div>
         <div className="text-heading ml-auto max-w-[90%] rounded-xl bg-[#0d4bfa]/10 px-3.5 py-2.5 dark:bg-[#0d4bfa]/20">
@@ -77,7 +78,7 @@ function AgentMock() {
         <div className="text-supporting-copy mt-3 flex flex-wrap items-center justify-between gap-2 font-mono text-[11px] leading-[1.45]">
           <span>agent-2 · intent: change_address</span>
           <span className="text-prominent flex items-center gap-1">
-            resolved <span aria-hidden="true" className="text-prominent">✓</span>
+            resolved
           </span>
         </div>
       </div>
@@ -96,12 +97,12 @@ function TtsMock() {
     <div className="flex h-full min-h-[250px] flex-col overflow-hidden rounded-xl bg-surface-card-elevated p-4">
       <div className="text-supporting-copy flex flex-wrap items-center justify-between gap-2 font-mono text-xs leading-[1.45]">
         <span className="text-prominent">Studio TTS</span>
-        <span className="text-prominent rounded-xl bg-black/[0.04] px-2.5 py-1 dark:bg-white/[0.05]">
+        <span className="text-prominent rounded-xl bg-surface-card-elevated px-2.5 py-1">
           Example voice
         </span>
       </div>
 
-      <p className="text-prominent mt-4 rounded-xl bg-black/[0.04] px-3.5 py-3 text-xs leading-[1.6] italic sm:text-sm dark:bg-white/[0.05]">
+      <p className="text-prominent mt-4 rounded-xl bg-surface-card-elevated px-3.5 py-3 text-xs leading-[1.6] italic sm:text-sm">
         &ldquo;Assalomu alaykum! Buyurtmangiz yo&#39;lga chiqdi.&rdquo;
       </p>
 
@@ -112,7 +113,7 @@ function TtsMock() {
             className={`rounded-xl px-2.5 py-1 text-xs font-medium transition-colors ${
               v.active
                 ? 'bg-[#0d4bfa] text-white'
-                : 'text-supporting-copy bg-black/[0.04] dark:bg-white/[0.05]'
+                : 'text-supporting-copy bg-surface-card-elevated '
             }`}
           >
             {v.lang} · {v.name}
@@ -143,7 +144,7 @@ function VoiceCloneMock() {
       </div>
 
       <div className="mt-4 flex flex-col gap-3">
-        <div className="rounded-xl bg-black/[0.04] p-3 transition-colors dark:bg-white/[0.05]">
+        <div className="rounded-xl bg-surface-card-elevated p-3 transition-colors">
           <div className="text-supporting-copy mb-2 flex items-center justify-between font-mono text-[11px] leading-[1.45]">
             <span>Reference audio</span>
             <span>speaker_01.wav</span>
@@ -161,7 +162,7 @@ function VoiceCloneMock() {
           </div>
         </div>
         <div className="relative flex justify-center py-0.5">
-          <div className="text-prominent relative rounded-xl bg-black/[0.04] px-2.5 py-0.5 font-mono text-[11px] tracking-[0.12em] uppercase dark:bg-white/[0.05]">
+          <div className="text-prominent relative rounded-xl bg-surface-card-elevated px-2.5 py-0.5 font-mono text-[11px] tracking-[0.12em] uppercase">
             generating
           </div>
         </div>
@@ -235,11 +236,11 @@ export function Bento() {
                 className="surface-card relative grid gap-8 rounded-4xl p-6 sm:p-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:items-center lg:gap-12 lg:p-10"
               >
                 <div className="relative z-10">
-                  <span className="text-prominent inline-flex items-center gap-2 rounded-xl bg-[#F7F8FC] px-3 py-1 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px] dark:bg-[#121214]">
+                  <span className="text-prominent inline-flex items-center gap-2 rounded-xl bg-surface-card-elevated px-3 py-1 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
                     <span aria-hidden="true" className="size-1.5 rounded-xl bg-[#0d4bfa]" />
                     {item.tag}
                   </span>
-                  <h3 className="mt-5 text-xl leading-[1.15] font-semibold tracking-[-0.02em] text-[#1d1d1f] sm:text-2xl lg:text-[1.65rem] dark:text-[#FFFFFF]">
+                  <h3 className="mt-5 text-xl leading-[1.15] font-semibold tracking-[-0.02em] text-heading sm:text-2xl lg:text-[1.65rem]">
                     {item.title}
                   </h3>
                   <p className="text-supporting-copy mt-4 text-[15px] leading-[1.6] sm:text-base">

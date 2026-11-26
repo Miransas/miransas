@@ -1,9 +1,9 @@
 'use client';
 
 import { useMediaQuery } from '@/lib/use-media-query';
-import { Reveal } from './reval';
+import { UI_DURATION, UI_EASE } from '@/lib/ui-motion';
 import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { motion, AnimatePresence, useInView, useReducedMotion } from 'framer-motion';
 import { Check } from 'lucide-react';
 
 import LiveVoiceStream from './voice-demo';
@@ -42,7 +42,7 @@ function StepTextItem({
       ref={ref}
       className="flex min-h-[60vh] flex-col justify-center py-8 lg:min-h-[75vh]"
     >
-      <Reveal className="max-w-lg space-y-4">
+      <div className="max-w-lg space-y-4">
         <span className="text-prominent block text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
           {step.eyebrow}
         </span>
@@ -71,12 +71,13 @@ function StepTextItem({
           ))}
         </ul>
         <div className="block pt-6 lg:hidden">{children}</div>
-      </Reveal>
+      </div>
     </div>
   );
 }
 
 function DynamicComponentSlot({ activeIndex }: { activeIndex: number }) {
+  const reduce = useReducedMotion();
   const ref = useRef<HTMLDivElement>(null);
   const visible = useInView(ref, { once: true, margin: '160px' });
   return (
@@ -85,10 +86,10 @@ function DynamicComponentSlot({ activeIndex }: { activeIndex: number }) {
         <AnimatePresence mode="wait">
           <motion.div
             key={activeIndex}
-            initial={{ opacity: 0, y: 10 }}
+            initial={reduce ? false : { opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
+            exit={reduce ? { opacity: 0 } : { opacity: 0, y: -10 }}
+            transition={{ duration: reduce ? 0 : UI_DURATION.overlay, ease: UI_EASE }}
             className="voice-visual flex h-full w-full min-w-0 flex-col items-center justify-center space-y-4 p-2 sm:p-4"
           >
             {activeIndex === 0 && <RobotEyes />}

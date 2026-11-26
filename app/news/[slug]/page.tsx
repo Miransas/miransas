@@ -1,3 +1,4 @@
+import { ContentTheme } from '@/components/shared/content-theme';
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -208,79 +209,81 @@ export default async function NewsPostPage({
             />
           </div>
 
-          <div className="mt-8">
-            <Post />
-          </div>
+          <ContentTheme>
+            <div className="mt-8">
+              <Post />
+            </div>
 
-          {related.length > 0 && (
-            <section className="mt-16 pt-8">
-              <h2 className="text-prominent mb-4 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
-                Related posts
-              </h2>
-              <ul className="grid gap-4 sm:grid-cols-2">
-                {related.map((r) => (
-                  <li key={r.slug}>
-                    <Link
-                      href={`/news/${r.slug}`}
-                      className="surface-card hover:bg-surface-card-elevated block h-full rounded-3xl p-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
-                    >
-                      <span className="text-supporting-copy block text-xs leading-[1.45]">
-                        {formatDate(r.date)}
-                      </span>
-                      <h3 className="text-heading mt-2 text-lg leading-[1.2] font-semibold">
-                        {r.title}
-                      </h3>
-                      <p className="text-supporting-copy mt-2 line-clamp-2 text-[15px] leading-[1.6]">
-                        {r.summary}
-                      </p>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
+            {related.length > 0 && (
+              <section className="mt-16 pt-8">
+                <h2 className="text-prominent mb-4 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
+                  Related posts
+                </h2>
+                <ul className="grid gap-4 sm:grid-cols-2">
+                  {related.map((r) => (
+                    <li key={r.slug}>
+                      <Link
+                        href={`/news/${r.slug}`}
+                        className="surface-card hover:bg-surface-card-elevated block h-full rounded-3xl p-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                      >
+                        <span className="text-supporting-copy block text-xs leading-[1.45]">
+                          {formatDate(r.date)}
+                        </span>
+                        <h3 className="text-heading mt-2 text-lg leading-[1.2] font-semibold">
+                          {r.title}
+                        </h3>
+                        <p className="text-supporting-copy mt-2 line-clamp-2 text-[15px] leading-[1.6]">
+                          {r.summary}
+                        </p>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
 
-          <nav
-            aria-label="More posts"
-            className="mt-12 grid gap-4 pt-4 sm:grid-cols-2"
-          >
-            {older ? (
-              <Link
-                href={`/news/${older.slug}`}
-                className="surface-card hover:bg-surface-card-elevated rounded-3xl p-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
-              >
-                <span className="text-supporting-copy block text-xs leading-[1.45]">
-                  ← Older
-                </span>
-                <span className="text-heading mt-1 block font-semibold">
-                  {older.title}
-                </span>
-              </Link>
-            ) : (
-              <div />
-            )}
-            {newer ? (
-              <Link
-                href={`/news/${newer.slug}`}
-                className="surface-card hover:bg-surface-card-elevated rounded-3xl p-5 text-right transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
-              >
-                <span className="text-supporting-copy block text-xs leading-[1.45]">
-                  Newer →
-                </span>
-                <span className="text-heading mt-1 block font-semibold">
-                  {newer.title}
-                </span>
-              </Link>
-            ) : (
-              <div />
-            )}
-          </nav>
+            <nav
+              aria-label="More posts"
+              className="mt-12 grid gap-4 pt-4 sm:grid-cols-2"
+            >
+              {older ? (
+                <Link
+                  href={`/news/${older.slug}`}
+                  className="surface-card hover:bg-surface-card-elevated rounded-3xl p-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                >
+                  <span className="text-supporting-copy block text-xs leading-[1.45]">
+                    ← Older
+                  </span>
+                  <span className="text-heading mt-1 block font-semibold">
+                    {older.title}
+                  </span>
+                </Link>
+              ) : (
+                <div />
+              )}
+              {newer ? (
+                <Link
+                  href={`/news/${newer.slug}`}
+                  className="surface-card hover:bg-surface-card-elevated rounded-3xl p-5 text-right transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                >
+                  <span className="text-supporting-copy block text-xs leading-[1.45]">
+                    Newer →
+                  </span>
+                  <span className="text-heading mt-1 block font-semibold">
+                    {newer.title}
+                  </span>
+                </Link>
+              ) : (
+                <div />
+              )}
+            </nav>
+          </ContentTheme>
         </article>
 
         <aside className="hidden lg:block">
           <div className="sticky top-24 space-y-6">
             <PostMeta item={item} author={author} minutes={minutes} raw={raw} />
-            <Toc items={toc} />
+            <ContentTheme><Toc items={toc} /></ContentTheme>
           </div>
         </aside>
       </div>

@@ -1,5 +1,7 @@
 'use client';
 
+import { ContentTheme } from '@/components/shared/content-theme';
+
 import {
   useEffect,
   useRef,
@@ -490,563 +492,565 @@ export function ModelsView() {
             </Link>
           </div>
         </header>
+      <ContentTheme>
 
-        {/* 2. Interactive 3-Tab Selector */}
-        <section
-          id="model-showcase-tabs"
-          aria-label="Audio model architecture showcase"
-          className="mt-14 scroll-mt-28 md:mt-20"
-        >
-          <div
-            role="tablist"
-            aria-label="Miralas audio models"
-            className="grid grid-cols-1 gap-3 md:grid-cols-3"
+          {/* 2. Interactive 3-Tab Selector */}
+          <section
+            id="model-showcase-tabs"
+            aria-label="Audio model architecture showcase"
+            className="mt-14 scroll-mt-28 md:mt-20"
           >
-            {MODELS.map((model, index) => {
-              const isSelected = selectedTab === model.id;
-              return (
-                <button
-                  key={model.id}
-                  id={`model-tab-${model.id}`}
-                  type="button"
-                  role="tab"
-                  aria-selected={isSelected}
-                  aria-controls={`model-panel-${model.id}`}
-                  tabIndex={isSelected ? 0 : -1}
-                  onClick={() => handleSelectTab(model.id)}
-                  onKeyDown={(event) => handleTabKeyDown(event, index)}
-                  className={`group relative flex flex-col justify-between overflow-hidden rounded-xl p-5 text-left transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] ${
-                    isSelected
-                      ? 'border border-black/[0.08] bg-surface-card-elevated dark:border-white/10'
-                      : 'border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
-                  }`}
-                >
-                  <div className="relative z-10 flex w-full items-center justify-between gap-2">
-                    <span className="font-mono text-xs font-medium text-secondary-copy dark:text-supporting-copy">
-                      {model.number} · {model.name}
-                    </span>
-                    <span
-                      className={`inline-flex items-center gap-1.5 rounded-xl px-2.5 py-0.5 text-[11px] font-medium tracking-[0.06em] uppercase ${
-                        model.isBaseline
-                          ? 'bg-[#0d4bfa]/12 text-[#0d4bfa] dark:bg-[#0d4bfa]/20 dark:text-[#89abff]'
-                          : 'bg-[#EFEFEF]/80 text-neutral-700 dark:bg-[#121214] dark:text-[#D1D1D1]'
-                      }`}
-                    >
+            <div
+              role="tablist"
+              aria-label="Miralas audio models"
+              className="grid grid-cols-1 gap-3 md:grid-cols-3"
+            >
+              {MODELS.map((model, index) => {
+                const isSelected = selectedTab === model.id;
+                return (
+                  <button
+                    key={model.id}
+                    id={`model-tab-${model.id}`}
+                    type="button"
+                    role="tab"
+                    aria-selected={isSelected}
+                    aria-controls={`model-panel-${model.id}`}
+                    tabIndex={isSelected ? 0 : -1}
+                    onClick={() => handleSelectTab(model.id)}
+                    onKeyDown={(event) => handleTabKeyDown(event, index)}
+                    className={`group relative flex flex-col justify-between overflow-hidden rounded-xl p-5 text-left transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] ${
+                      isSelected
+                        ? 'border border-transparent bg-surface-card-elevated'
+                        : 'border border-transparent bg-surface-card hover:bg-surface-hover'
+                    }`}
+                  >
+                    <div className="relative z-10 flex w-full items-center justify-between gap-2">
+                      <span className="font-mono text-xs font-medium text-secondary-copy dark:text-supporting-copy">
+                        {model.number} · {model.name}
+                      </span>
                       <span
-                        aria-hidden="true"
-                        className={`size-1.5 rounded-xl ${
+                        className={`inline-flex items-center gap-1.5 rounded-xl px-2.5 py-0.5 text-[11px] font-medium tracking-[0.06em] uppercase ${
                           model.isBaseline
-                            ? 'bg-[#0d4bfa]'
-                            : 'bg-neutral-400 dark:bg-[#6E6E74]'
+                            ? 'bg-[#0d4bfa]/12 text-heading dark:bg-[#0d4bfa]/20 dark:text-[#89abff]'
+                            : 'bg-surface-card-elevated text-prominent'
                         }`}
-                      />
-                      {model.badge}
-                    </span>
-                  </div>
+                      >
+                        <span
+                          aria-hidden="true"
+                          className={`size-1.5 rounded-xl ${
+                            model.isBaseline
+                              ? 'bg-[#0d4bfa]'
+                              : 'bg-neutral-400 dark:bg-[#6E6E74]'
+                          }`}
+                        />
+                        {model.badge}
+                      </span>
+                    </div>
 
-                  <div className="relative z-10 mt-3.5">
-                    <span className="block text-lg font-semibold tracking-[-0.02em] text-[#1d1d1f] dark:text-white">
-                      {model.name}
-                    </span>
-                    <span className="mt-0.5 block text-xs text-neutral-600 sm:text-[13px] dark:text-[#D1D1D1]">
-                      {model.role}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
+                    <div className="relative z-10 mt-3.5">
+                      <span className="block text-lg font-semibold tracking-[-0.02em] text-heading">
+                        {model.name}
+                      </span>
+                      <span className="mt-0.5 block text-xs text-supporting-copy sm:text-[13px]">
+                        {model.role}
+                      </span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
 
-          {/* 3. Active Model Detail Panels (All 3 remain mounted in DOM for SEO) */}
-          <div className="mt-6">
-            {MODELS.map((model) => {
-              const isSelected = selectedTab === model.id;
-              return (
-                <div
-                  key={model.id}
-                  id={`model-panel-${model.id}`}
-                  role="tabpanel"
-                  tabIndex={0}
-                  aria-labelledby={`model-tab-${model.id}`}
-                  hidden={!isSelected}
-                  className="relative overflow-hidden rounded-4xl border border-black/[0.08] bg-white p-7 sm:p-10 md:p-12 dark:border-white/10 dark:bg-[#0a0a0a]"
-                >
-                  <div className="relative z-10 space-y-10">
-                    {/* Block 1: Overview & Specs (2-Column) */}
-                    <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
-                      {/* Left Column: Narrative Overview + Honest Status */}
-                      <div className="flex flex-col justify-between lg:col-span-7">
-                        <div>
-                          <div className="flex flex-wrap items-center gap-2">
-                            <span className="inline-flex items-center gap-2 rounded-xl bg-[#0d4bfa]/10 px-3 py-1 text-xs font-medium tracking-[0.08em] text-[#0d4bfa] uppercase dark:bg-[#121214] dark:text-[#89abff]">
-                              <span
-                                aria-hidden="true"
-                                className="size-1.5 rounded-xl bg-[#0d4bfa]"
-                              />
-                              {model.badge}
-                            </span>
+            {/* 3. Active Model Detail Panels (All 3 remain mounted in DOM for SEO) */}
+            <div className="mt-6">
+              {MODELS.map((model) => {
+                const isSelected = selectedTab === model.id;
+                return (
+                  <div
+                    key={model.id}
+                    id={`model-panel-${model.id}`}
+                    role="tabpanel"
+                    tabIndex={0}
+                    aria-labelledby={`model-tab-${model.id}`}
+                    hidden={!isSelected}
+                    className="relative overflow-hidden rounded-4xl border border-transparent bg-surface-card p-7 sm:p-10 md:p-12"
+                  >
+                    <div className="relative z-10 space-y-10">
+                      {/* Block 1: Overview & Specs (2-Column) */}
+                      <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
+                        {/* Left Column: Narrative Overview + Honest Status */}
+                        <div className="flex flex-col justify-between lg:col-span-7">
+                          <div>
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="inline-flex items-center gap-2 rounded-xl bg-[#0d4bfa]/10 px-3 py-1 text-xs font-medium tracking-[0.08em] text-heading uppercase dark:text-[#89abff]">
+                                <span
+                                  aria-hidden="true"
+                                  className="size-1.5 rounded-xl bg-[#0d4bfa]"
+                                />
+                                {model.badge}
+                              </span>
 
-                            <span className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7F8FC] px-3 py-1 font-mono text-xs text-neutral-700 dark:bg-[#121214] dark:text-[#D1D1D1]">
-                              <Scale
-                                className="size-3.5 text-[#0d4bfa]"
-                                aria-hidden
-                              />
-                              {model.licenseShort}
-                            </span>
+                              <span className="inline-flex items-center gap-1.5 rounded-xl bg-surface-card-elevated px-3 py-1 font-mono text-xs text-prominent">
+                                <Scale
+                                  className="size-3.5 text-heading"
+                                  aria-hidden
+                                />
+                                {model.licenseShort}
+                              </span>
 
-                            <a
-                              href={model.upstreamUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 rounded-xl bg-[#F7F8FC] px-3 py-1 font-mono text-xs text-neutral-700 transition-colors hover:text-[#0d4bfa] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-[#121214] dark:text-[#D1D1D1] dark:hover:text-white"
-                            >
-                              <span>{model.upstreamAuthor}</span>
-                              <ExternalLink className="size-3" aria-hidden />
-                            </a>
-                          </div>
-
-                          <h2 className="mt-5 text-2xl leading-[1.12] font-semibold tracking-[-0.025em] text-[#1d1d1f] sm:text-4xl dark:text-white">
-                            {model.name} — {model.headline}
-                          </h2>
-
-                          <p className="mt-4 text-[15px] leading-[1.68] text-neutral-700 sm:text-base dark:text-[#D1D1D1]">
-                            {model.summary}
-                          </p>
-
-                          <p className="mt-3 text-[15px] leading-[1.68] text-neutral-600 sm:text-base dark:text-supporting-copy">
-                            {model.secondarySummary}
-                          </p>
-                        </div>
-
-                        {/* Honest Status / Operational Boundaries Box (Tier 3 Borderless) */}
-                        <div className="mt-6 rounded-3xl bg-[#F7F8FC] p-5 sm:p-6 dark:bg-[#121214]">
-                          <div className="flex items-start gap-3">
-                            <CheckCircle2
-                              className="mt-0.5 size-5 shrink-0 text-[#0d4bfa]"
-                              aria-hidden
-                            />
-                            <div>
-                              <h3 className="text-sm font-semibold tracking-[-0.01em] text-[#1d1d1f] dark:text-white">
-                                {model.honestStatusTitle}
-                              </h3>
-                              <p className="mt-1.5 text-xs leading-[1.6] text-neutral-600 sm:text-sm dark:text-[#D1D1D1]">
-                                {model.honestStatusBody}
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Right Column: Borderless Technical Spec Grid */}
-                      <div className="flex flex-col justify-between rounded-3xl bg-[#F7F8FC] p-6 sm:p-7 lg:col-span-5 dark:bg-[#121214]">
-                        <div>
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="font-mono text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
-                              Technical Specifications
-                            </span>
-                            <span className="font-mono text-xs text-[#0d4bfa] dark:text-[#89abff]">
-                              {model.number} / 03
-                            </span>
-                          </div>
-
-                          <dl className="mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-                            {model.specs.map((spec) => (
-                              <div
-                                key={spec.label}
-                                className="rounded-xl bg-white p-3.5 dark:bg-[#0a0a0a]"
+                              <a
+                                href={model.upstreamUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 rounded-xl bg-surface-card-elevated px-3 py-1 font-mono text-xs text-prominent transition-colors hover:text-heading focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:hover:text-white"
                               >
-                                <dt className="text-[11px] font-medium tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
-                                  {spec.label}
-                                </dt>
-                                <dd
-                                  className={`mt-1.5 text-xs leading-[1.45] font-semibold text-[#1d1d1f] sm:text-[13px] dark:text-white ${
-                                    spec.mono ? 'font-mono break-all' : ''
-                                  }`}
-                                >
-                                  {spec.value}
-                                </dd>
-                              </div>
-                            ))}
-                          </dl>
-                        </div>
-
-                        <div className="mt-5 rounded-xl bg-white p-3.5 dark:bg-[#0a0a0a]">
-                          <span className="block text-[11px] font-medium tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
-                            License &amp; Commercial Terms
-                          </span>
-                          <p className="mt-1 text-xs leading-[1.55] text-neutral-700 dark:text-[#D1D1D1]">
-                            {model.commercialTerms}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Block 2: Capabilities Grid (4 Borderless Tiles) */}
-                    <div>
-                      <div className="mb-4 flex items-center justify-between">
-                        <h3 className="text-lg font-semibold tracking-[-0.015em] text-[#1d1d1f] sm:text-xl dark:text-white">
-                          Core capabilities &amp; scope
-                        </h3>
-                        <span className="font-mono text-xs text-secondary-copy dark:text-supporting-copy">
-                          {model.role}
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                        {model.capabilities.map((cap) => {
-                          const Icon = cap.icon;
-                          return (
-                            <div
-                              key={cap.title}
-                              className={`flex flex-col justify-between rounded-xl p-5 ${
-                                cap.featured
-                                  ? 'bg-[#0d4bfa]/[0.08] dark:bg-[#0d4bfa]/[0.14]'
-                                  : 'bg-[#F7F8FC] dark:bg-[#121214]'
-                              }`}
-                            >
-                              <div>
-                                <div className="flex items-center justify-between gap-2">
-                                  <span className="flex size-9 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-[#0d4bfa] dark:bg-white/[0.06] dark:text-[#89abff]">
-                                    <Icon className="size-4" aria-hidden />
-                                  </span>
-                                  {cap.badge && (
-                                    <span className="rounded-xl bg-black/[0.04] px-2.5 py-0.5 font-mono text-[11px] font-medium text-neutral-700 dark:bg-white/[0.06] dark:text-[#D1D1D1]">
-                                      {cap.badge}
-                                    </span>
-                                  )}
-                                </div>
-
-                                <h4 className="mt-4 text-base font-semibold tracking-[-0.015em] text-[#1d1d1f] dark:text-white">
-                                  {cap.title}
-                                </h4>
-
-                                <p className="mt-2 text-xs leading-[1.6] text-neutral-600 sm:text-[13px] dark:text-[#D1D1D1]">
-                                  {cap.description}
-                                </p>
-                              </div>
-
-                              {cap.linkHref && cap.linkLabel && (
-                                <div className="mt-4 pt-2">
-                                  <Link
-                                    href={cap.linkHref}
-                                    className="inline-flex items-center gap-1 rounded-xl text-xs font-medium text-[#0d4bfa] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-[#89abff]"
-                                  >
-                                    {cap.linkLabel}
-                                  </Link>
-                                </div>
-                              )}
+                                <span>{model.upstreamAuthor}</span>
+                                <ExternalLink className="size-3" aria-hidden />
+                              </a>
                             </div>
-                          );
-                        })}
-                      </div>
-                    </div>
 
-                    {/* Block 3: Interactive Architecture Pipeline Diagram */}
-                    <ModelPipelineDiagram modelId={model.id} />
+                            <h2 className="mt-5 text-2xl leading-[1.12] font-semibold tracking-[-0.025em] text-heading sm:text-4xl">
+                              {model.name} — {model.headline}
+                            </h2>
 
-                    {/* Block 4: Model-Specific Engineering Reference Notes (Preserving all factual MDX details) */}
-                    {model.id === 'chatterbox' && (
-                      <div className="space-y-8 pt-2">
-                        {/* Chatterbox Model Family & Language Coverage */}
-                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-                          {/* Model Family Variants */}
-                          <div className="rounded-3xl bg-[#F7F8FC] p-6 sm:p-7 lg:col-span-7 dark:bg-[#121214]">
-                            <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
-                              Upstream Model Family
-                            </span>
-                            <h3 className="mt-2 text-lg font-semibold tracking-[-0.015em] text-[#1d1d1f] sm:text-xl dark:text-white">
-                              Chatterbox variants &amp; Miralas selection
-                            </h3>
-                            <p className="mt-1.5 text-xs leading-[1.6] text-neutral-600 sm:text-sm dark:text-supporting-copy">
-                              Chatterbox is a four-model open-source family.
-                              Miralas uses the approved{' '}
-                              <code className="rounded-xl bg-black/[0.05] px-1.5 py-0.5 font-mono text-xs text-[#1d1d1f] dark:bg-white/[0.07] dark:text-white">
-                                t3_mtl23ls_v2.safetensors
-                              </code>{' '}
-                              multilingual checkpoint.
+                            <p className="mt-4 text-[15px] leading-[1.68] text-prominent sm:text-base">
+                              {model.summary}
                             </p>
 
-                            <div className="mt-5 space-y-2.5">
-                              {CHATTERBOX_VARIANTS.map((variant) => (
-                                <div
-                                  key={variant.name}
-                                  className={`rounded-xl p-4 ${
-                                    variant.activeInMiralas
-                                      ? 'bg-[#0d4bfa]/[0.08] dark:bg-[#0d4bfa]/[0.14]'
-                                      : 'bg-white dark:bg-[#0a0a0a]'
-                                  }`}
-                                >
-                                  <div className="flex flex-wrap items-center justify-between gap-2">
-                                    <div className="flex items-center gap-2">
-                                      <span className="text-sm font-semibold text-[#1d1d1f] dark:text-white">
-                                        {variant.name}
-                                      </span>
-                                      {variant.activeInMiralas && (
-                                        <span className="rounded-xl bg-[#0d4bfa] px-2 py-0.5 font-mono text-[10px] font-medium tracking-[0.06em] text-white uppercase">
-                                          Pinned in Miralas
-                                        </span>
-                                      )}
-                                    </div>
-                                    <span className="font-mono text-xs text-secondary-copy dark:text-supporting-copy">
-                                      {variant.params} · {variant.languages}
-                                    </span>
-                                  </div>
-                                  <p className="mt-1.5 text-xs leading-[1.55] text-neutral-600 dark:text-[#D1D1D1]">
-                                    {variant.feature} —{' '}
-                                    <span className="text-secondary-copy dark:text-supporting-copy">
-                                      {variant.bestFor}
-                                    </span>
-                                  </p>
-                                </div>
-                              ))}
-                            </div>
+                            <p className="mt-3 text-[15px] leading-[1.68] text-supporting-copy sm:text-base dark:text-supporting-copy">
+                              {model.secondarySummary}
+                            </p>
                           </div>
 
-                          {/* 23 Supported Languages + Uzbek Research Priority */}
-                          <div className="flex flex-col justify-between rounded-3xl bg-[#F7F8FC] p-6 sm:p-7 lg:col-span-5 dark:bg-[#121214]">
-                            <div>
-                              <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
-                                Language Coverage
+                          {/* Honest Status / Operational Boundaries Box (Tier 3 Borderless) */}
+                          <div className="mt-6 rounded-3xl bg-surface-card-elevated p-5 sm:p-6">
+                            <div className="flex items-start gap-3">
+                              <CheckCircle2
+                                className="mt-0.5 size-5 shrink-0 text-heading"
+                                aria-hidden
+                              />
+                              <div>
+                                <h3 className="text-sm font-semibold tracking-[-0.01em] text-heading">
+                                  {model.honestStatusTitle}
+                                </h3>
+                                <p className="mt-1.5 text-xs leading-[1.6] text-supporting-copy sm:text-sm">
+                                  {model.honestStatusBody}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Right Column: Borderless Technical Spec Grid */}
+                        <div className="flex flex-col justify-between rounded-3xl bg-surface-card-elevated p-6 sm:p-7 lg:col-span-5">
+                          <div>
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="font-mono text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
+                                Technical Specifications
                               </span>
-                              <h3 className="mt-2 text-lg font-semibold tracking-[-0.015em] text-[#1d1d1f] sm:text-xl dark:text-white">
-                                23 baseline languages &amp; Uzbek priority
+                              <span className="font-mono text-xs text-heading dark:text-[#89abff]">
+                                {model.number} / 03
+                              </span>
+                            </div>
+
+                            <dl className="mt-5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                              {model.specs.map((spec) => (
+                                <div
+                                  key={spec.label}
+                                  className="rounded-xl bg-surface-card p-3.5"
+                                >
+                                  <dt className="text-[11px] font-medium tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
+                                    {spec.label}
+                                  </dt>
+                                  <dd
+                                    className={`mt-1.5 text-xs leading-[1.45] font-semibold text-heading sm:text-[13px]  ${
+                                      spec.mono ? 'font-mono break-all' : ''
+                                    }`}
+                                  >
+                                    {spec.value}
+                                  </dd>
+                                </div>
+                              ))}
+                            </dl>
+                          </div>
+
+                          <div className="mt-5 rounded-xl bg-surface-card p-3.5">
+                            <span className="block text-[11px] font-medium tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
+                              License &amp; Commercial Terms
+                            </span>
+                            <p className="mt-1 text-xs leading-[1.55] text-prominent">
+                              {model.commercialTerms}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Block 2: Capabilities Grid (4 Borderless Tiles) */}
+                      <div>
+                        <div className="mb-4 flex items-center justify-between">
+                          <h3 className="text-lg font-semibold tracking-[-0.015em] text-heading sm:text-xl">
+                            Core capabilities &amp; scope
+                          </h3>
+                          <span className="font-mono text-xs text-secondary-copy dark:text-supporting-copy">
+                            {model.role}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                          {model.capabilities.map((cap) => {
+                            const Icon = cap.icon;
+                            return (
+                              <div
+                                key={cap.title}
+                                className={`flex flex-col justify-between rounded-xl p-5 ${
+                                  cap.featured
+                                    ? 'bg-[#0d4bfa]/[0.08] dark:bg-[#0d4bfa]/[0.14]'
+                                    : 'bg-surface-card-elevated '
+                                }`}
+                              >
+                                <div>
+                                  <div className="flex items-center justify-between gap-2">
+                                    <span className="flex size-9 items-center justify-center rounded-xl bg-[#0d4bfa]/10 text-heading  dark:text-[#89abff]">
+                                      <Icon className="size-4" aria-hidden />
+                                    </span>
+                                    {cap.badge && (
+                                      <span className="rounded-xl bg-surface-card-elevated px-2.5 py-0.5 font-mono text-[11px] font-medium text-prominent ">
+                                        {cap.badge}
+                                      </span>
+                                    )}
+                                  </div>
+
+                                  <h4 className="mt-4 text-base font-semibold tracking-[-0.015em] text-heading">
+                                    {cap.title}
+                                  </h4>
+
+                                  <p className="mt-2 text-xs leading-[1.6] text-supporting-copy sm:text-[13px]">
+                                    {cap.description}
+                                  </p>
+                                </div>
+
+                                {cap.linkHref && cap.linkLabel && (
+                                  <div className="mt-4 pt-2">
+                                    <Link
+                                      href={cap.linkHref}
+                                      className="inline-flex items-center gap-1 rounded-xl text-xs font-medium text-heading underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-[#89abff]"
+                                    >
+                                      {cap.linkLabel}
+                                    </Link>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Block 3: Interactive Architecture Pipeline Diagram */}
+                      <ModelPipelineDiagram modelId={model.id} />
+
+                      {/* Block 4: Model-Specific Engineering Reference Notes (Preserving all factual MDX details) */}
+                      {model.id === 'chatterbox' && (
+                        <div className="space-y-8 pt-2">
+                          {/* Chatterbox Model Family & Language Coverage */}
+                          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+                            {/* Model Family Variants */}
+                            <div className="rounded-3xl bg-surface-card-elevated p-6 sm:p-7 lg:col-span-7">
+                              <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
+                                Upstream Model Family
+                              </span>
+                              <h3 className="mt-2 text-lg font-semibold tracking-[-0.015em] text-heading sm:text-xl">
+                                Chatterbox variants &amp; Miralas selection
                               </h3>
-                              <p className="mt-1.5 text-xs leading-[1.6] text-neutral-600 sm:text-sm dark:text-supporting-copy">
-                                Chatterbox-Multilingual supports 23 languages
-                                out of the box (including Turkish, English, and
-                                Russian).
+                              <p className="mt-1.5 text-xs leading-[1.6] text-supporting-copy sm:text-sm dark:text-supporting-copy">
+                                Chatterbox is a four-model open-source family.
+                                Miralas uses the approved{' '}
+                                <code className="rounded-xl bg-surface-card-elevated px-1.5 py-0.5 font-mono text-xs text-heading ">
+                                  t3_mtl23ls_v2.safetensors
+                                </code>{' '}
+                                multilingual checkpoint.
                               </p>
 
-                              <div className="mt-4 space-y-2.5">
-                                {CHATTERBOX_LANGUAGE_REGIONS.map((item) => (
+                              <div className="mt-5 space-y-2.5">
+                                {CHATTERBOX_VARIANTS.map((variant) => (
                                   <div
-                                    key={item.region}
-                                    className="rounded-xl bg-white p-3.5 dark:bg-[#0a0a0a]"
+                                    key={variant.name}
+                                    className={`rounded-xl p-4 ${
+                                      variant.activeInMiralas
+                                        ? 'bg-[#0d4bfa]/[0.08] dark:bg-[#0d4bfa]/[0.14]'
+                                        : 'bg-surface-card '
+                                    }`}
                                   >
-                                    <span className="block font-mono text-[11px] font-medium text-[#0d4bfa] uppercase dark:text-[#89abff]">
-                                      {item.region}
-                                    </span>
-                                    <p className="mt-1 text-xs leading-[1.55] text-neutral-700 dark:text-[#D1D1D1]">
-                                      {item.languages}
+                                    <div className="flex flex-wrap items-center justify-between gap-2">
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-sm font-semibold text-heading">
+                                          {variant.name}
+                                        </span>
+                                        {variant.activeInMiralas && (
+                                          <span className="rounded-xl bg-[#0d4bfa] px-2 py-0.5 font-mono text-[10px] font-medium tracking-[0.06em] text-white uppercase">
+                                            Pinned in Miralas
+                                          </span>
+                                        )}
+                                      </div>
+                                      <span className="font-mono text-xs text-secondary-copy dark:text-supporting-copy">
+                                        {variant.params} · {variant.languages}
+                                      </span>
+                                    </div>
+                                    <p className="mt-1.5 text-xs leading-[1.55] text-supporting-copy">
+                                      {variant.feature} —{' '}
+                                      <span className="text-secondary-copy dark:text-supporting-copy">
+                                        {variant.bestFor}
+                                      </span>
                                     </p>
                                   </div>
                                 ))}
                               </div>
                             </div>
 
-                            <div className="mt-4 rounded-xl bg-[#0d4bfa]/[0.08] p-4 dark:bg-[#0d4bfa]/[0.14]">
-                              <div className="flex items-center gap-2">
-                                <Sparkles
-                                  className="size-4 text-[#0d4bfa]"
-                                  aria-hidden
-                                />
-                                <span className="text-xs font-semibold tracking-[0.06em] text-[#1d1d1f] uppercase dark:text-white">
-                                  Uzbek Speech Research — In Development
+                            {/* 23 Supported Languages + Uzbek Research Priority */}
+                            <div className="flex flex-col justify-between rounded-3xl bg-surface-card-elevated p-6 sm:p-7 lg:col-span-5">
+                              <div>
+                                <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
+                                  Language Coverage
                                 </span>
+                                <h3 className="mt-2 text-lg font-semibold tracking-[-0.015em] text-heading sm:text-xl">
+                                  23 baseline languages &amp; Uzbek priority
+                                </h3>
+                                <p className="mt-1.5 text-xs leading-[1.6] text-supporting-copy sm:text-sm dark:text-supporting-copy">
+                                  Chatterbox-Multilingual supports 23 languages
+                                  out of the box (including Turkish, English, and
+                                  Russian).
+                                </p>
+
+                                <div className="mt-4 space-y-2.5">
+                                  {CHATTERBOX_LANGUAGE_REGIONS.map((item) => (
+                                    <div
+                                      key={item.region}
+                                      className="rounded-xl bg-surface-card p-3.5"
+                                    >
+                                      <span className="block font-mono text-[11px] font-medium text-heading uppercase dark:text-[#89abff]">
+                                        {item.region}
+                                      </span>
+                                      <p className="mt-1 text-xs leading-[1.55] text-prominent">
+                                        {item.languages}
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
-                              <p className="mt-1.5 text-xs leading-[1.55] text-neutral-700 dark:text-[#D1D1D1]">
-                                Uzbek is outside the 23-language Chatterbox
-                                baseline. Native Uzbek speech synthesis and
-                                evaluation remain a dedicated Miransas research
-                                priority.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
 
-                        {/* Known Limitations & Responsible Voice Cloning */}
-                        <div className="rounded-3xl bg-[#F7F8FC] p-6 sm:p-7 dark:bg-[#121214]">
-                          <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
-                            <div>
-                              <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
-                                Operational Notes &amp; Guardrails
-                              </span>
-                              <h3 className="mt-1 text-lg font-semibold tracking-[-0.015em] text-[#1d1d1f] sm:text-xl dark:text-white">
-                                Honest limitations &amp; PerTh watermark safety
-                              </h3>
-                            </div>
-                            <Link
-                              href="/news/principles"
-                              className="inline-flex items-center gap-1.5 rounded-xl text-xs font-medium text-[#0d4bfa] underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-[#89abff]"
-                            >
-                              <Lock className="size-3.5" aria-hidden />
-                              <span>Read our consent policy</span>
-                            </Link>
-                          </div>
-
-                          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                            {CHATTERBOX_LIMITATIONS.map((lim) => (
-                              <div
-                                key={lim.title}
-                                className="rounded-xl bg-white p-4 dark:bg-[#0a0a0a]"
-                              >
-                                <h4 className="text-sm font-semibold text-[#1d1d1f] dark:text-white">
-                                  {lim.title}
-                                </h4>
-                                <p className="mt-1.5 text-xs leading-[1.6] text-neutral-600 dark:text-supporting-copy">
-                                  {lim.detail}
+                              <div className="mt-4 rounded-xl bg-[#0d4bfa]/[0.08] p-4 dark:bg-[#0d4bfa]/[0.14]">
+                                <div className="flex items-center gap-2">
+                                  <Sparkles
+                                    className="size-4 text-heading"
+                                    aria-hidden
+                                  />
+                                  <span className="text-xs font-semibold tracking-[0.06em] text-heading uppercase">
+                                    Uzbek Speech Research — In Development
+                                  </span>
+                                </div>
+                                <p className="mt-1.5 text-xs leading-[1.55] text-prominent">
+                                  Uzbek is outside the 23-language Chatterbox
+                                  baseline. Native Uzbek speech synthesis and
+                                  evaluation remain a dedicated Miransas research
+                                  priority.
                                 </p>
                               </div>
-                            ))}
+                            </div>
+                          </div>
+
+                          {/* Known Limitations & Responsible Voice Cloning */}
+                          <div className="rounded-3xl bg-surface-card-elevated p-6 sm:p-7">
+                            <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
+                              <div>
+                                <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
+                                  Operational Notes &amp; Guardrails
+                                </span>
+                                <h3 className="mt-1 text-lg font-semibold tracking-[-0.015em] text-heading sm:text-xl">
+                                  Honest limitations &amp; PerTh watermark safety
+                                </h3>
+                              </div>
+                              <Link
+                                href="/news/principles"
+                                className="inline-flex items-center gap-1.5 rounded-xl text-xs font-medium text-heading underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-[#89abff]"
+                              >
+                                <Lock className="size-3.5" aria-hidden />
+                                <span>Read our consent policy</span>
+                              </Link>
+                            </div>
+
+                            <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                              {CHATTERBOX_LIMITATIONS.map((lim) => (
+                                <div
+                                  key={lim.title}
+                                  className="rounded-xl bg-surface-card p-4"
+                                >
+                                  <h4 className="text-sm font-semibold text-heading">
+                                    {lim.title}
+                                  </h4>
+                                  <p className="mt-1.5 text-xs leading-[1.6] text-supporting-copy dark:text-supporting-copy">
+                                    {lim.detail}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* 4. 3-Column Model & License Matrix */}
-        <section
-          aria-labelledby="model-license-matrix-heading"
-          className="mt-16 md:mt-24"
-        >
-          <div className="mb-8 max-w-2xl">
-            <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
-              Open-Source Attribution &amp; Status
-            </span>
-            <h2
-              id="model-license-matrix-heading"
-              className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-[#1d1d1f] sm:text-4xl dark:text-white"
-            >
-              Model &amp; license matrix
-            </h2>
-            <p className="mt-3 text-[15px] leading-[1.6] text-neutral-600 sm:text-base dark:text-supporting-copy">
-              Every audio foundation model in the Miralas stack is selected for
-              clear licensing, self-hosted execution, and domain specialization.
-              Select any model card to inspect its architecture diagram.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
-            {MODELS.map((model) => {
-              const isSelected = selectedTab === model.id;
-              return (
-                <div
-                  key={model.id}
-                  className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl p-7 transition-colors duration-200 ${
-                    isSelected
-                      ? 'border border-black/[0.08] bg-surface-card-elevated dark:border-white/10'
-                      : 'border border-black/[0.08] bg-white hover:border-black/[0.16] hover:bg-[#F7F8FC] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]'
-                  }`}
-                >
-                  <div className="relative z-10">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="inline-flex items-center gap-2 rounded-xl bg-[#F7F8FC] px-3 py-1 text-xs font-medium tracking-[0.08em] text-neutral-800 uppercase dark:bg-[#121214] dark:text-[#D1D1D1]">
-                        <span
-                          aria-hidden="true"
-                          className="size-1.5 rounded-xl bg-[#0d4bfa]"
-                        />
-                        {model.badge}
-                      </span>
-                      <span className="font-mono text-xs text-secondary-copy dark:text-supporting-copy">
-                        {model.number} / 03
-                      </span>
-                    </div>
-
-                    <h3 className="mt-5 text-xl font-semibold tracking-[-0.02em] text-[#1d1d1f] sm:text-2xl dark:text-white">
-                      {model.name}
-                    </h3>
-                    <p className="mt-1 text-xs font-medium text-[#0d4bfa] sm:text-[13px] dark:text-[#89abff]">
-                      {model.role}
-                    </p>
-
-                    <div className="mt-5 space-y-2.5">
-                      <div className="rounded-xl bg-[#F7F8FC] p-3.5 dark:bg-[#121214]">
-                        <span className="block font-mono text-[11px] tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
-                          License
-                        </span>
-                        <span className="mt-1 block text-xs font-semibold text-[#1d1d1f] sm:text-[13px] dark:text-white">
-                          {model.licenseDetail}
-                        </span>
-                      </div>
-
-                      <div className="rounded-xl bg-[#F7F8FC] p-3.5 dark:bg-[#121214]">
-                        <span className="block font-mono text-[11px] tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
-                          Commercial &amp; Hosting Terms
-                        </span>
-                        <p className="mt-1 text-xs leading-[1.55] text-neutral-600 dark:text-[#D1D1D1]">
-                          {model.commercialTerms}
-                        </p>
-                      </div>
+                      )}
                     </div>
                   </div>
+                );
+              })}
+            </div>
+          </section>
 
-                  <div className="relative z-10 mt-6 flex flex-wrap items-center justify-between gap-3 pt-2">
-                    <button
-                      type="button"
-                      onClick={() => handleSelectTab(model.id, true)}
-                      className="inline-flex min-h-11 items-center gap-1.5 rounded-xl text-xs font-semibold text-[#0d4bfa] transition-colors hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px] dark:text-white"
-                    >
-                      <span>
-                        {isSelected
-                          ? 'Viewing architecture'
-                          : 'Inspect architecture'}
-                      </span>
-                      <ArrowRight className="size-3.5 text-[#0d4bfa]" aria-hidden />
-                    </button>
-
-                    <a
-                      href={model.upstreamUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex min-h-11 items-center gap-1 rounded-xl text-xs text-secondary-copy transition-colors hover:text-[#0d4bfa] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-supporting-copy dark:hover:text-[#D1D1D1]"
-                    >
-                      <span>Upstream</span>
-                      <ExternalLink className="size-3" aria-hidden />
-                    </a>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* 5. Footer Navigation Strip */}
-        <section
-          aria-label="Related Miralas and policy resources"
-          className="mt-16 md:mt-20"
-        >
-          <div className="flex flex-col justify-between gap-6 rounded-3xl border border-black/[0.08] bg-white p-7 sm:p-8 lg:flex-row lg:items-center dark:border-white/10 dark:bg-[#0a0a0a]">
-            <div>
-              <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
-                Continue exploring
+          {/* 4. 3-Column Model & License Matrix */}
+          <section
+            aria-labelledby="model-license-matrix-heading"
+            className="mt-16 md:mt-24"
+          >
+            <div className="mb-8 max-w-2xl">
+              <span className="text-xs font-medium tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
+                Open-Source Attribution &amp; Status
               </span>
-              <h2 className="mt-1.5 text-xl font-semibold tracking-[-0.02em] text-[#1d1d1f] sm:text-2xl dark:text-white">
-                Platform architecture, principles, and support.
+              <h2
+                id="model-license-matrix-heading"
+                className="mt-2 text-2xl font-semibold tracking-[-0.025em] text-heading sm:text-4xl"
+              >
+                Model &amp; license matrix
               </h2>
+              <p className="mt-3 text-[15px] leading-[1.6] text-supporting-copy sm:text-base dark:text-supporting-copy">
+                Every audio foundation model in the Miralas stack is selected for
+                clear licensing, self-hosted execution, and domain specialization.
+                Select any model card to inspect its architecture diagram.
+              </p>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <Link
-                href="/projects#miralas"
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#0d4bfa] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
-              >
-                <Layers className="size-4" aria-hidden />
-                <span>Miralas project overview</span>
-              </Link>
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-3">
+              {MODELS.map((model) => {
+                const isSelected = selectedTab === model.id;
+                return (
+                  <div
+                    key={model.id}
+                    className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl p-7 transition-colors duration-200 ${
+                      isSelected
+                        ? 'border border-transparent bg-surface-card-elevated'
+                        : 'border border-transparent bg-surface-card hover:bg-surface-hover'
+                    }`}
+                  >
+                    <div className="relative z-10">
+                      <div className="flex items-center justify-between gap-2">
+                        <span className="inline-flex items-center gap-2 rounded-xl bg-surface-card-elevated px-3 py-1 text-xs font-medium tracking-[0.08em] text-prominent uppercase">
+                          <span
+                            aria-hidden="true"
+                            className="size-1.5 rounded-xl bg-[#0d4bfa]"
+                          />
+                          {model.badge}
+                        </span>
+                        <span className="font-mono text-xs text-secondary-copy dark:text-supporting-copy">
+                          {model.number} / 03
+                        </span>
+                      </div>
 
-              <Link
-                href="/news/principles"
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#F7F8FC] px-4 py-2.5 text-sm font-medium text-[#1d1d1f] transition-colors hover:bg-black/[0.06] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-[#121214] dark:text-[#D1D1D1] dark:hover:bg-white/[0.08]"
-              >
-                <ShieldCheck className="size-4 text-[#0d4bfa]" aria-hidden />
-                <span>What we will not build</span>
-              </Link>
+                      <h3 className="mt-5 text-xl font-semibold tracking-[-0.02em] text-heading sm:text-2xl">
+                        {model.name}
+                      </h3>
+                      <p className="mt-1 text-xs font-medium text-heading sm:text-[13px] dark:text-[#89abff]">
+                        {model.role}
+                      </p>
 
-              <Link
-                href="/support"
-                className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#F7F8FC] px-4 py-2.5 text-sm font-medium text-[#1d1d1f] transition-colors hover:bg-black/[0.06] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:bg-[#121214] dark:text-[#D1D1D1] dark:hover:bg-white/[0.08]"
-              >
-                <FileAudio className="size-4 text-[#0d4bfa]" aria-hidden />
-                <span>Support &amp; FAQ</span>
-              </Link>
+                      <div className="mt-5 space-y-2.5">
+                        <div className="rounded-xl bg-surface-card-elevated p-3.5">
+                          <span className="block font-mono text-[11px] tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
+                            License
+                          </span>
+                          <span className="mt-1 block text-xs font-semibold text-heading sm:text-[13px]">
+                            {model.licenseDetail}
+                          </span>
+                        </div>
+
+                        <div className="rounded-xl bg-surface-card-elevated p-3.5">
+                          <span className="block font-mono text-[11px] tracking-[0.08em] text-secondary-copy uppercase dark:text-supporting-copy">
+                            Commercial &amp; Hosting Terms
+                          </span>
+                          <p className="mt-1 text-xs leading-[1.55] text-supporting-copy">
+                            {model.commercialTerms}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="relative z-10 mt-6 flex flex-wrap items-center justify-between gap-3 pt-2">
+                      <button
+                        type="button"
+                        onClick={() => handleSelectTab(model.id, true)}
+                        className="inline-flex min-h-11 items-center gap-1.5 rounded-xl text-xs font-semibold text-heading transition-colors hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] sm:text-[13px]"
+                      >
+                        <span>
+                          {isSelected
+                            ? 'Viewing architecture'
+                            : 'Inspect architecture'}
+                        </span>
+                        <ArrowRight className="size-3.5 text-heading" aria-hidden />
+                      </button>
+
+                      <a
+                        href={model.upstreamUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex min-h-11 items-center gap-1 rounded-xl text-xs text-secondary-copy transition-colors hover:text-heading focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:text-supporting-copy dark:hover:text-[#D1D1D1]"
+                      >
+                        <span>Upstream</span>
+                        <ExternalLink className="size-3" aria-hidden />
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-          </div>
-        </section>
+          </section>
+
+          {/* 5. Footer Navigation Strip */}
+          <section
+            aria-label="Related Miralas and policy resources"
+            className="mt-16 md:mt-20"
+          >
+            <div className="flex flex-col justify-between gap-6 rounded-3xl border border-transparent bg-surface-card p-7 sm:p-8 lg:flex-row lg:items-center">
+              <div>
+                <span className="font-mono text-xs tracking-[0.12em] text-secondary-copy uppercase dark:text-supporting-copy">
+                  Continue exploring
+                </span>
+                <h2 className="mt-1.5 text-xl font-semibold tracking-[-0.02em] text-heading sm:text-2xl">
+                  Platform architecture, principles, and support.
+                </h2>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  href="/projects#miralas"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-[#0d4bfa] px-5 py-2.5 text-sm font-medium text-white transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
+                >
+                  <Layers className="size-4" aria-hidden />
+                  <span>Miralas project overview</span>
+                </Link>
+
+                <Link
+                  href="/news/principles"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-surface-card-elevated px-4 py-2.5 text-sm font-medium text-heading transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] "
+                >
+                  <ShieldCheck className="size-4 text-heading" aria-hidden />
+                  <span>What we will not build</span>
+                </Link>
+
+                <Link
+                  href="/support"
+                  className="inline-flex min-h-11 items-center gap-2 rounded-xl bg-surface-card-elevated px-4 py-2.5 text-sm font-medium text-heading transition-colors hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] "
+                >
+                  <FileAudio className="size-4 text-heading" aria-hidden />
+                  <span>Support &amp; FAQ</span>
+                </Link>
+              </div>
+            </div>
+          </section>
+      </ContentTheme>
       </div>
     </div>
   );

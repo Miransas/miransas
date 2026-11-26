@@ -12,6 +12,7 @@
 import type { Metadata, Viewport } from 'next';
 import { IBM_Plex_Mono, Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
+import './non-hero.css';
 
 import { SmoothScroll } from '../components/provider/smooth-scroll';
 import { SiteHeader } from '../components/layouts/header';

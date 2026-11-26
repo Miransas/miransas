@@ -5,6 +5,7 @@
 import Link from 'next/link';
 import { useEffect, useState, type MouseEvent } from 'react';
 import { ArrowUpRight } from 'lucide-react';
+import { UI_MOTION_STYLE } from '@/lib/ui-motion';
 import { FOOTER_NAV, SOCIAL_LINKS } from '@/constants/footer';
 
 export function SiteFooter() {
@@ -40,7 +41,7 @@ export function SiteFooter() {
   };
 
   return (
-    <footer className="surface-page text-foreground relative w-full overflow-hidden">
+    <footer style={UI_MOTION_STYLE} className="content-theme surface-page text-foreground relative w-full overflow-hidden">
       <div className="relative z-10 mx-auto max-w-7xl px-6 pt-16 pb-12 md:px-10 md:pt-20 lg:px-12">
         <div className="flex flex-col justify-between gap-12 xl:flex-row xl:gap-16">
           <div className="flex w-full max-w-sm shrink-0 flex-col xl:max-w-[260px]">
@@ -84,7 +85,7 @@ export function SiteFooter() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.label}
-                    className="surface-card hover:bg-surface-card-elevated text-prominent hover:text-heading flex h-11 w-11 items-center justify-center rounded-xl transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+                    className="surface-card hover:bg-surface-hover text-prominent hover:text-heading flex h-11 w-11 items-center justify-center rounded-xl transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
                   >
                     <Icon className="size-4" />
                   </a>
@@ -145,7 +146,7 @@ export function SiteFooter() {
             href="https://status.miransas.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="surface-card hover:bg-surface-card-elevated text-prominent inline-flex min-h-11 items-center gap-2 rounded-xl px-3.5 py-2 text-xs leading-[1.45] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] sm:text-[13px]"
+            className="surface-card hover:bg-surface-hover text-prominent inline-flex min-h-11 items-center gap-2 rounded-xl px-3.5 py-2 text-xs leading-[1.45] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] sm:text-[13px]"
           >
             <span className="h-2 w-2 rounded-xl bg-[#3847ff]" />
             <span className="font-medium">System status</span>

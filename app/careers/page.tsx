@@ -1,3 +1,4 @@
+import { ContentTheme } from '@/components/shared/content-theme';
 import type { Metadata } from 'next';
 import Careers from './careers.mdx';
 import { PageIntro, PageAction } from '@/components/pages/page-intro';
@@ -34,28 +35,30 @@ export default function CareersPage() {
           </PageAction>
         </div>
       </PageIntro>
-      <section
-        aria-labelledby="open-roles"
-        className="surface-card mt-8 grid gap-4 rounded-3xl p-6 sm:grid-cols-[1fr_2fr] sm:p-8"
-      >
-        <h2
-          id="open-roles"
-          className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]"
+      <ContentTheme>
+        <section
+          aria-labelledby="open-roles"
+          className="surface-card mt-8 grid gap-4 rounded-3xl p-6 sm:grid-cols-[1fr_2fr] sm:p-8"
         >
-          Open positions
-        </h2>
-        <div>
-          <p className="text-prominent text-base leading-[1.6] font-medium sm:text-lg">
-            No open roles currently listed.
-          </p>
-          <p className="text-supporting-copy mt-2 text-[15px] leading-[1.6] sm:text-base">
-            Follow News for future announcements. An introduction is welcome, but it is not an application to an advertised position.
-          </p>
+          <h2
+            id="open-roles"
+            className="text-heading text-xl leading-[1.15] font-semibold tracking-[-0.02em] sm:text-2xl lg:text-[1.65rem]"
+          >
+            Open positions
+          </h2>
+          <div>
+            <p className="text-prominent text-base leading-[1.6] font-medium sm:text-lg">
+              No open roles currently listed.
+            </p>
+            <p className="text-supporting-copy mt-2 text-[15px] leading-[1.6] sm:text-base">
+              Follow News for future announcements. An introduction is welcome, but it is not an application to an advertised position.
+            </p>
+          </div>
+        </section>
+        <div className="mt-12 max-w-3xl">
+          <Careers />
         </div>
-      </section>
-      <div className="mt-12 max-w-3xl">
-        <Careers />
-      </div>
+      </ContentTheme>
     </div>
   );
 }

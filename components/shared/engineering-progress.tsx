@@ -139,11 +139,11 @@ export function ModelResearch() {
               className="surface-card flex h-full flex-col justify-between rounded-3xl p-6 sm:p-7 lg:p-8"
             >
               <div className="relative z-10">
-                <span className="text-prominent inline-flex items-center gap-2 rounded-xl bg-[#F7F8FC] px-3 py-1 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px] dark:bg-[#121214]">
+                <span className="text-prominent inline-flex items-center gap-2 rounded-xl bg-surface-card-elevated px-3 py-1 text-xs font-medium tracking-[0.12em] uppercase sm:text-[13px]">
                   <span aria-hidden="true" className="size-1.5 rounded-xl bg-[#0d4bfa]" />
                   {item.status}
                 </span>
-                <h3 className="mt-5 text-xl leading-[1.15] font-semibold tracking-[-0.02em] text-[#1d1d1f] sm:text-2xl lg:text-[1.65rem] dark:text-[#FFFFFF]">
+                <h3 className="mt-5 text-xl leading-[1.15] font-semibold tracking-[-0.02em] text-heading sm:text-2xl lg:text-[1.65rem]">
                   {item.title}
                 </h3>
               </div>
@@ -164,7 +164,7 @@ export function ModelResearch() {
         <Reveal className="mt-10">
           <Link
             href="/models"
-            className="text-prominent inline-flex min-h-11 items-center gap-2.5 rounded-xl border border-black/[0.08] bg-white px-5 py-3 text-sm font-medium transition-colors duration-200 hover:border-black/[0.16] hover:bg-[#F7F8FC] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa] dark:border-white/10 dark:bg-[#0a0a0a] dark:hover:border-white/20 dark:hover:bg-[#121214]"
+            className="text-prominent inline-flex min-h-11 items-center gap-2.5 rounded-xl border border-transparent bg-surface-card px-5 py-3 text-sm font-medium transition-colors duration-200 hover:bg-surface-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d4bfa]"
           >
             Read the model notes{' '}
             <ArrowUpRight aria-hidden className="size-4 text-[#0d4bfa]" />

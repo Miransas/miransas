@@ -1,26 +1,19 @@
 'use client';
 
 import Link from 'next/link';
-import { useRef } from 'react';
 import { ArrowUpRight } from 'lucide-react';
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import CrystalizedBall from '@/components/visuals/crystalized-ball';
+import { UI_DURATION, UI_EASE } from '@/lib/ui-motion';
+import { UI_REVEAL, UI_VIEWPORT } from '@/lib/ui-motion';
 import { Reveal } from './reval';
 
 export function EngineeringVisualSection() {
-  const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  });
-  const y = useTransform(scrollYProgress, [0, 1], [28, -28]);
-  const scale = useTransform(scrollYProgress, [0, 0.45, 1], [0.96, 1, 0.98]);
 
   return (
     <section
       id="engineering-lab"
-      ref={ref}
       aria-labelledby="engineering-title"
       className="surface-page text-foreground relative overflow-hidden px-6 py-24 md:px-12 md:py-32"
     >
@@ -40,14 +33,17 @@ export function EngineeringVisualSection() {
           </p>
           <Link
             href="/lab"
-            className="surface-card hover:bg-surface-card-elevated text-prominent mt-8 inline-flex min-h-11 items-center gap-3 rounded-xl px-5 py-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
+            className="surface-card hover:bg-surface-hover text-prominent mt-8 inline-flex min-h-11 items-center gap-3 rounded-xl px-5 py-3 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff]"
           >
             Explore the Lab{' '}
             <ArrowUpRight className="size-4 text-[#3847ff]" aria-hidden="true" />
           </Link>
         </Reveal>
         <motion.figure
-          style={{ y: reduce ? 0 : y, scale: reduce ? 1 : scale }}
+          initial={false}
+          whileInView={reduce ? { opacity: 1, y: 0 } : UI_REVEAL}
+          viewport={UI_VIEWPORT}
+          transition={{ duration: reduce ? 0 : UI_DURATION.section, ease: UI_EASE }}
           className="surface-card relative mx-auto w-full max-w-[640px] rounded-4xl p-6"
         >
           <div className="aspect-square w-full">

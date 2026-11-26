@@ -31,7 +31,7 @@ export function VisualPlayground() {
               intro={false}
             />
           </div>
-          <span className="text-prominent pointer-events-none absolute top-5 left-5 font-mono text-xs leading-[1.45] tracking-[0.12em] uppercase sm:top-7 sm:left-7 sm:text-[13px]">
+          <span className="text-prominent bg-surface-page/95 pointer-events-none absolute top-5 left-5 rounded-xl px-3 py-2 font-mono text-xs leading-[1.45] tracking-[0.12em] uppercase sm:top-7 sm:left-7 sm:text-[13px]">
             001 / CRYSTAL FIELD
           </span>
           <button
@@ -46,7 +46,7 @@ export function VisualPlayground() {
             }
             aria-pressed={paused || reduce}
             onClick={() => setPaused((value) => !value)}
-            className="surface-card text-prominent hover:bg-surface-card-elevated absolute right-5 bottom-5 inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] disabled:cursor-default sm:right-7 sm:bottom-7 sm:text-[13px]"
+            className="surface-card text-prominent hover:bg-surface-hover absolute right-5 bottom-5 inline-flex min-h-11 items-center gap-2 rounded-xl px-4 text-xs font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#3847ff] disabled:cursor-default sm:right-7 sm:bottom-7 sm:text-[13px]"
           >
             {paused || reduce ? (
               <Play className="size-3.5 text-[#3847ff]" aria-hidden />
